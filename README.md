@@ -246,10 +246,3 @@ El principal costo futuro será el mantenimiento correctivo y evolutivo.
 ## 14. Equipo y contexto académico
 
 Proyecto escolar desarrollado por estudiantes de la EEST como Evaluación Anual de Capacidades Profesionales (EACP). Migrado desde carpeta compartida de Drive a GitHub para control de versiones y trabajo colaborativo.
-
-## 15. Licencia
-
-Proyecto con fines educativos. Todos los derechos reservados a sus autores e institución educativa.
-```
-
-**Tip extra:** después de crear el repo en GitHub, marca la casilla `Add a README file` en **NO**, porque vas a subir este `README.md` manualmente. Y agrega un `.gitignore` tipo `VisualStudio` al crearlo.
