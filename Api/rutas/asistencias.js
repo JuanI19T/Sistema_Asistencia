@@ -49,7 +49,7 @@ router.get('/', async (req, res) => {
       `SELECT a.id_asistencia, a.presente, a.verificada,
               al.id_alumno, al.apellido_alumno, al.nombre_alumno, al.legajo_alumno,
               c.id_clase, c.fecha_clase, c.estado,
-              d.id_dictado, m.nombre_materia, d.grupo, d.dia, d.horario,
+              d.id_dictado, m.nombre_materia, d.grupo, d.dia, d.horario, d.horario_fin,
               p.apellido_profesor
        FROM asistencia a
        JOIN alumno al ON al.id_alumno = a.id_alumno

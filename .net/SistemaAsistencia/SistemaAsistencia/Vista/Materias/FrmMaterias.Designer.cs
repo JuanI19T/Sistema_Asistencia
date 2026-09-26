@@ -96,18 +96,18 @@ namespace SistemaAsistencia.Vista.Materias
             // lblNombre
             //
             this.lblNombre.AutoSize = true;
-            this.lblNombre.Location = new System.Drawing.Point(16, 60);
+            this.lblNombre.Location = new System.Drawing.Point(16, 90);
             this.lblNombre.Name = "lblNombre";
             this.lblNombre.Size = new System.Drawing.Size(44, 13);
-            this.lblNombre.TabIndex = 0;
+            this.lblNombre.TabIndex = 4;
             this.lblNombre.Text = "Nombre";
             //
             // txtNombre
             //
-            this.txtNombre.Location = new System.Drawing.Point(130, 57);
+            this.txtNombre.Location = new System.Drawing.Point(90, 87);
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(180, 20);
-            this.txtNombre.TabIndex = 1;
+            this.txtNombre.TabIndex = 5;
             //
             // lblEspecialidad
             //
@@ -115,43 +115,48 @@ namespace SistemaAsistencia.Vista.Materias
             this.lblEspecialidad.Location = new System.Drawing.Point(16, 30);
             this.lblEspecialidad.Name = "lblEspecialidad";
             this.lblEspecialidad.Size = new System.Drawing.Size(67, 13);
-            this.lblEspecialidad.TabIndex = 2;
+            this.lblEspecialidad.TabIndex = 0;
             this.lblEspecialidad.Text = "Especialidad";
             //
             // cmbEspecialidad
             //
             this.cmbEspecialidad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbEspecialidad.FormattingEnabled = true;
-            this.cmbEspecialidad.Location = new System.Drawing.Point(130, 27);
+            this.cmbEspecialidad.Location = new System.Drawing.Point(90, 27);
             this.cmbEspecialidad.Name = "cmbEspecialidad";
             this.cmbEspecialidad.Size = new System.Drawing.Size(180, 21);
-            this.cmbEspecialidad.TabIndex = 3;
+            this.cmbEspecialidad.TabIndex = 1;
             //
             // lblAnio
             //
             this.lblAnio.AutoSize = true;
-            this.lblAnio.Location = new System.Drawing.Point(16, 120);
+            this.lblAnio.Location = new System.Drawing.Point(16, 60);
             this.lblAnio.Name = "lblAnio";
             this.lblAnio.Size = new System.Drawing.Size(26, 13);
-            this.lblAnio.TabIndex = 4;
+            this.lblAnio.TabIndex = 2;
             this.lblAnio.Text = "Año";
             //
             // nudAnioMateria
             //
-            this.nudAnioMateria.Location = new System.Drawing.Point(130, 117);
+            this.nudAnioMateria.Location = new System.Drawing.Point(90, 57);
             this.nudAnioMateria.Maximum = new decimal(new int[] {
-            1000000,
+            7,
+            0,
+            0,
+            0});
+            this.nudAnioMateria.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
             this.nudAnioMateria.Name = "nudAnioMateria";
             this.nudAnioMateria.Size = new System.Drawing.Size(120, 20);
-            this.nudAnioMateria.TabIndex = 5;
+            this.nudAnioMateria.TabIndex = 3;
             //
             // lblCargaHoraria
             //
             this.lblCargaHoraria.AutoSize = true;
-            this.lblCargaHoraria.Location = new System.Drawing.Point(16, 90);
+            this.lblCargaHoraria.Location = new System.Drawing.Point(16, 120);
             this.lblCargaHoraria.Name = "lblCargaHoraria";
             this.lblCargaHoraria.Size = new System.Drawing.Size(73, 13);
             this.lblCargaHoraria.TabIndex = 6;
@@ -159,7 +164,7 @@ namespace SistemaAsistencia.Vista.Materias
             //
             // nudCargaHoraria
             //
-            this.nudCargaHoraria.Location = new System.Drawing.Point(130, 87);
+            this.nudCargaHoraria.Location = new System.Drawing.Point(90, 117);
             this.nudCargaHoraria.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -171,7 +176,7 @@ namespace SistemaAsistencia.Vista.Materias
             //
             // btnGuardar
             //
-            this.btnGuardar.Location = new System.Drawing.Point(130, 158);
+            this.btnGuardar.Location = new System.Drawing.Point(90, 158);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(105, 32);
             this.btnGuardar.TabIndex = 8;
@@ -181,7 +186,7 @@ namespace SistemaAsistencia.Vista.Materias
             //
             // btnLimpiarCrear
             //
-            this.btnLimpiarCrear.Location = new System.Drawing.Point(250, 158);
+            this.btnLimpiarCrear.Location = new System.Drawing.Point(210, 158);
             this.btnLimpiarCrear.Name = "btnLimpiarCrear";
             this.btnLimpiarCrear.Size = new System.Drawing.Size(105, 32);
             this.btnLimpiarCrear.TabIndex = 9;
@@ -224,18 +229,18 @@ namespace SistemaAsistencia.Vista.Materias
             // lblEditNombre
             //
             this.lblEditNombre.AutoSize = true;
-            this.lblEditNombre.Location = new System.Drawing.Point(16, 88);
+            this.lblEditNombre.Location = new System.Drawing.Point(16, 118);
             this.lblEditNombre.Name = "lblEditNombre";
             this.lblEditNombre.Size = new System.Drawing.Size(44, 13);
-            this.lblEditNombre.TabIndex = 1;
+            this.lblEditNombre.TabIndex = 5;
             this.lblEditNombre.Text = "Nombre";
             //
             // txtEditNombre
             //
-            this.txtEditNombre.Location = new System.Drawing.Point(130, 85);
+            this.txtEditNombre.Location = new System.Drawing.Point(90, 115);
             this.txtEditNombre.Name = "txtEditNombre";
             this.txtEditNombre.Size = new System.Drawing.Size(180, 20);
-            this.txtEditNombre.TabIndex = 2;
+            this.txtEditNombre.TabIndex = 6;
             //
             // lblEditEspecialidad
             //
@@ -243,43 +248,48 @@ namespace SistemaAsistencia.Vista.Materias
             this.lblEditEspecialidad.Location = new System.Drawing.Point(16, 58);
             this.lblEditEspecialidad.Name = "lblEditEspecialidad";
             this.lblEditEspecialidad.Size = new System.Drawing.Size(67, 13);
-            this.lblEditEspecialidad.TabIndex = 3;
+            this.lblEditEspecialidad.TabIndex = 1;
             this.lblEditEspecialidad.Text = "Especialidad";
             //
             // cmbEditEspecialidad
             //
             this.cmbEditEspecialidad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbEditEspecialidad.FormattingEnabled = true;
-            this.cmbEditEspecialidad.Location = new System.Drawing.Point(130, 55);
+            this.cmbEditEspecialidad.Location = new System.Drawing.Point(90, 55);
             this.cmbEditEspecialidad.Name = "cmbEditEspecialidad";
             this.cmbEditEspecialidad.Size = new System.Drawing.Size(180, 21);
-            this.cmbEditEspecialidad.TabIndex = 4;
+            this.cmbEditEspecialidad.TabIndex = 2;
             //
             // lblEditAnio
             //
             this.lblEditAnio.AutoSize = true;
-            this.lblEditAnio.Location = new System.Drawing.Point(16, 148);
+            this.lblEditAnio.Location = new System.Drawing.Point(16, 88);
             this.lblEditAnio.Name = "lblEditAnio";
             this.lblEditAnio.Size = new System.Drawing.Size(26, 13);
-            this.lblEditAnio.TabIndex = 5;
+            this.lblEditAnio.TabIndex = 3;
             this.lblEditAnio.Text = "Año";
             //
             // nudEditAnio
             //
-            this.nudEditAnio.Location = new System.Drawing.Point(130, 145);
+            this.nudEditAnio.Location = new System.Drawing.Point(90, 85);
             this.nudEditAnio.Maximum = new decimal(new int[] {
-            1000000,
+            7,
+            0,
+            0,
+            0});
+            this.nudEditAnio.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
             this.nudEditAnio.Name = "nudEditAnio";
             this.nudEditAnio.Size = new System.Drawing.Size(120, 20);
-            this.nudEditAnio.TabIndex = 6;
+            this.nudEditAnio.TabIndex = 4;
             //
             // lblEditCarga
             //
             this.lblEditCarga.AutoSize = true;
-            this.lblEditCarga.Location = new System.Drawing.Point(16, 118);
+            this.lblEditCarga.Location = new System.Drawing.Point(16, 148);
             this.lblEditCarga.Name = "lblEditCarga";
             this.lblEditCarga.Size = new System.Drawing.Size(73, 13);
             this.lblEditCarga.TabIndex = 7;
@@ -287,7 +297,7 @@ namespace SistemaAsistencia.Vista.Materias
             //
             // nudEditCarga
             //
-            this.nudEditCarga.Location = new System.Drawing.Point(130, 115);
+            this.nudEditCarga.Location = new System.Drawing.Point(90, 145);
             this.nudEditCarga.Maximum = new decimal(new int[] {
             1000000,
             0,

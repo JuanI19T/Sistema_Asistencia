@@ -31,11 +31,25 @@ namespace SistemaAsistencia.Controlador
                 () => dictadoDAO.ObtenerTodos());
         }
 
+        // La hora de fin es obligatoria y posterior al inicio.
+        private static void Validar(Dictado dictado)
+        {
+            if (dictado == null)
+                throw new DatosException("Datos de dictado inválidos.");
+            if (!System.TimeSpan.TryParse(dictado.Horario, out System.TimeSpan inicio))
+                throw new DatosException("Horario de inicio inválido. Ejemplo: 08:00");
+            if (!System.TimeSpan.TryParse(dictado.HorarioFin, out System.TimeSpan fin))
+                throw new DatosException("Horario de fin inválido. Ejemplo: 10:00");
+            if (fin <= inicio)
+                throw new DatosException("La hora de fin debe ser posterior a la de inicio.");
+        }
+
         /// <summary>
         /// Agrega un nuevo dictado.
         /// </summary>
         public bool AgregarDictado(Dictado dictado)
         {
+            Validar(dictado);
             return Ejecutor.Ejecutar("Dictado.AgregarDictado",
                 () => dictadoDAO.Agregar(dictado));
         }
@@ -45,6 +59,7 @@ namespace SistemaAsistencia.Controlador
         /// </summary>
         public bool ModificarDictado(Dictado dictado)
         {
+            Validar(dictado);
             return Ejecutor.Ejecutar("Dictado.ModificarDictado",
                 () => dictadoDAO.Modificar(dictado));
         }

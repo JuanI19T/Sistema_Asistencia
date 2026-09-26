@@ -31,7 +31,6 @@
             this.grpCrear = new System.Windows.Forms.GroupBox();
             this.btnLimpiarCrear = new System.Windows.Forms.Button();
             this.btnGuardar = new System.Windows.Forms.Button();
-            this.chkActivo = new System.Windows.Forms.CheckBox();
             this.cmbRol = new System.Windows.Forms.ComboBox();
             this.lblCRol = new System.Windows.Forms.Label();
             this.txtPassword = new System.Windows.Forms.TextBox();
@@ -73,7 +72,6 @@
             //
             this.grpCrear.Controls.Add(this.btnLimpiarCrear);
             this.grpCrear.Controls.Add(this.btnGuardar);
-            this.grpCrear.Controls.Add(this.chkActivo);
             this.grpCrear.Controls.Add(this.cmbRol);
             this.grpCrear.Controls.Add(this.lblCRol);
             this.grpCrear.Controls.Add(this.txtPassword);
@@ -139,24 +137,12 @@
             this.cmbRol.Size = new System.Drawing.Size(150, 21);
             this.cmbRol.TabIndex = 5;
             //
-            // chkActivo
-            //
-            this.chkActivo.AutoSize = true;
-            this.chkActivo.Checked = true;
-            this.chkActivo.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkActivo.Location = new System.Drawing.Point(320, 59);
-            this.chkActivo.Name = "chkActivo";
-            this.chkActivo.Size = new System.Drawing.Size(56, 17);
-            this.chkActivo.TabIndex = 6;
-            this.chkActivo.Text = "Activo";
-            this.chkActivo.UseVisualStyleBackColor = true;
-            //
             // btnGuardar
             //
             this.btnGuardar.Location = new System.Drawing.Point(320, 110);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(100, 32);
-            this.btnGuardar.TabIndex = 7;
+            this.btnGuardar.TabIndex = 6;
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
@@ -166,7 +152,7 @@
             this.btnLimpiarCrear.Location = new System.Drawing.Point(435, 110);
             this.btnLimpiarCrear.Name = "btnLimpiarCrear";
             this.btnLimpiarCrear.Size = new System.Drawing.Size(100, 32);
-            this.btnLimpiarCrear.TabIndex = 8;
+            this.btnLimpiarCrear.TabIndex = 7;
             this.btnLimpiarCrear.Text = "Limpiar";
             this.btnLimpiarCrear.UseVisualStyleBackColor = true;
             this.btnLimpiarCrear.Click += new System.EventHandler(this.btnLimpiarCrear_Click);
@@ -439,7 +425,7 @@
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Label lblCRol;
         private System.Windows.Forms.ComboBox cmbRol;
-        private System.Windows.Forms.CheckBox chkActivo;
+
         private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.Button btnLimpiarCrear;
         private System.Windows.Forms.GroupBox grpModificar;

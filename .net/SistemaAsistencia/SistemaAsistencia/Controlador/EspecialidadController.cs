@@ -30,13 +30,21 @@ namespace SistemaAsistencia.Controlador
                 () => especialidadDAO.ObtenerTodas());
         }
 
+        // Catálogo fijo (Ciclo Básico + 5 tecnicaturas): no se crea ni se renombra a mano.
+        // El ABM existe por normalización pero opera en solo-lectura.
+        private static void BloquearEdicion()
+        {
+            throw new DatosException(
+                "Catálogo fijo (Ciclo Básico + 5 tecnicaturas): no se puede crear ni modificar a mano.");
+        }
+
         /// <summary>
         /// Agrega una nueva especialidad.
         /// </summary>
         public bool AgregarEspecialidad(Especialidad especialidad)
         {
-            return Ejecutor.Ejecutar("Especialidad.AgregarEspecialidad",
-                () => especialidadDAO.Agregar(especialidad));
+            BloquearEdicion();
+            return false;
         }
 
         /// <summary>
@@ -44,8 +52,8 @@ namespace SistemaAsistencia.Controlador
         /// </summary>
         public bool ModificarEspecialidad(Especialidad especialidad)
         {
-            return Ejecutor.Ejecutar("Especialidad.ModificarEspecialidad",
-                () => especialidadDAO.Modificar(especialidad));
+            BloquearEdicion();
+            return false;
         }
 
         /// <summary>
@@ -63,8 +71,8 @@ namespace SistemaAsistencia.Controlador
         /// </summary>
         public bool DarDeBaja(int idEspecialidad)
         {
-            return Ejecutor.Ejecutar("Especialidad.DarDeBaja",
-                () => especialidadDAO.DarDeBaja(idEspecialidad));
+            BloquearEdicion();
+            return false;
         }
 
         /// <summary>
@@ -73,13 +81,8 @@ namespace SistemaAsistencia.Controlador
         /// </summary>
         public bool EliminarDefinitivo(int idEspecialidad)
         {
-            if (!Sesion.UsuarioActualRolAdministrador())
-            {
-                throw new DatosException("Solo el administrador puede eliminar registros definitivamente.");
-            }
-
-            return Ejecutor.Ejecutar("Especialidad.EliminarDefinitivo",
-                () => especialidadDAO.EliminarDefinitivo(idEspecialidad));
+            BloquearEdicion();
+            return false;
         }
     }
 }

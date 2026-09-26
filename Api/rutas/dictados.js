@@ -7,7 +7,7 @@ const router = Router();
 router.get('/', async (req, res) => {
   try {
     const [filas] = await pool.query(
-      `SELECT d.id_dictado, d.dia, d.horario, d.grupo, d.anio_lectivo,
+      `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.anio_lectivo,
               m.id_materia, m.nombre_materia,
               p.id_profesor, p.apellido_profesor, p.nombre_profesor
        FROM dictado d
@@ -31,7 +31,7 @@ router.get('/alumno/:idAlumno', async (req, res) => {
 
   try {
     const [filas] = await pool.query(
-      `SELECT d.id_dictado, d.dia, d.horario, d.grupo, d.anio_lectivo,
+      `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.anio_lectivo,
               m.nombre_materia, p.apellido_profesor
        FROM inscribe i
        JOIN dictado d ON d.id_dictado = i.id_dictado

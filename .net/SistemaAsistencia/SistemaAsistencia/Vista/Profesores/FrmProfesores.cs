@@ -6,6 +6,7 @@ using SistemaAsistencia.Controlador;
 using SistemaAsistencia.Modelo.DAO;
 using SistemaAsistencia.Modelo.Entidades;
 using SistemaAsistencia.Vista.Comun;
+using SistemaAsistencia.Utilidades;
 
 namespace SistemaAsistencia.Vista.Profesores
 {
@@ -20,6 +21,26 @@ namespace SistemaAsistencia.Vista.Profesores
             InitializeComponent();
 
             profesorController = new ProfesorController();
+
+            Tema.ConfigurarFondo(this);
+            Tema.EstilizarGrilla(dgvProfesores);
+
+            Tema.EstilizarBoton(btnGuardar, true);
+            Tema.EstilizarBoton(btnModificar, true);
+            Tema.EstilizarBoton(btnBuscar, false);
+            Tema.EstilizarBoton(btnEliminar, false);
+            Tema.EstilizarBoton(btnLimpiarCrear, false);
+            Tema.EstilizarBoton(btnLimpiarEditar, false);
+
+            // Regla EEST: legajo = DNI (autocompletado, no editable).
+            txtLegajo.ReadOnly = true;
+            txtLegajo.TabStop = false;
+            txtLegajo.BackColor = System.Drawing.SystemColors.Control;
+            txtEditLegajo.ReadOnly = true;
+            txtEditLegajo.TabStop = false;
+            txtEditLegajo.BackColor = System.Drawing.SystemColors.Control;
+            txtDni.TextChanged += (s, e) => txtLegajo.Text = txtDni.Text.Trim();
+            txtEditDni.TextChanged += (s, e) => txtEditLegajo.Text = txtEditDni.Text.Trim();
         }
 
         private void FrmProfesores_Load(object sender, EventArgs e)
@@ -52,46 +73,67 @@ namespace SistemaAsistencia.Vista.Profesores
 
             if (dgvProfesores.Columns.Count > 0)
             {
-                if (dgvProfesores.Columns.Contains("IdProfesor"))
-                    dgvProfesores.Columns["IdProfesor"].Visible = false;
+                string[] soloRelevantes = { "NombreProfesor", "ApellidoProfesor", "DniProfesor", "LegajoProfesor", "CorreoProfesor", "TelefonoProfesor", "Activo" };
+                foreach (DataGridViewColumn col in dgvProfesores.Columns)
+                    col.Visible = System.Array.IndexOf(soloRelevantes, col.Name) >= 0;
+
                 if (dgvProfesores.Columns.Contains("NombreProfesor"))
+                {
                     dgvProfesores.Columns["NombreProfesor"].HeaderText = "Nombre";
+                    dgvProfesores.Columns["NombreProfesor"].DisplayIndex = 0;
+                }
                 if (dgvProfesores.Columns.Contains("ApellidoProfesor"))
+                {
                     dgvProfesores.Columns["ApellidoProfesor"].HeaderText = "Apellido";
+                    dgvProfesores.Columns["ApellidoProfesor"].DisplayIndex = 1;
+                }
+                if (dgvProfesores.Columns.Contains("DniProfesor"))
+                {
+                    dgvProfesores.Columns["DniProfesor"].HeaderText = "DNI";
+                    dgvProfesores.Columns["DniProfesor"].DisplayIndex = 2;
+                }
                 if (dgvProfesores.Columns.Contains("LegajoProfesor"))
+                {
                     dgvProfesores.Columns["LegajoProfesor"].HeaderText = "Legajo";
+                    dgvProfesores.Columns["LegajoProfesor"].DisplayIndex = 3;
+                }
                 if (dgvProfesores.Columns.Contains("CorreoProfesor"))
+                {
                     dgvProfesores.Columns["CorreoProfesor"].HeaderText = "Correo";
+                    dgvProfesores.Columns["CorreoProfesor"].DisplayIndex = 4;
+                }
                 if (dgvProfesores.Columns.Contains("TelefonoProfesor"))
+                {
                     dgvProfesores.Columns["TelefonoProfesor"].HeaderText = "Teléfono";
+                    dgvProfesores.Columns["TelefonoProfesor"].DisplayIndex = 5;
+                }
+                if (dgvProfesores.Columns.Contains("Activo"))
+                {
+                    dgvProfesores.Columns["Activo"].HeaderText = "Activo";
+                    dgvProfesores.Columns["Activo"].DisplayIndex = 6;
+                    dgvProfesores.Columns["Activo"].ReadOnly = true;
+                }
             }
         }
 
-        // Formato argentino: 54 + área (3) + número (7).
-        // Vacío se permite; a medio completar se exige completar.
-        private static bool TelefonoValido(MaskedTextBox txt)
+        // Teléfono en 3 cajas (CtrlTelefono): | 54 | área máx 3 | número |.
+        private bool TelefonoValidoSimple(SistemaAsistencia.Vista.Comun.CtrlTelefono ctrl)
         {
-            string digitos = new string(txt.Text.Where(char.IsDigit).ToArray());
-            return digitos.Length <= 2 || txt.MaskCompleted;
-        }
-
-        private static string TelefonoLimpio(MaskedTextBox txt)
-        {
-            string digitos = new string(txt.Text.Where(char.IsDigit).ToArray());
-            return digitos.Length <= 2 ? string.Empty : txt.Text;
+            if (!ctrl.EsValido(out string error))
+            {
+                MessageBox.Show(error);
+                ctrl.Enfocar();
+                return false;
+            }
+            return true;
         }
 
         // ---------------- 1. Crear ----------------
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            if (!TelefonoValido(txtTelefono))
-            {
-                MessageBox.Show(
-                    "El teléfono debe estar completo (54 + área de 3 + número) o vacío.");
-                txtTelefono.Focus();
+            if (!TelefonoValidoSimple(ctrlTelCrear))
                 return;
-            }
 
             try
             {
@@ -99,9 +141,10 @@ namespace SistemaAsistencia.Vista.Profesores
                 {
                     NombreProfesor = txtNombre.Text,
                     ApellidoProfesor = txtApellido.Text,
-                    LegajoProfesor = txtLegajo.Text,
+                    DniProfesor = txtDni.Text,
+                    LegajoProfesor = txtDni.Text.Trim(),
                     CorreoProfesor = txtCorreo.Text,
-                    TelefonoProfesor = TelefonoLimpio(txtTelefono)
+                    TelefonoProfesor = ctrlTelCrear.Telefono
                 };
 
                 if (profesorController.AgregarProfesor(profesor))
@@ -131,9 +174,10 @@ namespace SistemaAsistencia.Vista.Profesores
         {
             txtNombre.Clear();
             txtApellido.Clear();
+            txtDni.Clear();
             txtLegajo.Clear();
             txtCorreo.Clear();
-            txtTelefono.Clear();
+            ctrlTelCrear.Limpiar();
             txtNombre.Focus();
         }
 
@@ -163,7 +207,11 @@ namespace SistemaAsistencia.Vista.Profesores
                 (p.NombreProfesor != null &&
                     p.NombreProfesor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
                 (p.ApellidoProfesor != null &&
-                    p.ApellidoProfesor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0));
+                    p.ApellidoProfesor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                (p.DniProfesor != null &&
+                    p.DniProfesor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                (p.LegajoProfesor != null &&
+                    p.LegajoProfesor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0));
 
             MostrarEnGrilla(resultados);
 
@@ -197,9 +245,10 @@ namespace SistemaAsistencia.Vista.Profesores
                 "Editando: " + profesor.ApellidoProfesor + ", " + profesor.NombreProfesor;
             txtEditNombre.Text = profesor.NombreProfesor;
             txtEditApellido.Text = profesor.ApellidoProfesor;
+            txtEditDni.Text = profesor.DniProfesor;
             txtEditLegajo.Text = profesor.LegajoProfesor;
             txtEditCorreo.Text = profesor.CorreoProfesor;
-            txtEditTelefono.Text = profesor.TelefonoProfesor;
+            ctrlTelEdit.Telefono = profesor.TelefonoProfesor;
         }
 
         private void btnModificar_Click(object sender, EventArgs e)
@@ -210,13 +259,8 @@ namespace SistemaAsistencia.Vista.Profesores
                 return;
             }
 
-            if (!TelefonoValido(txtEditTelefono))
-            {
-                MessageBox.Show(
-                    "El teléfono debe estar completo (54 + área de 3 + número) o vacío.");
-                txtEditTelefono.Focus();
+            if (!TelefonoValidoSimple(ctrlTelEdit))
                 return;
-            }
 
             try
             {
@@ -225,9 +269,10 @@ namespace SistemaAsistencia.Vista.Profesores
                     IdProfesor = idProfesorSeleccionado,
                     NombreProfesor = txtEditNombre.Text,
                     ApellidoProfesor = txtEditApellido.Text,
-                    LegajoProfesor = txtEditLegajo.Text,
+                    DniProfesor = txtEditDni.Text,
+                    LegajoProfesor = txtEditDni.Text.Trim(),
                     CorreoProfesor = txtEditCorreo.Text,
-                    TelefonoProfesor = TelefonoLimpio(txtEditTelefono)
+                    TelefonoProfesor = ctrlTelEdit.Telefono
                 };
 
                 if (profesorController.ModificarProfesor(profesor))
@@ -312,9 +357,10 @@ namespace SistemaAsistencia.Vista.Profesores
             lblEditando.Text = "Editando: (seleccione de la lista)";
             txtEditNombre.Clear();
             txtEditApellido.Clear();
+            txtEditDni.Clear();
             txtEditLegajo.Clear();
             txtEditCorreo.Clear();
-            txtEditTelefono.Clear();
+            ctrlTelEdit.Limpiar();
         }
     }
 }

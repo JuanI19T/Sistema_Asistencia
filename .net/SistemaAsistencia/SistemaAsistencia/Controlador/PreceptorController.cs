@@ -31,11 +31,21 @@ namespace SistemaAsistencia.Controlador
                 () => preceptorDAO.ObtenerTodos());
         }
 
+        // Regla EEST: el legajo del personal se autocompleta con el DNI.
+        private static void NormalizarLegajo(Preceptor preceptor)
+        {
+            if (preceptor == null)
+                throw new DatosException("Datos de preceptor inválidos.");
+            preceptor.Dni = (preceptor.Dni ?? string.Empty).Trim();
+            preceptor.LegajoPreceptor = preceptor.Dni;
+        }
+
         /// <summary>
         /// Agrega un nuevo preceptor.
         /// </summary>
         public bool AgregarPreceptor(Preceptor preceptor)
         {
+            NormalizarLegajo(preceptor);
             return Ejecutor.Ejecutar("Preceptor.AgregarPreceptor",
                 () => preceptorDAO.Agregar(preceptor));
         }
@@ -45,6 +55,7 @@ namespace SistemaAsistencia.Controlador
         /// </summary>
         public bool ModificarPreceptor(Preceptor preceptor)
         {
+            NormalizarLegajo(preceptor);
             return Ejecutor.Ejecutar("Preceptor.ModificarPreceptor",
                 () => preceptorDAO.Modificar(preceptor));
         }

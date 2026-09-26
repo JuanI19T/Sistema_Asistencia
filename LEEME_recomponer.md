@@ -33,10 +33,11 @@ Los siguientes pasos reconstruyen cada módulo desde cero.
    y completar `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
    con los valores de tu MySQL.
 
-2. Reconstruir la base de datos (¡borra cualquier dato anterior!):
+2. Reconstruir la base de datos (¡borra cualquier dato anterior!)
+   con el script definitivo (ya incluye catálogo + datos de prueba):
 
    ```
-   mysql -u usuario -p < scripts/migrar_a_clases.sql
+   mysql -u usuario -p < ../../.net/SistemaAsistencia/BD/2026-09-26_reconstruccion_definitiva.sql
    ```
 
 3. Instalar dependencias (usa el `package-lock.json` incluido):
@@ -45,11 +46,8 @@ Los siguientes pasos reconstruyen cada módulo desde cero.
    npm install
    ```
 
-4. Cargar datos de prueba (idempotente; contraseña inicial = DNI):
-
-   ```
-   node scripts/seed.js
-   ```
+4. Datos de prueba: ya vienen incluidos en el script
+   (contraseña inicial = DNI). No hace falta `seed.js` (retirado).
 
 5. Levantar la API:
 
@@ -85,17 +83,18 @@ Los siguientes pasos reconstruyen cada módulo desde cero.
 
 ## Orden sugerido
 
-Base de datos (`scripts/migrar_a_clases.sql` + `seed.js`) -> API -> App.
+Base de datos (script definitivo con datos incluidos) -> API -> App.
 
-## Credenciales de prueba (dataset del seed)
+## Credenciales de prueba (dataset del script definitivo)
 
-Contraseña = DNI en todos los casos:
+Contraseña = DNI en todos los casos.
+Legajo: en personal es igual al DNI; en alumnos lo genera la escuela:
 
-| Rol       | Nombre          | DNI       |
-|-----------|-----------------|-----------|
-| Profesor  | Carlos Gutierrez| `30111222`|
-| Profesor  | María Fernández | `31222333`|
-| Preceptor | Laura Martínez  | `34555666`|
-| Alumno    | Juan Pérez      | `45222001`|
-| Alumno    | Ana Gómez       | `45222002`|
-| Alumno    | Luis Díaz       | `45222003`|
+| Rol       | Nombre          | DNI       | Legajo    |
+|-----------|-----------------|-----------|-----------|
+| Profesor  | Carlos Gutierrez| `30111222`| `30111222`|
+| Profesor  | María Fernández | `31222333`| `31222333`|
+| Preceptor | Laura Martínez  | `34555666`| `34555666`|
+| Alumno    | Juan Pérez      | `45222001`| `1001`    |
+| Alumno    | Ana Gómez       | `45222002`| `1002`    |
+| Alumno    | Luis Díaz       | `45222003`| `1003`    |

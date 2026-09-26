@@ -23,14 +23,31 @@ namespace SistemaAsistencia.Modelo.DAO
         /// <returns>Objeto Profesor.</returns>
         private Profesor MapearProfesor(MySqlDataReader dr)
         {
+            // dni/activo pueden no existir en BD viejas: lectura defensiva.
+            string dni = string.Empty;
+            try
+            {
+                int o = dr.GetOrdinal("dni");
+                if (!dr.IsDBNull(o)) dni = Convert.ToString(dr["dni"]);
+            }
+            catch (IndexOutOfRangeException) { }
+            bool activo = true;
+            try
+            {
+                int o = dr.GetOrdinal("activo");
+                if (!dr.IsDBNull(o)) activo = Convert.ToBoolean(dr["activo"]);
+            }
+            catch (IndexOutOfRangeException) { }
             return new Profesor
             {
                 IdProfesor = Convert.ToInt32(dr["id_profesor"]),
                 NombreProfesor = Convert.ToString(dr["nombre_profesor"]),
                 ApellidoProfesor = Convert.ToString(dr["apellido_profesor"]),
+                DniProfesor = dni,
                 LegajoProfesor = Convert.ToString(dr["legajo_profesor"]),
                 CorreoProfesor = Convert.ToString(dr["correo_profesor"]),
-                TelefonoProfesor = Convert.ToString(dr["telefono_profesor"])
+                TelefonoProfesor = Convert.ToString(dr["telefono_profesor"]),
+                Activo = activo
             };
         }
 
@@ -73,16 +90,20 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
+                // Requiere columna `dni` (el portal ya la tiene; si tu MySQL WinForms
+                // es anterior, avisame el error "Unknown column 'dni'" y te paso el ALTER).
                 string sql = @"INSERT INTO PROFESOR
-                               (nombre_profesor, apellido_profesor, legajo_profesor,
-                                correo_profesor, telefono_profesor)
-                               VALUES
-                               (@nombre, @apellido, @legajo, @correo, @telefono)";
+                                (nombre_profesor, apellido_profesor, dni, legajo_profesor,
+                                 correo_profesor, telefono_profesor)
+                                VALUES
+                                (@nombre, @apellido, @dni, @legajo, @correo, @telefono)";
 
                 var cmd = new MySqlCommand(sql, cn);
 
                 cmd.Parameters.AddWithValue("@nombre", profesor.NombreProfesor);
                 cmd.Parameters.AddWithValue("@apellido", profesor.ApellidoProfesor);
+                cmd.Parameters.AddWithValue("@dni",
+                    string.IsNullOrWhiteSpace(profesor.DniProfesor) ? (object)System.DBNull.Value : profesor.DniProfesor.Trim());
                 cmd.Parameters.AddWithValue("@legajo", profesor.LegajoProfesor);
                 cmd.Parameters.AddWithValue("@correo", profesor.CorreoProfesor);
                 cmd.Parameters.AddWithValue("@telefono", profesor.TelefonoProfesor);
@@ -101,17 +122,20 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"UPDATE PROFESOR
-                               SET nombre_profesor = @nombre,
-                                   apellido_profesor = @apellido,
-                                   legajo_profesor = @legajo,
-                                   correo_profesor = @correo,
-                                   telefono_profesor = @telefono
-                               WHERE id_profesor = @id";
+                                SET nombre_profesor = @nombre,
+                                    apellido_profesor = @apellido,
+                                    dni = @dni,
+                                    legajo_profesor = @legajo,
+                                    correo_profesor = @correo,
+                                    telefono_profesor = @telefono
+                                WHERE id_profesor = @id";
 
                 var cmd = new MySqlCommand(sql, cn);
 
                 cmd.Parameters.AddWithValue("@nombre", profesor.NombreProfesor);
                 cmd.Parameters.AddWithValue("@apellido", profesor.ApellidoProfesor);
+                cmd.Parameters.AddWithValue("@dni",
+                    string.IsNullOrWhiteSpace(profesor.DniProfesor) ? (object)System.DBNull.Value : profesor.DniProfesor.Trim());
                 cmd.Parameters.AddWithValue("@legajo", profesor.LegajoProfesor);
                 cmd.Parameters.AddWithValue("@correo", profesor.CorreoProfesor);
                 cmd.Parameters.AddWithValue("@telefono", profesor.TelefonoProfesor);

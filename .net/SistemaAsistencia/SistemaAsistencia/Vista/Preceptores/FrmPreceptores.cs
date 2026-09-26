@@ -6,6 +6,7 @@ using SistemaAsistencia.Controlador;
 using SistemaAsistencia.Modelo.DAO;
 using SistemaAsistencia.Modelo.Entidades;
 using SistemaAsistencia.Vista.Comun;
+using SistemaAsistencia.Utilidades;
 
 namespace SistemaAsistencia.Vista.Preceptores
 {
@@ -20,6 +21,26 @@ namespace SistemaAsistencia.Vista.Preceptores
             InitializeComponent();
 
             preceptorController = new PreceptorController();
+
+            Tema.ConfigurarFondo(this);
+            Tema.EstilizarGrilla(dgvPreceptores);
+
+            Tema.EstilizarBoton(btnGuardar, true);
+            Tema.EstilizarBoton(btnModificar, true);
+            Tema.EstilizarBoton(btnBuscar, false);
+            Tema.EstilizarBoton(btnEliminar, false);
+            Tema.EstilizarBoton(btnLimpiarCrear, false);
+            Tema.EstilizarBoton(btnLimpiarEditar, false);
+
+            // Regla EEST: legajo = DNI (autocompletado, no editable).
+            txtLegajo.ReadOnly = true;
+            txtLegajo.TabStop = false;
+            txtLegajo.BackColor = System.Drawing.SystemColors.Control;
+            txtEditLegajo.ReadOnly = true;
+            txtEditLegajo.TabStop = false;
+            txtEditLegajo.BackColor = System.Drawing.SystemColors.Control;
+            txtDni.TextChanged += (s, e) => txtLegajo.Text = txtDni.Text.Trim();
+            txtEditDni.TextChanged += (s, e) => txtEditLegajo.Text = txtEditDni.Text.Trim();
         }
 
         private void FrmPreceptores_Load(object sender, EventArgs e)
@@ -52,46 +73,69 @@ namespace SistemaAsistencia.Vista.Preceptores
 
             if (dgvPreceptores.Columns.Count > 0)
             {
-                if (dgvPreceptores.Columns.Contains("IdPreceptor"))
-                    dgvPreceptores.Columns["IdPreceptor"].Visible = false;
+                string[] soloRelevantes = { "NombrePreceptor", "ApellidoPreceptor", "Dni", "LegajoPreceptor", "CorreoPreceptor", "TelefonoPreceptor", "Activo" };
+                foreach (DataGridViewColumn col in dgvPreceptores.Columns)
+                    col.Visible = System.Array.IndexOf(soloRelevantes, col.Name) >= 0;
+
                 if (dgvPreceptores.Columns.Contains("NombrePreceptor"))
+                {
                     dgvPreceptores.Columns["NombrePreceptor"].HeaderText = "Nombre";
+                    dgvPreceptores.Columns["NombrePreceptor"].DisplayIndex = 0;
+                }
                 if (dgvPreceptores.Columns.Contains("ApellidoPreceptor"))
+                {
                     dgvPreceptores.Columns["ApellidoPreceptor"].HeaderText = "Apellido";
+                    dgvPreceptores.Columns["ApellidoPreceptor"].DisplayIndex = 1;
+                }
+                if (dgvPreceptores.Columns.Contains("Dni"))
+                {
+                    dgvPreceptores.Columns["Dni"].HeaderText = "DNI";
+                    dgvPreceptores.Columns["Dni"].DisplayIndex = 2;
+                }
                 if (dgvPreceptores.Columns.Contains("LegajoPreceptor"))
+                {
                     dgvPreceptores.Columns["LegajoPreceptor"].HeaderText = "Legajo";
+                    dgvPreceptores.Columns["LegajoPreceptor"].DisplayIndex = 3;
+                }
                 if (dgvPreceptores.Columns.Contains("CorreoPreceptor"))
+                {
                     dgvPreceptores.Columns["CorreoPreceptor"].HeaderText = "Correo";
+                    dgvPreceptores.Columns["CorreoPreceptor"].DisplayIndex = 4;
+                }
                 if (dgvPreceptores.Columns.Contains("TelefonoPreceptor"))
+                {
                     dgvPreceptores.Columns["TelefonoPreceptor"].HeaderText = "Teléfono";
+                    dgvPreceptores.Columns["TelefonoPreceptor"].DisplayIndex = 5;
+                }
+                if (dgvPreceptores.Columns.Contains("Activo"))
+                {
+                    dgvPreceptores.Columns["Activo"].HeaderText = "Activo";
+                    dgvPreceptores.Columns["Activo"].DisplayIndex = 6;
+                    dgvPreceptores.Columns["Activo"].ReadOnly = true;
+                }
+                if (dgvPreceptores.Columns.Contains("Contrasena"))
+                    dgvPreceptores.Columns["Contrasena"].Visible = false;
             }
         }
 
-        // Formato argentino: 54 + área (3) + número (7).
-        // Vacío se permite; a medio completar se exige completar.
-        private static bool TelefonoValido(MaskedTextBox txt)
+        // Teléfono en 3 cajas (CtrlTelefono): | 54 | área máx 3 | número |.
+        private bool TelefonoValidoSimple(CtrlTelefono ctrl)
         {
-            string digitos = new string(txt.Text.Where(char.IsDigit).ToArray());
-            return digitos.Length <= 2 || txt.MaskCompleted;
-        }
-
-        private static string TelefonoLimpio(MaskedTextBox txt)
-        {
-            string digitos = new string(txt.Text.Where(char.IsDigit).ToArray());
-            return digitos.Length <= 2 ? string.Empty : txt.Text;
+            if (!ctrl.EsValido(out string error))
+            {
+                MessageBox.Show(error);
+                ctrl.Enfocar();
+                return false;
+            }
+            return true;
         }
 
         // ---------------- 1. Crear ----------------
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            if (!TelefonoValido(txtTelefono))
-            {
-                MessageBox.Show(
-                    "El teléfono debe estar completo (54 + área de 3 + número) o vacío.");
-                txtTelefono.Focus();
+            if (!TelefonoValidoSimple(ctrlTelCrear))
                 return;
-            }
 
             if (!DniValido(txtDni.Text))
             {
@@ -106,10 +150,10 @@ namespace SistemaAsistencia.Vista.Preceptores
                 {
                     NombrePreceptor = txtNombre.Text,
                     ApellidoPreceptor = txtApellido.Text,
-                    LegajoPreceptor = txtLegajo.Text,
+                    LegajoPreceptor = txtDni.Text.Trim(),
                     Dni = txtDni.Text.Trim(),
                     CorreoPreceptor = txtCorreo.Text,
-                    TelefonoPreceptor = TelefonoLimpio(txtTelefono),
+                    TelefonoPreceptor = ctrlTelCrear.Telefono,
                     Contrasena = txtContrasena.Text
                 };
 
@@ -143,7 +187,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             txtLegajo.Clear();
             txtDni.Clear();
             txtCorreo.Clear();
-            txtTelefono.Clear();
+            ctrlTelCrear.Limpiar();
             txtContrasena.Clear();
             txtNombre.Focus();
         }
@@ -181,7 +225,11 @@ namespace SistemaAsistencia.Vista.Preceptores
                 (p.NombrePreceptor != null &&
                     p.NombrePreceptor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
                 (p.ApellidoPreceptor != null &&
-                    p.ApellidoPreceptor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0));
+                    p.ApellidoPreceptor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                (p.Dni != null &&
+                    p.Dni.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                (p.LegajoPreceptor != null &&
+                    p.LegajoPreceptor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0));
 
             MostrarEnGrilla(resultados);
 
@@ -218,7 +266,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             txtEditLegajo.Text = preceptor.LegajoPreceptor;
             txtEditDni.Text = preceptor.Dni;
             txtEditCorreo.Text = preceptor.CorreoPreceptor;
-            txtEditTelefono.Text = preceptor.TelefonoPreceptor;
+            ctrlTelEdit.Telefono = preceptor.TelefonoPreceptor;
             txtEditContrasena.Clear();
         }
 
@@ -230,13 +278,8 @@ namespace SistemaAsistencia.Vista.Preceptores
                 return;
             }
 
-            if (!TelefonoValido(txtEditTelefono))
-            {
-                MessageBox.Show(
-                    "El teléfono debe estar completo (54 + área de 3 + número) o vacío.");
-                txtEditTelefono.Focus();
+            if (!TelefonoValidoSimple(ctrlTelEdit))
                 return;
-            }
 
             if (!DniValido(txtEditDni.Text))
             {
@@ -252,10 +295,10 @@ namespace SistemaAsistencia.Vista.Preceptores
                     IdPreceptor = idPreceptorSeleccionado,
                     NombrePreceptor = txtEditNombre.Text,
                     ApellidoPreceptor = txtEditApellido.Text,
-                    LegajoPreceptor = txtEditLegajo.Text,
+                    LegajoPreceptor = txtEditDni.Text.Trim(),
                     Dni = txtEditDni.Text.Trim(),
                     CorreoPreceptor = txtEditCorreo.Text,
-                    TelefonoPreceptor = TelefonoLimpio(txtEditTelefono),
+                    TelefonoPreceptor = ctrlTelEdit.Telefono,
                     Contrasena = txtEditContrasena.Text
                 };
 
@@ -344,7 +387,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             txtEditLegajo.Clear();
             txtEditDni.Clear();
             txtEditCorreo.Clear();
-            txtEditTelefono.Clear();
+            ctrlTelEdit.Limpiar();
             txtEditContrasena.Clear();
         }
     }
