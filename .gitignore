@@ -1,0 +1,36 @@
+# --- SECRETOS: nunca subir a GitHub (repo público) ---
+.net/secreto.config
+**/secreto.config
+Api/.env
+App/.env
+**/.env
+*.pem
+*.key
+
+# --- Archivos grandes / entregas ---
+*.zip
+ProyectoEscuela_v7.zip
+
+# --- .NET / Visual Studio ---
+.vs/
+**/bin/
+**/obj/
+**/packages/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# --- Node / Expo (refuerzo; App y Api ya tienen su propio .gitignore) ---
+**/node_modules/
+**/.expo/
+**/dist/
+**/web-build/
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+*.log
+
+# --- OS ---
+.DS_Store
+Thumbs.db

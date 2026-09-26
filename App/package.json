@@ -1,0 +1,28 @@
+{
+  "name": "appasistencia",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "expo": "~57.0.23",
+    "expo-camera": "~57.0.5",
+    "expo-constants": "~57.0.19",
+    "expo-modules-core": "^57.0.18",
+    "expo-status-bar": "~57.0.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-fetch-event-source": "^1.0.1",
+    "react-native-qrcode-svg": "^6.3.26",
+    "react-native-svg": "15.15.4",
+    "react-native-web": "^0.21.2"
+  },
+  "scripts": {
+    "start": "expo start",
+    "start-usb": "expo start --localhost",
+    "android": "expo start --android",
+    "android-usb": "expo start --localhost --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "private": true
+}
