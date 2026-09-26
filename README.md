@@ -1,11 +1,14 @@
+```markdown
 # Sistema Integral de Gestión de Asistencia Escolar
 
-> Aplicación de escritorio para digitalizar el control de asistencia de alumnos y centralizar la gestión de alumnos, profesores, cursos y materias. Proyecto académico EEST.
+> Sistema para digitalizar el control de asistencia de alumnos y centralizar la gestión de alumnos, profesores, preceptores, cursos y materias. Proyecto académico EEST. Compuesto por 3 módulos: **aplicativo de escritorio** (administración), **API REST** (lógica compartida y tiempo real) y **app móvil** (registro de asistencia con QR).
 
 ![C#](https://img.shields.io/badge/C%23-.NET_Framework_4.7.2-239120?logo=csharp&logoColor=white)
-![WinForms](https://img.shields.io/badge/UI-Windows_Forms-blue)
+![WinForms](https://img.shields.io/badge/UI-Windows_Forms+MaterialSkin-blue)
 ![MySQL](https://img.shields.io/badge/DB-MySQL-4479A1?logo=mysql&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/Auth-MongoDB-47A248?logo=mongodb&logoColor=white)
+![Node](https://img.shields.io/badge/API-Node+Express-339933?logo=node.js&logoColor=white)
+![Expo](https://img.shields.io/badge/App-Expo_SDK_57-000020?logo=expo&logoColor=white)
 ![Estado](https://img.shields.io/badge/Estado-En_desarrollo-yellow)
 
 ## Índice
@@ -25,6 +28,8 @@
 - [13. Roadmap](#13-roadmap)
 - [14. Equipo y contexto académico](#14-equipo-y-contexto-académico)
 - [15. Licencia](#15-licencia)
+- [16. Flujo de trabajo (Git)](#16-flujo-de-trabajo-git)
+- [17. Documentación adicional](#17-documentación-adicional)
 
 ## 1. Descripción del proyecto
 
@@ -32,8 +37,9 @@ Actualmente el control de asistencia en la institución se realiza mayormente **
 
 Este proyecto desarrolla un **sistema integral de gestión de asistencia escolar** compuesto por:
 
-1.  **Aplicativo administrativo de escritorio:** gestión de información institucional (alumnos, profesores, cursos, materias, usuarios).
-2.  **Módulo web (planificado):** registro diario de asistencia desde celulares o PC para docentes y preceptores.
+1. **Aplicativo administrativo de escritorio** (`.net/`): gestión de información institucional (alumnos, profesores, preceptores, cursos, materias, dictados, inscripciones, usuarios).
+2. **API REST** (`Api/`): expone los datos a la app móvil, emite eventos en tiempo real (SSE) y gestiona las clases con token QR.
+3. **App móvil** (`App/`): registro de asistencia desde el celular para docentes, preceptores y alumnos (escaneo QR o código corto).
 
 Objetivo: digitalizar el registro diario, mejorar la disponibilidad de la información y automatizar reportes en una plataforma segura y organizada.
 
@@ -55,136 +61,230 @@ Objetivo: digitalizar el registro diario, mejorar la disponibilidad de la inform
 
 ## 3. Alcance y funcionalidades
 
-Funcionalidades de la primera versión:
+**Escritorio (WinForms):**
 
 | Módulo | Descripción |
 |---|---|
 | Autenticación | Login de usuarios con control de sesión |
+| Primer usuario | Creación del primer Administrador si no existen usuarios |
 | Usuarios y perfiles | Alta, baja, modificación y activación/desactivación |
 | Alumnos | ABM completo de alumnos |
 | Profesores | ABM completo de profesores |
-| Cursos | Administración de cursos |
+| Preceptores | ABM completo de preceptores (contraseña bcrypt compatible con la API) |
+| Cursos / Especialidades | Administración de cursos y especialidades |
 | Materias | ABM de materias con asignación de especialidad |
-| Asistencias | Registro diario de asistencias |
-| Inasistencias | Justificación de inasistencias |
-| Historial | Consulta de historial de asistencia por alumno |
-| Auditoría | Bitácora de acciones de usuarios |
-| Permisos | Control de acceso según rol |
+| Dictados | Gestión de dictados (materia + profesor + preceptor) |
+| Inscripciones | Inscripción de alumnos a dictados |
+| Permisos | Control de acceso según rol (menú filtrado en `FrmPrincipal`) |
+
+**API (`Api/`, puerto 3000):**
+
+| Endpoint | Descripción |
+|---|---|
+| `GET /api/health` | Verifica que el servidor responde |
+| `GET /api/alumnos` | Lista alumnos (MySQL) |
+| `POST /api/login` | Autenticación por rol: preceptor, profesor o alumno |
+| `GET /api/dictados`, `GET /api/dictados/:id/alumnos`, `GET /api/dictados/alumno/:idAlumno` | Consulta de dictados e inscriptos |
+| `GET /api/asistencia`, `POST /api/asistencia`, `POST /api/asistencia/lote` | Consulta y alta de asistencias |
+| `GET /api/clases?fecha=`, `POST /api/clases`, `PATCH /api/clases/:id` | Apertura y estados de clase |
+| `POST /api/clases/:id/token`, `POST /api/clases/:id/escanear`, `POST /api/clases/ingresar` | Token QR, escaneo y código corto |
+| `GET /api/eventos` | Eventos en tiempo real (SSE, autenticado) |
+
+**App móvil (`App/`):**
+
+| Pantalla | Rol |
+|---|---|
+| `PreceptorPrincipal` | Preceptor: clases y asistencia |
+| `ProfesorPrincipal` | Profesor: sus dictados y clases |
+| `AlumnoPrincipal` | Alumno: escaneo QR e ingreso con código |
 
 ## 4. Usuarios y roles
 
 | Rol | Permisos |
 |---|---|
-| **Administrador** | Configuración general, gestión de usuarios y mantenimiento |
+| **Administrador** | Configuración general, gestión de usuarios y mantenimiento (solo escritorio) |
 | **Directivo** | Administración de alumnos, profesores, cursos, materias y consultas generales |
-| **Preceptor** | Registro y seguimiento de asistencias e inasistencias |
-| **Profesor** | Carga de asistencia de sus clases |
-| **Alumno** | Consulta de su historial (según permisos) |
+| **Preceptor** | Registro y seguimiento de asistencias e inasistencias (escritorio + app) |
+| **Profesor** | Carga de asistencia de sus clases (escritorio + app) |
+| **Alumno** | Registra su asistencia escaneando el QR (app) |
 
-El menú principal (`FrmPrincipal`) aplica permisos automáticamente: el módulo de usuarios solo es visible para el Administrador.
+El menú principal (`FrmPrincipal`) aplica permisos automáticamente: el módulo de usuarios solo es visible para el Administrador. El login de la API solo contempla preceptor, profesor y alumno (no hay rol administrador en la API).
 
 ## 5. Tecnologías y arquitectura
 
-**Stack:**
+**Escritorio (`.net/`):**
 - **Lenguaje:** C# .NET Framework 4.7.2
-- **Interfaz:** Windows Forms (WinForms)
-- **Base relacional:** MySQL (alumnos, profesores, materias, especialidades, asistencias)
-- **Base documental:** MongoDB (usuarios y autenticación)
-- **Drivers:** `MySql.Data` + `MongoDB.Driver`
-- **IDE:** Visual Studio Community
-- **Arquitectura:** En capas tipo MVC
+- **Interfaz:** Windows Forms + MaterialSkin.2
+- **Base relacional:** MySQL `gestion_asistencia_eest` (alumnos, profesores, preceptores, materias, especialidades, dictados, inscripciones, asistencias)
+- **Base documental:** MongoDB Atlas (usuarios y autenticación del escritorio)
+- **Drivers:** `MySql.Data` + `MongoDB.Driver` (+ `CryptSharpOfficial` **2.1.0.0** para bcrypt)
+- **IDE:** Visual Studio (con workload .NET desktop development)
+- **Arquitectura:** en capas tipo MVC
 
-**Capas:**
+**API (`Api/`):**
+- Node.js + Express 5, `mysql2`, `bcryptjs`, `cors`, `dotenv`
+- Lee/escribe el mismo MySQL que el escritorio (única fuente de verdad compartida)
+
+**App (`App/`):**
+- React Native con Expo SDK 57, React 19
+- Cámara (`expo-camera`) para escaneo QR, eventos en tiempo real (SSE)
+
+**Capas del escritorio:**
 
 ```
 Vista (Forms) <-> Controlador (Lógica de negocio) <-> Modelo (Entidades + DAO + Conexión)
 ```
 
-- **Modelo/Entidades:** `Alumno`, `Profesor`, `Materia`, `Especialidad`, `Asistencia`, `Usuario`, `Rol`
-- **Modelo/DAO:** `AlumnoDAO`, `ProfesorDAO`, `MateriaDAO`, `EspecialidadDAO` (MySQL) y `UsuarioDAO` (MongoDB con contador autoincremental atómico)
-- **Controlador:** `AlumnoController`, `ProfesorController`, `MateriaController`, `EspecialidadController`, `UsuarioController`
-- **Vista:** `FrmLogin`, `FrmPrincipal`, `FrmAlumnos`, `FrmProfesores`, `FrmMaterias`, `FrmUsuarios`, `FrmPrimerUsuario`
-- **Utilidades:** `Sesion` (usuario actual en memoria)
+- **Modelo/Entidades:** `Alumno`, `Profesor`, `Preceptor`, `Materia`, `Especialidad`, `Dictado`, `Inscripcion`, `Asistencia`, `Usuario`, `Rol`
+- **Modelo/DAO:** `AlumnoDAO`, `ProfesorDAO`, `PreceptorDAO`, `MateriaDAO`, `EspecialidadDAO`, `DictadoDAO`, `InscripcionDAO` (MySQL) y `UsuarioDAO` (MongoDB)
+- **Modelo/Conexion:** `conexionBD.cs` (MySQL), `ConexionMongo.cs` (Atlas)
+- **Controlador:** `AlumnoController`, `ProfesorController`, `PreceptorController`, `MateriaController`, `EspecialidadController`, `DictadoController`, `InscripcionController`, `UsuarioController`
+- **Vista:** `FrmLogin`, `FrmPrincipal`, `FrmInicio`, `FrmAlumnos`, `FrmProfesores`, `FrmPreceptores`, `FrmMaterias`, `FrmEspecialidades`, `FrmDictados`, `FrmInscripcion`, `FrmUsuarios`, `FrmPrimerUsuario`, `FrmConfiguracion`, `FrmConfirmarEliminar`
+- **Utilidades:** `Sesion` (usuario actual en memoria), `Configuracion` (cadenas de conexión), `Logger` (logs en `bin/**/logs`), `DatosException`, `Ejecutor`
+
+**Contraseñas:** las de preceptor/profesor en MySQL usan bcrypt (`$2a$`, costo 10), interoperable entre el escritorio (CryptSharp) y la API (bcryptjs).
+
+> Detalle de sincronización escritorio ↔ app y decisiones pendientes: ver `PROPUESTA-SINCRONIZACION.md`.
 
 ## 6. Estructura del proyecto
 
 ```
-SistemaAsistencia/
-├── SistemaAsistencia.slnx
-└── SistemaAsistencia/
-    ├── Program.cs
-    ├── App.config
-    ├── Controlador/
-    │   ├── AlumnoController.cs
-    │   ├── ProfesorController.cs
-    │   ├── MateriaController.cs
-    │   ├── EspecialidadController.cs
-    │   └── UsuarioController.cs
-    ├── Modelo/
-    │   ├── Conexion/ (conexionBD.cs, ConexionMongo.cs)
-    │   ├── DAO/ (AlumnoDAO, ProfesorDAO, etc.)
-    │   └── Entidades/ (Alumno, Profesor, etc.)
-    ├── Vista/
-    │   ├── Login/FrmLogin.cs
-    │   ├── Principal/FrmPrincipal.cs
-    │   ├── Alumnos/FrmAlumnos.cs
-    │   ├── Profesores/FrmProfesores.cs
-    │   ├── Materias/FrmMaterias.cs
-    │   ├── Usuarios/FrmUsuarios.cs
-    │   └── PrimerUsuario/FrmPrimerUsuario.cs
-    └── Utilidades/Sesion.cs
+Sistema_Asistencia/
+├── README.md
+├── LEEME_recomponer.md            # recomponer los 3 módulos desde un zip
+├── PROPUESTA-SINCRONIZACION.md    # conexión escritorio <-> app (fases)
+├── ComoFuncionaElSistema.pdf/.html
+├── .net/                          # módulo escritorio
+│   ├── CHECKLIST-MEJORAS.md
+│   ├── secreto.config             # LOCAL, gitignored (URI de Atlas ofuscado)
+│   └── SistemaAsistencia/
+│       ├── SistemaAsistencia.slnx
+│       ├── BD/2026-09-24_baja_logica_activo.sql
+│       └── SistemaAsistencia/
+│           ├── Program.cs
+│           ├── App.config         # MySQL local (MongoAtlas se completa por wizard)
+│           ├── packages.config
+│           ├── Controlador/
+│           ├── Modelo/Conexion|DAO|Entidades/
+│           ├── Vista/Login|Principal|Alumnos|Profesores|Preceptores|Materias|Especialidades|Dictados|Inscripcion|Usuarios|PrimerUsuario|Configuracion|Comun/
+│           └── Utilidades/
+├── Api/                           # módulo API (Node/Express)
+│   ├── index.js
+│   ├── .env.example               # plantilla (el .env real es LOCAL, gitignored)
+│   ├── config/db.js
+│   ├── rutas/asistencias.js|clases.js|dictados.js|eventos.js|login.js
+│   ├── scripts/migrar_a_clases.sql|agregar_codigo_clase.sql|seed.js
+│   └── utilidades/
+└── App/                           # módulo móvil (Expo)
+    ├── App.js
+    ├── app.json
+    ├── src/api.js
+    └── src/pantallas/AlumnoPrincipal.js|PreceptorPrincipal.js|ProfesorPrincipal.js
 ```
 
 ## 7. Requisitos previos
 
 **Hardware:**
 - PC con Windows 10 o superior (personal directivo / administrativo)
-- Celular o PC con internet (docentes / preceptores para módulo web)
-- Servidor local o remoto para MySQL / MongoDB
+- Celular con Expo Go + PC en la misma red (app móvil)
+- MySQL Server 8.x (local o remoto) + acceso a MongoDB Atlas
 
 **Software:**
-- Windows 10+
-- Visual Studio 2022 Community (con workload .NET desktop development)
-- MySQL Server 8.x + MySQL Workbench
-- Acceso a MongoDB (local o Atlas)
+- Visual Studio 2022 o superior (workload .NET desktop development)
 - .NET Framework 4.7.2 Developer Pack
+- MySQL Server 8.x + MySQL Workbench
+- Node.js 20+ (para `Api/` y `App/`)
+- Expo Go en el celular (para `App/`)
 
 ## 8. Instalación y configuración
 
-1. **Clonar el repositorio:**
+### 8.1 Escritorio (.NET)
+
+1. **Clonar el repositorio** (trabajo siempre en la branch `Juan-Torres`, ver §16):
    ```bash
-   git clone https://github.com/TU-USUARIO/TU-REPO.git
+   git clone -b Juan-Torres https://github.com/JuanI19T/Sistema_Asistencia.git
    ```
 
 2. **Abrir la solución:**
-   Abrir `SistemaAsistencia/SistemaAsistencia.slnx` en Visual Studio.
+   Abrir `.net/SistemaAsistencia/SistemaAsistencia.slnx` en Visual Studio.
 
 3. **Restaurar paquetes NuGet:**
-   Visual Studio lo hace automático. Paquetes requeridos:
-   - `MySql.Data`
-   - `MongoDB.Driver`
+   Visual Studio lo hace automático (clic derecho en la solución → *Restaurar paquetes NuGet* si hace falta). Incluye `MySql.Data`, `MongoDB.Driver`, `MaterialSkin.2` y `CryptSharpOfficial` (**2.1.0.0**, versionado fijo en `packages.config`).
 
-4. **Configurar bases de datos:**
-   - Crear la base MySQL `gestion_asistencia_eest` e importar el script SQL (si aplica).
-   - Configurar cadenas de conexión en:
-     - `Modelo/Conexion/conexionBD.cs`
-     - `Modelo/Conexion/ConexionMongo.cs`
+4. **Configurar MySQL local:**
+   Revisar la cadena `MySQL` en `SistemaAsistencia/App.config` (apunta a localhost por defecto).
 
 5. **Compilar y ejecutar (F5):**
+   - La primera vez se abre `FrmConfiguracion`: pegar el URI completo de MongoDB Atlas (empieza con `mongodb+srv://`). Se guarda ofuscado en `.net/secreto.config` (local, no se commitea).
    - Si no existen usuarios, se abre `FrmPrimerUsuario` para crear el primer Administrador.
    - Luego se accede con `FrmLogin`.
 
-> Recomendado: agregar un `.gitignore` de Visual Studio para ignorar `bin/`, `obj/`, `.vs/`, `packages/`.
+> Nota: compilar con el MSBuild de Visual Studio. `dotnet build` no es compatible con este proyecto clásico de .NET Framework.
+
+### 8.2 Base de datos MySQL
+
+1. Crear la base `gestion_asistencia_eest` y aplicar (¡borra datos anteriores!):
+   ```bash
+   mysql -u usuario -p gestion_asistencia_eest < Api/scripts/migrar_a_clases.sql
+   ```
+2. Script adicional del escritorio (baja lógica):
+   `.net/SistemaAsistencia/BD/2026-09-24_baja_logica_activo.sql`
+3. Cargar datos de prueba (idempotente; contraseña inicial = DNI):
+   ```bash
+   cd Api
+   node scripts/seed.js
+   ```
+
+### 8.3 API (Node)
+
+1. Crear el archivo de entorno y completarlo con los datos de tu MySQL:
+   ```bash
+   cd Api
+   copy .env.example .env
+   npm install
+   ```
+2. Levantar la API:
+   ```bash
+   node index.js
+   ```
+   Queda escuchando en `http://localhost:3000` (`GET /api/health` para verificar).
+
+### 8.4 App móvil (Expo)
+
+1. Instalar dependencias e iniciar:
+   ```bash
+   cd App
+   npm install
+   npx expo start
+   ```
+2. Escanear el QR con **Expo Go** en el celular (misma red WiFi que la PC; la app resuelve la IP del host automáticamente).
 
 ## 9. Uso del sistema
 
+**Escritorio:**
 1. Iniciar la app, crear el primer usuario Administrador si es la primera vez.
 2. Iniciar sesión con usuario y contraseña.
 3. Desde el menú principal:
-   - **Administrador:** gestiona usuarios, alumnos, profesores y materias.
+   - **Administrador:** gestiona usuarios, alumnos, profesores, preceptores y materias.
    - **Directivo:** administra datos institucionales y consultas.
-   - **Preceptor / Profesor:** registra asistencias diarias.
-4. La sesión actual muestra nombre y rol en `FrmPrincipal`.
+   - **Preceptor / Profesor:** gestionan dictados, inscripciones y datos.
+4. La sesión actual muestra nombre y rol en `FrmPrincipal`. Los errores de arranque quedan en `bin/**/logs/log_*.txt`.
+
+**API + App:**
+1. Levantar MySQL y la API (`node index.js`).
+2. El profesor/preceptor abre su clase desde la app (la API genera el token QR).
+3. El alumno escanea el QR (o ingresa el código corto) y queda registrada su asistencia en tiempo real.
+
+**Datos de prueba (del seed, contraseña = DNI):**
+
+| Rol | Nombre | DNI |
+|---|---|---|
+| Profesor | Carlos Gutierrez | `30111222` |
+| Profesor | María Fernández | `31222333` |
+| Preceptor | Laura Martínez | `34555666` |
+| Alumno | Juan Pérez | `45222001` |
+| Alumno | Ana Gómez | `45222002` |
+| Alumno | Luis Díaz | `45222003` |
 
 ## 10. Metas y factores críticos de éxito
 
@@ -226,6 +326,7 @@ Proyecto académico sin costo de mano de obra.
 | Desarrollo de software | Sin costo (proyecto académico) |
 | MySQL Community Edition | $0 |
 | Visual Studio Community | $0 |
+| Node.js / Express / Expo | $0 |
 | Equipamiento existente | Sin costo adicional |
 | Capacitación de usuarios | Mínima |
 | Mantenimiento anual | Bajo |
@@ -234,15 +335,52 @@ El principal costo futuro será el mantenimiento correctivo y evolutivo.
 
 ## 13. Roadmap
 
-- [x] Login y gestión de primer usuario admin
-- [x] ABM Alumnos, Profesores, Materias, Usuarios
+**Hecho:**
+- [x] Login y gestión de primer usuario admin (escritorio)
+- [x] ABM Alumnos, Profesores, Preceptores, Materias, Especialidades, Dictados, Inscripciones, Usuarios
 - [x] Control de permisos por rol
-- [ ] Registro diario de asistencias
-- [ ] Justificación de inasistencias e historial por alumno
-- [ ] Bitácora de acciones
-- [ ] Reportes automáticos
-- [ ] Módulo web móvil para docentes/preceptores
+- [x] Baja lógica (`activo`) en escritorio + script SQL
+- [x] Credenciales Mongo en `secreto.config` (ofuscado, gitignored)
+- [x] API REST: login, dictados, asistencias, clases con QR, health
+- [x] Eventos en tiempo real (SSE) API → app
+- [x] App móvil con 3 roles + escaneo QR + código corto
+
+**Pendiente:**
+- [ ] Refresco automático en la app ante cambios hechos desde el escritorio (outbox + triggers, ver propuesta Fase 2)
+- [ ] Unificar joins de dictados (INNER vs LEFT) entre escritorio y API
+- [ ] Filtrar `activo` en todos los listados de la API
+- [ ] Exponer `id_preceptor` en `GET /api/dictados`
+- [ ] Endpoints de escritura para dictados (`POST`, `PATCH`)
+- [ ] Rol administrador en la API / unificar estrategia de identidad
+- [ ] Backup/restauración de MySQL y Mongo
+- [ ] Bloqueo por intentos fallidos de login, auditoría, tests
 
 ## 14. Equipo y contexto académico
 
 Proyecto escolar desarrollado por estudiantes de la EEST como Evaluación Anual de Capacidades Profesionales (EACP). Migrado desde carpeta compartida de Drive a GitHub para control de versiones y trabajo colaborativo.
+
+## 15. Licencia
+
+Proyecto académico sin licencia definida por el momento.
+
+## 16. Flujo de trabajo (Git)
+
+- Branch de trabajo: **`Juan-Torres`**. Nunca se trabaja ni commitea directo en `main` ni en otras ramas.
+- Todo cambio va a `main` únicamente vía **Pull Request** desde `Juan-Torres`, previa revisión y aprobación.
+- No commitear nunca secretos ni generados: `secreto.config`, `Api/.env`, `*.zip`, `node_modules/`, `.expo/`, `bin/`, `obj/`, `.vs/`, `packages/` (ver `.gitignore`).
+
+## 17. Documentación adicional
+
+- `ComoFuncionaElSistema.pdf` / `.html`: descripción funcional del sistema.
+- `PROPUESTA-SINCRONIZACION.md`: conexión escritorio ↔ app, problemas detectados y hoja de ruta por fases.
+- `LEEME_recomponer.md`: recomponer los 3 módulos desde un zip (restauración limpia).
+- `.net/CHECKLIST-MEJORAS.md`: checklist de mejoras del escritorio con estados.
+```
+
+## Para aplicar
+
+1. Abrí `README.md` y reemplazá todo el contenido por el de arriba.
+2. Verificá que compile/visualice bien (es solo markdown, sin riesgo).
+3. Después: commit en `Juan-Torres` → push → entra al PR #2 que ya está abierto (o a uno nuevo si ese se mergea antes).
+
+Dos decisiones que tomé y podés revertir: dejé §15 Licencia como "sin licencia definida" (el `LICENSE` de `App/` es el de la plantilla Expo, no del proyecto — no lo usé para no atribuir mal), y no puse nombres en §14 porque no los tengo.
