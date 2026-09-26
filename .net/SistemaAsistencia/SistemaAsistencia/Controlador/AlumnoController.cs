@@ -31,13 +31,58 @@ namespace SistemaAsistencia.Controlador
                 () => alumnoDAO.ObtenerTodos());
         }
 
+        private static bool SoloDigitos(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return false;
+            foreach (char c in s)
+                if (!char.IsDigit(c)) return false;
+            return true;
+        }
+
+        private static void Validar(Alumno alumno)
+        {
+            if (alumno == null)
+                throw new DatosException("Datos de alumno inválidos.");
+            if (string.IsNullOrWhiteSpace(alumno.NombreAlumno) || alumno.NombreAlumno.Trim().Length < 2)
+                throw new DatosException("Ingrese el nombre del alumno.");
+            if (string.IsNullOrWhiteSpace(alumno.ApellidoAlumno) || alumno.ApellidoAlumno.Trim().Length < 2)
+                throw new DatosException("Ingrese el apellido del alumno.");
+            string dni = (alumno.DniAlumno ?? string.Empty).Trim();
+            if (dni.Length == 0)
+                throw new DatosException("Ingrese el DNI del alumno.");
+            if (!SoloDigitos(dni) || dni.Length < 7 || dni.Length > 8)
+                throw new DatosException("El DNI debe tener 7 u 8 dígitos numéricos.");
+            alumno.DniAlumno = dni;
+            string legajo = (alumno.LegajoAlumno ?? string.Empty).Trim();
+            if (legajo.Length == 0)
+                throw new DatosException("Ingrese el legajo del alumno.");
+            if (!SoloDigitos(legajo) || legajo.Length > 10)
+                throw new DatosException("El legajo debe ser numérico de hasta 10 dígitos (lo escriben ustedes).");
+            alumno.LegajoAlumno = legajo;
+            string correo = (alumno.CorreoAlumno ?? string.Empty).Trim();
+            if (correo.Length > 0 && (!correo.Contains("@") || !correo.Contains(".")))
+                throw new DatosException("El correo no tiene un formato válido.");
+            alumno.NombreAlumno = alumno.NombreAlumno.Trim();
+            alumno.ApellidoAlumno = alumno.ApellidoAlumno.Trim();
+            alumno.CorreoAlumno = correo;
+        }
+
         /// <summary>
         /// Agrega un nuevo alumno.
         /// </summary>
         public bool AgregarAlumno(Alumno alumno)
         {
-            return Ejecutor.Ejecutar("Alumno.AgregarAlumno",
-                () => alumnoDAO.Agregar(alumno));
+            Validar(alumno);
+            try
+            {
+                return Ejecutor.Ejecutar("Alumno.AgregarAlumno",
+                    () => alumnoDAO.Agregar(alumno));
+            }
+            catch (DatosException ex) when (ex.InnerException != null &&
+                ex.InnerException.Message.Contains("Duplicate"))
+            {
+                throw new DatosException("Ya existe un alumno con ese DNI o legajo (deben ser únicos).");
+            }
         }
 
         /// <summary>
@@ -45,8 +90,17 @@ namespace SistemaAsistencia.Controlador
         /// </summary>
         public bool ModificarAlumno(Alumno alumno)
         {
-            return Ejecutor.Ejecutar("Alumno.ModificarAlumno",
-                () => alumnoDAO.Modificar(alumno));
+            Validar(alumno);
+            try
+            {
+                return Ejecutor.Ejecutar("Alumno.ModificarAlumno",
+                    () => alumnoDAO.Modificar(alumno));
+            }
+            catch (DatosException ex) when (ex.InnerException != null &&
+                ex.InnerException.Message.Contains("Duplicate"))
+            {
+                throw new DatosException("Ya existe otro alumno con ese DNI o legajo (deben ser únicos).");
+            }
         }
 
         /// <summary>

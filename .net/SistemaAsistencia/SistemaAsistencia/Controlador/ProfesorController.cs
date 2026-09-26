@@ -31,13 +31,54 @@ namespace SistemaAsistencia.Controlador
                 () => profesorDAO.ObtenerTodos());
         }
 
+        private static bool SoloDigitos(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return false;
+            foreach (char c in s)
+                if (!char.IsDigit(c)) return false;
+            return true;
+        }
+
+        private static void Validar(Profesor profesor)
+        {
+            if (profesor == null)
+                throw new DatosException("Datos de profesor inválidos.");
+            if (string.IsNullOrWhiteSpace(profesor.NombreProfesor) || profesor.NombreProfesor.Trim().Length < 2)
+                throw new DatosException("Ingrese el nombre del profesor.");
+            if (string.IsNullOrWhiteSpace(profesor.ApellidoProfesor) || profesor.ApellidoProfesor.Trim().Length < 2)
+                throw new DatosException("Ingrese el apellido del profesor.");
+            string dni = (profesor.DniProfesor ?? string.Empty).Trim();
+            if (dni.Length == 0)
+                throw new DatosException("Ingrese el DNI del profesor.");
+            if (!SoloDigitos(dni) || dni.Length < 7 || dni.Length > 8)
+                throw new DatosException("El DNI debe tener 7 u 8 dígitos numéricos.");
+            profesor.DniProfesor = dni;
+            // Regla EEST: el legajo del personal se autocompleta con el DNI.
+            profesor.LegajoProfesor = dni;
+            string correo = (profesor.CorreoProfesor ?? string.Empty).Trim();
+            if (correo.Length > 0 && (!correo.Contains("@") || !correo.Contains(".")))
+                throw new DatosException("El correo no tiene un formato válido.");
+            profesor.NombreProfesor = profesor.NombreProfesor.Trim();
+            profesor.ApellidoProfesor = profesor.ApellidoProfesor.Trim();
+            profesor.CorreoProfesor = correo;
+        }
+
         /// <summary>
         /// Agrega un nuevo profesor.
         /// </summary>
         public bool AgregarProfesor(Profesor profesor)
         {
-            return Ejecutor.Ejecutar("Profesor.AgregarProfesor",
-                () => profesorDAO.Agregar(profesor));
+            Validar(profesor);
+            try
+            {
+                return Ejecutor.Ejecutar("Profesor.AgregarProfesor",
+                    () => profesorDAO.Agregar(profesor));
+            }
+            catch (DatosException ex) when (ex.InnerException != null &&
+                ex.InnerException.Message.Contains("Duplicate"))
+            {
+                throw new DatosException("Ya existe un profesor con ese DNI o legajo (deben ser únicos).");
+            }
         }
 
         /// <summary>
@@ -45,8 +86,17 @@ namespace SistemaAsistencia.Controlador
         /// </summary>
         public bool ModificarProfesor(Profesor profesor)
         {
-            return Ejecutor.Ejecutar("Profesor.ModificarProfesor",
-                () => profesorDAO.Modificar(profesor));
+            Validar(profesor);
+            try
+            {
+                return Ejecutor.Ejecutar("Profesor.ModificarProfesor",
+                    () => profesorDAO.Modificar(profesor));
+            }
+            catch (DatosException ex) when (ex.InnerException != null &&
+                ex.InnerException.Message.Contains("Duplicate"))
+            {
+                throw new DatosException("Ya existe otro profesor con ese DNI o legajo (deben ser únicos).");
+            }
         }
 
         /// <summary>

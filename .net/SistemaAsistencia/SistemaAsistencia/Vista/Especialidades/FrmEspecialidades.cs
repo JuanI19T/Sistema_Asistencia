@@ -5,6 +5,7 @@ using SistemaAsistencia.Controlador;
 using SistemaAsistencia.Modelo.DAO;
 using SistemaAsistencia.Modelo.Entidades;
 using SistemaAsistencia.Vista.Comun;
+using SistemaAsistencia.Utilidades;
 
 namespace SistemaAsistencia.Vista.Especialidades
 {
@@ -19,6 +20,29 @@ namespace SistemaAsistencia.Vista.Especialidades
             InitializeComponent();
 
             especialidadController = new EspecialidadController();
+
+            Tema.ConfigurarFondo(this);
+            Tema.EstilizarGrilla(dgvEspecialidades);
+
+            Tema.EstilizarBoton(btnBuscar, false);
+            Tema.EstilizarBoton(btnLimpiarEditar, false);
+
+            // Catálogo fijo (Ciclo Básico + 5 tecnicaturas): solo consulta.
+            // El ABM existe por normalización pero no se edita a mano.
+            grpCrear.Visible = false;
+            btnModificar.Visible = false;
+            btnEliminar.Visible = false;
+            txtEditNombre.ReadOnly = true;
+            grpModificar.Text = "Catálogo (solo consulta)";
+            var aviso = new Label
+            {
+                AutoSize = true,
+                Location = new System.Drawing.Point(16, 150),
+                Text = "Catálogo fijo: Ciclo Básico + 5 tecnicaturas (se eligen desde Materias).",
+                ForeColor = System.Drawing.Color.Gray
+            };
+            grpModificar.Controls.Add(aviso);
+            txtEditNombre.Location = new System.Drawing.Point(90, 57);
         }
 
         private void FrmEspecialidades_Load(object sender, EventArgs e)

@@ -67,7 +67,7 @@ app.get('/api/alumnos', async (req, res) => {
   try {
     const [filas] = await pool.query(
       `SELECT id_alumno, nombre_alumno, apellido_alumno, legajo_alumno,
-              correo_alumno, telefono_alumno, telefono_emergencia
+              dni, correo_alumno, telefono_alumno
        FROM ALUMNO
        ORDER BY apellido_alumno, nombre_alumno`
     );

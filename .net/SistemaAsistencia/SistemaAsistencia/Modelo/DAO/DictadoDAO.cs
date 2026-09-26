@@ -23,6 +23,14 @@ namespace SistemaAsistencia.Modelo.DAO
         /// <returns>Objeto Dictado.</returns>
         private Dictado MapearDictado(MySqlDataReader dr)
         {
+            // horario_fin puede no existir en BD anteriores: lectura defensiva.
+            string fin = string.Empty;
+            try
+            {
+                int o = dr.GetOrdinal("horario_fin");
+                if (!dr.IsDBNull(o)) fin = Convert.ToString(dr["horario_fin"]);
+            }
+            catch (IndexOutOfRangeException) { }
             return new Dictado
             {
                 IdDictado = Convert.ToInt32(dr["id_dictado"]),
@@ -30,6 +38,7 @@ namespace SistemaAsistencia.Modelo.DAO
                 IdProfesor = Convert.ToInt32(dr["id_profesor"]),
                 Dia = Convert.ToString(dr["dia"]),
                 Horario = Convert.ToString(dr["horario"]),
+                HorarioFin = fin,
                 Grupo = Convert.ToString(dr["grupo"]),
                 AnioLectivo = Convert.ToInt32(dr["anio_lectivo"]),
                 NombreMateria = Convert.ToString(dr["nombre_materia"]),
@@ -49,7 +58,7 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
-                                      D.dia, D.horario, D.grupo, D.anio_lectivo,
+                                      D.dia, D.horario, D.horario_fin, D.grupo, D.anio_lectivo,
                                       M.nombre_materia, P.apellido_profesor
                                FROM DICTADO D
                                INNER JOIN MATERIA M
@@ -84,9 +93,9 @@ INNER JOIN PROFESOR P
                 cn.Open();
 
                 string sql = @"INSERT INTO DICTADO
-                               (id_materia, id_profesor, dia, horario, grupo, anio_lectivo)
-                               VALUES
-                               (@id_materia, @id_profesor, @dia, @horario, @grupo, @anio_lectivo)";
+                                (id_materia, id_profesor, dia, horario, horario_fin, grupo, anio_lectivo)
+                                VALUES
+                                (@id_materia, @id_profesor, @dia, @horario, @horario_fin, @grupo, @anio_lectivo)";
 
                 var cmd = new MySqlCommand(sql, cn);
 
@@ -94,6 +103,8 @@ INNER JOIN PROFESOR P
                 cmd.Parameters.AddWithValue("@id_profesor", dictado.IdProfesor);
                 cmd.Parameters.AddWithValue("@dia", dictado.Dia);
                 cmd.Parameters.AddWithValue("@horario", dictado.Horario);
+                cmd.Parameters.AddWithValue("@horario_fin",
+                    string.IsNullOrWhiteSpace(dictado.HorarioFin) ? (object)System.DBNull.Value : dictado.HorarioFin);
                 cmd.Parameters.AddWithValue("@grupo", dictado.Grupo);
                 cmd.Parameters.AddWithValue("@anio_lectivo", dictado.AnioLectivo);
 
@@ -111,13 +122,14 @@ INNER JOIN PROFESOR P
                 cn.Open();
 
                 string sql = @"UPDATE DICTADO
-                               SET id_materia = @id_materia,
-                                   id_profesor = @id_profesor,
-                                   dia = @dia,
-                                   horario = @horario,
-                                   grupo = @grupo,
-                                   anio_lectivo = @anio_lectivo
-                               WHERE id_dictado = @id";
+                                SET id_materia = @id_materia,
+                                    id_profesor = @id_profesor,
+                                    dia = @dia,
+                                    horario = @horario,
+                                    horario_fin = @horario_fin,
+                                    grupo = @grupo,
+                                    anio_lectivo = @anio_lectivo
+                                WHERE id_dictado = @id";
 
                 var cmd = new MySqlCommand(sql, cn);
 
@@ -125,6 +137,8 @@ INNER JOIN PROFESOR P
                 cmd.Parameters.AddWithValue("@id_profesor", dictado.IdProfesor);
                 cmd.Parameters.AddWithValue("@dia", dictado.Dia);
                 cmd.Parameters.AddWithValue("@horario", dictado.Horario);
+                cmd.Parameters.AddWithValue("@horario_fin",
+                    string.IsNullOrWhiteSpace(dictado.HorarioFin) ? (object)System.DBNull.Value : dictado.HorarioFin);
                 cmd.Parameters.AddWithValue("@grupo", dictado.Grupo);
                 cmd.Parameters.AddWithValue("@anio_lectivo", dictado.AnioLectivo);
                 cmd.Parameters.AddWithValue("@id", dictado.IdDictado);

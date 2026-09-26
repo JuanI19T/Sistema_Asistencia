@@ -31,11 +31,22 @@ namespace SistemaAsistencia.Controlador
                 () => materiaDAO.ObtenerTodos());
         }
 
+        // La EEST tiene 7 años: el NumericUpDown limita a 1-7,
+        // esto es defensa por si se escribe el valor a mano.
+        private static void Validar(Materia materia)
+        {
+            if (materia == null)
+                throw new DatosException("Datos de materia inválidos.");
+            if (materia.AnioMateria < 1 || materia.AnioMateria > 7)
+                throw new DatosException("El año debe estar entre 1 y 7.");
+        }
+
         /// <summary>
         /// Agrega una nueva materia.
         /// </summary>
         public bool AgregarMateria(Materia materia)
         {
+            Validar(materia);
             return Ejecutor.Ejecutar("Materia.AgregarMateria",
                 () => materiaDAO.Agregar(materia));
         }
@@ -45,6 +56,7 @@ namespace SistemaAsistencia.Controlador
         /// </summary>
         public bool ModificarMateria(Materia materia)
         {
+            Validar(materia);
             return Ejecutor.Ejecutar("Materia.ModificarMateria",
                 () => materiaDAO.Modificar(materia));
         }

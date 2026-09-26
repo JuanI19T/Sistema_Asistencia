@@ -105,7 +105,7 @@ namespace SistemaAsistencia.Vista.Usuarios
                     NombreUsuario = txtUsuario.Text.Trim(),
                     Contrasena = txtPassword.Text,
                     Rol = cmbRol.SelectedItem.ToString(),
-                    Activo = chkActivo.Checked
+                    Activo = true
                 };
 
                 if (usuarioController.AgregarUsuario(usuario))
@@ -136,7 +136,6 @@ namespace SistemaAsistencia.Vista.Usuarios
             txtUsuario.Clear();
             txtPassword.Clear();
             cmbRol.SelectedIndex = -1;
-            chkActivo.Checked = true;
         }
 
         // ---------------- 2. Buscar y modificar ----------------

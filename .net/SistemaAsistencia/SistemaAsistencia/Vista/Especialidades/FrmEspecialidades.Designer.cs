@@ -246,8 +246,8 @@ namespace SistemaAsistencia.Vista.Especialidades
             // tlpBase
             //
             this.tlpBase.ColumnCount = 2;
-            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 68F));
-            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32F));
+            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55F));
+            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45F));
             this.tlpBase.Controls.Add(this.pnlIzquierda, 0, 0);
             this.tlpBase.Controls.Add(this.pnlBusqueda, 1, 0);
             this.tlpBase.Dock = System.Windows.Forms.DockStyle.Fill;

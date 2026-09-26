@@ -23,17 +23,18 @@ namespace SistemaAsistencia.Modelo.DAO
         /// <returns>Objeto Alumno.</returns>
         private Alumno MapearAlumno(MySqlDataReader dr)
         {
+            int ordDni = dr.GetOrdinal("dni");
+            int ordActivo = dr.GetOrdinal("activo");
             return new Alumno
             {
                 IdAlumno = Convert.ToInt32(dr["id_alumno"]),
                 NombreAlumno = Convert.ToString(dr["nombre_alumno"]),
                 ApellidoAlumno = Convert.ToString(dr["apellido_alumno"]),
+                DniAlumno = dr.IsDBNull(ordDni) ? string.Empty : Convert.ToString(dr["dni"]),
                 LegajoAlumno = Convert.ToString(dr["legajo_alumno"]),
                 CorreoAlumno = Convert.ToString(dr["correo_alumno"]),
                 TelefonoAlumno = Convert.ToString(dr["telefono_alumno"]),
-                TelefonoEmergencia = Convert.ToString(dr["telefono_emergencia"]),
-                TelefonoPadre = Convert.ToString(dr["telefono_padre"]),
-                TelefonoMadre = Convert.ToString(dr["telefono_madre"])
+                Activo = !dr.IsDBNull(ordActivo) && Convert.ToBoolean(dr["activo"])
             };
         }
 
@@ -77,24 +78,20 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"INSERT INTO ALUMNO
-                               (nombre_alumno, apellido_alumno, legajo_alumno,
-                                correo_alumno, telefono_alumno,
-                                telefono_emergencia, telefono_padre, telefono_madre)
-                               VALUES
-                               (@nombre, @apellido, @legajo,
-                                @correo, @telefono,
-                                @telefono_emergencia, @telefono_padre, @telefono_madre)";
+                                (nombre_alumno, apellido_alumno, dni, legajo_alumno,
+                                 correo_alumno, telefono_alumno)
+                                VALUES
+                                (@nombre, @apellido, @dni, @legajo,
+                                 @correo, @telefono)";
 
                 var cmd = new MySqlCommand(sql, cn);
 
                 cmd.Parameters.AddWithValue("@nombre", alumno.NombreAlumno);
                 cmd.Parameters.AddWithValue("@apellido", alumno.ApellidoAlumno);
+                cmd.Parameters.AddWithValue("@dni", alumno.DniAlumno.Trim());
                 cmd.Parameters.AddWithValue("@legajo", alumno.LegajoAlumno);
                 cmd.Parameters.AddWithValue("@correo", alumno.CorreoAlumno);
                 cmd.Parameters.AddWithValue("@telefono", alumno.TelefonoAlumno);
-                cmd.Parameters.AddWithValue("@telefono_emergencia", alumno.TelefonoEmergencia);
-                cmd.Parameters.AddWithValue("@telefono_padre", alumno.TelefonoPadre);
-                cmd.Parameters.AddWithValue("@telefono_madre", alumno.TelefonoMadre);
 
                 return cmd.ExecuteNonQuery() > 0;
             }
@@ -110,26 +107,22 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"UPDATE ALUMNO
-                               SET nombre_alumno = @nombre,
-                                   apellido_alumno = @apellido,
-                                   legajo_alumno = @legajo,
-                                   correo_alumno = @correo,
-                                   telefono_alumno = @telefono,
-                                   telefono_emergencia = @telefono_emergencia,
-                                   telefono_padre = @telefono_padre,
-                                   telefono_madre = @telefono_madre
-                               WHERE id_alumno = @id";
+                                SET nombre_alumno = @nombre,
+                                    apellido_alumno = @apellido,
+                                    dni = @dni,
+                                    legajo_alumno = @legajo,
+                                    correo_alumno = @correo,
+                                    telefono_alumno = @telefono
+                                WHERE id_alumno = @id";
 
                 var cmd = new MySqlCommand(sql, cn);
 
                 cmd.Parameters.AddWithValue("@nombre", alumno.NombreAlumno);
                 cmd.Parameters.AddWithValue("@apellido", alumno.ApellidoAlumno);
+                cmd.Parameters.AddWithValue("@dni", alumno.DniAlumno.Trim());
                 cmd.Parameters.AddWithValue("@legajo", alumno.LegajoAlumno);
                 cmd.Parameters.AddWithValue("@correo", alumno.CorreoAlumno);
                 cmd.Parameters.AddWithValue("@telefono", alumno.TelefonoAlumno);
-                cmd.Parameters.AddWithValue("@telefono_emergencia", alumno.TelefonoEmergencia);
-                cmd.Parameters.AddWithValue("@telefono_padre", alumno.TelefonoPadre);
-                cmd.Parameters.AddWithValue("@telefono_madre", alumno.TelefonoMadre);
                 cmd.Parameters.AddWithValue("@id", alumno.IdAlumno);
 
                 return cmd.ExecuteNonQuery() > 0;

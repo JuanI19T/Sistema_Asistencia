@@ -33,32 +33,42 @@ namespace SistemaAsistencia.Vista.Dictados
             this.btnGuardar = new System.Windows.Forms.Button();
             this.nudAnioLectivo = new System.Windows.Forms.NumericUpDown();
             this.lblCAnio = new System.Windows.Forms.Label();
-            this.txtGrupo = new System.Windows.Forms.TextBox();
+            this.nudGrupo = new System.Windows.Forms.NumericUpDown();
             this.lblCGrupo = new System.Windows.Forms.Label();
-            this.txtHorario = new System.Windows.Forms.TextBox();
+            this.dtpHorario = new System.Windows.Forms.DateTimePicker();
             this.lblCHorario = new System.Windows.Forms.Label();
+            this.dtpHorarioFin = new System.Windows.Forms.DateTimePicker();
+            this.lblCFin = new System.Windows.Forms.Label();
             this.cmbDia = new System.Windows.Forms.ComboBox();
             this.lblCDia = new System.Windows.Forms.Label();
             this.cmbProfesor = new System.Windows.Forms.ComboBox();
             this.lblCProfesor = new System.Windows.Forms.Label();
-            this.cmbMateria = new System.Windows.Forms.ComboBox();
-            this.lblCMateria = new System.Windows.Forms.Label();
+            this.dgvMateriaSel = new System.Windows.Forms.DataGridView();
+            this.cmbFiltroEspecialidad = new System.Windows.Forms.ComboBox();
+            this.lblCFiltroEsp = new System.Windows.Forms.Label();
+            this.nudAnioMateria = new System.Windows.Forms.NumericUpDown();
+            this.lblCAnioMateria = new System.Windows.Forms.Label();
             this.grpModificar = new System.Windows.Forms.GroupBox();
             this.btnLimpiarEditar = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
             this.btnModificar = new System.Windows.Forms.Button();
             this.nudEditAnio = new System.Windows.Forms.NumericUpDown();
             this.lblEditAnio = new System.Windows.Forms.Label();
-            this.txtEditGrupo = new System.Windows.Forms.TextBox();
+            this.nudEditGrupo = new System.Windows.Forms.NumericUpDown();
             this.lblEditGrupo = new System.Windows.Forms.Label();
-            this.txtEditHorario = new System.Windows.Forms.TextBox();
+            this.dtpEditHorario = new System.Windows.Forms.DateTimePicker();
             this.lblEditHorario = new System.Windows.Forms.Label();
+            this.dtpEditHorarioFin = new System.Windows.Forms.DateTimePicker();
+            this.lblEditFin = new System.Windows.Forms.Label();
             this.cmbEditDia = new System.Windows.Forms.ComboBox();
             this.lblEditDia = new System.Windows.Forms.Label();
             this.cmbEditProfesor = new System.Windows.Forms.ComboBox();
             this.lblEditProfesor = new System.Windows.Forms.Label();
-            this.cmbEditMateria = new System.Windows.Forms.ComboBox();
-            this.lblEditMateria = new System.Windows.Forms.Label();
+            this.dgvEditMateriaSel = new System.Windows.Forms.DataGridView();
+            this.cmbEditFiltroEspecialidad = new System.Windows.Forms.ComboBox();
+            this.lblEditFiltroEsp = new System.Windows.Forms.Label();
+            this.nudEditAnioMateria = new System.Windows.Forms.NumericUpDown();
+            this.lblEditAnioMateria = new System.Windows.Forms.Label();
             this.lblEditando = new System.Windows.Forms.Label();
             this.pnlBusqueda = new System.Windows.Forms.Panel();
             this.dgvDictados = new System.Windows.Forms.DataGridView();
@@ -69,8 +79,14 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tlpBase = new System.Windows.Forms.TableLayoutPanel();
             this.pnlIzquierda = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.nudAnioLectivo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAnioMateria)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGrupo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEditAnio)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEditAnioMateria)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEditGrupo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDictados)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMateriaSel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvEditMateriaSel)).BeginInit();
             this.grpCrear.SuspendLayout();
             this.grpModificar.SuspendLayout();
             this.pnlBusqueda.SuspendLayout();
@@ -85,67 +101,117 @@ namespace SistemaAsistencia.Vista.Dictados
             this.grpCrear.Controls.Add(this.btnGuardar);
             this.grpCrear.Controls.Add(this.nudAnioLectivo);
             this.grpCrear.Controls.Add(this.lblCAnio);
-            this.grpCrear.Controls.Add(this.txtGrupo);
+            this.grpCrear.Controls.Add(this.nudGrupo);
             this.grpCrear.Controls.Add(this.lblCGrupo);
-            this.grpCrear.Controls.Add(this.txtHorario);
+            this.grpCrear.Controls.Add(this.dtpHorarioFin);
+            this.grpCrear.Controls.Add(this.lblCFin);
+            this.grpCrear.Controls.Add(this.dtpHorario);
             this.grpCrear.Controls.Add(this.lblCHorario);
             this.grpCrear.Controls.Add(this.cmbDia);
             this.grpCrear.Controls.Add(this.lblCDia);
             this.grpCrear.Controls.Add(this.cmbProfesor);
             this.grpCrear.Controls.Add(this.lblCProfesor);
-            this.grpCrear.Controls.Add(this.cmbMateria);
-            this.grpCrear.Controls.Add(this.lblCMateria);
+            this.grpCrear.Controls.Add(this.dgvMateriaSel);
+            this.grpCrear.Controls.Add(this.cmbFiltroEspecialidad);
+            this.grpCrear.Controls.Add(this.lblCFiltroEsp);
+            this.grpCrear.Controls.Add(this.nudAnioMateria);
+            this.grpCrear.Controls.Add(this.lblCAnioMateria);
             this.grpCrear.Dock = System.Windows.Forms.DockStyle.Top;
             this.grpCrear.Location = new System.Drawing.Point(0, 0);
             this.grpCrear.Name = "grpCrear";
-            this.grpCrear.Size = new System.Drawing.Size(560, 190);
+            this.grpCrear.Size = new System.Drawing.Size(560, 325);
             this.grpCrear.TabIndex = 0;
             this.grpCrear.TabStop = false;
             this.grpCrear.Text = "1. Crear dictado";
             //
-            // lblCMateria
+            // lblCAnioMateria
             //
-            this.lblCMateria.AutoSize = true;
-            this.lblCMateria.Location = new System.Drawing.Point(16, 30);
-            this.lblCMateria.Name = "lblCMateria";
-            this.lblCMateria.Size = new System.Drawing.Size(44, 13);
-            this.lblCMateria.TabIndex = 0;
-            this.lblCMateria.Text = "Materia";
+            this.lblCAnioMateria.AutoSize = true;
+            this.lblCAnioMateria.Location = new System.Drawing.Point(16, 30);
+            this.lblCAnioMateria.Name = "lblCAnioMateria";
+            this.lblCAnioMateria.Size = new System.Drawing.Size(26, 13);
+            this.lblCAnioMateria.TabIndex = 0;
+            this.lblCAnioMateria.Text = "Año";
             //
-            // cmbMateria
+            // nudAnioMateria
             //
-            this.cmbMateria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMateria.FormattingEnabled = true;
-            this.cmbMateria.Location = new System.Drawing.Point(110, 27);
-            this.cmbMateria.Name = "cmbMateria";
-            this.cmbMateria.Size = new System.Drawing.Size(170, 21);
-            this.cmbMateria.TabIndex = 1;
+            this.nudAnioMateria.Location = new System.Drawing.Point(90, 27);
+            this.nudAnioMateria.Maximum = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            this.nudAnioMateria.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudAnioMateria.Name = "nudAnioMateria";
+            this.nudAnioMateria.Size = new System.Drawing.Size(120, 20);
+            this.nudAnioMateria.TabIndex = 1;
+            this.nudAnioMateria.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            //
+            // lblCFiltroEsp
+            //
+            this.lblCFiltroEsp.AutoSize = true;
+            this.lblCFiltroEsp.Location = new System.Drawing.Point(16, 60);
+            this.lblCFiltroEsp.Name = "lblCFiltroEsp";
+            this.lblCFiltroEsp.Size = new System.Drawing.Size(67, 13);
+            this.lblCFiltroEsp.TabIndex = 2;
+            this.lblCFiltroEsp.Text = "Especialidad";
+            //
+            // cmbFiltroEspecialidad
+            //
+            this.cmbFiltroEspecialidad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFiltroEspecialidad.FormattingEnabled = true;
+            this.cmbFiltroEspecialidad.Location = new System.Drawing.Point(90, 57);
+            this.cmbFiltroEspecialidad.Name = "cmbFiltroEspecialidad";
+            this.cmbFiltroEspecialidad.Size = new System.Drawing.Size(170, 21);
+            this.cmbFiltroEspecialidad.TabIndex = 3;
+            //
+            // dgvMateriaSel
+            //
+            this.dgvMateriaSel.AllowUserToAddRows = false;
+            this.dgvMateriaSel.AllowUserToDeleteRows = false;
+            this.dgvMateriaSel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvMateriaSel.Location = new System.Drawing.Point(16, 90);
+            this.dgvMateriaSel.MultiSelect = false;
+            this.dgvMateriaSel.Name = "dgvMateriaSel";
+            this.dgvMateriaSel.ReadOnly = true;
+            this.dgvMateriaSel.RowHeadersVisible = false;
+            this.dgvMateriaSel.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvMateriaSel.Size = new System.Drawing.Size(528, 110);
+            this.dgvMateriaSel.TabIndex = 8;
             //
             // lblCProfesor
             //
             this.lblCProfesor.AutoSize = true;
-            this.lblCProfesor.Location = new System.Drawing.Point(16, 60);
+            this.lblCProfesor.Location = new System.Drawing.Point(16, 210);
             this.lblCProfesor.Name = "lblCProfesor";
             this.lblCProfesor.Size = new System.Drawing.Size(46, 13);
-            this.lblCProfesor.TabIndex = 2;
+            this.lblCProfesor.TabIndex = 11;
             this.lblCProfesor.Text = "Profesor";
             //
             // cmbProfesor
             //
             this.cmbProfesor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbProfesor.FormattingEnabled = true;
-            this.cmbProfesor.Location = new System.Drawing.Point(110, 57);
+            this.cmbProfesor.Location = new System.Drawing.Point(90, 207);
             this.cmbProfesor.Name = "cmbProfesor";
             this.cmbProfesor.Size = new System.Drawing.Size(170, 21);
-            this.cmbProfesor.TabIndex = 3;
+            this.cmbProfesor.TabIndex = 12;
             //
             // lblCDia
             //
             this.lblCDia.AutoSize = true;
-            this.lblCDia.Location = new System.Drawing.Point(16, 90);
+            this.lblCDia.Location = new System.Drawing.Point(290, 30);
             this.lblCDia.Name = "lblCDia";
             this.lblCDia.Size = new System.Drawing.Size(30, 13);
-            this.lblCDia.TabIndex = 4;
+            this.lblCDia.TabIndex = 8;
             this.lblCDia.Text = "Día";
             //
             // cmbDia
@@ -158,55 +224,92 @@ namespace SistemaAsistencia.Vista.Dictados
             "MIÉRCOLES",
             "JUEVES",
             "VIERNES"});
-            this.cmbDia.Location = new System.Drawing.Point(110, 87);
+            this.cmbDia.Location = new System.Drawing.Point(360, 27);
             this.cmbDia.Name = "cmbDia";
             this.cmbDia.Size = new System.Drawing.Size(170, 21);
-            this.cmbDia.TabIndex = 5;
+            this.cmbDia.TabIndex = 9;
             //
             // lblCHorario
             //
             this.lblCHorario.AutoSize = true;
-            this.lblCHorario.Location = new System.Drawing.Point(300, 30);
+            this.lblCHorario.Location = new System.Drawing.Point(290, 60);
             this.lblCHorario.Name = "lblCHorario";
             this.lblCHorario.Size = new System.Drawing.Size(46, 13);
-            this.lblCHorario.TabIndex = 6;
-            this.lblCHorario.Text = "Horario";
+            this.lblCHorario.TabIndex = 10;
+            this.lblCHorario.Text = "Inicio";
             //
-            // txtHorario
+            // dtpHorario
             //
-            this.txtHorario.Location = new System.Drawing.Point(380, 27);
-            this.txtHorario.Name = "txtHorario";
-            this.txtHorario.Size = new System.Drawing.Size(140, 20);
-            this.txtHorario.TabIndex = 7;
+            this.dtpHorario.CustomFormat = "HH:mm";
+            this.dtpHorario.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpHorario.Location = new System.Drawing.Point(360, 57);
+            this.dtpHorario.Name = "dtpHorario";
+            this.dtpHorario.ShowUpDown = true;
+            this.dtpHorario.Size = new System.Drawing.Size(140, 20);
+            this.dtpHorario.TabIndex = 11;
+            //
+            // lblCFin
+            //
+            this.lblCFin.AutoSize = true;
+            this.lblCFin.Location = new System.Drawing.Point(290, 90);
+            this.lblCFin.Name = "lblCFin";
+            this.lblCFin.Size = new System.Drawing.Size(26, 13);
+            this.lblCFin.TabIndex = 11;
+            this.lblCFin.Text = "Fin";
+            //
+            // dtpHorarioFin
+            //
+            this.dtpHorarioFin.CustomFormat = "HH:mm";
+            this.dtpHorarioFin.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpHorarioFin.Location = new System.Drawing.Point(360, 87);
+            this.dtpHorarioFin.Name = "dtpHorarioFin";
+            this.dtpHorarioFin.ShowUpDown = true;
+            this.dtpHorarioFin.Size = new System.Drawing.Size(140, 20);
+            this.dtpHorarioFin.TabIndex = 12;
             //
             // lblCGrupo
             //
             this.lblCGrupo.AutoSize = true;
-            this.lblCGrupo.Location = new System.Drawing.Point(300, 60);
+            this.lblCGrupo.Location = new System.Drawing.Point(290, 210);
             this.lblCGrupo.Name = "lblCGrupo";
             this.lblCGrupo.Size = new System.Drawing.Size(36, 13);
-            this.lblCGrupo.TabIndex = 8;
+            this.lblCGrupo.TabIndex = 13;
             this.lblCGrupo.Text = "Grupo";
             //
-            // txtGrupo
+            // nudGrupo
             //
-            this.txtGrupo.Location = new System.Drawing.Point(380, 57);
-            this.txtGrupo.Name = "txtGrupo";
-            this.txtGrupo.Size = new System.Drawing.Size(140, 20);
-            this.txtGrupo.TabIndex = 9;
+            this.nudGrupo.Location = new System.Drawing.Point(360, 207);
+            this.nudGrupo.Maximum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.nudGrupo.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudGrupo.Name = "nudGrupo";
+            this.nudGrupo.Size = new System.Drawing.Size(120, 20);
+            this.nudGrupo.TabIndex = 14;
+            this.nudGrupo.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             //
             // lblCAnio
             //
             this.lblCAnio.AutoSize = true;
-            this.lblCAnio.Location = new System.Drawing.Point(300, 90);
+            this.lblCAnio.Location = new System.Drawing.Point(16, 240);
             this.lblCAnio.Name = "lblCAnio";
-            this.lblCAnio.Size = new System.Drawing.Size(26, 13);
-            this.lblCAnio.TabIndex = 10;
-            this.lblCAnio.Text = "Año";
+            this.lblCAnio.Size = new System.Drawing.Size(62, 13);
+            this.lblCAnio.TabIndex = 15;
+            this.lblCAnio.Text = "Año lectivo";
             //
             // nudAnioLectivo
             //
-            this.nudAnioLectivo.Location = new System.Drawing.Point(380, 87);
+            this.nudAnioLectivo.Location = new System.Drawing.Point(90, 237);
             this.nudAnioLectivo.Maximum = new decimal(new int[] {
             2100,
             0,
@@ -219,7 +322,7 @@ namespace SistemaAsistencia.Vista.Dictados
             0});
             this.nudAnioLectivo.Name = "nudAnioLectivo";
             this.nudAnioLectivo.Size = new System.Drawing.Size(120, 20);
-            this.nudAnioLectivo.TabIndex = 11;
+            this.nudAnioLectivo.TabIndex = 16;
             this.nudAnioLectivo.Value = new decimal(new int[] {
             2026,
             0,
@@ -228,20 +331,20 @@ namespace SistemaAsistencia.Vista.Dictados
             //
             // btnGuardar
             //
-            this.btnGuardar.Location = new System.Drawing.Point(140, 140);
+            this.btnGuardar.Location = new System.Drawing.Point(150, 270);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(105, 32);
-            this.btnGuardar.TabIndex = 12;
+            this.btnGuardar.TabIndex = 17;
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             //
             // btnLimpiarCrear
             //
-            this.btnLimpiarCrear.Location = new System.Drawing.Point(260, 140);
+            this.btnLimpiarCrear.Location = new System.Drawing.Point(270, 270);
             this.btnLimpiarCrear.Name = "btnLimpiarCrear";
             this.btnLimpiarCrear.Size = new System.Drawing.Size(105, 32);
-            this.btnLimpiarCrear.TabIndex = 13;
+            this.btnLimpiarCrear.TabIndex = 18;
             this.btnLimpiarCrear.Text = "Limpiar";
             this.btnLimpiarCrear.UseVisualStyleBackColor = true;
             this.btnLimpiarCrear.Click += new System.EventHandler(this.btnLimpiarCrear_Click);
@@ -253,19 +356,24 @@ namespace SistemaAsistencia.Vista.Dictados
             this.grpModificar.Controls.Add(this.btnModificar);
             this.grpModificar.Controls.Add(this.nudEditAnio);
             this.grpModificar.Controls.Add(this.lblEditAnio);
-            this.grpModificar.Controls.Add(this.txtEditGrupo);
+            this.grpModificar.Controls.Add(this.nudEditGrupo);
             this.grpModificar.Controls.Add(this.lblEditGrupo);
-            this.grpModificar.Controls.Add(this.txtEditHorario);
+            this.grpModificar.Controls.Add(this.dtpEditHorarioFin);
+            this.grpModificar.Controls.Add(this.lblEditFin);
+            this.grpModificar.Controls.Add(this.dtpEditHorario);
             this.grpModificar.Controls.Add(this.lblEditHorario);
             this.grpModificar.Controls.Add(this.cmbEditDia);
             this.grpModificar.Controls.Add(this.lblEditDia);
             this.grpModificar.Controls.Add(this.cmbEditProfesor);
             this.grpModificar.Controls.Add(this.lblEditProfesor);
-            this.grpModificar.Controls.Add(this.cmbEditMateria);
-            this.grpModificar.Controls.Add(this.lblEditMateria);
+            this.grpModificar.Controls.Add(this.dgvEditMateriaSel);
+            this.grpModificar.Controls.Add(this.cmbEditFiltroEspecialidad);
+            this.grpModificar.Controls.Add(this.lblEditFiltroEsp);
+            this.grpModificar.Controls.Add(this.nudEditAnioMateria);
+            this.grpModificar.Controls.Add(this.lblEditAnioMateria);
             this.grpModificar.Controls.Add(this.lblEditando);
             this.grpModificar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpModificar.Location = new System.Drawing.Point(0, 190);
+            this.grpModificar.Location = new System.Drawing.Point(0, 250);
             this.grpModificar.Name = "grpModificar";
             this.grpModificar.Size = new System.Drawing.Size(560, 410);
             this.grpModificar.TabIndex = 1;
@@ -282,49 +390,94 @@ namespace SistemaAsistencia.Vista.Dictados
             this.lblEditando.TabIndex = 0;
             this.lblEditando.Text = "Editando: (seleccione de la lista)";
             //
-            // lblEditMateria
+            // lblEditAnioMateria
             //
-            this.lblEditMateria.AutoSize = true;
-            this.lblEditMateria.Location = new System.Drawing.Point(16, 56);
-            this.lblEditMateria.Name = "lblEditMateria";
-            this.lblEditMateria.Size = new System.Drawing.Size(44, 13);
-            this.lblEditMateria.TabIndex = 1;
-            this.lblEditMateria.Text = "Materia";
+            this.lblEditAnioMateria.AutoSize = true;
+            this.lblEditAnioMateria.Location = new System.Drawing.Point(16, 58);
+            this.lblEditAnioMateria.Name = "lblEditAnioMateria";
+            this.lblEditAnioMateria.Size = new System.Drawing.Size(26, 13);
+            this.lblEditAnioMateria.TabIndex = 1;
+            this.lblEditAnioMateria.Text = "Año";
             //
-            // cmbEditMateria
+            // nudEditAnioMateria
             //
-            this.cmbEditMateria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEditMateria.FormattingEnabled = true;
-            this.cmbEditMateria.Location = new System.Drawing.Point(110, 53);
-            this.cmbEditMateria.Name = "cmbEditMateria";
-            this.cmbEditMateria.Size = new System.Drawing.Size(170, 21);
-            this.cmbEditMateria.TabIndex = 2;
+            this.nudEditAnioMateria.Location = new System.Drawing.Point(90, 55);
+            this.nudEditAnioMateria.Maximum = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            this.nudEditAnioMateria.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudEditAnioMateria.Name = "nudEditAnioMateria";
+            this.nudEditAnioMateria.Size = new System.Drawing.Size(120, 20);
+            this.nudEditAnioMateria.TabIndex = 2;
+            this.nudEditAnioMateria.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            //
+            // lblEditFiltroEsp
+            //
+            this.lblEditFiltroEsp.AutoSize = true;
+            this.lblEditFiltroEsp.Location = new System.Drawing.Point(16, 88);
+            this.lblEditFiltroEsp.Name = "lblEditFiltroEsp";
+            this.lblEditFiltroEsp.Size = new System.Drawing.Size(67, 13);
+            this.lblEditFiltroEsp.TabIndex = 5;
+            this.lblEditFiltroEsp.Text = "Especialidad";
+            //
+            // cmbEditFiltroEspecialidad
+            //
+            this.cmbEditFiltroEspecialidad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEditFiltroEspecialidad.FormattingEnabled = true;
+            this.cmbEditFiltroEspecialidad.Location = new System.Drawing.Point(90, 85);
+            this.cmbEditFiltroEspecialidad.Name = "cmbEditFiltroEspecialidad";
+            this.cmbEditFiltroEspecialidad.Size = new System.Drawing.Size(170, 21);
+            this.cmbEditFiltroEspecialidad.TabIndex = 6;
+            //
+            // dgvEditMateriaSel
+            //
+            this.dgvEditMateriaSel.AllowUserToAddRows = false;
+            this.dgvEditMateriaSel.AllowUserToDeleteRows = false;
+            this.dgvEditMateriaSel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvEditMateriaSel.Location = new System.Drawing.Point(16, 118);
+            this.dgvEditMateriaSel.MultiSelect = false;
+            this.dgvEditMateriaSel.Name = "dgvEditMateriaSel";
+            this.dgvEditMateriaSel.ReadOnly = true;
+            this.dgvEditMateriaSel.RowHeadersVisible = false;
+            this.dgvEditMateriaSel.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvEditMateriaSel.Size = new System.Drawing.Size(528, 110);
+            this.dgvEditMateriaSel.TabIndex = 9;
             //
             // lblEditProfesor
             //
             this.lblEditProfesor.AutoSize = true;
-            this.lblEditProfesor.Location = new System.Drawing.Point(16, 86);
+            this.lblEditProfesor.Location = new System.Drawing.Point(16, 238);
             this.lblEditProfesor.Name = "lblEditProfesor";
             this.lblEditProfesor.Size = new System.Drawing.Size(46, 13);
-            this.lblEditProfesor.TabIndex = 3;
+            this.lblEditProfesor.TabIndex = 10;
             this.lblEditProfesor.Text = "Profesor";
             //
             // cmbEditProfesor
             //
             this.cmbEditProfesor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbEditProfesor.FormattingEnabled = true;
-            this.cmbEditProfesor.Location = new System.Drawing.Point(110, 83);
+            this.cmbEditProfesor.Location = new System.Drawing.Point(90, 235);
             this.cmbEditProfesor.Name = "cmbEditProfesor";
             this.cmbEditProfesor.Size = new System.Drawing.Size(170, 21);
-            this.cmbEditProfesor.TabIndex = 4;
+            this.cmbEditProfesor.TabIndex = 11;
             //
             // lblEditDia
             //
             this.lblEditDia.AutoSize = true;
-            this.lblEditDia.Location = new System.Drawing.Point(16, 116);
+            this.lblEditDia.Location = new System.Drawing.Point(290, 58);
             this.lblEditDia.Name = "lblEditDia";
             this.lblEditDia.Size = new System.Drawing.Size(30, 13);
-            this.lblEditDia.TabIndex = 5;
+            this.lblEditDia.TabIndex = 3;
             this.lblEditDia.Text = "Día";
             //
             // cmbEditDia
@@ -337,55 +490,92 @@ namespace SistemaAsistencia.Vista.Dictados
             "MIÉRCOLES",
             "JUEVES",
             "VIERNES"});
-            this.cmbEditDia.Location = new System.Drawing.Point(110, 113);
+            this.cmbEditDia.Location = new System.Drawing.Point(360, 55);
             this.cmbEditDia.Name = "cmbEditDia";
             this.cmbEditDia.Size = new System.Drawing.Size(170, 21);
-            this.cmbEditDia.TabIndex = 6;
+            this.cmbEditDia.TabIndex = 4;
             //
             // lblEditHorario
             //
             this.lblEditHorario.AutoSize = true;
-            this.lblEditHorario.Location = new System.Drawing.Point(300, 56);
+            this.lblEditHorario.Location = new System.Drawing.Point(290, 88);
             this.lblEditHorario.Name = "lblEditHorario";
             this.lblEditHorario.Size = new System.Drawing.Size(46, 13);
             this.lblEditHorario.TabIndex = 7;
-            this.lblEditHorario.Text = "Horario";
+            this.lblEditHorario.Text = "Inicio";
             //
-            // txtEditHorario
+            // dtpEditHorario
             //
-            this.txtEditHorario.Location = new System.Drawing.Point(380, 53);
-            this.txtEditHorario.Name = "txtEditHorario";
-            this.txtEditHorario.Size = new System.Drawing.Size(140, 20);
-            this.txtEditHorario.TabIndex = 8;
+            this.dtpEditHorario.CustomFormat = "HH:mm";
+            this.dtpEditHorario.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpEditHorario.Location = new System.Drawing.Point(360, 85);
+            this.dtpEditHorario.Name = "dtpEditHorario";
+            this.dtpEditHorario.ShowUpDown = true;
+            this.dtpEditHorario.Size = new System.Drawing.Size(140, 20);
+            this.dtpEditHorario.TabIndex = 8;
+            //
+            // lblEditFin
+            //
+            this.lblEditFin.AutoSize = true;
+            this.lblEditFin.Location = new System.Drawing.Point(290, 118);
+            this.lblEditFin.Name = "lblEditFin";
+            this.lblEditFin.Size = new System.Drawing.Size(26, 13);
+            this.lblEditFin.TabIndex = 11;
+            this.lblEditFin.Text = "Fin";
+            //
+            // dtpEditHorarioFin
+            //
+            this.dtpEditHorarioFin.CustomFormat = "HH:mm";
+            this.dtpEditHorarioFin.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpEditHorarioFin.Location = new System.Drawing.Point(360, 115);
+            this.dtpEditHorarioFin.Name = "dtpEditHorarioFin";
+            this.dtpEditHorarioFin.ShowUpDown = true;
+            this.dtpEditHorarioFin.Size = new System.Drawing.Size(140, 20);
+            this.dtpEditHorarioFin.TabIndex = 12;
             //
             // lblEditGrupo
             //
             this.lblEditGrupo.AutoSize = true;
-            this.lblEditGrupo.Location = new System.Drawing.Point(300, 86);
+            this.lblEditGrupo.Location = new System.Drawing.Point(290, 238);
             this.lblEditGrupo.Name = "lblEditGrupo";
             this.lblEditGrupo.Size = new System.Drawing.Size(36, 13);
-            this.lblEditGrupo.TabIndex = 9;
+            this.lblEditGrupo.TabIndex = 12;
             this.lblEditGrupo.Text = "Grupo";
             //
-            // txtEditGrupo
+            // nudEditGrupo
             //
-            this.txtEditGrupo.Location = new System.Drawing.Point(380, 83);
-            this.txtEditGrupo.Name = "txtEditGrupo";
-            this.txtEditGrupo.Size = new System.Drawing.Size(140, 20);
-            this.txtEditGrupo.TabIndex = 10;
+            this.nudEditGrupo.Location = new System.Drawing.Point(360, 235);
+            this.nudEditGrupo.Maximum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.nudEditGrupo.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudEditGrupo.Name = "nudEditGrupo";
+            this.nudEditGrupo.Size = new System.Drawing.Size(120, 20);
+            this.nudEditGrupo.TabIndex = 13;
+            this.nudEditGrupo.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             //
             // lblEditAnio
             //
             this.lblEditAnio.AutoSize = true;
-            this.lblEditAnio.Location = new System.Drawing.Point(300, 116);
+            this.lblEditAnio.Location = new System.Drawing.Point(16, 268);
             this.lblEditAnio.Name = "lblEditAnio";
-            this.lblEditAnio.Size = new System.Drawing.Size(26, 13);
-            this.lblEditAnio.TabIndex = 11;
-            this.lblEditAnio.Text = "Año";
+            this.lblEditAnio.Size = new System.Drawing.Size(62, 13);
+            this.lblEditAnio.TabIndex = 14;
+            this.lblEditAnio.Text = "Año lectivo";
             //
             // nudEditAnio
             //
-            this.nudEditAnio.Location = new System.Drawing.Point(380, 113);
+            this.nudEditAnio.Location = new System.Drawing.Point(90, 265);
             this.nudEditAnio.Maximum = new decimal(new int[] {
             2100,
             0,
@@ -398,7 +588,7 @@ namespace SistemaAsistencia.Vista.Dictados
             0});
             this.nudEditAnio.Name = "nudEditAnio";
             this.nudEditAnio.Size = new System.Drawing.Size(120, 20);
-            this.nudEditAnio.TabIndex = 12;
+            this.nudEditAnio.TabIndex = 15;
             this.nudEditAnio.Value = new decimal(new int[] {
             2026,
             0,
@@ -407,30 +597,30 @@ namespace SistemaAsistencia.Vista.Dictados
             //
             // btnModificar
             //
-            this.btnModificar.Location = new System.Drawing.Point(40, 166);
+            this.btnModificar.Location = new System.Drawing.Point(40, 298);
             this.btnModificar.Name = "btnModificar";
             this.btnModificar.Size = new System.Drawing.Size(105, 32);
-            this.btnModificar.TabIndex = 13;
+            this.btnModificar.TabIndex = 16;
             this.btnModificar.Text = "Modificar";
             this.btnModificar.UseVisualStyleBackColor = true;
             this.btnModificar.Click += new System.EventHandler(this.btnModificar_Click);
             //
             // btnEliminar
             //
-            this.btnEliminar.Location = new System.Drawing.Point(160, 166);
+            this.btnEliminar.Location = new System.Drawing.Point(160, 298);
             this.btnEliminar.Name = "btnEliminar";
             this.btnEliminar.Size = new System.Drawing.Size(105, 32);
-            this.btnEliminar.TabIndex = 14;
+            this.btnEliminar.TabIndex = 17;
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.UseVisualStyleBackColor = true;
             this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
             //
             // btnLimpiarEditar
             //
-            this.btnLimpiarEditar.Location = new System.Drawing.Point(280, 166);
+            this.btnLimpiarEditar.Location = new System.Drawing.Point(280, 298);
             this.btnLimpiarEditar.Name = "btnLimpiarEditar";
             this.btnLimpiarEditar.Size = new System.Drawing.Size(105, 32);
-            this.btnLimpiarEditar.TabIndex = 15;
+            this.btnLimpiarEditar.TabIndex = 18;
             this.btnLimpiarEditar.Text = "Limpiar";
             this.btnLimpiarEditar.UseVisualStyleBackColor = true;
             this.btnLimpiarEditar.Click += new System.EventHandler(this.btnLimpiarEditar_Click);
@@ -502,8 +692,8 @@ namespace SistemaAsistencia.Vista.Dictados
             // tlpBase
             //
             this.tlpBase.ColumnCount = 2;
-            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 68F));
-            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32F));
+            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55F));
+            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45F));
             this.tlpBase.Controls.Add(this.pnlIzquierda, 0, 0);
             this.tlpBase.Controls.Add(this.pnlBusqueda, 1, 0);
             this.tlpBase.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -545,8 +735,14 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tlpBase.ResumeLayout(false);
             this.pnlIzquierda.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvDictados)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMateriaSel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvEditMateriaSel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAnioLectivo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAnioMateria)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGrupo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEditAnio)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEditAnioMateria)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEditGrupo)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -554,32 +750,42 @@ namespace SistemaAsistencia.Vista.Dictados
         #endregion
 
         private System.Windows.Forms.GroupBox grpCrear;
-        private System.Windows.Forms.Label lblCMateria;
-        private System.Windows.Forms.ComboBox cmbMateria;
+        private System.Windows.Forms.Label lblCAnioMateria;
+        private System.Windows.Forms.NumericUpDown nudAnioMateria;
+        private System.Windows.Forms.Label lblCFiltroEsp;
+        private System.Windows.Forms.ComboBox cmbFiltroEspecialidad;
+        private System.Windows.Forms.DataGridView dgvMateriaSel;
         private System.Windows.Forms.Label lblCProfesor;
         private System.Windows.Forms.ComboBox cmbProfesor;
         private System.Windows.Forms.Label lblCDia;
         private System.Windows.Forms.ComboBox cmbDia;
         private System.Windows.Forms.Label lblCHorario;
-        private System.Windows.Forms.TextBox txtHorario;
+        private System.Windows.Forms.DateTimePicker dtpHorario;
+        private System.Windows.Forms.Label lblCFin;
+        private System.Windows.Forms.DateTimePicker dtpHorarioFin;
         private System.Windows.Forms.Label lblCGrupo;
-        private System.Windows.Forms.TextBox txtGrupo;
+        private System.Windows.Forms.NumericUpDown nudGrupo;
         private System.Windows.Forms.Label lblCAnio;
         private System.Windows.Forms.NumericUpDown nudAnioLectivo;
         private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.Button btnLimpiarCrear;
         private System.Windows.Forms.GroupBox grpModificar;
         private System.Windows.Forms.Label lblEditando;
-        private System.Windows.Forms.Label lblEditMateria;
-        private System.Windows.Forms.ComboBox cmbEditMateria;
+        private System.Windows.Forms.Label lblEditAnioMateria;
+        private System.Windows.Forms.NumericUpDown nudEditAnioMateria;
+        private System.Windows.Forms.Label lblEditFiltroEsp;
+        private System.Windows.Forms.ComboBox cmbEditFiltroEspecialidad;
+        private System.Windows.Forms.DataGridView dgvEditMateriaSel;
         private System.Windows.Forms.Label lblEditProfesor;
         private System.Windows.Forms.ComboBox cmbEditProfesor;
         private System.Windows.Forms.Label lblEditDia;
         private System.Windows.Forms.ComboBox cmbEditDia;
         private System.Windows.Forms.Label lblEditHorario;
-        private System.Windows.Forms.TextBox txtEditHorario;
+        private System.Windows.Forms.DateTimePicker dtpEditHorario;
+        private System.Windows.Forms.Label lblEditFin;
+        private System.Windows.Forms.DateTimePicker dtpEditHorarioFin;
         private System.Windows.Forms.Label lblEditGrupo;
-        private System.Windows.Forms.TextBox txtEditGrupo;
+        private System.Windows.Forms.NumericUpDown nudEditGrupo;
         private System.Windows.Forms.Label lblEditAnio;
         private System.Windows.Forms.NumericUpDown nudEditAnio;
         private System.Windows.Forms.Button btnModificar;

@@ -21,6 +21,28 @@ namespace SistemaAsistencia.Vista.Materias
 
             materiaController = new MateriaController();
             especialidadController = new EspecialidadController();
+
+            // La especialidad condiciona el año: Ciclo Básico 1-3, tecnicaturas 4-7.
+            cmbEspecialidad.SelectedIndexChanged += (s, e) =>
+                AjustarRangoAnio(cmbEspecialidad, nudAnioMateria);
+            cmbEditEspecialidad.SelectedIndexChanged += (s, e) =>
+                AjustarRangoAnio(cmbEditEspecialidad, nudEditAnio);
+        }
+
+        private static void AjustarRangoAnio(ComboBox combo, NumericUpDown nud)
+        {
+            int min = 1, max = 7;
+            if (combo.SelectedIndex >= 0)
+            {
+                if (EsCicloBasico(NombreEspecialidadDe(combo))) { min = 1; max = 3; }
+                else { min = 4; max = 7; }
+            }
+
+            // Orden seguro: nunca dejar Value fuera de [Minimum, Maximum].
+            decimal v = nud.Value;
+            if (v < min) { nud.Maximum = max; nud.Minimum = min; nud.Value = min; }
+            else if (v > max) { nud.Minimum = min; nud.Maximum = max; nud.Value = max; }
+            else { nud.Minimum = min; nud.Maximum = max; }
         }
 
         private void FrmMaterias_Load(object sender, EventArgs e)
@@ -80,7 +102,43 @@ namespace SistemaAsistencia.Vista.Materias
                     dgvMaterias.Columns["CargaHoraria"].HeaderText = "Carga Horaria";
                 if (dgvMaterias.Columns.Contains("AnioMateria"))
                     dgvMaterias.Columns["AnioMateria"].HeaderText = "Año";
+                if (dgvMaterias.Columns.Contains("Ciclo"))
+                    dgvMaterias.Columns["Ciclo"].HeaderText = "Ciclo";
             }
+        }
+
+        // Regla EEST: años 1-3 van con "Ciclo Básico"; años 4-7 con su tecnicatura.
+        private static bool EsCicloBasico(string nombreEspecialidad)
+        {
+            string n = (nombreEspecialidad ?? string.Empty).Trim();
+            return n.Equals("Ciclo Básico", StringComparison.OrdinalIgnoreCase)
+                || n.Equals("Ciclo Basico", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string NombreEspecialidadDe(ComboBox combo)
+        {
+            var esp = combo.SelectedItem as Especialidad;
+            if (esp != null && !string.IsNullOrWhiteSpace(esp.NombreEspecialidad))
+                return esp.NombreEspecialidad;
+            return combo.Text;
+        }
+
+        private static bool CicloValido(int anio, string nombreEspecialidad)
+        {
+            bool basico = EsCicloBasico(nombreEspecialidad);
+            if (anio >= 1 && anio <= 3 && !basico)
+            {
+                MessageBox.Show(
+                    "Las materias de 1° a 3° año deben registrarse con la especialidad 'Ciclo Básico'.");
+                return false;
+            }
+            if (anio >= 4 && anio <= 7 && basico)
+            {
+                MessageBox.Show(
+                    "Las materias de 4° a 7° año deben registrarse con su tecnicatura (no 'Ciclo Básico').");
+                return false;
+            }
+            return true;
         }
 
         // ---------------- 1. Crear ----------------
@@ -90,6 +148,12 @@ namespace SistemaAsistencia.Vista.Materias
             if (cmbEspecialidad.SelectedIndex < 0)
             {
                 MessageBox.Show("Seleccione una especialidad.");
+                cmbEspecialidad.Focus();
+                return;
+            }
+
+            if (!CicloValido(Convert.ToInt32(nudAnioMateria.Value), NombreEspecialidadDe(cmbEspecialidad)))
+            {
                 cmbEspecialidad.Focus();
                 return;
             }
@@ -132,7 +196,7 @@ namespace SistemaAsistencia.Vista.Materias
             cmbEspecialidad.SelectedIndex = -1;
             txtNombre.Clear();
             nudCargaHoraria.Value = 0;
-            nudAnioMateria.Value = 0;
+            nudAnioMateria.Value = nudAnioMateria.Minimum;
         }
 
         // ---------------- 2. Buscar y modificar ----------------
@@ -223,6 +287,9 @@ namespace SistemaAsistencia.Vista.Materias
                 MessageBox.Show("Seleccione una especialidad.");
                 return;
             }
+
+            if (!CicloValido(Convert.ToInt32(nudEditAnio.Value), NombreEspecialidadDe(cmbEditEspecialidad)))
+                return;
 
             try
             {
@@ -317,7 +384,7 @@ namespace SistemaAsistencia.Vista.Materias
             txtEditNombre.Clear();
             cmbEditEspecialidad.SelectedIndex = -1;
             nudEditCarga.Value = 0;
-            nudEditAnio.Value = 0;
+            nudEditAnio.Value = nudEditAnio.Minimum;
         }
     }
 }

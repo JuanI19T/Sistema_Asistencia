@@ -31,13 +31,9 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.grpCrear = new System.Windows.Forms.GroupBox();
             this.btnLimpiarCrear = new System.Windows.Forms.Button();
             this.btnGuardar = new System.Windows.Forms.Button();
-            this.txtTelMadre = new System.Windows.Forms.MaskedTextBox();
-            this.lblCTelMadre = new System.Windows.Forms.Label();
-            this.txtTelPadre = new System.Windows.Forms.MaskedTextBox();
-            this.lblCTelPadre = new System.Windows.Forms.Label();
-            this.txtTelEmergencia = new System.Windows.Forms.MaskedTextBox();
-            this.lblCTelEmergencia = new System.Windows.Forms.Label();
-            this.txtTelefono = new System.Windows.Forms.MaskedTextBox();
+            this.txtDni = new System.Windows.Forms.TextBox();
+            this.lblCDni = new System.Windows.Forms.Label();
+            this.ctrlTelCrear = new SistemaAsistencia.Vista.Comun.CtrlTelefono();
             this.lblCTelefono = new System.Windows.Forms.Label();
             this.txtCorreo = new System.Windows.Forms.TextBox();
             this.lblCCorreo = new System.Windows.Forms.Label();
@@ -51,13 +47,9 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.btnLimpiarEditar = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
             this.btnModificar = new System.Windows.Forms.Button();
-            this.txtEditTelMadre = new System.Windows.Forms.MaskedTextBox();
-            this.lblEditTelMadre = new System.Windows.Forms.Label();
-            this.txtEditTelPadre = new System.Windows.Forms.MaskedTextBox();
-            this.lblEditTelPadre = new System.Windows.Forms.Label();
-            this.txtEditTelEmergencia = new System.Windows.Forms.MaskedTextBox();
-            this.lblEditTelEmergencia = new System.Windows.Forms.Label();
-            this.txtEditTelefono = new System.Windows.Forms.MaskedTextBox();
+            this.txtEditDni = new System.Windows.Forms.TextBox();
+            this.lblEditDni = new System.Windows.Forms.Label();
+            this.ctrlTelEdit = new SistemaAsistencia.Vista.Comun.CtrlTelefono();
             this.lblEditTelefono = new System.Windows.Forms.Label();
             this.txtEditCorreo = new System.Windows.Forms.TextBox();
             this.lblEditCorreo = new System.Windows.Forms.Label();
@@ -89,13 +81,9 @@ namespace SistemaAsistencia.Vista.Alumnos
             //
             this.grpCrear.Controls.Add(this.btnLimpiarCrear);
             this.grpCrear.Controls.Add(this.btnGuardar);
-            this.grpCrear.Controls.Add(this.txtTelMadre);
-            this.grpCrear.Controls.Add(this.lblCTelMadre);
-            this.grpCrear.Controls.Add(this.txtTelPadre);
-            this.grpCrear.Controls.Add(this.lblCTelPadre);
-            this.grpCrear.Controls.Add(this.txtTelEmergencia);
-            this.grpCrear.Controls.Add(this.lblCTelEmergencia);
-            this.grpCrear.Controls.Add(this.txtTelefono);
+            this.grpCrear.Controls.Add(this.txtDni);
+            this.grpCrear.Controls.Add(this.lblCDni);
+            this.grpCrear.Controls.Add(this.ctrlTelCrear);
             this.grpCrear.Controls.Add(this.lblCTelefono);
             this.grpCrear.Controls.Add(this.txtCorreo);
             this.grpCrear.Controls.Add(this.lblCCorreo);
@@ -108,7 +96,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.grpCrear.Dock = System.Windows.Forms.DockStyle.Top;
             this.grpCrear.Location = new System.Drawing.Point(0, 0);
             this.grpCrear.Name = "grpCrear";
-            this.grpCrear.Size = new System.Drawing.Size(560, 215);
+            this.grpCrear.Size = new System.Drawing.Size(560, 190);
             this.grpCrear.TabIndex = 0;
             this.grpCrear.TabStop = false;
             this.grpCrear.Text = "1. Crear alumno";
@@ -124,7 +112,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             //
             // txtNombre
             //
-            this.txtNombre.Location = new System.Drawing.Point(110, 25);
+            this.txtNombre.Location = new System.Drawing.Point(85, 25);
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(150, 20);
             this.txtNombre.TabIndex = 1;
@@ -140,7 +128,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             //
             // txtApellido
             //
-            this.txtApellido.Location = new System.Drawing.Point(110, 55);
+            this.txtApellido.Location = new System.Drawing.Point(85, 55);
             this.txtApellido.Name = "txtApellido";
             this.txtApellido.Size = new System.Drawing.Size(150, 20);
             this.txtApellido.TabIndex = 3;
@@ -156,7 +144,8 @@ namespace SistemaAsistencia.Vista.Alumnos
             //
             // txtLegajo
             //
-            this.txtLegajo.Location = new System.Drawing.Point(110, 85);
+            this.txtLegajo.Location = new System.Drawing.Point(85, 85);
+            this.txtLegajo.MaxLength = 10;
             this.txtLegajo.Name = "txtLegajo";
             this.txtLegajo.Size = new System.Drawing.Size(150, 20);
             this.txtLegajo.TabIndex = 5;
@@ -172,7 +161,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             //
             // txtCorreo
             //
-            this.txtCorreo.Location = new System.Drawing.Point(110, 115);
+            this.txtCorreo.Location = new System.Drawing.Point(85, 115);
             this.txtCorreo.Name = "txtCorreo";
             this.txtCorreo.Size = new System.Drawing.Size(150, 20);
             this.txtCorreo.TabIndex = 7;
@@ -186,81 +175,46 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.lblCTelefono.TabIndex = 8;
             this.lblCTelefono.Text = "Teléfono";
             //
-            // txtTelefono
+            // ctrlTelCrear
             //
-            this.txtTelefono.Location = new System.Drawing.Point(390, 25);
-            this.txtTelefono.Mask = "54 000 0000000";
-            this.txtTelefono.Name = "txtTelefono";
-            this.txtTelefono.Size = new System.Drawing.Size(140, 20);
-            this.txtTelefono.TabIndex = 9;
+            this.ctrlTelCrear.Location = new System.Drawing.Point(360, 25);
+            this.ctrlTelCrear.Name = "ctrlTelCrear";
+            this.ctrlTelCrear.Size = new System.Drawing.Size(180, 22);
+            this.ctrlTelCrear.TabIndex = 9;
             //
-            // lblCTelEmergencia
+            // lblCDni
             //
-            this.lblCTelEmergencia.AutoSize = true;
-            this.lblCTelEmergencia.Location = new System.Drawing.Point(290, 58);
-            this.lblCTelEmergencia.Name = "lblCTelEmergencia";
-            this.lblCTelEmergencia.Size = new System.Drawing.Size(83, 13);
-            this.lblCTelEmergencia.TabIndex = 10;
-            this.lblCTelEmergencia.Text = "Tel. Emergencia";
+            this.lblCDni.AutoSize = true;
+            this.lblCDni.Location = new System.Drawing.Point(290, 58);
+            this.lblCDni.Name = "lblCDni";
+            this.lblCDni.Size = new System.Drawing.Size(26, 13);
+            this.lblCDni.TabIndex = 10;
+            this.lblCDni.Text = "DNI";
             //
-            // txtTelEmergencia
+            // txtDni
             //
-            this.txtTelEmergencia.Location = new System.Drawing.Point(390, 55);
-            this.txtTelEmergencia.Mask = "54 000 0000000";
-            this.txtTelEmergencia.Name = "txtTelEmergencia";
-            this.txtTelEmergencia.Size = new System.Drawing.Size(140, 20);
-            this.txtTelEmergencia.TabIndex = 11;
-            //
-            // lblCTelPadre
-            //
-            this.lblCTelPadre.AutoSize = true;
-            this.lblCTelPadre.Location = new System.Drawing.Point(290, 88);
-            this.lblCTelPadre.Name = "lblCTelPadre";
-            this.lblCTelPadre.Size = new System.Drawing.Size(58, 13);
-            this.lblCTelPadre.TabIndex = 12;
-            this.lblCTelPadre.Text = "Tel. Padre";
-            //
-            // txtTelPadre
-            //
-            this.txtTelPadre.Location = new System.Drawing.Point(390, 85);
-            this.txtTelPadre.Mask = "54 000 0000000";
-            this.txtTelPadre.Name = "txtTelPadre";
-            this.txtTelPadre.Size = new System.Drawing.Size(140, 20);
-            this.txtTelPadre.TabIndex = 13;
-            //
-            // lblCTelMadre
-            //
-            this.lblCTelMadre.AutoSize = true;
-            this.lblCTelMadre.Location = new System.Drawing.Point(290, 118);
-            this.lblCTelMadre.Name = "lblCTelMadre";
-            this.lblCTelMadre.Size = new System.Drawing.Size(59, 13);
-            this.lblCTelMadre.TabIndex = 14;
-            this.lblCTelMadre.Text = "Tel. Madre";
-            //
-            // txtTelMadre
-            //
-            this.txtTelMadre.Location = new System.Drawing.Point(390, 115);
-            this.txtTelMadre.Mask = "54 000 0000000";
-            this.txtTelMadre.Name = "txtTelMadre";
-            this.txtTelMadre.Size = new System.Drawing.Size(140, 20);
-            this.txtTelMadre.TabIndex = 15;
+            this.txtDni.Location = new System.Drawing.Point(360, 55);
+            this.txtDni.MaxLength = 8;
+            this.txtDni.Name = "txtDni";
+            this.txtDni.Size = new System.Drawing.Size(140, 20);
+            this.txtDni.TabIndex = 11;
             //
             // btnGuardar
             //
-            this.btnGuardar.Location = new System.Drawing.Point(140, 168);
+            this.btnGuardar.Location = new System.Drawing.Point(140, 145);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(105, 32);
-            this.btnGuardar.TabIndex = 16;
+            this.btnGuardar.TabIndex = 12;
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             //
             // btnLimpiarCrear
             //
-            this.btnLimpiarCrear.Location = new System.Drawing.Point(260, 168);
+            this.btnLimpiarCrear.Location = new System.Drawing.Point(260, 145);
             this.btnLimpiarCrear.Name = "btnLimpiarCrear";
             this.btnLimpiarCrear.Size = new System.Drawing.Size(105, 32);
-            this.btnLimpiarCrear.TabIndex = 17;
+            this.btnLimpiarCrear.TabIndex = 13;
             this.btnLimpiarCrear.Text = "Limpiar";
             this.btnLimpiarCrear.UseVisualStyleBackColor = true;
             this.btnLimpiarCrear.Click += new System.EventHandler(this.btnLimpiarCrear_Click);
@@ -270,13 +224,9 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.grpModificar.Controls.Add(this.btnLimpiarEditar);
             this.grpModificar.Controls.Add(this.btnEliminar);
             this.grpModificar.Controls.Add(this.btnModificar);
-            this.grpModificar.Controls.Add(this.txtEditTelMadre);
-            this.grpModificar.Controls.Add(this.lblEditTelMadre);
-            this.grpModificar.Controls.Add(this.txtEditTelPadre);
-            this.grpModificar.Controls.Add(this.lblEditTelPadre);
-            this.grpModificar.Controls.Add(this.txtEditTelEmergencia);
-            this.grpModificar.Controls.Add(this.lblEditTelEmergencia);
-            this.grpModificar.Controls.Add(this.txtEditTelefono);
+            this.grpModificar.Controls.Add(this.txtEditDni);
+            this.grpModificar.Controls.Add(this.lblEditDni);
+            this.grpModificar.Controls.Add(this.ctrlTelEdit);
             this.grpModificar.Controls.Add(this.lblEditTelefono);
             this.grpModificar.Controls.Add(this.txtEditCorreo);
             this.grpModificar.Controls.Add(this.lblEditCorreo);
@@ -288,9 +238,9 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.grpModificar.Controls.Add(this.lblEditNombre);
             this.grpModificar.Controls.Add(this.lblEditando);
             this.grpModificar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpModificar.Location = new System.Drawing.Point(0, 215);
+            this.grpModificar.Location = new System.Drawing.Point(0, 190);
             this.grpModificar.Name = "grpModificar";
-            this.grpModificar.Size = new System.Drawing.Size(560, 385);
+            this.grpModificar.Size = new System.Drawing.Size(560, 410);
             this.grpModificar.TabIndex = 1;
             this.grpModificar.TabStop = false;
             this.grpModificar.Text = "2. Modificar alumno";
@@ -316,7 +266,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             //
             // txtEditNombre
             //
-            this.txtEditNombre.Location = new System.Drawing.Point(110, 53);
+            this.txtEditNombre.Location = new System.Drawing.Point(85, 53);
             this.txtEditNombre.Name = "txtEditNombre";
             this.txtEditNombre.Size = new System.Drawing.Size(150, 20);
             this.txtEditNombre.TabIndex = 2;
@@ -332,7 +282,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             //
             // txtEditApellido
             //
-            this.txtEditApellido.Location = new System.Drawing.Point(110, 83);
+            this.txtEditApellido.Location = new System.Drawing.Point(85, 83);
             this.txtEditApellido.Name = "txtEditApellido";
             this.txtEditApellido.Size = new System.Drawing.Size(150, 20);
             this.txtEditApellido.TabIndex = 4;
@@ -348,7 +298,8 @@ namespace SistemaAsistencia.Vista.Alumnos
             //
             // txtEditLegajo
             //
-            this.txtEditLegajo.Location = new System.Drawing.Point(110, 113);
+            this.txtEditLegajo.Location = new System.Drawing.Point(85, 113);
+            this.txtEditLegajo.MaxLength = 10;
             this.txtEditLegajo.Name = "txtEditLegajo";
             this.txtEditLegajo.Size = new System.Drawing.Size(150, 20);
             this.txtEditLegajo.TabIndex = 6;
@@ -364,7 +315,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             //
             // txtEditCorreo
             //
-            this.txtEditCorreo.Location = new System.Drawing.Point(110, 143);
+            this.txtEditCorreo.Location = new System.Drawing.Point(85, 143);
             this.txtEditCorreo.Name = "txtEditCorreo";
             this.txtEditCorreo.Size = new System.Drawing.Size(150, 20);
             this.txtEditCorreo.TabIndex = 8;
@@ -378,91 +329,56 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.lblEditTelefono.TabIndex = 9;
             this.lblEditTelefono.Text = "Teléfono";
             //
-            // txtEditTelefono
+            // ctrlTelEdit
             //
-            this.txtEditTelefono.Location = new System.Drawing.Point(390, 53);
-            this.txtEditTelefono.Mask = "54 000 0000000";
-            this.txtEditTelefono.Name = "txtEditTelefono";
-            this.txtEditTelefono.Size = new System.Drawing.Size(140, 20);
-            this.txtEditTelefono.TabIndex = 10;
+            this.ctrlTelEdit.Location = new System.Drawing.Point(360, 53);
+            this.ctrlTelEdit.Name = "ctrlTelEdit";
+            this.ctrlTelEdit.Size = new System.Drawing.Size(180, 22);
+            this.ctrlTelEdit.TabIndex = 10;
             //
-            // lblEditTelEmergencia
+            // lblEditDni
             //
-            this.lblEditTelEmergencia.AutoSize = true;
-            this.lblEditTelEmergencia.Location = new System.Drawing.Point(290, 86);
-            this.lblEditTelEmergencia.Name = "lblEditTelEmergencia";
-            this.lblEditTelEmergencia.Size = new System.Drawing.Size(83, 13);
-            this.lblEditTelEmergencia.TabIndex = 11;
-            this.lblEditTelEmergencia.Text = "Tel. Emergencia";
+            this.lblEditDni.AutoSize = true;
+            this.lblEditDni.Location = new System.Drawing.Point(290, 86);
+            this.lblEditDni.Name = "lblEditDni";
+            this.lblEditDni.Size = new System.Drawing.Size(26, 13);
+            this.lblEditDni.TabIndex = 11;
+            this.lblEditDni.Text = "DNI";
             //
-            // txtEditTelEmergencia
+            // txtEditDni
             //
-            this.txtEditTelEmergencia.Location = new System.Drawing.Point(390, 83);
-            this.txtEditTelEmergencia.Mask = "54 000 0000000";
-            this.txtEditTelEmergencia.Name = "txtEditTelEmergencia";
-            this.txtEditTelEmergencia.Size = new System.Drawing.Size(140, 20);
-            this.txtEditTelEmergencia.TabIndex = 12;
-            //
-            // lblEditTelPadre
-            //
-            this.lblEditTelPadre.AutoSize = true;
-            this.lblEditTelPadre.Location = new System.Drawing.Point(290, 116);
-            this.lblEditTelPadre.Name = "lblEditTelPadre";
-            this.lblEditTelPadre.Size = new System.Drawing.Size(58, 13);
-            this.lblEditTelPadre.TabIndex = 13;
-            this.lblEditTelPadre.Text = "Tel. Padre";
-            //
-            // txtEditTelPadre
-            //
-            this.txtEditTelPadre.Location = new System.Drawing.Point(390, 113);
-            this.txtEditTelPadre.Mask = "54 000 0000000";
-            this.txtEditTelPadre.Name = "txtEditTelPadre";
-            this.txtEditTelPadre.Size = new System.Drawing.Size(140, 20);
-            this.txtEditTelPadre.TabIndex = 14;
-            //
-            // lblEditTelMadre
-            //
-            this.lblEditTelMadre.AutoSize = true;
-            this.lblEditTelMadre.Location = new System.Drawing.Point(290, 146);
-            this.lblEditTelMadre.Name = "lblEditTelMadre";
-            this.lblEditTelMadre.Size = new System.Drawing.Size(59, 13);
-            this.lblEditTelMadre.TabIndex = 15;
-            this.lblEditTelMadre.Text = "Tel. Madre";
-            //
-            // txtEditTelMadre
-            //
-            this.txtEditTelMadre.Location = new System.Drawing.Point(390, 143);
-            this.txtEditTelMadre.Mask = "54 000 0000000";
-            this.txtEditTelMadre.Name = "txtEditTelMadre";
-            this.txtEditTelMadre.Size = new System.Drawing.Size(140, 20);
-            this.txtEditTelMadre.TabIndex = 16;
+            this.txtEditDni.Location = new System.Drawing.Point(360, 83);
+            this.txtEditDni.MaxLength = 8;
+            this.txtEditDni.Name = "txtEditDni";
+            this.txtEditDni.Size = new System.Drawing.Size(140, 20);
+            this.txtEditDni.TabIndex = 12;
             //
             // btnModificar
             //
-            this.btnModificar.Location = new System.Drawing.Point(40, 196);
+            this.btnModificar.Location = new System.Drawing.Point(40, 176);
             this.btnModificar.Name = "btnModificar";
             this.btnModificar.Size = new System.Drawing.Size(105, 32);
-            this.btnModificar.TabIndex = 17;
+            this.btnModificar.TabIndex = 13;
             this.btnModificar.Text = "Modificar";
             this.btnModificar.UseVisualStyleBackColor = true;
             this.btnModificar.Click += new System.EventHandler(this.btnModificar_Click);
             //
             // btnEliminar
             //
-            this.btnEliminar.Location = new System.Drawing.Point(160, 196);
+            this.btnEliminar.Location = new System.Drawing.Point(160, 176);
             this.btnEliminar.Name = "btnEliminar";
             this.btnEliminar.Size = new System.Drawing.Size(105, 32);
-            this.btnEliminar.TabIndex = 18;
+            this.btnEliminar.TabIndex = 14;
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.UseVisualStyleBackColor = true;
             this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
             //
             // btnLimpiarEditar
             //
-            this.btnLimpiarEditar.Location = new System.Drawing.Point(280, 196);
+            this.btnLimpiarEditar.Location = new System.Drawing.Point(280, 176);
             this.btnLimpiarEditar.Name = "btnLimpiarEditar";
             this.btnLimpiarEditar.Size = new System.Drawing.Size(105, 32);
-            this.btnLimpiarEditar.TabIndex = 19;
+            this.btnLimpiarEditar.TabIndex = 15;
             this.btnLimpiarEditar.Text = "Limpiar";
             this.btnLimpiarEditar.UseVisualStyleBackColor = true;
             this.btnLimpiarEditar.Click += new System.EventHandler(this.btnLimpiarEditar_Click);
@@ -534,8 +450,8 @@ namespace SistemaAsistencia.Vista.Alumnos
             // tlpBase
             //
             this.tlpBase.ColumnCount = 2;
-            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 68F));
-            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32F));
+            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55F));
+            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45F));
             this.tlpBase.Controls.Add(this.pnlIzquierda, 0, 0);
             this.tlpBase.Controls.Add(this.pnlBusqueda, 1, 0);
             this.tlpBase.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -593,13 +509,9 @@ namespace SistemaAsistencia.Vista.Alumnos
         private System.Windows.Forms.Label lblCCorreo;
         private System.Windows.Forms.TextBox txtCorreo;
         private System.Windows.Forms.Label lblCTelefono;
-        private System.Windows.Forms.MaskedTextBox txtTelefono;
-        private System.Windows.Forms.Label lblCTelEmergencia;
-        private System.Windows.Forms.MaskedTextBox txtTelEmergencia;
-        private System.Windows.Forms.Label lblCTelPadre;
-        private System.Windows.Forms.MaskedTextBox txtTelPadre;
-        private System.Windows.Forms.Label lblCTelMadre;
-        private System.Windows.Forms.MaskedTextBox txtTelMadre;
+        private SistemaAsistencia.Vista.Comun.CtrlTelefono ctrlTelCrear;
+        private System.Windows.Forms.Label lblCDni;
+        private System.Windows.Forms.TextBox txtDni;
         private System.Windows.Forms.Button btnGuardar;
         private System.Windows.Forms.Button btnLimpiarCrear;
         private System.Windows.Forms.GroupBox grpModificar;
@@ -613,13 +525,9 @@ namespace SistemaAsistencia.Vista.Alumnos
         private System.Windows.Forms.Label lblEditCorreo;
         private System.Windows.Forms.TextBox txtEditCorreo;
         private System.Windows.Forms.Label lblEditTelefono;
-        private System.Windows.Forms.MaskedTextBox txtEditTelefono;
-        private System.Windows.Forms.Label lblEditTelEmergencia;
-        private System.Windows.Forms.MaskedTextBox txtEditTelEmergencia;
-        private System.Windows.Forms.Label lblEditTelPadre;
-        private System.Windows.Forms.MaskedTextBox txtEditTelPadre;
-        private System.Windows.Forms.Label lblEditTelMadre;
-        private System.Windows.Forms.MaskedTextBox txtEditTelMadre;
+        private SistemaAsistencia.Vista.Comun.CtrlTelefono ctrlTelEdit;
+        private System.Windows.Forms.Label lblEditDni;
+        private System.Windows.Forms.TextBox txtEditDni;
         private System.Windows.Forms.Button btnModificar;
         private System.Windows.Forms.Button btnEliminar;
         private System.Windows.Forms.Button btnLimpiarEditar;

@@ -35,7 +35,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.lblCContrasena = new System.Windows.Forms.Label();
             this.txtDni = new System.Windows.Forms.TextBox();
             this.lblCDni = new System.Windows.Forms.Label();
-            this.txtTelefono = new System.Windows.Forms.MaskedTextBox();
+            this.ctrlTelCrear = new SistemaAsistencia.Vista.Comun.CtrlTelefono();
             this.lblCTelefono = new System.Windows.Forms.Label();
             this.txtCorreo = new System.Windows.Forms.TextBox();
             this.lblCCorreo = new System.Windows.Forms.Label();
@@ -53,7 +53,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.lblEditContrasena = new System.Windows.Forms.Label();
             this.txtEditDni = new System.Windows.Forms.TextBox();
             this.lblEditDni = new System.Windows.Forms.Label();
-            this.txtEditTelefono = new System.Windows.Forms.MaskedTextBox();
+            this.ctrlTelEdit = new SistemaAsistencia.Vista.Comun.CtrlTelefono();
             this.lblEditTelefono = new System.Windows.Forms.Label();
             this.txtEditCorreo = new System.Windows.Forms.TextBox();
             this.lblEditCorreo = new System.Windows.Forms.Label();
@@ -89,7 +89,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.grpCrear.Controls.Add(this.lblCContrasena);
             this.grpCrear.Controls.Add(this.txtDni);
             this.grpCrear.Controls.Add(this.lblCDni);
-            this.grpCrear.Controls.Add(this.txtTelefono);
+            this.grpCrear.Controls.Add(this.ctrlTelCrear);
             this.grpCrear.Controls.Add(this.lblCTelefono);
             this.grpCrear.Controls.Add(this.txtCorreo);
             this.grpCrear.Controls.Add(this.lblCCorreo);
@@ -118,7 +118,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             //
             // txtNombre
             //
-            this.txtNombre.Location = new System.Drawing.Point(130, 25);
+            this.txtNombre.Location = new System.Drawing.Point(90, 25);
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(180, 20);
             this.txtNombre.TabIndex = 1;
@@ -134,7 +134,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             //
             // txtApellido
             //
-            this.txtApellido.Location = new System.Drawing.Point(130, 55);
+            this.txtApellido.Location = new System.Drawing.Point(90, 55);
             this.txtApellido.Name = "txtApellido";
             this.txtApellido.Size = new System.Drawing.Size(180, 20);
             this.txtApellido.TabIndex = 3;
@@ -150,7 +150,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             //
             // txtLegajo
             //
-            this.txtLegajo.Location = new System.Drawing.Point(130, 85);
+            this.txtLegajo.Location = new System.Drawing.Point(90, 85);
             this.txtLegajo.Name = "txtLegajo";
             this.txtLegajo.Size = new System.Drawing.Size(180, 20);
             this.txtLegajo.TabIndex = 5;
@@ -166,7 +166,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             //
             // txtCorreo
             //
-            this.txtCorreo.Location = new System.Drawing.Point(130, 115);
+            this.txtCorreo.Location = new System.Drawing.Point(90, 115);
             this.txtCorreo.Name = "txtCorreo";
             this.txtCorreo.Size = new System.Drawing.Size(180, 20);
             this.txtCorreo.TabIndex = 7;
@@ -180,13 +180,12 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.lblCTelefono.TabIndex = 8;
             this.lblCTelefono.Text = "Teléfono";
             //
-            // txtTelefono
+            // ctrlTelCrear
             //
-            this.txtTelefono.Location = new System.Drawing.Point(130, 145);
-            this.txtTelefono.Mask = "54 000 0000000";
-            this.txtTelefono.Name = "txtTelefono";
-            this.txtTelefono.Size = new System.Drawing.Size(180, 20);
-            this.txtTelefono.TabIndex = 9;
+            this.ctrlTelCrear.Location = new System.Drawing.Point(90, 145);
+            this.ctrlTelCrear.Name = "ctrlTelCrear";
+            this.ctrlTelCrear.Size = new System.Drawing.Size(180, 22);
+            this.ctrlTelCrear.TabIndex = 9;
             //
             // lblCDni
             //
@@ -199,7 +198,8 @@ namespace SistemaAsistencia.Vista.Preceptores
             //
             // txtDni
             //
-            this.txtDni.Location = new System.Drawing.Point(130, 175);
+            this.txtDni.Location = new System.Drawing.Point(90, 175);
+            this.txtDni.MaxLength = 8;
             this.txtDni.Name = "txtDni";
             this.txtDni.Size = new System.Drawing.Size(180, 20);
             this.txtDni.TabIndex = 11;
@@ -215,7 +215,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             //
             // txtContrasena
             //
-            this.txtContrasena.Location = new System.Drawing.Point(130, 205);
+            this.txtContrasena.Location = new System.Drawing.Point(90, 205);
             this.txtContrasena.Name = "txtContrasena";
             this.txtContrasena.Size = new System.Drawing.Size(180, 20);
             this.txtContrasena.TabIndex = 13;
@@ -223,7 +223,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             //
             // btnGuardar
             //
-            this.btnGuardar.Location = new System.Drawing.Point(130, 240);
+            this.btnGuardar.Location = new System.Drawing.Point(90, 240);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(105, 32);
             this.btnGuardar.TabIndex = 14;
@@ -250,7 +250,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.grpModificar.Controls.Add(this.lblEditContrasena);
             this.grpModificar.Controls.Add(this.txtEditDni);
             this.grpModificar.Controls.Add(this.lblEditDni);
-            this.grpModificar.Controls.Add(this.txtEditTelefono);
+            this.grpModificar.Controls.Add(this.ctrlTelEdit);
             this.grpModificar.Controls.Add(this.lblEditTelefono);
             this.grpModificar.Controls.Add(this.txtEditCorreo);
             this.grpModificar.Controls.Add(this.lblEditCorreo);
@@ -290,7 +290,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             //
             // txtEditNombre
             //
-            this.txtEditNombre.Location = new System.Drawing.Point(130, 53);
+            this.txtEditNombre.Location = new System.Drawing.Point(90, 53);
             this.txtEditNombre.Name = "txtEditNombre";
             this.txtEditNombre.Size = new System.Drawing.Size(180, 20);
             this.txtEditNombre.TabIndex = 2;
@@ -306,7 +306,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             //
             // txtEditApellido
             //
-            this.txtEditApellido.Location = new System.Drawing.Point(130, 83);
+            this.txtEditApellido.Location = new System.Drawing.Point(90, 83);
             this.txtEditApellido.Name = "txtEditApellido";
             this.txtEditApellido.Size = new System.Drawing.Size(180, 20);
             this.txtEditApellido.TabIndex = 4;
@@ -322,7 +322,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             //
             // txtEditLegajo
             //
-            this.txtEditLegajo.Location = new System.Drawing.Point(130, 113);
+            this.txtEditLegajo.Location = new System.Drawing.Point(90, 113);
             this.txtEditLegajo.Name = "txtEditLegajo";
             this.txtEditLegajo.Size = new System.Drawing.Size(180, 20);
             this.txtEditLegajo.TabIndex = 6;
@@ -338,7 +338,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             //
             // txtEditCorreo
             //
-            this.txtEditCorreo.Location = new System.Drawing.Point(130, 143);
+            this.txtEditCorreo.Location = new System.Drawing.Point(90, 143);
             this.txtEditCorreo.Name = "txtEditCorreo";
             this.txtEditCorreo.Size = new System.Drawing.Size(180, 20);
             this.txtEditCorreo.TabIndex = 8;
@@ -352,13 +352,12 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.lblEditTelefono.TabIndex = 9;
             this.lblEditTelefono.Text = "Teléfono";
             //
-            // txtEditTelefono
+            // ctrlTelEdit
             //
-            this.txtEditTelefono.Location = new System.Drawing.Point(130, 173);
-            this.txtEditTelefono.Mask = "54 000 0000000";
-            this.txtEditTelefono.Name = "txtEditTelefono";
-            this.txtEditTelefono.Size = new System.Drawing.Size(180, 20);
-            this.txtEditTelefono.TabIndex = 10;
+            this.ctrlTelEdit.Location = new System.Drawing.Point(90, 173);
+            this.ctrlTelEdit.Name = "ctrlTelEdit";
+            this.ctrlTelEdit.Size = new System.Drawing.Size(180, 22);
+            this.ctrlTelEdit.TabIndex = 10;
             //
             // lblEditDni
             //
@@ -371,7 +370,8 @@ namespace SistemaAsistencia.Vista.Preceptores
             //
             // txtEditDni
             //
-            this.txtEditDni.Location = new System.Drawing.Point(130, 203);
+            this.txtEditDni.Location = new System.Drawing.Point(90, 203);
+            this.txtEditDni.MaxLength = 8;
             this.txtEditDni.Name = "txtEditDni";
             this.txtEditDni.Size = new System.Drawing.Size(180, 20);
             this.txtEditDni.TabIndex = 12;
@@ -387,7 +387,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             //
             // txtEditContrasena
             //
-            this.txtEditContrasena.Location = new System.Drawing.Point(130, 233);
+            this.txtEditContrasena.Location = new System.Drawing.Point(90, 233);
             this.txtEditContrasena.Name = "txtEditContrasena";
             this.txtEditContrasena.Size = new System.Drawing.Size(180, 20);
             this.txtEditContrasena.TabIndex = 14;
@@ -490,8 +490,8 @@ namespace SistemaAsistencia.Vista.Preceptores
             // tlpBase
             //
             this.tlpBase.ColumnCount = 2;
-            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 68F));
-            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32F));
+            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55F));
+            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45F));
             this.tlpBase.Controls.Add(this.pnlIzquierda, 0, 0);
             this.tlpBase.Controls.Add(this.pnlBusqueda, 1, 0);
             this.tlpBase.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -549,7 +549,7 @@ namespace SistemaAsistencia.Vista.Preceptores
         private System.Windows.Forms.Label lblCCorreo;
         private System.Windows.Forms.TextBox txtCorreo;
         private System.Windows.Forms.Label lblCTelefono;
-        private System.Windows.Forms.MaskedTextBox txtTelefono;
+        private SistemaAsistencia.Vista.Comun.CtrlTelefono ctrlTelCrear;
         private System.Windows.Forms.Label lblCDni;
         private System.Windows.Forms.TextBox txtDni;
         private System.Windows.Forms.Label lblCContrasena;
@@ -567,7 +567,7 @@ namespace SistemaAsistencia.Vista.Preceptores
         private System.Windows.Forms.Label lblEditCorreo;
         private System.Windows.Forms.TextBox txtEditCorreo;
         private System.Windows.Forms.Label lblEditTelefono;
-        private System.Windows.Forms.MaskedTextBox txtEditTelefono;
+        private SistemaAsistencia.Vista.Comun.CtrlTelefono ctrlTelEdit;
         private System.Windows.Forms.Label lblEditDni;
         private System.Windows.Forms.TextBox txtEditDni;
         private System.Windows.Forms.Label lblEditContrasena;
