@@ -1,97 +1,129 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using SistemaAsistencia.Controlador;
 using SistemaAsistencia.Modelo.Entidades;
+using MaterialSkin;
+using MaterialSkin.Controls;
 
 namespace SistemaAsistencia.Vista.PrimerUsuario
 {
-    public partial class FrmPrimerUsuario : Form
+    public partial class FrmPrimerUsuario : MaterialForm
     {
         private readonly UsuarioController usuarioController;
 
         public FrmPrimerUsuario()
         {
             InitializeComponent();
+
+            var materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+            materialSkinManager.ColorScheme = new ColorScheme(
+                Primary.Blue600, Primary.Blue700, Primary.Blue200,
+                Accent.LightBlue200, TextShade.WHITE);
+
             usuarioController = new UsuarioController();
-        }
 
-        protected override void OnShown(EventArgs e)
-        {
-            base.OnShown(e);
+            // Configuración inicial del formulario
+            txtPassword.Password = true;
+            txtUsuario.Focus();
 
-            // Se aplican los placeholders una vez que la ventana está renderizada en pantalla
-            UIHelper.EstablecerPlaceholder(txtUsuario, "USUARIO");
-            UIHelper.EstablecerPlaceholder(txtPassword, "CONTRASEÑA");
-            UIHelper.EstablecerPlaceholder(txtConfirmarPassword, "CONFIRMAR CONTRASEÑA");
-        }
+            // Permite usar Enter para continuar
+            this.AcceptButton = btnCrearAdmin;
 
-        private void btnSalir_Click(object sender, EventArgs e)
-        {
-            DialogResult resp = MessageBox.Show(
-                "Cerrar sistema, ¿confirma?",
-                "Sistema Asistencia",
-                MessageBoxButtons.YesNoCancel,
-                MessageBoxIcon.Question
-            );
+            // Permite usar Escape para cancelar
+            this.CancelButton = btnSalir;
 
-            if (resp == DialogResult.Yes)
+            // Multi-monitor: abrir en la pantalla donde está el cursor,
+            // no siempre en la primaria (puede ser la TV).
+            this.StartPosition = FormStartPosition.Manual;
+            try
             {
-                Application.Exit();
+                Rectangle area = Screen.FromPoint(Cursor.Position).WorkingArea;
+                Location = new System.Drawing.Point(
+                    area.Left + (area.Width - Width) / 2,
+                    area.Top + (area.Height - Height) / 2);
+            }
+            catch { }
+
+            // La cruz / Alt+F4 deben cerrar la app sin pasar por Dispose
+            // (los MaterialTextBox son RichTextBox y se cuelgan en EM_STREAMOUT).
+            this.FormClosing += FrmPrimerUsuario_FormClosing;
+        }
+
+
+        private void FrmPrimerUsuario_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Cerrar este form por la vía normal (Close/Dispose) se cuelga al
+            // destruir sus MaterialTextBox. Se sale del proceso directamente.
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                Environment.Exit(0);
             }
         }
 
+
         private void btnCrearAdmin_Click(object sender, EventArgs e)
         {
-            string usuario = txtUsuario.Text.Trim();
-            string contraseña = txtPassword.Text;
-            string confirmarContraseña = txtConfirmarPassword.Text;
-
-            if (string.IsNullOrWhiteSpace(usuario))
+            // Validación de usuario vacío
+            if (string.IsNullOrWhiteSpace(txtUsuario.Text))
             {
-                MessageBox.Show(
-                    "Debe ingresar un nombre de usuario.",
-                    "Datos incompletos",
+                MaterialMessageBox.Show(
+                    this,
+                    "Ingrese un usuario.",
+                    "Atención",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+                    MessageBoxIcon.Warning,
+                    MessageBoxDefaultButton.Button1,
+                    false,
+                    FlexibleMaterialForm.ButtonsPosition.Center);
 
                 txtUsuario.Focus();
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(contraseña))
+            // Validación de contraseña vacía
+            if (string.IsNullOrWhiteSpace(txtPassword.Text))
             {
-                MessageBox.Show(
-                    "Debe ingresar una contraseña.",
-                    "Datos incompletos",
+                MaterialMessageBox.Show(
+                    this,
+                    "Ingrese una contraseña.",
+                    "Atención",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+                    MessageBoxIcon.Warning,
+                    MessageBoxDefaultButton.Button1,
+                    false,
+                    FlexibleMaterialForm.ButtonsPosition.Center);
 
                 txtPassword.Focus();
                 return;
             }
 
-            if (contraseña != confirmarContraseña)
+            // Validación de confirmación de contraseña
+            if (txtPassword.Text != txtConfirmarPassword.Text)
             {
-                MessageBox.Show(
+                MaterialMessageBox.Show(
+                    this,
                     "Las contraseñas no coinciden.",
                     "Error",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+                    MessageBoxIcon.Error,
+                    MessageBoxDefaultButton.Button1,
+                    false,
+                    FlexibleMaterialForm.ButtonsPosition.Center);
 
                 txtConfirmarPassword.Clear();
                 txtConfirmarPassword.Focus();
                 return;
             }
 
-            DialogResult resultado = MessageBox.Show(
+            DialogResult resultado = MaterialMessageBox.Show(
+                this,
                 "Se creará el primer usuario del sistema con el rol de Administrador.\n\n¿Desea continuar?",
                 "Crear administrador",
                 MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
-            );
+                MessageBoxIcon.Question);
 
             if (resultado != DialogResult.Yes)
             {
@@ -100,8 +132,8 @@ namespace SistemaAsistencia.Vista.PrimerUsuario
 
             Usuario nuevoUsuario = new Usuario
             {
-                NombreUsuario = usuario,
-                Contrasena = contraseña,
+                NombreUsuario = txtUsuario.Text.Trim(),
+                Contrasena = txtPassword.Text,
                 Rol = "Administrador",
                 Activo = true
             };
@@ -110,25 +142,59 @@ namespace SistemaAsistencia.Vista.PrimerUsuario
 
             if (creado)
             {
-                MessageBox.Show(
+                MaterialMessageBox.Show(
+                    this,
                     "El usuario administrador fue creado correctamente.",
                     "Configuración inicial",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
-                );
+                    MessageBoxIcon.Information,
+                    MessageBoxDefaultButton.Button1,
+                    false,
+                    FlexibleMaterialForm.ButtonsPosition.Center);
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             else
             {
-                MessageBox.Show(
+                MaterialMessageBox.Show(
+                    this,
                     "No se pudo crear el usuario administrador.",
                     "Error",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                    MessageBoxIcon.Error,
+                    MessageBoxDefaultButton.Button1,
+                    false,
+                    FlexibleMaterialForm.ButtonsPosition.Center);
             }
+        }
+
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            DialogResult respuesta = MaterialMessageBox.Show(
+                this,
+                "¿Desea cerrar el sistema?",
+                "Sistema Asistencia",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question,
+                MessageBoxDefaultButton.Button2,
+                false,
+                FlexibleMaterialForm.ButtonsPosition.Center);
+
+
+            if (respuesta == DialogResult.Yes)
+            {
+                // Ver FrmPrincipal.Salir: Application.Exit() se cuelga
+                // destruyendo los MaterialTextBox (RichTextBox).
+                Environment.Exit(0);
+            }
+        }
+
+
+        private void txtUsuario_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

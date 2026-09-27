@@ -35,9 +35,6 @@ namespace SistemaAsistencia.Vista.Login
             // Permite usar Enter para iniciar sesión
             this.AcceptButton = btnLogin;
 
-            // Permite usar Escape para cancelar
-            this.CancelButton = btnCancelar;
-
             // Multi-monitor: abrir en la pantalla donde está el cursor,
             // no siempre en la primaria (puede ser la TV).
             this.StartPosition = FormStartPosition.Manual;
@@ -168,15 +165,6 @@ namespace SistemaAsistencia.Vista.Login
                 txtPassword.Clear();
                 txtPassword.Focus();
             }
-        }
-
-
-        private void btnCancelar_Click(object sender, EventArgs e)
-        {
-            txtUsuario.Clear();
-            txtPassword.Clear();
-
-            txtUsuario.Focus();
         }
 
 

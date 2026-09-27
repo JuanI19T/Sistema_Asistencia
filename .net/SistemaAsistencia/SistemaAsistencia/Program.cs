@@ -3,7 +3,6 @@ using System.Windows.Forms;
 using SistemaAsistencia.Controlador;
 using SistemaAsistencia.Utilidades;
 using SistemaAsistencia.Vista;
-using SistemaAsistencia.Vista.Configuracion;
 using SistemaAsistencia.Vista.Login;
 using SistemaAsistencia.Vista.PrimerUsuario;
 
@@ -18,15 +17,6 @@ namespace SistemaAsistencia
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-
-                if (!Configuracion.ExisteConfiguracion())
-                {
-                    using (var config = new FrmConfiguracion())
-                    {
-                        if (config.ShowDialog() != DialogResult.OK)
-                            return;
-                    }
-                }
 
                 UsuarioController usuarioController = new UsuarioController();
 

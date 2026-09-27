@@ -1,14 +1,14 @@
 ﻿using System;
 using MongoDB.Driver;
 using MongoDB.Bson;
-using SistemaAsistencia.Utilidades;
+using System.Configuration;
 
 namespace SistemaAsistencia.Modelo.Conexion
 {
     public class ConexionMongo
     {
         private static readonly string cadenaAtlas =
-            Configuracion.ObtenerCadena("MongoAtlas");
+        ConfigurationManager.ConnectionStrings["MongoAtlas"].ConnectionString;
 
         private static readonly MongoClient cliente;
 

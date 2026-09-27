@@ -1,6 +1,4 @@
 # --- SECRETOS: nunca subir a GitHub (repo público) ---
-.net/secreto.config
-**/secreto.config
 Api/.env
 App/.env
 **/.env
