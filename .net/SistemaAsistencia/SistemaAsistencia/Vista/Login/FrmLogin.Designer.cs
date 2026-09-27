@@ -31,7 +31,6 @@
             this.txtPassword = new MaterialSkin.Controls.MaterialTextBox();
             this.txtUsuario = new MaterialSkin.Controls.MaterialTextBox();
             this.btnSalir = new MaterialSkin.Controls.MaterialButton();
-            this.btnCancelar = new MaterialSkin.Controls.MaterialButton();
             this.btnLogin = new MaterialSkin.Controls.MaterialButton();
             this.SuspendLayout();
             //
@@ -58,7 +57,7 @@
             // btnLogin
             //
             this.btnLogin.AutoSize = false;
-            this.btnLogin.Location = new System.Drawing.Point(24, 214);
+            this.btnLogin.Location = new System.Drawing.Point(60, 214);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(110, 36);
             this.btnLogin.TabIndex = 2;
@@ -67,22 +66,10 @@
             this.btnLogin.UseAccentColor = false;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             //
-            // btnCancelar
-            //
-            this.btnCancelar.AutoSize = false;
-            this.btnCancelar.Location = new System.Drawing.Point(146, 214);
-            this.btnCancelar.Name = "btnCancelar";
-            this.btnCancelar.Size = new System.Drawing.Size(110, 36);
-            this.btnCancelar.TabIndex = 3;
-            this.btnCancelar.Text = "Cancelar";
-            this.btnCancelar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-            this.btnCancelar.UseAccentColor = false;
-            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
-            //
             // btnSalir
             //
             this.btnSalir.AutoSize = false;
-            this.btnSalir.Location = new System.Drawing.Point(266, 214);
+            this.btnSalir.Location = new System.Drawing.Point(230, 214);
             this.btnSalir.Name = "btnSalir";
             this.btnSalir.Size = new System.Drawing.Size(110, 36);
             this.btnSalir.TabIndex = 4;
@@ -99,7 +86,6 @@
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.txtUsuario);
             this.Controls.Add(this.btnSalir);
-            this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.btnLogin);
             this.MaximizeBox = false;
             this.Name = "FrmLogin";
@@ -113,7 +99,6 @@
         private MaterialSkin.Controls.MaterialTextBox txtPassword;
         private MaterialSkin.Controls.MaterialTextBox txtUsuario;
         private MaterialSkin.Controls.MaterialButton btnSalir;
-        private MaterialSkin.Controls.MaterialButton btnCancelar;
         private MaterialSkin.Controls.MaterialButton btnLogin;
     }
 }
