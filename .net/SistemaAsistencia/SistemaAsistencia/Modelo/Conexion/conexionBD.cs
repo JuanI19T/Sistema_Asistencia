@@ -1,12 +1,10 @@
-﻿using System.Configuration;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 
 namespace SistemaAsistencia.Modelo.Conexion
 {
     public class ConexionBD
     {
-        private readonly string cadenaConexion =
-            ConfigurationManager.ConnectionStrings["MySQL"].ConnectionString;
+        private readonly string cadenaConexion = Credenciales.Obtener("MYSQL", "MySQL");
 
         public MySqlConnection ObtenerConexion()
         {

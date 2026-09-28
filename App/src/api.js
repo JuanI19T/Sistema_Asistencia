@@ -6,7 +6,8 @@ function obtenerHost() {
   return hostUri ? hostUri.split(':')[0] : 'localhost';
 }
 
-const API_URL = `http://${obtenerHost()}:3000`;
+// Producción (Railway): definir EXPO_PUBLIC_API_URL=https://TU-APP.up.railway.app
+const API_URL = process.env.EXPO_PUBLIC_API_URL || `http://${obtenerHost()}:3000`;
 let tokenSesion = null;
 
 function cabeceras(conToken = true) {

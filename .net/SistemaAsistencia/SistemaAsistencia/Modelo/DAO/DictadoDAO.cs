@@ -57,13 +57,13 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-                string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
+string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
                                       D.dia, D.horario, D.horario_fin, D.grupo, D.anio_lectivo,
                                       M.nombre_materia, P.apellido_profesor
-                               FROM DICTADO D
-                               INNER JOIN MATERIA M
+                               FROM dictado D
+                               INNER JOIN materia M
                                    ON M.id_materia = D.id_materia
-INNER JOIN PROFESOR P
+                               INNER JOIN profesor P
                                     ON P.id_profesor = D.id_profesor
                                WHERE D.activo = 1
                                ORDER BY D.anio_lectivo, D.grupo,

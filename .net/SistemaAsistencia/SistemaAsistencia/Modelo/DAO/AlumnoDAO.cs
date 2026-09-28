@@ -50,9 +50,9 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"SELECT *
-                               FROM ALUMNO
-                               WHERE activo = 1
-                               ORDER BY apellido_alumno, nombre_alumno";
+                                FROM alumno
+                                WHERE activo = 1
+                                ORDER BY apellido_alumno, nombre_alumno";
 
                 var cmd = new MySqlCommand(sql, cn);
 

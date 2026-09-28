@@ -68,7 +68,7 @@ app.get('/api/alumnos', async (req, res) => {
     const [filas] = await pool.query(
       `SELECT id_alumno, nombre_alumno, apellido_alumno, legajo_alumno,
               dni, correo_alumno, telefono_alumno
-       FROM ALUMNO
+       FROM alumno
        ORDER BY apellido_alumno, nombre_alumno`
     );
     res.json(filas);

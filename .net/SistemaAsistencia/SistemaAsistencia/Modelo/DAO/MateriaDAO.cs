@@ -48,11 +48,11 @@ namespace SistemaAsistencia.Modelo.DAO
                 string sql = @"SELECT M.id_materia, M.id_especialidad, M.nombre_materia,
                                       M.carga_horaria, M.anio_materia,
                                       E.nombre_especialidad
-                               FROM MATERIA M
-                               INNER JOIN ESPECIALIDAD E
-                                   ON E.id_especialidad = M.id_especialidad
-                               WHERE M.activo = 1
-                               ORDER BY M.nombre_materia";
+                                FROM materia M
+                                INNER JOIN especialidad E
+                                    ON E.id_especialidad = M.id_especialidad
+                                WHERE M.activo = 1
+                                ORDER BY M.nombre_materia";
 
                 var cmd = new MySqlCommand(sql, cn);
 
