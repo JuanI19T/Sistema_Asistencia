@@ -1,133 +1,324 @@
 # context.md — Contexto del proyecto
 
-> Guía rápida para entender el proyecto (humanos y agentes de IA) antes de tocar código.
-> Documentos hermanos: `README.md` (visión general), `LEEME_recomponer.md` (restauración desde cero),
-> `PROPUESTA-SINCRONIZACION.md` (integración escritorio ↔ app), `ComoFuncionaElSistema.html/pdf`.
+> Guía rápida para entender el proyecto antes de tocar código.
+> Documento hermano: [`README.md`](README.md) (visión general para humanos).
 
-## 1. Qué es
+## 📑 Índice
+
+| | Sección | Qué_findrás |
+|---|---|---|
+| [1](#s1) | [¿Qué es?](#s1) | El proyecto en dos líneas |
+| [2](#s2) | [Los tres módulos](#s2) | Diagrama con Railway incluido |
+| [3](#s3) | [Base de datos](#s3) | Script definitivo y cómo restaurarlo |
+| [4](#s4) | [Arquitectura del escritorio](#s4) | Las capas y los Forms reales |
+| [5](#s5) | [Cómo levantar cada módulo](#s5) | Pasos exactos, incluido `credenciales.env` |
+| [6](#s6) | [Cuentas de prueba](#s6) | Los 6 usuarios del script |
+| [7](#s7) | [Flujo de negocio](#s7) | Qué pasa en una clase |
+| [8](#s8) | [Limitación conocida](#s8) | Por qué la app no ve al escritorio en vivo |
+| [9](#s9) | [Reglas y convenciones](#s9) | Lo que no se toca y por qué |
+| [10](#s10) | [Mapa de archivos](#s10) | Dónde está cada cosa |
+| [11](#s11) | [Base de datos: cuál es cuál](#s11) | 🔴 La confusión más común del proyecto |
+
+**Leyenda:** 🔴 riesgo o prohibido · 🟡 pendiente o con salvedad · 🟢 seguro u opcional
+
+---
+
+<a id="s1"></a>
+
+## 1. ¿Qué es? 🎯
 
 Sistema integral de gestión de asistencia escolar para una EEST (proyecto académico, EACP).
-Reemplaza el registro en papel por: un aplicativo de escritorio para administración, una API
+Reemplaza el registro en papel por: un aplicativo de escritorio para la administración, una API
 intermedia y una app móvil para registrar asistencia en el aula (QR / código corto).
 
-## 2. Los tres módulos
+<a id="s2"></a>
+
+## 2. Los tres módulos 🧩
 
 | Módulo | Carpeta | Stack | Rol |
 |---|---|---|---|
-| **Escritorio** | `.net/SistemaAsistencia/` | C# .NET Framework 4.7.2, WinForms, MaterialSkin | ABMs institucionales (alumnos, profesores, preceptores, materias, especialidades, dictados, inscripciones, usuarios). Escribe **directo a MySQL**. Autentica usuarios propios contra **MongoDB Atlas** |
-| **API** | `Api/` | Node.js, Express 5, mysql2, bcryptjs | Único acceso a MySQL de la app. Endpoints REST + **SSE** (`/api/eventos`). Login por rol con `dni` + bcrypt, token Bearer |
-| **App móvil** | `App/` | React Native + Expo 57 (Expo Go) | Login y pantallas por rol (profesor/preceptor/alumno). Escaneo QR (`expo-camera`), SSE con reconexión automática. **Habla solo con la API** (nunca directo a la BD) |
+| 🖥️ **Escritorio** | `.net/SistemaAsistencia/` | C# .NET Framework 4.7.2, WinForms, MaterialSkin | ABMs institucionales (alumnos, profesores, preceptores, materias, especialidades, dictados, inscripciones, usuarios). Escribe **directo a MySQL**. Autentica usuarios propios contra **MongoDB Atlas** |
+| 🔌 **API** | `Api/` | Node.js, Express 5, mysql2, bcryptjs | Único acceso a MySQL de la app. Endpoints REST + **SSE** (`/api/eventos`). Login por rol con `dni` + bcrypt, token Bearer |
+| 📱 **App móvil** | `App/` | React Native + Expo 57 (Expo Go) | Login y pantallas por rol. Escaneo QR (`expo-camera`), SSE con reconexión automática. **Habla solo con la API**, nunca directo a la BD |
 
+```mermaid
+graph TB
+    subgraph LOCAL["💻 Tu PC"]
+        ESC["🖥️ Escritorio<br/>C# WinForms"]
+        APIL["🔌 API local<br/>Node · puerto 3000<br/>opcional"]
+        MYSQLL[("🗄️ MySQL local<br/>localhost:3306<br/>desechable")]
+    end
+    subgraph PROD["☁️ Railway — producción"]
+        APIR["🔌 API<br/>sistemaasistencia-production<br/>.up.railway.app"]
+        MYSQL[("🗄️ MySQL<br/>gestion_asistencia_eest<br/>fuente de verdad")]
+    end
+    ATLAS[("🍃 MongoDB Atlas<br/>solo usuarios del escritorio")]
+    APP["📱 App móvil<br/>Expo"]
+
+    ESC -->|"escribe directo"| MYSQL
+    ESC -->|"autentica usuarios"| ATLAS
+    APIR -->|"única vía a MySQL"| MYSQL
+    APP -->|"REST + SSE"| APIR
+    APIL --> MYSQLL
+
+    classDef prod fill:#1a7f37,stroke:#0d4421,color:#ffffff
+    classDef warn fill:#9a6700,stroke:#5c3b00,color:#ffffff
+    classDef ext fill:#1f6feb,stroke:#0a3069,color:#ffffff
+    class APIR,MYSQL,APP,ESC prod
+    class APIL,MYSQLL warn
+    class ATLAS ext
 ```
-Escritorio ────────────────► MySQL ◄──────────────── API ◄───► App móvil
-   │                          ▲                          │        │
-   └──► MongoDB Atlas         └── (fuente de verdad)     └── SSE ─┘
-```
 
-- MySQL `gestion_asistencia_eest` es la única fuente de verdad compartida.
-- La app obtiene la IP del host sola (`App/src/api.js`, `Constants.expoConfig.hostUri`); la API escucha en el puerto **3000**.
-- El escritorio **no tiene integración HTTP** hoy: sus cambios no generan eventos SSE (ver §8).
+- 🟢 MySQL `gestion_asistencia_eest` en Railway es la **única fuente de verdad compartida**.
+- 🟡 La app obtiene la IP del host sola (`App/src/api.js`, `Constants.expoConfig.hostUri`). La API escucha en el **puerto 3000**.
+- 🔴 El escritorio **no tiene integración HTTP**: sus cambios no generan eventos SSE (ver [§8](#s8)).
 
-## 3. Base de datos (MySQL)
+<a id="s3"></a>
 
-Script definitivo: `.net/SistemaAsistencia/BD/2026-09-26_reconstruccion_definitiva.sql`
-(reconstruye todo, **borra datos previos**, incluye catálogo y datos de prueba).
+## 3. Base de datos (MySQL) 🗄️
 
-Tablas: `especialidad`, `materia`, `profesor`, `preceptor`, `alumno`, `dictado`, `inscribe`,
+**Script definitivo:**
+`.net/SistemaAsistencia/BD/2026-09-26_reconstruccion_definitiva.sql`
+
+Reconstruye todo el esquema, **borra los datos previos** e incluye catálogo y datos de prueba.
+
+**Tablas:** `especialidad`, `materia`, `profesor`, `preceptor`, `alumno`, `dictado`, `inscribe`,
 `clase`, `asistencia`, `usuario`.
 
-Restaurar: `mysql -u usuario -p < .net/SistemaAsistencia/BD/2026-09-26_reconstruccion_definitiva.sql`
+**Restaurar** (desde la raíz del repo):
 
-Otros scripts en `Api/scripts/` (`agregar_codigo_clase.sql`, `migrar_a_clases.sql`) — históricos de migración; los scripts futuros deben incluir triggers si se adopta la outbox (§8).
+```bash
+mysql -u usuario -p < .net/SistemaAsistencia/BD/2026-09-26_reconstruccion_definitiva.sql
+```
 
-## 4. Arquitectura del escritorio (MVC en capas)
+<a id="s4"></a>
 
-`.net/SistemaAsistencia/SistemaAsistencia/` con:
+## 4. Arquitectura del escritorio (MVC en capas) 🏛️
 
-- `Vista/` — Forms por módulo (Login, Principal, Alumnos, Profesores, Preceptores, Materias, Especialidades, Dictados, Inscripcion, Usuarios, PrimerUsuario, Comun, Configuracion).
-- `Controlador/` — un `*Controller` por módulo.
-- `Modelo/Entidades/` + `Modelo/DAO/` — un DAO por tabla; `Modelo/Conexion/` (`conexionBD.cs` MySQL, `ConexionMongo.cs` Mongo Atlas).
-- `Utilidades/Sesion.cs` — usuario actual en memoria.
+Raíz del proyecto: `.net/SistemaAsistencia/SistemaAsistencia/`
 
-**Regla inviolable: no romper el MVC.** Toda futura integración HTTP debe vivir solo en la
-capa Modelo (DAO/repositorio). Nunca en Vistas ni Controladores.
+| Capa | Contenido |
+|---|---|
+| `Vista/` | Forms: `FrmLogin`, `FrmPrincipal`, `FrmInicio`, `FrmAlumnos`, `FrmProfesores`, `FrmPreceptores`, `FrmMaterias`, `FrmEspecialidades`, `FrmDictados`, `FrmInscripcion`, `FrmUsuarios`, `FrmPrimerUsuario`, `FrmConfirmarEliminar` + helpers `UIHelper.cs` y `CtrlTelefono.cs` |
+| `Controlador/` | Un `*Controller` por módulo |
+| `Modelo/Entidades/` + `Modelo/DAO/` | Un DAO por tabla; MySQL para los datos, MongoDB para los usuarios |
+| `Modelo/Conexion/` | `conexionBD.cs` (MySQL), `ConexionMongo.cs` (Atlas), `Credenciales.cs` (lee el `.env`) |
+| `Utilidades/` | `Sesion.cs` (usuario actual en memoria), `Logger.cs` (errores a `bin/**/logs/`), `Ejecutor.cs`, `DatosException.cs`, `Tema.cs`, `TelefonoHelper.cs` |
 
-## 5. Cómo levantar cada módulo
+> 📌 **Regla inviolable: no romper el MVC.** Toda futura integración HTTP debe vivir solo en la
+> capa Modelo (DAO/repositorio). Nunca en Vistas ni Controladores.
 
-Orden sugerido: **BD → API → App** (el escritorio es independiente).
+<a id="s5"></a>
 
-1. **BD**: restaurar el script definitivo (§3).
-2. **API** (`Api/`):
-   - `copy .env.example .env` y completar `DB_HOST/PORT/NAME/USER/PASS` + `SESSION_SECRET`.
-   - `npm install` → `npm start` (o `npm run dev` con watch). Corre en `http://localhost:3000`.
-3. **App** (`App/`):
-   - `npm install` → `npx expo start` → escanear QR con **Expo Go**.
-   - Requisito: PC y celular en la **misma red Wi-Fi** (o usar los scripts `*-usb` del package.json).
-4. **Escritorio**:
-   - Abrir `.net/SistemaAsistencia/SistemaAsistencia.slnx` en Visual Studio; restaurar NuGet; F5.
-   - Build por consola: usar el **MSBuild de Visual Studio 18** (`C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe`). `dotnet msbuild` **falla** (MSB3822/3823) en este proyecto clásico.
-5. **Debug VS Code**: `.vscode/launch.json` trae la config compuesta "Proyecto: API + App (F5)".
+## 5. Cómo levantar cada módulo 🚀
 
-## 6. Cuentas de prueba (incluidas en el script definitivo)
+Orden sugerido: **BD → API → App**. El escritorio es independiente de los otros dos.
 
-Contraseña = DNI en todos los casos. Legajo: en personal es igual al DNI; en alumnos lo genera la escuela.
+### Paso 0 — Credenciales del escritorio (obligatorio) 🔴
+
+El escritorio **no arranca sin** `credenciales.env`. No está en git, hay que crearlo una vez por máquina:
+
+```bash
+cd .net/SistemaAsistencia/SistemaAsistencia
+copy credenciales.env.example credenciales.env
+```
+
+Editá `credenciales.env` con tus cadenas reales. El formato tiene que ser exacto:
+
+```
+MYSQL=Server=<host>;Port=<puerto>;Database=gestion_asistencia_eest;Uid=<user>;Pwd=<password>;
+MONGO=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/
+```
+
+> 🔴 **Nunca** pongas las cadenas reales en `App.config` ni en ningún archivo versionado.
+> `App.config` conserva solo placeholders como respaldo.
+
+### 1 — Base de datos 🟢
+
+Restaurar el script definitivo ([§3](#s3)).
+
+### 2 — API 🔌
+
+```bash
+cd Api
+copy .env.example .env     # y completá los valores
+npm install
+npm start                  # o: npm run dev  (con watch)
+```
+
+Queda escuchando en `http://localhost:3000`.
+
+> 🟡 **`SESSION_SECRET`**: si no la definís, la API genera una clave aleatoria en cada arranque y
+> **todos los tokens emitidos quedan inválidos**. En Railway, cada redeploy sin esa variable
+> desloguea a todo el mundo.
+
+> 🟡 **En Railway** el `DB_HOST` va con el host de la **red privada**, no el proxy TCP público.
+
+### 3 — App móvil 📱
+
+```bash
+cd App
+npm install
+npx expo start
+```
+
+Escaneá el QR con **Expo Go**. Requisito: PC y celular en la **misma red Wi-Fi**
+(o usá los scripts `*-usb` del `package.json` para trabajar por cable).
+
+> 🟡 Para apuntar la app a una API desplegada en vez de la local, definí
+> `EXPO_PUBLIC_API_URL` en `App/.env` **con el prefijo `https://` incluido**.
+> Ese archivo está gitignored y solo debe contener URLs públicas, nunca secretos.
+
+### 4 — Escritorio 🖥️
+
+Abrí `.net/SistemaAsistencia/SistemaAsistencia.slnx` en Visual Studio, restaurá NuGet y F5.
+
+> 🔴 **Build por consola**: usá el **MSBuild de Visual Studio 18**
+> (`C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe`).
+> `dotnet msbuild` **falla** con MSB3822/3823 en este proyecto clásico de .NET Framework.
+
+### 5 — Debug de API + App 🟢
+
+`.vscode/launch.json` trae la config compuesta **"Proyecto: API + App (F5)"**.
+
+<a id="s6"></a>
+
+## 6. Cuentas de prueba 🧪
+
+Contraseña = DNI en todos los casos. En personal el legajo es igual al DNI; en alumnos lo genera la escuela.
 
 | Rol | Nombre | DNI | Legajo |
 |---|---|---|---|
-| Profesor | Carlos Gutierrez | `30111222` | `30111222` |
-| Profesor | María Fernández | `31222333` | `31222333` |
-| Preceptor | Laura Martínez | `34555666` | `34555666` |
-| Alumno | Juan Pérez | `45222001` | `1001` |
-| Alumno | Ana Gómez | `45222002` | `1002` |
-| Alumno | Luis Díaz | `45222003` | `1003` |
+| 👨‍🏫 Profesor | Carlos Gutierrez | `30111222` | `30111222` |
+| 👩‍🏫 Profesora | María Fernández | `31222333` | `31222333` |
+| 📋 Preceptora | Laura Martínez | `34555666` | `34555666` |
+| 🎒 Alumno | Juan Pérez | `45222001` | `1001` |
+| 🎒 Alumna | Ana Gómez | `45222002` | `1002` |
+| 🎒 Alumno | Luis Díaz | `45222003` | `1003` |
 
-La app muestra botones de login rápido con estas cuentas solo en `__DEV__` (`App/App.js`).
+La app muestra botones de login rápido con estas cuentas **solo en `__DEV__`** (`App/App.js`).
 
-## 7. Flujo de negocio clave (asistencia en el aula)
+<a id="s7"></a>
 
-1. El **profesor** abre una clase desde su dictado (`POST /api/clases`), genera QR + código corto.
+## 7. Flujo de negocio (asistencia en el aula) 📋
+
+1. El **profesor** abre una clase desde su dictado (`POST /api/clases`) y se generan QR + código corto.
 2. Los **alumnos** marcan presencia escaneando el QR (`POST /api/clases/:id/escanear`) o ingresando el código (`POST /api/clases/ingresar`).
-3. El **preceptor** ve la asistencia en vivo (SSE) y puede ajustarla.
-4. Endpoints principales (ver índice en `/`): `/api/login`, `/api/dictados*`, `/api/clases*`, `/api/asistencia*`, `/api/eventos` (SSE autenticado con Bearer).
+3. El **preceptor** ve la asistencia en vivo por SSE y puede corregirla.
 
-## 8. Integración escritorio ↔ app (estado y decisión pendiente)
+**Endpoints principales** (el índice completo está en `GET /` de la API):
+`/api/login` · `/api/dictados*` · `/api/clases*` · `/api/asistencia*` · `/api/eventos` (SSE con Bearer).
 
-Problema actual: el escritorio escribe directo a MySQL y la SSE solo emite eventos por
-cambios hechos **por la API** → un cambio hecho en el escritorio (ej. reasignar preceptor de un
-dictado) no llega a la app hasta que esta re-consulta, y viceversa.
+<a id="s8"></a>
 
-`PROPUESTA-SINCRONIZACION.md` analiza 5 alternativas y recomienda por fases:
+## 8. Limitación conocida 🟡
 
-- **Fase 0**: ordenar esquema (unificar `INNER`/`LEFT JOIN` en dictados, filtrar `activo` en listados de la API, exponer `id_preceptor`).
-- **Fase 1 (quick win)**: refresco suave en la app + `Timer` ligero en escritorio.
-- **Fase 2 (recomendada)**: tabla `outbox_evento` + triggers MySQL + worker en la API que emita SSE — captura el 100% de las escrituras sin tocar el escritorio.
-- **Fase 3 (mediano plazo)**: migrar pantallas del escritorio a endpoints REST, con el HTTP confinado al Modelo.
+> Esta sección describe un problema **abierto**. No tiene solución implementada.
 
-Pendientes técnicos detallados: ver checklist en `PROPUESTA-SINCRONIZACION.md` §6
-(refresco de listas del profesor, unificar joins, filtrar `activo`, endpoints de escritura
-para dictados, rol administrador en la API, backups de MySQL/Mongo, etc.).
+El escritorio escribe **directo en MySQL**. La API emite eventos SSE **solo** por los cambios que
+ella misma hace. Por lo tanto:
 
-## 9. Reglas y convenciones del proyecto
+- Un cambio hecho **en el escritorio** (por ejemplo reasignar el preceptor de un dictado) **no llega** a la app.
+- La app se entera recién cuando vuelve a consultar el endpoint.
+- Y al revés: un cambio hecho **en la app** tampoco refresca las pantallas del escritorio.
 
-- **Git**: trabajar en la rama `Juan-Torres` (o rama propia); **PR obligatorio a `main`**, nunca commitear directo a main. Ramas existentes: `main`, `Juan-Torres`, `Isa-Vecco`.
-- **Credenciales**: están hardcodeadas a propósito en `App.config` y `ConexionMongo.cs` del escritorio (y en `Api/.env` para la API). **No cambiarlas ni copiarlas a otros archivos**. `.env`, `*.pem`, `*.key` y `AGENTS.md` raíz están gitignored — jamás subirlos.
-- **Contraseñas**: `contrasena` se hashea con **bcrypt coste 10** (`$2a$10$…`). bcryptjs (API) y CryptSharp (escritorio) son interoperables. **No usar BCrypt.Net-Next** (delay-signed, no carga en .NET Framework) — usar el paquete `CryptSharpOfficial`.
-- El login del escritorio de MongoDB usa PBKDF2 propio (`pbkdf2$`, 10k iteraciones) — identidad separada de la API (pendiente unificar, §6 de la propuesta).
-- **Expo**: la app usa Expo 57; leer la documentación versionada (https://docs.expo.dev/versions/v57.0.0/) antes de escribir código de la app (`App/AGENTS.md`).
-- **Estilo de código**: identificadores y BD en español (`alumno`, `dictado`, `obtenerDictados`); API sin acentos en rutas/JSON.
-- **Baja lica**: entidades con columna `activo`; el login de la API filtra `activo = 1` (faltó aplicarlo en otros listados — pendiente).
+En resumen: **el escritorio y la app comparten la base, pero no se avisan entre sí.**
 
-## 10. Mapa de archivos clave
+<a id="s9"></a>
 
-| Archivo/Carpeta | Qué es |
+## 9. Reglas y convenciones 📌
+
+### Git 🌿
+
+- Trabajá en tu rama (`Juan-Torres`, `Isa-Vecco`). **PR obligatorio a `main`**, nunca commitees directo a `main`.
+- Ramas existentes: `main`, `Juan-Torres`, `Isa-Vecco`.
+
+### Credenciales 🔴
+
+> 🔴 **Las credenciales NO se hardcodean.** Esta regla antes decía lo contrario y por eso las
+> cadenas de MySQL y MongoDB estuvieron versionadas en el historial. Ya fueron rotadas; no repitas el error.
+
+| Módulo | Dónde van las credenciales | ¿Versionado? |
+|---|---|---|
+| 🖥️ Escritorio | `credenciales.env` (ignorado por git) | 🟢 No |
+| 🖥️ Escritorio | `App.config` → solo placeholders | 🟢 Sí, vacío |
+| 🔌 API | `Api/.env` (ignorado por git) | 🟢 No |
+| 🔌 API | `Api/.env.example` → solo placeholders | 🟢 Sí, vacío |
+
+Nunca copies una cadena real a ningún archivo versionado. Si tocás una credencial, **rotala** en el
+proveedor (Atlas / Railway), no solo en el código.
+
+**Nunca versionar:** `.env` · `credenciales.env` · `*.pem` · `*.key` · `*.zip`
+
+### Nombres de tabla 🔴
+
+> 🔴 **Siempre en minúscula.** Railway corre **Linux**, donde `ALUMNO` y `alumno` son tablas distintas.
+> En Windows funcionan igual, así que el error aparece únicamente en producción.
+
+Por eso el escritorio normalizó sus queries (`FROM alumno`, no `FROM ALUMNO`).
+
+### Contraseñas 🔑
+
+- `contrasena` se hashea con **bcrypt coste 10** (`$2a$10$…`).
+- bcryptjs (API) y CryptSharp (escritorio) son interoperables.
+- 🔴 **No usar `BCrypt.Net-Next`**: es delay-signed y no carga en .NET Framework. Usá `CryptSharpOfficial`.
+- El login del escritorio contra MongoDB usa **PBKDF2 propio** (`pbkdf2$`, 10k iteraciones): es una identidad
+  separada de la de la API. 🟡 Pendiente de unificar.
+
+### Otros
+
+- **Expo**: la app usa SDK 57. Leé la documentación versionada
+  (<https://docs.expo.dev/versions/v57.0.0/>) antes de escribir código de la app.
+- **Estilo**: identificadores y BD en español (`alumno`, `dictado`, `obtenerDictados`).
+  En la API, rutas y JSON **sin acentos**.
+- **Baja lógica**: las entidades tienen columna `activo`. El login de la API filtra `activo = 1`;
+  🟡 faltó aplicarlo en otros listados.
+
+<a id="s10"></a>
+
+## 10. Mapa de archivos clave 🗺️
+
+| Archivo / Carpeta | Qué es |
 |---|---|
 | `Api/index.js` | Bootstrap de la API + índice de endpoints |
-| `Api/rutas/` | `login.js`, `clases.js`, `dictados.js`, `asistencias.js`, `eventos.js` (SSE) |
-| `Api/config/db.js` | Pool mysql2 (lee `.env`) |
+| `Api/config/db.js` | Pool de mysql2 (lee `.env`) |
+| `Api/rutas/` | `login.js` · `dictados.js` · `clases.js` · `asistencias.js` · `eventos.js` (SSE) |
+| `Api/utilidades/autenticacion.js` | Emisión y verificación del token (Bearer) |
+| `Api/utilidades/eventos.js` | Bus de eventos SSE en memoria |
+| `Api/utilidades/asistencia.js` | Validaciones del módulo de asistencia |
+| `Api/.env.example` | Plantilla de configuración de la API |
 | `App/App.js` | Login + enrutado por rol |
-| `App/src/api.js` | Cliente HTTP/SSE de la app (detecta host, guarda token Bearer) |
-| `App/src/pantallas/` | `ProfesorPrincipal.js`, `PreceptorPrincipal.js`, `AlumnoPrincipal.js` |
+| `App/src/api.js` | Cliente HTTP/SSE (detecta host, guarda el token) |
+| `App/src/pantallas/` | `ProfesorPrincipal.js` · `PreceptorPrincipal.js` · `AlumnoPrincipal.js` |
 | `.net/.../SistemaAsistencia.slnx` | Solución del escritorio (abrir en Visual Studio) |
-| `.net/.../Modelo/Conexion/` | Cadenas de conexión MySQL/Mongo |
-| `.net/.../BD/` | Script SQL definitivo de reconstrucción |
+| `.net/.../Modelo/Conexion/Credenciales.cs` | Lee el `.env` del escritorio (versionado, sin secretos) |
+| `.net/.../credenciales.env.example` | Plantilla de credenciales del escritorio |
+| `.net/SistemaAsistencia/BD/` | Script SQL definitivo de reconstrucción |
 | `.vscode/launch.json` | Debug de API + App en un F5 |
+
+<a id="s11"></a>
+
+## 11. Base de datos: cuál es cuál 🔴
+
+> 🔴 La confusión más común del proyecto. Hay **más de un destino** posible en `DB_HOST` y
+> apuntan a bases **distintas**. Antes de probar nada, confirmá cuál estás usando.
+
+| Destino | Host | Qué contiene | Quién lo usa |
+|---|---|---|---|
+| 🟢 **Producción** | host de la red privada de Railway | **Los datos reales** | API en Railway, y el escritorio |
+| 🟢 **Producción (vía externa)** | `iriguchi.proxy.rlwy.net:23138` | La **misma** base de producción | El escritorio, desde tu PC |
+| 🟡 **Local** | `localhost:3306` | Una base **desechable y separada** | Solo la API local |
+
+**La API local apunta a `localhost:3306`**, es decir a una base distinta de la de producción. Eso es
+intencional y sirve para:
+
+- 🟢 probar migraciones o restaurar el script definitivo, que **borra los datos**, sin tocar producción
+- 🟡 probar el flujo de asistencia sin que nada de lo que hagas afecte los datos reales
+
+🔴 **Lo que NO te da:** datos reales. Si probás contra la API local y algo falla, el error no es
+necesariamente el mismo que vas a ver en producción. Y al revés: si algo funciona en local, no
+garantiza que funcione en Railway.
+
+> 📌 ¿Querés que la API local trabaje contra producción? Cambiá `DB_HOST` y `DB_PORT` en
+> `Api/.env` por los del proxy TCP. Recordá que el bus de eventos SSE es **por proceso**: si el
+> profesor y el preceptor apuntan a instancias distintas, no se ven en tiempo real.
