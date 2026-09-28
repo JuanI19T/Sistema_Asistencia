@@ -27,7 +27,7 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"SELECT id_alumno
-                               FROM INSCRIBE
+                               FROM inscribe
                                WHERE id_dictado = @id";
 
                 var cmd = new MySqlCommand(sql, cn);
@@ -56,10 +56,10 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-                string sql = @"INSERT INTO INSCRIBE (id_alumno, id_dictado, anio_inicio)
+                string sql = @"INSERT INTO inscribe (id_alumno, id_dictado, anio_inicio)
                                SELECT @alumno, @dictado, @anio
                                FROM DUAL
-                               WHERE NOT EXISTS (SELECT 1 FROM INSCRIBE
+                               WHERE NOT EXISTS (SELECT 1 FROM inscribe
                                                  WHERE id_alumno = @alumno
                                                    AND id_dictado = @dictado)";
 
@@ -82,7 +82,7 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-                string sql = @"DELETE FROM INSCRIBE
+                string sql = @"DELETE FROM inscribe
                                WHERE id_alumno = @alumno
                                  AND id_dictado = @dictado";
 

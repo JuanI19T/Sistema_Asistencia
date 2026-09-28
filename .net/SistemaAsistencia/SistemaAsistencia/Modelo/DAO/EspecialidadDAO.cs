@@ -27,9 +27,9 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"SELECT *
-                               FROM ESPECIALIDAD
-                               WHERE activo = 1
-                               ORDER BY nombre_especialidad";
+                                FROM especialidad
+                                WHERE activo = 1
+                                ORDER BY nombre_especialidad";
 
                 var cmd = new MySqlCommand(sql, cn);
 

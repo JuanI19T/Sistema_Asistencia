@@ -51,7 +51,17 @@ namespace SistemaAsistencia.Vista.Alumnos
 
         private void CargarAlumnos()
         {
-            cacheAlumnos = alumnoController.ObtenerAlumnos() ?? new List<Alumno>();
+            // Preferir los datos en memoria si fueron cargados al iniciar sesión
+            if (Sesion.Alumnos != null && Sesion.Alumnos.Count > 0)
+            {
+                cacheAlumnos = Sesion.Alumnos;
+            }
+            else
+            {
+                // Fallback: cargar de BD y guardar en sesión para próximas veces
+                cacheAlumnos = alumnoController.ObtenerAlumnos() ?? new List<Alumno>();
+                Sesion.Alumnos = cacheAlumnos;
+            }
             MostrarEnGrilla(cacheAlumnos);
         }
 

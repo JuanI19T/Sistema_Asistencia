@@ -49,9 +49,9 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"SELECT *
-                               FROM PRECEPTOR
-                               WHERE activo = 1
-                               ORDER BY apellido_preceptor, nombre_preceptor";
+                                FROM preceptor
+                                WHERE activo = 1
+                                ORDER BY apellido_preceptor, nombre_preceptor";
 
                 var cmd = new MySqlCommand(sql, cn);
 
