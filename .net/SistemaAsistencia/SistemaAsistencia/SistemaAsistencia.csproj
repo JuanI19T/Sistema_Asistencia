@@ -188,6 +188,7 @@
     <Compile Include="Controlador\AlumnoController.cs" />
     <Compile Include="Modelo\Conexion\conexionBD.cs" />
     <Compile Include="Modelo\Conexion\ConexionMongo.cs" />
+          <Compile Include="Modelo\Conexion\Credenciales.cs" />
     <Compile Include="Modelo\DAO\AlumnoDAO.cs" />
     <Compile Include="Modelo\DAO\DictadoDAO.cs" />
     <Compile Include="Modelo\DAO\Dependencia.cs" />
@@ -338,6 +339,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="credenciales.env" Condition="Exists('credenciales.env')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modelo\Servicios\" />

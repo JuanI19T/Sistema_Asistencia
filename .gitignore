@@ -35,3 +35,6 @@ Thumbs.db
 
 # --- Local OpenCode (no subir al repo) ---
 /AGENTS.md
+
+# Credenciales reales del escritorio (contienen passwords: NUNCA versionar)
+.net/SistemaAsistencia/SistemaAsistencia/credenciales.env
