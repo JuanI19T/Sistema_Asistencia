@@ -9,16 +9,49 @@ namespace SistemaAsistencia.Modelo.Conexion
     {
         private const string Archivo = "credenciales.env";
 
-        private static readonly Dictionary<string, string> Valores = LeerArchivo();
+        private static readonly object Candado = new object();
+        private static Dictionary<string, string> valores;
+
+        private static Dictionary<string, string> Valores
+        {
+            get
+            {
+                lock (Candado)
+                {
+                    if (valores == null)
+                        valores = LeerArchivo();
+
+                    return valores;
+                }
+            }
+        }
 
         private static Dictionary<string, string> LeerArchivo()
         {
             var resultado = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            string ruta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Archivo);
+            string rutaSalida = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Archivo);
 
-            if (!File.Exists(ruta)) return resultado;
+            if (!File.Exists(rutaSalida))
+            {
+                var dirActual = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
+                while (dirActual != null && dirActual.Parent != null)
+                {
+                    var prueba = Path.Combine(dirActual.FullName, Archivo);
+                    if (File.Exists(prueba))
+                    {
+                        throw new InvalidOperationException(
+                            $"El archivo '{Archivo}' existe en la carpeta del proyecto pero no se copió al directorio de salida ({AppDomain.CurrentDomain.BaseDirectory}). " +
+                            "Recompilá la solución (Rebuild) para copiarlo.");
+                    }
+                    dirActual = dirActual.Parent;
+                }
 
-            foreach (var linea in File.ReadAllLines(ruta))
+                throw new InvalidOperationException(
+                    $"No se encontró el archivo '{Archivo}'. Copiá '{Archivo}.example' como '{Archivo}' " +
+                    "en la carpeta del proyecto y completá los valores reales.");
+            }
+
+            foreach (var linea in File.ReadAllLines(rutaSalida))
             {
                 string texto = linea.Trim();
                 if (texto.Length == 0 || texto.StartsWith("#")) continue;
@@ -47,7 +80,7 @@ namespace SistemaAsistencia.Modelo.Conexion
             if (string.IsNullOrWhiteSpace(valor) || valor.Contains("PLACEHOLDER"))
             {
                 throw new InvalidOperationException(
-                    "Falta la credencial '" + clave + ". Copiá '" + Archivo + ".example' a '" +
+                    "Falta la credencial '" + clave + "'. Copiá '" + Archivo + ".example' a '" +
                     Archivo + "' (en la carpeta del proyecto) y completá el valor real.");
             }
 
