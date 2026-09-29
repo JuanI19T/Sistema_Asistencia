@@ -58,7 +58,7 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-                string sql = @"INSERT INTO ESPECIALIDAD
+                string sql = @"INSERT INTO especialidad
                                (nombre_especialidad)
                                VALUES
                                (@nombre)";
@@ -80,7 +80,7 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-                string sql = @"UPDATE ESPECIALIDAD
+                string sql = @"UPDATE especialidad
                                SET nombre_especialidad = @nombre
                                WHERE id_especialidad = @id";
 
@@ -102,7 +102,7 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-                string sql = @"UPDATE ESPECIALIDAD
+                string sql = @"UPDATE especialidad
                                SET activo = 0
                                WHERE id_especialidad = @id";
 
@@ -127,7 +127,7 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 using (MySqlCommand cmd = new MySqlCommand(
-                    "SELECT COUNT(*) FROM MATERIA WHERE id_especialidad = @id", cn))
+                    "SELECT COUNT(*) FROM materia WHERE id_especialidad = @id", cn))
                 {
                     cmd.Parameters.AddWithValue("@id", idEspecialidad);
 
@@ -155,14 +155,14 @@ namespace SistemaAsistencia.Modelo.DAO
                     try
                     {
                         using (MySqlCommand cmdMaterias = new MySqlCommand(
-                            "DELETE FROM MATERIA WHERE id_especialidad = @id", cn, tx))
+                            "DELETE FROM materia WHERE id_especialidad = @id", cn, tx))
                         {
                             cmdMaterias.Parameters.AddWithValue("@id", idEspecialidad);
                             cmdMaterias.ExecuteNonQuery();
                         }
 
                         using (MySqlCommand cmd = new MySqlCommand(
-                            "DELETE FROM ESPECIALIDAD WHERE id_especialidad = @id", cn, tx))
+                            "DELETE FROM especialidad WHERE id_especialidad = @id", cn, tx))
                         {
                             cmd.Parameters.AddWithValue("@id", idEspecialidad);
 

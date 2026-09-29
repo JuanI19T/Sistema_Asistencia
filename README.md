@@ -152,7 +152,7 @@ Vista (Forms) <-> Controlador (lógica) <-> Modelo (Entidades + DAO + Conexión)
 - 🪟 **Vista:** `FrmLogin`, `FrmPrincipal`, `FrmInicio`, `FrmAlumnos`, `FrmProfesores`, `FrmPreceptores`, `FrmMaterias`, `FrmEspecialidades`, `FrmDictados`, `FrmInscripcion`, `FrmUsuarios`, `FrmPrimerUsuario`, `FrmConfirmarEliminar`, más los helpers `UIHelper.cs` y `CtrlTelefono.cs`
 - 🧰 **Utilidades:** `Sesion` (usuario actual), `Logger` (errores en `bin/**/logs/log_*.txt`), `Ejecutor`, `DatosException`, `Tema`, `TelefonoHelper`
 
-**🔑 Contraseñas:** las de preceptor/profesor en MySQL usan bcrypt (`$2a$`, costo 10), interoperable entre el escritorio (CryptSharp) y la API (bcryptjs).
+**🔑 Contraseñas:** las de preceptor/profesor en MySQL usan bcrypt (costo 10, prefijo `$2a$` o `$2b$` indistintamente), interoperable entre el escritorio (CryptSharp) y la API (bcryptjs).
 
 **🔒 Credenciales:** ninguna cadena de conexión está en el código. Ver [§8.1](#81-escritorio-net) y [§8.3](#83-api-node).
 
@@ -162,6 +162,7 @@ Vista (Forms) <-> Controlador (lógica) <-> Modelo (Entidades + DAO + Conexión)
 Sistema_Asistencia/
 ├── 📖 README.md                              # este documento
 ├── 📖 context.md                             # contexto técnico para humanos y agentes de IA
+├── 📖 AGENTS.md                              # reglas de trabajo del agente: Git, credenciales y estilo
 ├── .gitignore
 ├── 🖥️ .net/                                  # módulo escritorio
 │   └── SistemaAsistencia/
@@ -479,6 +480,7 @@ graph LR
 | Documento | Contenido |
 |---|---|
 | 📖 [`context.md`](context.md) | Contexto técnico: arquitectura, cómo levantar cada módulo, reglas del proyecto y mapa de archivos |
+| 📖 [`AGENTS.md`](AGENTS.md) | Reglas de trabajo del agente: identidad por rama, seguridad con Git, credenciales y estilo |
 | 🗺️ `Api/index.js` | Índice vivo de endpoints: `GET /` en la API devuelve la lista completa |
 
 ---

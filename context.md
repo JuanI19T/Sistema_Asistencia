@@ -2,6 +2,7 @@
 
 > Guía rápida para entender el proyecto antes de tocar código.
 > Documento hermano: [`README.md`](README.md) (visión general para humanos).
+> Reglas de trabajo del agente: [`AGENTS.md`](AGENTS.md).
 
 ## 📑 Índice
 
@@ -179,7 +180,9 @@ Abrí `.net/SistemaAsistencia/SistemaAsistencia.slnx` en Visual Studio, restaur�
 
 ### 5 — Debug de API + App 🟢
 
-`.vscode/launch.json` trae la config compuesta **"Proyecto: API + App (F5)"**.
+`.vscode/launch.json` trae configs compuestas para debug de API + App: **"Api + App (Internet)"**
+y **"Api + App (LAN - USB)"**. También hay launches separados (`API: Node.js`, `App: Expo LAN`,
+`App: Expo QR`).
 
 <a id="s6"></a>
 
@@ -231,7 +234,19 @@ En resumen: **el escritorio y la app comparten la base, pero no se avisan entre 
 ### Git 🌿
 
 - Trabajá en tu rama (`Juan-Torres`, `Isa-Vecco`). **PR obligatorio a `main`**, nunca commitees directo a `main`.
+- Nunca commitees ni pushees en la rama de la otra persona: frená y preguntá.
 - Ramas existentes: `main`, `Juan-Torres`, `Isa-Vecco`.
+- Cada máquina define su usuario con `git config user.name`, que determina a qué rama pertenecés:
+
+| `user.name` | Rama |
+|---|---|
+| `JuanI19T` | `Juan-Torres` |
+| `isabellacarrete` | `Isa-Vecco` |
+
+**Cómo sincronizar con `main`:** pedile al agente *"traeme los cambios de main"* en el chat. No hay
+ningún comando que ejecutar. Las reglas operativas de Git —qué se puede y qué no hacer, cómo traer
+`origin/main` en vez de `main`, cómo manejar conflictos— están en [`AGENTS.md`](AGENTS.md), que el
+agente carga siempre.
 
 ### Credenciales 🔴
 
@@ -259,7 +274,8 @@ Por eso el escritorio normalizó sus queries (`FROM alumno`, no `FROM ALUMNO`).
 
 ### Contraseñas 🔑
 
-- `contrasena` se hashea con **bcrypt coste 10** (`$2a$10$…`).
+- `contrasena` se hashea con **bcrypt coste 10** (prefijo `$2a$` al hashear el escritorio, `$2b$` en los
+  hashes sembrados por el script SQL). bcryptjs y CryptSharp verifican ambos prefijos.
 - bcryptjs (API) y CryptSharp (escritorio) son interoperables.
 - 🔴 **No usar `BCrypt.Net-Next`**: es delay-signed y no carga en .NET Framework. Usá `CryptSharpOfficial`.
 - El login del escritorio contra MongoDB usa **PBKDF2 propio** (`pbkdf2$`, 10k iteraciones): es una identidad

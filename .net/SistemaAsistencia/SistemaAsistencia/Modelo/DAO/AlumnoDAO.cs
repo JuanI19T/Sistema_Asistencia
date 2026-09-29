@@ -77,7 +77,7 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-                string sql = @"INSERT INTO ALUMNO
+                string sql = @"INSERT INTO alumno
                                 (nombre_alumno, apellido_alumno, dni, legajo_alumno,
                                  correo_alumno, telefono_alumno)
                                 VALUES
@@ -106,7 +106,7 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-                string sql = @"UPDATE ALUMNO
+                string sql = @"UPDATE alumno
                                 SET nombre_alumno = @nombre,
                                     apellido_alumno = @apellido,
                                     dni = @dni,
@@ -138,7 +138,7 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-                string sql = @"UPDATE ALUMNO
+                string sql = @"UPDATE alumno
                                SET activo = 0
                                WHERE id_alumno = @id";
 
@@ -163,7 +163,7 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 using (MySqlCommand cmd = new MySqlCommand(
-                    "SELECT COUNT(*) FROM INSCRIBE WHERE id_alumno = @id", cn))
+                    "SELECT COUNT(*) FROM inscribe WHERE id_alumno = @id", cn))
                 {
                     cmd.Parameters.AddWithValue("@id", idAlumno);
 
@@ -191,14 +191,14 @@ namespace SistemaAsistencia.Modelo.DAO
                     try
                     {
                         using (MySqlCommand cmdInscripciones = new MySqlCommand(
-                            "DELETE FROM INSCRIBE WHERE id_alumno = @id", cn, tx))
+                            "DELETE FROM inscribe WHERE id_alumno = @id", cn, tx))
                         {
                             cmdInscripciones.Parameters.AddWithValue("@id", idAlumno);
                             cmdInscripciones.ExecuteNonQuery();
                         }
 
                         using (MySqlCommand cmd = new MySqlCommand(
-                            "DELETE FROM ALUMNO WHERE id_alumno = @id", cn, tx))
+                            "DELETE FROM alumno WHERE id_alumno = @id", cn, tx))
                         {
                             cmd.Parameters.AddWithValue("@id", idAlumno);
 

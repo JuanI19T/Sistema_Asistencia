@@ -92,7 +92,7 @@ namespace SistemaAsistencia.Modelo.DAO
 
                 // Requiere columna `dni` (el portal ya la tiene; si tu MySQL WinForms
                 // es anterior, avisame el error "Unknown column 'dni'" y te paso el ALTER).
-                string sql = @"INSERT INTO PROFESOR
+                string sql = @"INSERT INTO profesor
                                 (nombre_profesor, apellido_profesor, dni, legajo_profesor,
                                  correo_profesor, telefono_profesor)
                                 VALUES
@@ -121,7 +121,7 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-                string sql = @"UPDATE PROFESOR
+                string sql = @"UPDATE profesor
                                 SET nombre_profesor = @nombre,
                                     apellido_profesor = @apellido,
                                     dni = @dni,
@@ -154,7 +154,7 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-                string sql = @"UPDATE PROFESOR
+                string sql = @"UPDATE profesor
                                SET activo = 0
                                WHERE id_profesor = @id";
 
@@ -179,7 +179,7 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 using (MySqlCommand cmd = new MySqlCommand(
-                    "SELECT COUNT(*) FROM DICTADO WHERE id_profesor = @id", cn))
+                    "SELECT COUNT(*) FROM dictado WHERE id_profesor = @id", cn))
                 {
                     cmd.Parameters.AddWithValue("@id", idProfesor);
 
@@ -207,14 +207,14 @@ namespace SistemaAsistencia.Modelo.DAO
                     try
                     {
                         using (MySqlCommand cmdDictados = new MySqlCommand(
-                            "DELETE FROM DICTADO WHERE id_profesor = @id", cn, tx))
+                            "DELETE FROM dictado WHERE id_profesor = @id", cn, tx))
                         {
                             cmdDictados.Parameters.AddWithValue("@id", idProfesor);
                             cmdDictados.ExecuteNonQuery();
                         }
 
                         using (MySqlCommand cmd = new MySqlCommand(
-                            "DELETE FROM PROFESOR WHERE id_profesor = @id", cn, tx))
+                            "DELETE FROM profesor WHERE id_profesor = @id", cn, tx))
                         {
                             cmd.Parameters.AddWithValue("@id", idProfesor);
 

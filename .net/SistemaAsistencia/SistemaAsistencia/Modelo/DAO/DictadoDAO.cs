@@ -92,7 +92,7 @@ string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
             {
                 cn.Open();
 
-                string sql = @"INSERT INTO DICTADO
+                string sql = @"INSERT INTO dictado
                                 (id_materia, id_profesor, dia, horario, horario_fin, grupo, anio_lectivo)
                                 VALUES
                                 (@id_materia, @id_profesor, @dia, @horario, @horario_fin, @grupo, @anio_lectivo)";
@@ -121,7 +121,7 @@ string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
             {
                 cn.Open();
 
-                string sql = @"UPDATE DICTADO
+                string sql = @"UPDATE dictado
                                 SET id_materia = @id_materia,
                                     id_profesor = @id_profesor,
                                     dia = @dia,
@@ -156,7 +156,7 @@ string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
             {
                 cn.Open();
 
-                string sql = @"UPDATE DICTADO
+                string sql = @"UPDATE dictado
                                SET activo = 0
                                WHERE id_dictado = @id";
 
@@ -181,7 +181,7 @@ string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
                 cn.Open();
 
                 using (MySqlCommand cmd = new MySqlCommand(
-                    "SELECT COUNT(*) FROM INSCRIBE WHERE id_dictado = @id", cn))
+                    "SELECT COUNT(*) FROM inscribe WHERE id_dictado = @id", cn))
                 {
                     cmd.Parameters.AddWithValue("@id", idDictado);
 
@@ -209,14 +209,14 @@ string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
                     try
                     {
                         using (MySqlCommand cmdInscripciones = new MySqlCommand(
-                            "DELETE FROM INSCRIBE WHERE id_dictado = @id", cn, tx))
+                            "DELETE FROM inscribe WHERE id_dictado = @id", cn, tx))
                         {
                             cmdInscripciones.Parameters.AddWithValue("@id", idDictado);
                             cmdInscripciones.ExecuteNonQuery();
                         }
 
                         using (MySqlCommand cmd = new MySqlCommand(
-                            "DELETE FROM DICTADO WHERE id_dictado = @id", cn, tx))
+                            "DELETE FROM dictado WHERE id_dictado = @id", cn, tx))
                         {
                             cmd.Parameters.AddWithValue("@id", idDictado);
 
