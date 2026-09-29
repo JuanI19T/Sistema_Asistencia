@@ -152,7 +152,7 @@ Vista (Forms) <-> Controlador (lógica) <-> Modelo (Entidades + DAO + Conexión)
 - 🪟 **Vista:** `FrmLogin`, `FrmPrincipal`, `FrmInicio`, `FrmAlumnos`, `FrmProfesores`, `FrmPreceptores`, `FrmMaterias`, `FrmEspecialidades`, `FrmDictados`, `FrmInscripcion`, `FrmUsuarios`, `FrmPrimerUsuario`, `FrmConfirmarEliminar`, más los helpers `UIHelper.cs` y `CtrlTelefono.cs`
 - 🧰 **Utilidades:** `Sesion` (usuario actual), `Logger` (errores en `bin/**/logs/log_*.txt`), `Ejecutor`, `DatosException`, `Tema`, `TelefonoHelper`
 
-**🔑 Contraseñas:** las de preceptor/profesor en MySQL usan bcrypt (`$2a$`, costo 10), interoperable entre el escritorio (CryptSharp) y la API (bcryptjs).
+**🔑 Contraseñas:** las de preceptor/profesor en MySQL usan bcrypt (costo 10, prefijo `$2a$` o `$2b$` indistintamente), interoperable entre el escritorio (CryptSharp) y la API (bcryptjs).
 
 **🔒 Credenciales:** ninguna cadena de conexión está en el código. Ver [§8.1](#81-escritorio-net) y [§8.3](#83-api-node).
 

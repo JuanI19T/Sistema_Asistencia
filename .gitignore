@@ -19,7 +19,7 @@ ProyectoEscuela_v7.zip
 *.userosscache
 *.sln.docstates
 
-# --- Node / Expo (refuerzo; App y Api ya tienen su propio .gitignore) ---
+# --- Node / Expo (refuerzo; App ya tiene su propio .gitignore) ---
 **/node_modules/
 **/.expo/
 **/dist/

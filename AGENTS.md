@@ -43,6 +43,8 @@ Git ya garantiza el resto, así que no hace falta defenderse de eso:
 
 ## Traer cambios de main
 
+Si te piden "traeme los cambios de main" o algo equivalente, seguí esta sección.
+
 ⛔ **Nunca** merges `main`; usá siempre `origin/main`. La `main` local queda
 atrasada porque nadie la mueve al mergear en GitHub, y mergearla aplica un estado
 viejo sin avisar.
@@ -71,6 +73,9 @@ Si hubo conflictos, **no actualices tu `main` local** con el merge a medias.
 
 ## Commits y PRs
 
+- ⛔ Solo commitees y pushees en **tu** rama: la de la tabla de Identidad. Si la rama
+  activa es la de otra persona, frená y no commitees nada, ni siquiera "para corregir"
+  algo que cambió.
 - Nunca commitees directo a `main`. Todo desde tu rama, por PR.
 - Un commit = un cambio con sentido, mensaje en español plano.
 - No commitees ni pushees sin que te lo pida explícitamente.
