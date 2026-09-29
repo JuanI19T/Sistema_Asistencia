@@ -162,6 +162,7 @@ Vista (Forms) <-> Controlador (lógica) <-> Modelo (Entidades + DAO + Conexión)
 Sistema_Asistencia/
 ├── 📖 README.md                              # este documento
 ├── 📖 context.md                             # contexto técnico para humanos y agentes de IA
+├── 📖 AGENTS.md                              # reglas de trabajo del agente: Git, credenciales y estilo
 ├── .gitignore
 ├── 🖥️ .net/                                  # módulo escritorio
 │   └── SistemaAsistencia/
@@ -479,6 +480,7 @@ graph LR
 | Documento | Contenido |
 |---|---|
 | 📖 [`context.md`](context.md) | Contexto técnico: arquitectura, cómo levantar cada módulo, reglas del proyecto y mapa de archivos |
+| 📖 [`AGENTS.md`](AGENTS.md) | Reglas de trabajo del agente: identidad por rama, seguridad con Git, credenciales y estilo |
 | 🗺️ `Api/index.js` | Índice vivo de endpoints: `GET /` en la API devuelve la lista completa |
 
 ---

@@ -2,6 +2,7 @@
 
 > Guía rápida para entender el proyecto antes de tocar código.
 > Documento hermano: [`README.md`](README.md) (visión general para humanos).
+> Reglas de trabajo del agente: [`AGENTS.md`](AGENTS.md).
 
 ## 📑 Índice
 
@@ -232,6 +233,16 @@ En resumen: **el escritorio y la app comparten la base, pero no se avisan entre 
 
 - Trabajá en tu rama (`Juan-Torres`, `Isa-Vecco`). **PR obligatorio a `main`**, nunca commitees directo a `main`.
 - Ramas existentes: `main`, `Juan-Torres`, `Isa-Vecco`.
+- Cada máquina define su usuario con `git config user.name`, que determina a qué rama pertenecés:
+
+| `user.name` | Rama |
+|---|---|
+| `JuanI19T` | `Juan-Torres` |
+| `isabellacarrete` | `Isa-Vecco` |
+
+**Cómo sincronizar con `main`:** decile al agente *"traeme los cambios de main"*. No hace falta
+ningún comando. Las reglas operativas de Git —qué se puede y qué no hacer, cómo traer `main`, cómo
+manejar conflictos— están en [`AGENTS.md`](AGENTS.md), que el agente carga siempre.
 
 ### Credenciales 🔴
 
