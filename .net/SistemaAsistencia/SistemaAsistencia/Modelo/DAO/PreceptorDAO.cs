@@ -87,7 +87,7 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-                string sql = @"INSERT INTO PRECEPTOR
+                string sql = @"INSERT INTO preceptor
                                (nombre_preceptor, apellido_preceptor, legajo_preceptor,
                                 dni, correo_preceptor, telefono_preceptor, contrasena)
                                VALUES
@@ -135,7 +135,7 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-                string sql = @"UPDATE PRECEPTOR
+                string sql = @"UPDATE preceptor
                                SET nombre_preceptor = @nombre,
                                    apellido_preceptor = @apellido,
                                    legajo_preceptor = @legajo,
@@ -176,7 +176,7 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-                string sql = @"UPDATE PRECEPTOR
+                string sql = @"UPDATE preceptor
                                SET activo = 0
                                WHERE id_preceptor = @id";
 
@@ -201,7 +201,7 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 using (MySqlCommand cmd = new MySqlCommand(
-                    "SELECT COUNT(*) FROM DICTADO WHERE id_preceptor = @id", cn))
+                    "SELECT COUNT(*) FROM dictado WHERE id_preceptor = @id", cn))
                 {
                     cmd.Parameters.AddWithValue("@id", idPreceptor);
 
@@ -229,14 +229,14 @@ namespace SistemaAsistencia.Modelo.DAO
                     try
                     {
                         using (MySqlCommand cmdDictados = new MySqlCommand(
-                            "DELETE FROM DICTADO WHERE id_preceptor = @id", cn, tx))
+                            "DELETE FROM dictado WHERE id_preceptor = @id", cn, tx))
                         {
                             cmdDictados.Parameters.AddWithValue("@id", idPreceptor);
                             cmdDictados.ExecuteNonQuery();
                         }
 
                         using (MySqlCommand cmd = new MySqlCommand(
-                            "DELETE FROM PRECEPTOR WHERE id_preceptor = @id", cn, tx))
+                            "DELETE FROM preceptor WHERE id_preceptor = @id", cn, tx))
                         {
                             cmd.Parameters.AddWithValue("@id", idPreceptor);
 
