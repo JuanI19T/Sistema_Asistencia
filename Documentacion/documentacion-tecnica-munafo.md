@@ -29,6 +29,7 @@
 | 6 | [Impacto y beneficios esperados](#s6) | Impacto operativo e institucional, y factibilidad |
 | 7 | [Perfiles de usuario y roles](#s7) | Perfiles, matriz de permisos y reglas de interacción |
 | 8 | [Metodología de trabajo y trazabilidad](#s8) | Organización por módulos, ciclo de desarrollo y control de versiones |
+| 9 | [División de módulos y responsabilidad](#s9) | Reparto de trabajo por integrante y matriz de responsabilidad |
 
 ---
 
@@ -628,6 +629,106 @@ Para proteger la continuidad del trabajo se definieron reglas que el equipo resp
   implique pérdida de datos.
 - **Los archivos generados no se suben:** dependencias y artefactos de compilación permanecen fuera del
   control de versiones, manteniendo el repositorio liviano y confiable.
+
+---
+
+<a id="s9"></a>
+
+## 9. División de módulos y responsabilidad
+
+Para garantizar la trazabilidad del trabajo individual y aprovechar las fortalezas de cada integrante,
+las funcionalidades del sistema se dividieron atendiendo al ámbito en el que mejor se desempeña cada
+uno. Este fue un criterio deliberado del equipo: en este proyecto, cada integrante se encarga de lo que
+mejor le sale.
+
+### 9.1 Alumno 1: Isabella Lara Carrete Vecco
+
+#### 9.1.1 Módulo de Diseño y Experiencia de Usuario
+
+- Diseño de la interfaz de usuario de los distintos módulos del sistema.
+- Diseño funcional de los módulos y de la forma en que el usuario interactúa con ellos.
+- Participación en el diseño del aplicativo de escritorio, cuya decodificación completa corrió por cuenta
+  de Juan.
+- Diseño, desarrollo y distribución de la aplicación web y de la aplicación móvil, incluyendo el diseño
+  de las interfaces de ambas aplicaciones.
+
+**Aclaración sobre la migración tecnológica.** Las aplicaciones web y móvil se decidieron desarrollar
+recientemente con React Native, lo que implicó migrar el trabajo previamente realizado con Flutter para
+la aplicación móvil y con PHP y HTML para la aplicación web. La migración y el diseño de las nuevas
+interfaces están a cargo de Isabella, con la colaboración inicial de Juan.
+
+#### 9.1.2 Módulo de Extensibilidad del proyecto
+
+- Busca y diagrama posibles mejoras del sistema y vela por que el proyecto pueda extenderse en el
+  futuro.
+- Realiza diagramas de bases de datos de ejemplo para que, si el proyecto continúa el año que viene
+  con otro grupo, sus integrantes sepan cómo retomarlo y cómo abordar sus extensiones.
+
+Entre los diagramas contemplados se encuentran:
+
+| N° | Extensión propuesta | Objetivo |
+|:---:|---|---|
+| 1 | Registro completo de legajos | Incorporar todos los documentos de los alumnos (libreta de vacunas, copia del DNI, datos de obra social, fichas de inscripción, etc.), para evitar que se pierdan ciertos documentos y facilitar su localización. |
+| 2 | Gestor de notas | Digitalizar las notas de los finales de cada alumno, eliminando el riesgo de que se confundan o se pierdan y posibilitando la generación de un boletín digital con acceso más sencillo. |
+
+#### 9.1.3 Módulo de Documentación
+
+- Se encarga de toda la documentación del proyecto, incluyendo el presente informe y los documentos
+  técnicos y funcionales que acompañan al desarrollo.
+
+### 9.2 Alumno 2: Juan Ignacio Torres Troschasky
+
+#### 9.2.1 Módulo de Aplicativo de Escritorio
+
+- Creación del aplicativo de escritorio casi en su totalidad, incluida la mayor parte de su
+  programación, dado que es el ámbito que mejor maneja.
+- Isabella intervino en el diseño del módulo; la implementación del código es responsabilidad de Juan.
+
+#### 9.2.2 Módulo de Conexiones QR (en desarrollo)
+
+- Implementación de la utilidad de conexiones con código QR en la aplicación móvil para la toma de
+  asistencia. Se encuentra actualmente en etapa de pruebas: se analiza y verifica cuál es la mejor forma
+  de realizarlo antes de su integración definitiva.
+
+#### 9.2.3 Módulo de Colaboración en Migración y Soporte técnico
+
+- Colaboración inicial en la migración de la aplicación de Flutter y de PHP y HTML hacia React Native,
+  ayudando a impulsar el inicio del diseño del funcionamiento de la API de comunicación con la base de
+  datos.
+- Búsqueda de distintos frameworks adicionales que puedan ayudar en el proceso de hacer que las
+  interfaces sean más agradables y funcionales.
+
+### 9.3 Trabajo conjunto
+
+Las etapas anteriores al desarrollo modular fueron realizadas en conjunto por ambos integrantes:
+
+- Investigación previa del proyecto.
+- Diseño de la base de datos: estudio de factibilidad, modelo Entidad-Relación (MER) y diagrama
+  entidad-relación del sistema.
+- Búsqueda y selección de las tecnologías utilizadas actualmente en el proyecto.
+
+### 9.4 Nota sobre las tecnologías adoptadas
+
+Parte de las tecnologías en uso fueron incorporadas por la recomendación de compañeros que las emplean
+en sus propios proyectos. Al conocer su utilidad a través de esas experiencias, el equipo decidió
+adoptarlas. Es el caso, por ejemplo, del host de base de datos en Railway, utilizado para el despliegue
+de la base de datos y de la API del sistema.
+
+### 9.5 Matriz de responsabilidad
+
+| Responsabilidad | Isabella | Juan |
+|---|---|---|
+| Diseño de interfaces y experiencia de usuario | X | - |
+| Diseño funcional de módulos | X | Consulta |
+| Aplicativo de escritorio (desarrollo completo) | - | X |
+| Aplicación web (React Native) | X | - |
+| Aplicación móvil (React Native) | Diseñó y desarrolló | QR en pruebas |
+| Migración (Flutter y PHP con HTML hacia React Native) | General | Inicio y API |
+| Diseño de la API de comunicación con la base de datos | Consulta | X |
+| Búsqueda de frameworks para las interfaces | - | X |
+| Extensibilidad: diagramas de futuras extensiones | X | - |
+| Documentación completa del proyecto | X | - |
+| Investigación, base de datos y selección de tecnologías | X | X |
 
 ---
 
