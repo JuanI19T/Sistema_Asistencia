@@ -481,7 +481,7 @@ graph LR
 
 | Documento | Contenido |
 |---|---|
-| 📘 [`Documentacion/documentacion-tecnica-munafo.md`](Documentacion/documentacion-tecnica-munafo.md) | Documentación técnica y análisis de requerimientos (EACP): problema real, solución, objetivos y marco teórico |
+| 📘 [`Documentacion/documentacion-tecnica-munafo.md`](Documentacion/documentacion-tecnica-munafo.md) | Documentación técnica y análisis de requerimientos (EACP): problema real, solución, alcance y límites, objetivos, marco teórico, roles e impacto |
 | 📖 [`context.md`](context.md) | Contexto técnico: arquitectura, cómo levantar cada módulo, reglas del proyecto y mapa de archivos |
 | 📖 [`AGENTS.md`](AGENTS.md) | Reglas de trabajo del agente: identidad por rama, seguridad con Git, credenciales y estilo |
 | 🗺️ `Api/index.js` | Índice vivo de endpoints: `GET /` en la API devuelve la lista completa |
