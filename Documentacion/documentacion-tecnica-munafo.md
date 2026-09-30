@@ -28,6 +28,7 @@
 | 5 | [Alcance y límites](#s5) | Funcionalidades incluidas y funcionalidades excluidas |
 | 6 | [Impacto y beneficios esperados](#s6) | Impacto operativo e institucional, y factibilidad |
 | 7 | [Perfiles de usuario y roles](#s7) | Perfiles, matriz de permisos y reglas de interacción |
+| 8 | [Metodología de trabajo y trazabilidad](#s8) | Organización por módulos, ciclo de desarrollo y control de versiones |
 
 ---
 
@@ -543,6 +544,90 @@ información personal de identidad de los usuarios.
 | Preceptor | Alumnos | Modificar sus datos, inscribirlos en clases y registrarles asistencia. |
 | Profesor | Alumnos y preceptores | Solo visualización de la información de quienes interactúan con su cursada. |
 | Alumno | Profesores y preceptores | Solo visualización de la información relacionada con sus clases. |
+
+---
+
+<a id="s8"></a>
+
+## 8. Metodología de trabajo y trazabilidad
+
+### 8.1 Metodología de desarrollo
+
+#### 8.1.1 Organización del trabajo por módulos
+
+El proyecto se desarrolló dividiendo el sistema en tres partes interdependientes, cuyo orden responde a
+una lógica de dependencia de datos:
+
+| N° | Módulo | Descripción |
+|:---:|---|---|
+| 1 | Aplicativo de escritorio | Módulo administrativo donde se cargan y administran los datos institucionales (alumnos, profesores, preceptores, materias, dictados, inscripciones y usuarios). Constituye la primera etapa del desarrollo, ya que debía quedar bastante avanzado para poder continuar con el resto de los módulos: toda la información que estos consumen se ingresa a la base de datos a través de él. |
+| 2 | Aplicación móvil | Módulo operativo de registro de asistencia, desarrollado en React Native. |
+| 3 | Página o aplicación web | Módulo complementario, también desarrollado en React Native, que comparte con la aplicación móvil la dependencia de los datos cargados desde el escritorio. |
+
+La aplicación móvil y la web dependen de los datos que se ingresan a la base de datos mediante el
+aplicativo de escritorio: no existen por fuera de la información institucional registrada en el módulo
+administrativo. Esta relación determinó el orden de construcción y definió que el escritorio fuera el
+primer entregable funcional de la solución.
+
+#### 8.1.2 Evolución de la gestión del trabajo
+
+El proceso de desarrollo atravesó dos etapas de organización bien diferenciadas:
+
+| Etapa | Descripción |
+|---|---|
+| 1. Gestión previa a GitHub (Drive y canal de comunicación Discord) | En un inicio, el equipo trabajó con la información del proyecto distribuida en carpetas compartidas de Google Drive, y el archivo del aplicativo de escritorio se compartía enviándolo por un canal de Discord dedicado al proyecto o por WhatsApp. Esta modalidad presentó un problema operativo recurrente: el archivo solía corromperse con frecuencia, lo que obligaba a reconstruir versiones, dificultaba saber cuál era la copia vigente y ponía en riesgo la continuidad del trabajo realizado. |
+| 2. Migración a GitHub | Ante esas limitaciones, el equipo creó el repositorio de GitHub del proyecto. En su creación, uno de los integrantes se encargó de subir todo el material desarrollado hasta ese momento, consolidando el avance existente y estableciendo el punto de partida desde el cual continuar el desarrollo. A partir de esa migración, la información dejó de dispersarse entre Drive, Discord y WhatsApp, y pasó a convivir en un único repositorio con historial y control de versiones. |
+
+#### 8.1.3 Ciclo de desarrollo
+
+El ciclo adoptado combina planificación por etapas y desarrollo incremental:
+
+1. **Relevamiento:** identificación de las necesidades institucionales junto al equipo directivo.
+2. **Análisis y diseño:** definición de requerimientos, reglas de negocio y modelo de datos.
+3. **Construcción por módulos:** desarrollo secuencial del escritorio primero y de la app y la web
+   después, sobre los datos que aquel administra.
+4. **Pruebas:** verificación funcional de cada módulo antes de integrarlo.
+5. **Integración y revisiones:** protocolo de incorporación de cambios descrito en la sección 8.2.
+
+### 8.2 Traceabilidad y GitHub
+
+#### 8.2.1 Control de versiones
+
+El repositorio de GitHub constituye el instrumento formal de trazabilidad del proyecto: conserva el
+historial de cada cambio, acredita la autoría individual del trabajo y permite reconstruir el estado del
+sistema en cualquier momento.
+
+A la fecha del informe, el repositorio contiene más de 25 commits, la documentación del proyecto, el
+script de definición de la base de datos y el código fuente de los módulos desarrollados.
+
+#### 8.2.2 Flujo de trabajo con ramas
+
+El equipo adoptó una estrategia de trabajo basada en ramas (branches):
+
+| Elemento | Descripción |
+|---|---|
+| Rama principal (main) | Integra la versión estable del proyecto. No recibe commits directos. |
+| Rama individual por integrante | Cada desarrollador trabaja en su propia rama asignada, con autonomía para avanzar sobre los módulos bajo su responsabilidad. |
+| Integración mediante Pull Request | Cuando un integrante completa un cambio, pushea su rama y solicita su incorporación a la rama principal mediante un Pull Request. Este paso permite revisar la modificación antes de integrarla y registra formalmente qué trabajo aportó cada uno. |
+
+Este flujo garantiza que:
+
+- Cada integrante pueda desarrollar en paralelo sin pisar el trabajo del otro.
+- Ningún cambio ingresado a la rama principal esté sin revisión.
+- La autoría de cada funcionalidad sea auditable, dejando constancia de quién realizó cada cambio y
+  cuándo.
+
+#### 8.2.3 Conservación y seguridad del repositorio
+
+Para proteger la continuidad del trabajo se definieron reglas que el equipo respeta en cada operación:
+
+- **Los secretos no se versionan:** las credenciales de conexión se mantienen fuera del repositorio, en
+  archivos de entorno ignorados, protegiendo la seguridad del sistema.
+- **Prohibidos los borrados destructivos:** operaciones como el descarte forzado del historial o la
+  limpieza de archivos sin confirmar están fuera de uso, para garantizar que ninguna acción accidental
+  implique pérdida de datos.
+- **Los archivos generados no se suben:** dependencias y artefactos de compilación permanecen fuera del
+  control de versiones, manteniendo el repositorio liviano y confiable.
 
 ---
 
