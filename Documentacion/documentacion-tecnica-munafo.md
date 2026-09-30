@@ -31,6 +31,7 @@
 | 8 | [Metodología de trabajo y trazabilidad](#s8) | Organización por módulos, ciclo de desarrollo y control de versiones |
 | 9 | [División de módulos y responsabilidad](#s9) | Reparto de trabajo por integrante y matriz de responsabilidad |
 | 10 | [Requerimientos del sistema](#s10) | Requerimientos funcionales y no funcionales por categoría |
+| 11 | [Reglas de negocio](#s11) | Reglas relevadas en la institución, agrupadas por ámbito |
 
 ---
 
@@ -821,6 +822,80 @@ de la base de datos y de la API del sistema.
 | Código | Requerimiento |
 |:---:|---|
 | RNF-22 | Todo cambio debe registrarse en el control de versiones y llegar a la rama principal mediante revisión, de modo que quede constancia de la autoría de cada funcionalidad. |
+
+---
+
+<a id="s11"></a>
+
+## 11. Reglas de negocio (RN)
+
+Las reglas de negocio del sistema fueron extraídas del relevamiento institucional realizado con el
+equipo directivo (Acta del 29/04/2026) y complementadas con las validaciones derivadas del estudio de
+factibilidad y del comportamiento definido para el sistema.
+
+### 11.1 Modalidades de cursada
+
+| Código | Regla |
+|:---:|---|
+| RN-01 | En la institución no existe la figura de estudiante oyente: todo estudiante que participa de una clase está registrado formalmente. |
+| RN-02 | Un estudiante puede cursar una materia por primera vez o como recursante, de todas las materias pendientes o únicamente de algunas. |
+| RN-03 | La institución no utiliza el concepto de repetir el año; en su lugar, el estudiante vuelve a cursar determinadas materias que mantiene pendientes. |
+| RN-04 | Un estudiante no pasa de curso: comienza a cursar las materias del año siguiente conservando las que aún tiene sin aprobar. |
+| RN-05 | Un estudiante puede encontrarse cursando simultáneamente materias de distintos años curriculares. Por ejemplo, un estudiante ubicado administrativamente en 4.º año cursa dos materias de 4.º y cinco pendientes de 3.º. |
+| RN-06 | El sistema parte siempre del estudiante y su trayectoria para generar planillas de asistencia y listados; no organiza la información con el curso como único eje. |
+
+### 11.2 Intensificación
+
+| Código | Regla |
+|:---:|---|
+| RN-07 | La institución implementa períodos de intensificación distribuidos a lo largo del ciclo lectivo: marzo, julio, última semana de noviembre, diciembre y febrero. |
+| RN-08 | Un estudiante puede intensificar hasta un máximo de cinco (5) materias. |
+| RN-09 | Si un estudiante supera el máximo de cinco materias, las materias excedentes deben recursarse. |
+| RN-10 | Los estudiantes que intensifican pueden pertenecer tanto al curso habitual del docente como a otros cursos; el docente administra a todos ellos. |
+| RN-11 | La definición de qué materias intensificar depende de la trayectoria académica del estudiante. |
+| RN-12 | La lógica general de la trayectoria académica es: cursada regular, luego intensificación, luego nueva intensificación si corresponde, y finalmente recursado. |
+
+### 11.3 Asignación de materias y cursos
+
+| Código | Regla |
+|:---:|---|
+| RN-13 | El estudiante no elige libremente las materias que cursará: la asignación la determina la institución según su trayectoria académica. |
+| RN-14 | La asignación de materias considera la disponibilidad horaria del estudiante. |
+| RN-15 | Siempre que sea posible se prioriza el recursado; cuando el recursado no resulta viable, el estudiante intensifica la materia correspondiente. |
+| RN-16 | Un estudiante no puede cursar un número de materias superior al máximo permitido para su año, contemplando tanto las cursadas regulares como las recursadas. |
+| RN-17 | El proceso de asignación de un estudiante a un curso consta de tres pasos: determinar qué materias debe cursar, asignarlo al grupo correspondiente de cada materia y definir el aula donde desarrollará la cursada. |
+| RN-18 | La asignación de materias debe respetar la compatibilidad horaria entre todas las materias del estudiante. |
+| RN-19 | La institución no organiza inicialmente la cursada en función del docente: primero se define la trayectoria del estudiante y luego se resuelve la asignación docente. |
+
+### 11.4 Asistencia
+
+| Código | Regla |
+|:---:|---|
+| RN-20 | Cuando un docente se encuentra ausente, el estudiante no registra inasistencia en esa materia. |
+| RN-21 | La clase con docente ausente continúa contabilizándose dentro del total de clases previstas para la materia. |
+| RN-22 | La asistencia solo puede registrarse sobre alumnos inscriptos en el dictado correspondiente. |
+| RN-23 | El registro de presencia de un alumno en una clase se realiza mediante escaneo del código QR o ingreso del código corto generado al abrir la clase. |
+| RN-24 | El seguimiento y la corrección de la asistencia corresponden a preceptoría, pudiendo observar el estado en tiempo real mientras la clase transcurre. |
+
+### 11.5 Materias en riesgo
+
+| Código | Regla |
+|:---:|---|
+| RN-25 | La determinación de una materia en riesgo contempla dos criterios: el criterio pedagógico y el criterio administrativo. |
+| RN-26 | La evaluación de una materia en riesgo se realiza durante el proceso de calificación. |
+| RN-27 | Cuando la problemática involucra el desempeño de un docente, el seguimiento corresponde al área de preceptoría. |
+
+### 11.6 Gestión de usuarios y datos
+
+| Código | Regla |
+|:---:|---|
+| RN-28 | La información personal de cada usuario no puede ser modificada por el propio usuario, cualquiera sea su rol; solo un directivo o administrador puede modificar ese tipo de datos. |
+| RN-29 | Los secretarios pueden cargar y modificar datos de profesores, preceptores y alumnos, pero no los de directivos ni los de otros secretarios. |
+| RN-30 | Los preceptores pueden modificar datos de alumnos e inscribirlos en clases, pero no pueden modificar los datos de los profesores: solo interactúan con ellos para asignarles cursos. |
+| RN-31 | Los profesores y los alumnos solo pueden consultar los datos habilitados para su perfil, sin modificar información del sistema. |
+| RN-32 | Cada usuario accede exclusivamente a los módulos correspondientes a su rol, sin posibilidad de operar sobre funciones de otros perfiles. |
+| RN-33 | El alta de una entidad nueva se produce siempre con estado activo, y las bajas se realizan de forma lógica, preservando el historial del registro. |
+| RN-34 | Las credenciales de acceso y las cadenas de conexión no deben exponerse en el código ni versionarse en el repositorio. |
 
 ---
 
