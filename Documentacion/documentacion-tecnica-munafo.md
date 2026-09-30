@@ -22,13 +22,12 @@
 | Sección | Título | Contenido |
 |:---:|---|---|
 | 1 | [Datos generales del proyecto](#s1) | Identificación del proyecto, cliente, equipo y repositorio |
-| 2 | [Descripción del problema real](#s2) | Situación actual e ineficiencias de la gestión en papel |
-| 3 | [Solución tecnológica propuesta](#s3) | Módulos del sistema, infraestructura y circuito cubierto |
-| 4 | [Alcance y límites](#s4) | Funcionalidades incluidas y funcionalidades excluidas |
-| 5 | [Objetivos](#s5) | Objetivo general y objetivos específicos |
-| 6 | [Marco teórico](#s6) | Conceptos fundamentales, justificación y criterios de selección |
+| 2 | [Descripción del problema real](#s2) | Situación actual, ineficiencias y solución tecnológica propuesta |
+| 3 | [Objetivos](#s3) | Objetivo general y objetivos específicos |
+| 4 | [Marco teórico](#s4) | Conceptos fundamentales, justificación y criterios de selección |
+| 5 | [Alcance y límites](#s5) | Funcionalidades incluidas y funcionalidades excluidas |
+| 6 | [Impacto y beneficios esperados](#s6) | Impacto operativo e institucional, y factibilidad |
 | 7 | [Perfiles de usuario y roles](#s7) | Perfiles, matriz de permisos y reglas de interacción |
-| 8 | [Impacto y beneficios esperados](#s8) | Impacto operativo e institucional, y factibilidad |
 
 ---
 
@@ -113,17 +112,13 @@ Esta metodología genera las siguientes ineficiencias operativas:
 | 10 | Imposibilidad de operar desde el aula | El registro de asistencia solo puede efectuarse donde está la documentación física, con la clase detenida mientras el docente completa la planilla. |
 | 11 | Sin visibilidad en tiempo real | Preceptoría no puede ir siguiendo la asistencia mientras la clase transcurre ni corregirla al momento. |
 
----
-
-<a id="s3"></a>
-
-## 3. Solución tecnológica propuesta
+### 2.3 Solución tecnológica propuesta
 
 Se propone el desarrollo del Sistema Integral de Asistencia Escolar (SIA): una solución formada por
 **tres módulos interdependientes** que reemplazan el registro en papel y las planillas descentralizadas
 por una única plataforma digital.
 
-### 3.1 Módulos del sistema
+#### 2.3.1 Módulos del sistema
 
 | N° | Módulo | Tecnología | Función |
 |:---:|---|---|---|
@@ -131,7 +126,7 @@ por una única plataforma digital.
 | 2 | API REST intermedia | Node.js · Express | Capa de servicios que actúa como puerta de acceso único a la base de datos, con autenticación por token (Bearer) y contraseñas cifradas con bcrypt. |
 | 3 | Aplicación móvil | React Native · Expo | Módulo operativo que permite registrar la asistencia en el aula desde el celular, mediante escaneo de código QR o ingreso de un código corto generado por el docente al abrir la clase. |
 
-### 3.2 Infraestructura y reglas de negocio
+#### 2.3.2 Infraestructura y reglas de negocio
 
 El sistema se apoya sobre una infraestructura centralizada y segura:
 
@@ -150,7 +145,7 @@ El sistema se apoya sobre una infraestructura centralizada y segura:
 5. **Reglas institucionales incorporadas.** El registro de clases sin docente ausente y las demás
    reglas de asistencia se incorporan como reglas de negocio del sistema.
 
-### 3.3 Cobertura del circuito completo
+#### 2.3.3 Cobertura del circuito completo
 
 Con esta solución, el SIA cubre el circuito completo de la información de asistencia:
 
@@ -166,80 +161,11 @@ El proceso que hoy se lleva a cabo en papel queda digitalizado en su totalidad.
 
 ---
 
-<a id="s4"></a>
+<a id="s3"></a>
 
-## 4. Alcance y límites
+## 3. Objetivos
 
-### 4.1 Alcance
-
-El Sistema Integral de Asistencia Escolar (SIA) comprende el desarrollo e implementación de tres módulos
-que cubren el circuito completo del control de asistencia de la institución.
-
-#### 4.1.1 Módulo de Escritorio (administración)
-
-| N° | Funcionalidad | Descripción |
-|:---:|---|---|
-| 1 | Autenticación de usuarios | Ingreso con usuario y contraseña, control de sesión y creación del primer Administrador cuando no existen usuarios en el sistema. |
-| 2 | Gestión de usuarios y perfiles | Alta, baja, modificación y activación o desactivación de usuarios, con contraseñas cifradas. |
-| 3 | Administración de alumnos, profesores y preceptores | Alta, baja, modificación y listados. |
-| 4 | Administración de especialidades y materias | Catálogo curricular con asignación de especialidad. |
-| 5 | Gestión de dictados | Asignación de materia, profesor y preceptor, con sus fechas. |
-| 6 | Gestión de inscripciones | Inscripción de alumnos a dictados. |
-| 7 | Control de permisos por rol | El menú se filtra según el perfil del usuario: administrador, directivo, preceptor y profesor. |
-
-#### 4.1.2 Módulo de API REST (intermediación)
-
-| N° | Funcionalidad | Descripción |
-|:---:|---|---|
-| 1 | Autenticación por rol | Autenticación de preceptor, profesor y alumno mediante token de seguridad. |
-| 2 | Exposición de datos | Alumnos, dictados, dictados por alumno y listados de inscriptos. |
-| 3 | Gestión de clases | Apertura de clase por dictado, estados y consulta por fecha. |
-| 4 | Registro de asistencias | Consulta, carga individual y carga por lote. |
-| 5 | Generación y validación de tokens de clase | Emisión de código QR, escaneo y código corto de ingreso. |
-| 6 | Difusión de eventos en tiempo real | Difusión de eventos hacia la aplicación móvil. |
-
-#### 4.1.3 Módulo de Aplicación Móvil
-
-| N° | Funcionalidad | Descripción |
-|:---:|---|---|
-| 1 | Login por rol | Autenticación de preceptor, profesor y alumno. |
-| 2 | Perfil preceptor | Gestión de clases y seguimiento de asistencia en vivo. |
-| 3 | Perfil profesor | Acceso a sus dictados, apertura de clase y generación del código QR. |
-| 4 | Perfil alumno | Registro de su presencia escaneando el QR o ingresando el código corto. |
-
-#### 4.1.4 Infraestructura
-
-| N° | Componente | Descripción |
-|:---:|---|---|
-| 1 | Base de datos centralizada | MySQL (`gestion_asistencia_eest`) como única fuente de verdad, compartida por el escritorio y la API. |
-| 2 | Base de datos documental | MongoDB Atlas para la autenticación de usuarios del escritorio. |
-| 3 | Despliegue en la nube | Despliegue de la API y de la base de datos para su operación desde los dispositivos móviles. |
-
-### 4.2 Límites / fuera de alcance
-
-El sistema no contempla en esta etapa las siguientes funcionalidades:
-
-| N° | Límite | Descripción |
-|:---:|---|---|
-| 1 | Gestión de calificaciones y evaluación | No se registran notas ni se maneja la promoción de materias. |
-| 2 | Automatización de la trayectoria académica completa | Si bien el modelo soporta dictados e inscripciones personalizadas, la asignación automática de recursado e intensificación conforme a la regla institucional (máximo de cinco materias, priorización del recursado, límite por año) queda fuera de esta versión y se resuelve de forma asistida por el personal. |
-| 3 | Módulo económico-financiero | No se gestionan pagos, cuotas ni contribuciones. |
-| 4 | Gestión de legajos completos | El sistema administra los datos académicos relacionados con la asistencia, sin digitalizar documentación extraacadémica. |
-| 5 | Justificación y bitácora avanzadas | La justificación de inasistencias y la bitácora de acciones figuran como proyección, no como entrega funcional completa. |
-| 6 | Soporte sin conexión | El registro de asistencia requiere conexión con la API; no existe cola de carga offline. |
-| 7 | Sincronización bidireccional en vivo entre escritorio y aplicación móvil | El escritorio escribe directamente en la base, por lo que sus cambios no se difunden en tiempo real a la aplicación móvil, que los ve al volver a consultar. La difusión en vivo opera solo sobre los cambios que registra la propia API. |
-| 8 | Notificaciones automáticas | No se envían avisos por correo electrónico, WhatsApp ni otros canales de mensajería. |
-| 9 | Versión web completa del escritorio | Las funcionalidades administrativas se ofrecen únicamente como aplicación de escritorio Windows. |
-| 10 | Rol administrador en la API | El login del servicio contempla profesor, preceptor y alumno; la administración de usuarios se realiza exclusivamente desde el escritorio. |
-| 11 | Copias de seguridad automáticas | La persistencia confía en la infraestructura de nube contratada, sin un esquema propio de respaldo automático. |
-
----
-
-<a id="s5"></a>
-
-## 5. Objetivos
-
-### 5.1 Objetivo general
+### 3.1 Objetivo general
 
 Desarrollar e implementar el Sistema Integral de Asistencia Escolar (SIA), una plataforma digital única
 que digitalice el circuito completo del control de asistencia de la E.E.S.T. N° 1, desde la carga y
@@ -247,7 +173,7 @@ administración de los datos institucionales hasta el registro diario de asisten
 posterior consulta, reemplazando el registro manual en papel y las planillas de cálculo
 descentralizadas por una solución centralizada, segura y operativa en tiempo real.
 
-### 5.2 Objetivos específicos
+### 3.2 Objetivos específicos
 
 | N° | Objetivo |
 |:---:|---|
@@ -264,11 +190,11 @@ descentralizadas por una solución centralizada, segura y operativa en tiempo re
 
 ---
 
-<a id="s6"></a>
+<a id="s4"></a>
 
-## 6. Marco teórico
+## 4. Marco teórico
 
-### 6.1 Conceptos fundamentales
+### 4.1 Conceptos fundamentales
 
 **1. Sistema de información.** Un sistema de información es el conjunto de componentes
 interrelacionados que recolectan, procesan, almacenan y distribuyen información para apoyar la toma de
@@ -357,7 +283,7 @@ una única estructura rígida, sino que cada estudiante puede cursar materias de
 simultáneo, el modelo de datos no parte del curso, sino del estudiante y sus trayectorias; la
 asistencia se registra siempre en el contexto de un dictado y de una clase concreta.
 
-### 6.2 Justificación de tecnologías
+### 4.2 Justificación de tecnologías
 
 | Tecnología | Función en el proyecto | Justificación |
 |---|---|---|
@@ -375,7 +301,7 @@ asistencia se registra siempre en el contexto de un dictado y de una clase concr
 | Entorno de variables (.env) | Gestión de credenciales | Externaliza las cadenas de conexión fuera del código fuente, evitando que secretos queden versionados en el repositorio. |
 | Git y GitHub (flujo de ramas + Pull Request) | Control de versiones y trazabilidad | Registra el historial completo, permite el trabajo colaborativo en ramas individuales y audita la autoría de cada cambio antes de integrarse a la rama principal. |
 
-### 6.3 Criterios generales de selección
+### 4.3 Criterios generales de selección
 
 Las tecnologías fueron elegidas priorizando los siguientes criterios:
 
@@ -390,6 +316,116 @@ Las tecnologías fueron elegidas priorizando los siguientes criterios:
    clientes o funcionalidades a futuro sin reescribir el sistema.
 5. **Seguridad por diseño.** Cifrado de contraseñas, tokens de sesión, permisos por rol y credenciales
    fuera del repositorio.
+
+---
+
+<a id="s5"></a>
+
+## 5. Alcance y límites
+
+### 5.1 Alcance
+
+El Sistema Integral de Asistencia Escolar (SIA) comprende el desarrollo e implementación de tres módulos
+que cubren el circuito completo del control de asistencia de la institución.
+
+#### 5.1.1 Módulo de Escritorio (administración)
+
+| N° | Funcionalidad | Descripción |
+|:---:|---|---|
+| 1 | Autenticación de usuarios | Ingreso con usuario y contraseña, control de sesión y creación del primer Administrador cuando no existen usuarios en el sistema. |
+| 2 | Gestión de usuarios y perfiles | Alta, baja, modificación y activación o desactivación de usuarios, con contraseñas cifradas. |
+| 3 | Administración de alumnos, profesores y preceptores | Alta, baja, modificación y listados. |
+| 4 | Administración de especialidades y materias | Catálogo curricular con asignación de especialidad. |
+| 5 | Gestión de dictados | Asignación de materia, profesor y preceptor, con sus fechas. |
+| 6 | Gestión de inscripciones | Inscripción de alumnos a dictados. |
+| 7 | Control de permisos por rol | El menú se filtra según el perfil del usuario: administrador, directivo, preceptor y profesor. |
+
+#### 5.1.2 Módulo de API REST (intermediación)
+
+| N° | Funcionalidad | Descripción |
+|:---:|---|---|
+| 1 | Autenticación por rol | Autenticación de preceptor, profesor y alumno mediante token de seguridad. |
+| 2 | Exposición de datos | Alumnos, dictados, dictados por alumno y listados de inscriptos. |
+| 3 | Gestión de clases | Apertura de clase por dictado, estados y consulta por fecha. |
+| 4 | Registro de asistencias | Consulta, carga individual y carga por lote. |
+| 5 | Generación y validación de tokens de clase | Emisión de código QR, escaneo y código corto de ingreso. |
+| 6 | Difusión de eventos en tiempo real | Difusión de eventos hacia la aplicación móvil. |
+
+#### 5.1.3 Módulo de Aplicación Móvil
+
+| N° | Funcionalidad | Descripción |
+|:---:|---|---|
+| 1 | Login por rol | Autenticación de preceptor, profesor y alumno. |
+| 2 | Perfil preceptor | Gestión de clases y seguimiento de asistencia en vivo. |
+| 3 | Perfil profesor | Acceso a sus dictados, apertura de clase y generación del código QR. |
+| 4 | Perfil alumno | Registro de su presencia escaneando el QR o ingresando el código curto. |
+
+#### 5.1.4 Infraestructura
+
+| N° | Componente | Descripción |
+|:---:|---|---|
+| 1 | Base de datos centralizada | MySQL (`gestion_asistencia_eest`) como única fuente de verdad, compartida por el escritorio y la API. |
+| 2 | Base de datos documental | MongoDB Atlas para la autenticación de usuarios del escritorio. |
+| 3 | Despliegue en la nube | Despliegue de la API y de la base de datos para su operación desde los dispositivos móviles. |
+
+### 5.2 Límites / fuera de alcance
+
+El sistema no contempla en esta etapa las siguientes funcionalidades:
+
+| N° | Límite | Descripción |
+|:---:|---|---|
+| 1 | Gestión de calificaciones y evaluación | No se registran notas ni se maneja la promoción de materias. |
+| 2 | Automatización de la trayectoria académica completa | Si bien el modelo soporta dictados e inscripciones personalizadas, la asignación automática de recursado e intensificación conforme a la regla institucional (máximo de cinco materias, priorización del recursado, límite por año) queda fuera de esta versión y se resuelve de forma asistida por el personal. |
+| 3 | Módulo económico-financiero | No se gestionan pagos, cuotas ni contribuciones. |
+| 4 | Gestión de legajos completos | El sistema administra los datos académicos relacionados con la asistencia, sin digitalizar documentación extraacadémica. |
+| 5 | Justificación y bitácora avanzadas | La justificación de inasistencias y la bitácora de acciones figuran como proyección, no como entrega funcional completa. |
+| 6 | Soporte sin conexión | El registro de asistencia requiere conexión con la API; no existe cola de carga offline. |
+| 7 | Sincronización bidireccional en vivo entre escritorio y aplicación móvil | El escritorio escribe directamente en la base, por lo que sus cambios no se difunden en tiempo real a la aplicación móvil, que los ve al volver a consultar. La difusión en vivo opera solo sobre los cambios que registra la propia API. |
+| 8 | Notificaciones automáticas | No se envían avisos por correo electrónico, WhatsApp ni otros canales de mensajería. |
+| 9 | Versión web completa del escritorio | Las funcionalidades administrativas se ofrecen únicamente como aplicación de escritorio Windows. |
+| 10 | Rol administrador en la API | El login del servicio contempla profesor, preceptor y alumno; la administración de usuarios se realiza exclusivamente desde el escritorio. |
+| 11 | Copias de seguridad automáticas | La persistencia confía en la infraestructura de nube contratada, sin un esquema propio de respaldo automático. |
+
+---
+
+<a id="s6"></a>
+
+## 6. Impacto y beneficios esperados
+
+### 6.1 Impacto operativo
+
+La implementación del SIA transforma la operatoria diaria de la institución en los siguientes aspectos:
+
+| N° | Aspecto | Descripción |
+|:---:|---|---|
+| 1 | Registro de asistencia inmediato | El alumno marca su presencia escaneando el QR o ingresando el código corto desde su celular, sin interrumpir la clase mientras el docente completa una planilla. |
+| 2 | Eliminación del doble registro | Se suprime la transcripción del papel a las planillas administrativas; el dato se carga una sola vez y queda disponible para todos los módulos. |
+| 3 | Reducción de tiempos administrativos | Búsquedas de estudiantes, armado de listados y cierres de planilla que antes demandaban horas de trabajo manual se resuelven con consultas inmediatas. |
+| 4 | Control y corrección en tiempo real | Preceptoría observa la asistencia mientras transcurre la clase y puede corregir registros al momento, en lugar de hacerlo días después sobre el papel. |
+| 5 | Disminución de errores | Las validaciones automáticas (alumno inscripto, estados de clase, reglas de asistencia) evitan cargas duplicadas o incorrectas que el registro manual no podía detectar. |
+| 6 | Disponibilidad permanente de la información | Los datos centralizados en la nube pueden consultarse desde cualquier equipo autorizado, sin depender de la ubicación física de la documentación. |
+| 7 | Gestión de trayectorias personalizadas | El modelo de datos acompaña la realidad institucional de cursadas simultáneas, recurso e intensificación, ordenando información que en el papel resultaba inmanejable. |
+
+### 6.2 Impacto social e institucional
+
+| N° | Aspecto | Descripción |
+|:---:|---|---|
+| 1 | Modernización de la gestión escolar | La institución avanza hacia un modelo digital de administración, alineado con las prácticas actuales de informatización de las organizaciones educativas. |
+| 2 | Valorización de la información institucional | Dirección y preceptoría pasan a contar con datos confiables y actualizados para conocer la situación de matrícula, la regularidad de los estudiantes y las materias pendientes. |
+| 3 | Autonomía y participación del alumno | El estudiante deja de ser un mero objeto del registro y pasa a participar activamente de su propia asistencia, lo que refuerza hábitos de responsabilidad. |
+| 4 | Reconocimiento del rol docente y de preceptoría | Las tareas de control y seguimiento se elevan de un trabajo manual repetitivo a una función de supervisión y gestión apoyada en datos. |
+| 5 | Fortalecimiento del vínculo con la comunidad educativa | La disponibilidad de un sistema institucional propio constituye un activo académico de la escuela, fruto del trabajo conjunto entre el equipo directivo y el equipo de desarrollo. |
+| 6 | Experiencia formativa para los alumnos desarrolladores | El proyecto involucra a los integrantes del grupo en un problema real, con usuarios reales y requisitos relevados, fortaleciendo sus capacidades profesionales. |
+
+### 6.3 Factibilidad
+
+El proyecto se considera factible desde sus tres dimensiones:
+
+| Dimensión | Evaluación |
+|---|---|
+| Factibilidad técnica | Las tecnologías seleccionadas (C#/.NET, MySQL, Node.js/Express, React Native/Expo) son de acceso libre, maduras y de amplia documentación. El equipo ya cuenta con un prototipo funcional operativo: los tres módulos desarrollados, la base de datos restaurable mediante script y el despliegue en la nube funcionando, lo que confirma la viabilidad técnica de la solución. |
+| Factibilidad operativa | La institución ya posee la estructura, el equipamiento (computadoras Windows y teléfonos inteligentes) y el personal con experiencia en el procedimiento de toma de asistencia. El sistema fue diseñado a partir del relevamiento directo con el equipo directivo, por lo que contempla las reglas y la metodología de trabajo reales de la escuela. La capacitación requerida para los usuarios es mínima, dado que las interfaces simplifican tareas que el personal ya realiza. |
+| Factibilidad económica | Al tratarse de un proyecto académico, no existe costo de mano de obra de desarrollo. Todas las herramientas y plataformas utilizadas son gratuitas (ediciones comunitarias o de código abierto). El equipamiento ya existe en la institución y el costo futuro se limita al mantenimiento correctivo y evolutivo, estimado como bajo, y a la eventual contratación de los servicios en la nube ya utilizados en la etapa de desarrollo. |
 
 ---
 
@@ -501,53 +537,12 @@ información personal de identidad de los usuarios.
 
 | Quién | Con quién | Qué puede hacer |
 |---|---|---|
-| Directivo | Professores, secretarios, preceptores y alumnos | Cargarlos, modificarlos y gestionar sus datos. |
-| Secretario | Professores, preceptores y alumnos | Cargarlos y modificar sus datos, sin directivos ni otros secretarios. |
-| Preceptor | Professores | Ver su información e interactuar para asignarles cursos, sin modificar sus datos. |
+| Directivo | Profesores, secretarios, preceptores y alumnos | Cargarlos, modificarlos y gestionar sus datos. |
+| Secretario | Profesores, preceptores y alumnos | Cargarlos y modificar sus datos, sin directivos ni otros secretarios. |
+| Preceptor | Profesores | Ver su información e interactuar para asignarles cursos, sin modificar sus datos. |
 | Preceptor | Alumnos | Modificar sus datos, inscribirlos en clases y registrarles asistencia. |
 | Profesor | Alumnos y preceptores | Solo visualización de la información de quienes interactúan con su cursada. |
-| Alumno | Professores y preceptores | Solo visualización de la información relacionada con sus clases. |
-
----
-
-<a id="s8"></a>
-
-## 8. Impacto y beneficios esperados
-
-### 8.1 Impacto operativo
-
-La implementación del SIA transforma la operatoria diaria de la institución en los siguientes aspectos:
-
-| N° | Aspecto | Descripción |
-|:---:|---|---|
-| 1 | Registro de asistencia inmediato | El alumno marca su presencia escaneando el QR o ingresando el código corto desde su celular, sin interrumpir la clase mientras el docente completa una planilla. |
-| 2 | Eliminación del doble registro | Se suprime la transcripción del papel a las planillas administrativas; el dato se carga una sola vez y queda disponible para todos los módulos. |
-| 3 | Reducción de tiempos administrativos | Búsquedas de estudiantes, armado de listados y cierres de planilla que antes demandaban horas de trabajo manual se resuelven con consultas inmediatas. |
-| 4 | Control y corrección en tiempo real | Preceptoría observa la asistencia mientras transcurre la clase y puede corregir registros al momento, en lugar de hacerlo días después sobre el papel. |
-| 5 | Disminución de errores | Las validaciones automáticas (alumno inscripto, estados de clase, reglas de asistencia) evitan cargas duplicadas o incorrectas que el registro manual no podía detectar. |
-| 6 | Disponibilidad permanente de la información | Los datos centralizados en la nube pueden consultarse desde cualquier equipo autorizado, sin depender de la ubicación física de la documentación. |
-| 7 | Gestión de trayectorias personalizadas | El modelo de datos acompaña la realidad institucional de cursadas simultáneas, recurso e intensificación, ordenando información que en el papel resultaba inmanejable. |
-
-### 8.2 Impacto social e institucional
-
-| N° | Aspecto | Descripción |
-|:---:|---|---|
-| 1 | Modernización de la gestión escolar | La institución avanza hacia un modelo digital de administración, alineado con las prácticas actuales de informatización de las organizaciones educativas. |
-| 2 | Valorización de la información institucional | Dirección y preceptoría pasan a contar con datos confiables y actualizados para conocer la situación de matrícula, la regularidad de los estudiantes y las materias pendientes. |
-| 3 | Autonomía y participación del alumno | El estudiante deja de ser un mero objeto del registro y pasa a participar activamente de su propia asistencia, lo que refuerza hábitos de responsabilidad. |
-| 4 | Reconocimiento del rol docente y de preceptoría | Las tareas de control y seguimiento se elevan de un trabajo manual repetitivo a una función de supervisión y gestión apoyada en datos. |
-| 5 | Fortalecimiento del vínculo con la comunidad educativa | La disponibilidad de un sistema institucional propio constituye un activo académico de la escuela, fruto del trabajo conjunto entre el equipo directivo y el equipo de desarrollo. |
-| 6 | Experiencia formativa para los alumnos desarrolladores | El proyecto involucra a los integrantes del grupo en un problema real, con usuarios reales y requisitos relevados, fortaleciendo sus capacidades profesionales. |
-
-### 8.3 Factibilidad
-
-El proyecto se considera factible desde sus tres dimensiones:
-
-| Dimensión | Evaluación |
-|---|---|
-| Factibilidad técnica | Las tecnologías seleccionadas (C#/.NET, MySQL, Node.js/Express, React Native/Expo) son de acceso libre, maduras y de amplia documentación. El equipo ya cuenta con un prototipo funcional operativo: los tres módulos desarrollados, la base de datos restaurable mediante script y el despliegue en la nube funcionando, lo que confirma la viabilidad técnica de la solución. |
-| Factibilidad operativa | La institución ya posee la estructura, el equipamiento (computadoras Windows y teléfonos inteligentes) y el personal con experiencia en el procedimiento de toma de asistencia. El sistema fue diseñado a partir del relevamiento directo con el equipo directivo, por lo que contempla las reglas y la metodología de trabajo reales de la escuela. La capacitación requerida para los usuarios es mínima, dado que las interfaces simplifican tareas que el personal ya realiza. |
-| Factibilidad económica | Al tratarse de un proyecto académico, no existe costo de mano de obra de desarrollo. Todas las herramientas y plataformas utilizadas son gratuitas (ediciones comunitarias o de código abierto). El equipamiento ya existe en la institución y el costo futuro se limita al mantenimiento correctivo y evolutivo, estimado como bajo, y a la eventual contratación de los servicios en la nube ya utilizados en la etapa de desarrollo. |
+| Alumno | Profesores y preceptores | Solo visualización de la información relacionada con sus clases. |
 
 ---
 
