@@ -60,7 +60,7 @@ de Capacidades Profesionales (EACP) de la carrera de Analista en Sistemas.
 
 El trabajo fue realizado por dos integrantes, cada uno con su propia rama en el repositorio
 (`Isa-Vecco` y `Juan-Torres`), e integrando a `main` únicamente mediante Pull Request para garantizar
-la trazabilidad individual. El repositorio fue creado el **[FECHA PENDIENTE]**.
+la trazabilidad individual. El repositorio fue creado el **15/09/2026**.
 
 La materia resulta pertinente porque el valor del sistema se concentra en sus componentes web: una
 API REST con autenticación por token y emisión de eventos en tiempo real (SSE), consumida por una
@@ -254,7 +254,7 @@ descentralizadas por una solución centralizada, segura y operativa en tiempo re
 | 1 | Centralizar la información institucional en una única base de datos que actúe como fuente de verdad, eliminando la duplicación e inconsistencia de las planillas descentralizadas. |
 | 2 | Digitalizar la administración institucional mediante un aplicativo de escritorio que permita el alta, baja y modificación de alumnos, profesores, preceptores, especialidades, materias, cursos, dictados e inscripciones. |
 | 3 | Modelar las trayectorias escolares personalizadas de los estudiantes, permitiendo cursadas simultáneas de materias de distintos años, recursado e intensificación conforme a las reglas institucionales relevadas. |
-| 4 | Garantizar la seguridad de acceso con un sistema de autenticación de usuarios y un control de permisos por rol (administrador, directivo, preceptor, profesor y alumno) que limite las acciones de cada perfil. |
+| 4 | Garantizar la seguridad de acceso con un sistema de autenticación de usuarios y un control de permisos por rol (administrador, directivo, secretario, preceptor, profesor y alumno) que limite las acciones de cada perfil. |
 | 5 | Agilizar el registro de asistencia en el aula mediante una aplicación móvil con escaneo de código QR o ingreso de código corto, de modo que el alumno registre su presencia en segundos sin interrumpir la clase. |
 | 6 | Brindar visibilidad en tiempo real del estado de asistencia de una clase a través de la transmisión de eventos, permitiendo que preceptoría observe y corrija los registros mientras la clase transcurre. |
 | 7 | Facilitar la consulta de información histórica, permitiendo acceder al historial de asistencia por alumno de forma inmediata, sin depender de la revisión manual de documentación física. |
