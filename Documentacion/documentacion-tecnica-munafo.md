@@ -32,6 +32,7 @@
 | 9 | [División de módulos y responsabilidad](#s9) | Reparto de trabajo por integrante y matriz de responsabilidad |
 | 10 | [Requerimientos del sistema](#s10) | Requerimientos funcionales y no funcionales por categoría |
 | 11 | [Reglas de negocio](#s11) | Reglas relevadas en la institución, agrupadas por ámbito |
+| 12 | [Arquitectura y tecnologías](#s12) | Módulos, bases de datos, despliegue, capas del escritorio y seguridad |
 
 ---
 
@@ -896,6 +897,159 @@ factibilidad y del comportamiento definido para el sistema.
 | RN-32 | Cada usuario accede exclusivamente a los módulos correspondientes a su rol, sin posibilidad de operar sobre funciones de otros perfiles. |
 | RN-33 | El alta de una entidad nueva se produce siempre con estado activo, y las bajas se realizan de forma lógica, preservando el historial del registro. |
 | RN-34 | Las credenciales de acceso y las cadenas de conexión no deben exponerse en el código ni versionarse en el repositorio. |
+
+---
+
+<a id="s12"></a>
+
+## 12. Arquitectura y tecnologías utilizadas
+
+### 12.1 Arquitectura general del sistema
+
+El Sistema Integral de Asistencia Escolar (SIA) adopta una arquitectura de tres módulos
+interdependientes que comparten una única fuente de datos:
+
+- **Aplicativo de escritorio:** módulo administrativo que escribe directamente sobre la base MySQL y
+  autentica sus usuarios contra MongoDB.
+- **API REST:** puerta de acceso única a la base para la aplicación móvil, con endpoints y difusión de
+  eventos en tiempo real (SSE).
+- **Aplicación móvil:** cliente que habla únicamente con la API, nunca con la base de datos.
+
+```mermaid
+graph LR
+    ESC["Aplicativo de escritorio<br/>.net/ · Windows Forms"] -->|SQL directo| MYSQL[("MySQL<br/>gestion_asistencia_eest")]
+    ESC -->|consulta y autenticación| MONGO[("MongoDB Atlas<br/>usuarios del escritorio")]
+    MOV["Aplicación móvil<br/>App/ · React Native + Expo"] -->|HTTPS + Bearer| API["API REST<br/>Api/ · Node.js + Express"]
+    API -->|mysql2| MYSQL
+    API -->|SSE| MOV
+```
+
+| Módulo | Carpeta | Stack tecnológico | Rol |
+|---|:---:|---|---|
+| Aplicativo de escritorio | `.net/` | C# / .NET Framework 4.7.2, Windows Forms, MaterialSkin.2 | Gestión institucional y administrativa |
+| API REST | `Api/` | Node.js, Express 5, mysql2, bcryptjs | Servicios de datos, autenticación y eventos |
+| Aplicación móvil | `App/` | React Native, Expo SDK, expo-camera | Registro de asistencia en el aula con QR |
+
+La dependencia queda acotada en un solo sentido: la aplicación móvil nunca accede a la base de datos
+de forma directa, y la API nunca se expone a los formularios del escritorio. Así, el acceso a los
+datos tiene siempre un único punto de entrada por módulo.
+
+### 12.2 Bases de datos
+
+- **MySQL (`gestion_asistencia_eest`):** base relacional que actúa como única fuente de verdad
+  compartida. Modela las entidades de negocio: `especialidad`, `materia`, `profesor`, `preceptor`,
+  `alumno`, `dictado`, `inscribe`, `clase`, `asistencia` y `usuario`.
+- **MongoDB Atlas:** base documental, no relacional, utilizada para el almacenamiento de los usuarios
+  del aplicativo de escritorio y su autenticación.
+
+### 12.3 Despliegue en la nube
+
+- **Railway:** aloja la API y la base MySQL en producción, garantizando disponibilidad permanente y
+  acceso desde los dispositivos móviles.
+- **MongoDB Atlas:** aloja la base documental de usuarios.
+
+### 12.4 Arquitectura del aplicativo de escritorio (Vista > Controlador > Modelo)
+
+El escritorio implementa una arquitectura en capas tipo MVC, donde cada capa tiene una
+responsabilidad exclusiva:
+
+| Capa | Ejemplos de contenido | Responsabilidad |
+|---|---|---|
+| Vista | `FrmLogin`, `FrmPrincipal`, `FrmAlumnos`, `FrmProfesores` | Interfaz de usuario: carga de datos y presentación de resultados |
+| Controlador | Un controlador por módulo | Lógica de coordinación: recibe las acciones de la vista y orquesta las operaciones del modelo |
+| Modelo | `Entidades/`, `DAO/`, `Conexion/` | Datos y persistencia: entidades, acceso a datos (DAO) y conexiones |
+| Utilidades | `Sesion`, `Logger`, `Ejecutor`, `DatosException` | Servicios transversales: usuario en memoria, registro de errores, validaciones y utilidades de interfaz |
+
+Dentro del modelo:
+
+- **Entidades:** `Alumno`, `Profesor`, `Preceptor`, `Materia`, `Especialidad`, `Dictado`,
+  `Inscripcion`, `Asistencia`, `Usuario` y `Rol`.
+- **DAO (Data Access Objects):** un DAO por tabla para MySQL (`AlumnoDAO`, `ProfesorDAO`,
+  `PreceptorDAO`, `MateriaDAO`, `EspecialidadDAO`, `DictadoDAO`, `InscripcionDAO`) y un `UsuarioDAO`
+  para MongoDB.
+- **Conexión:** `conexionBD.cs` (MySQL), `ConexionMongo.cs` (MongoDB Atlas) y `Credenciales.cs`,
+  responsable de leer las cadenas de conexión desde el archivo de credenciales.
+
+La regla inviolable de esta arquitectura es que toda adaptación futura (por ejemplo, una integración
+HTTP) debe vivir únicamente en la capa Modelo, preservando la independencia de las Vistas y los
+Controladores.
+
+### 12.5 Protección de las credenciales y de los datos
+
+El proyecto establece un esquema de seguridad que separa las credenciales del código fuente y cifra
+los datos sensibles.
+
+#### 12.5.1 Credenciales fuera del repositorio
+
+| Módulo | Dónde se guardan las credenciales | ¿Se versiona? |
+|---|---|:---:|
+| Escritorio | `credenciales.env` (ignorado por git) | No |
+| Escritorio | `App.config` → solo placeholders | Sí, pero vacío |
+| API | `Api/.env` (ignorado por git) | No |
+| API | `Api/.env.example` → solo placeholders | Sí, pero vacío |
+
+- Las cadenas de conexión reales de MySQL y MongoDB nunca se escriben en el código ni se suben al
+  repositorio.
+- Los archivos versionados conservan únicamente plantillas con placeholders para que cada entorno
+  genere su configuración.
+- Si una credencial quedara expuesta, se rota en el proveedor (Railway / Atlas) y no solo se corrige
+  en el código.
+- Un archivo de configuración del escritorio lee estas variables en tiempo de ejecución y arma las
+  cadenas de conexión.
+
+#### 12.5.2 Cifrado de contraseñas
+
+- Las contraseñas de preceptores y profesores se almacenan con bcrypt, un algoritmo de hash
+  irreversible e interoperable entre el escritorio (CryptSharp) y la API (bcryptjs), de modo que una
+  misma contraseña puede validarse desde ambos módulos.
+- Los usuarios del escritorio autenticados contra MongoDB utilizan un esquema propio de derivación
+  de clave (PBKDF2).
+
+#### 12.5.3 Autenticación de la API
+
+- El ingreso desde la aplicación móvil se realiza por rol (preceptor, profesor y alumno) con DNI y
+  contraseña cifrada.
+- Cada sesión emite un token de seguridad (`Bearer`) firmado con una clave secreta mediante HMAC
+  SHA-256, que el cliente móvil remite en cada solicitud; sin el token, el acceso a los endpoints
+  queda denegado.
+- La clave de firma se define por entorno en la variable `SESSION_SECRET`, evitando que los tokens se
+  invaliden en cada nuevo despliegue.
+
+#### 12.5.4 Protección de datos
+
+- **Baja lógica:** las entidades conservan el estado activo, y las bajas dejan el registro histórico
+  preservado en lugar de eliminarlo físicamente.
+- **Control de acceso por rol:** cada perfil opera únicamente sobre los módulos habilitados.
+- **Errores dirigidos a logs:** las fallas de arranque y ejecución quedan registradas en archivos de
+  log para su diagnóstico, sin exponer información sensible en pantalla.
+
+### 12.6 Tecnologías utilizadas
+
+| Tecnología | Uso |
+|---|---|
+| C# / .NET Framework 4.7.2 | Lenguaje y framework del aplicativo de escritorio |
+| Windows Forms + MaterialSkin.2 | Interfaz gráfica del escritorio |
+| MySQL | Base de datos relacional de negocio |
+| MongoDB Atlas | Base documental de usuarios y autenticación del escritorio |
+| Node.js + Express 5 | Servidor de la API REST |
+| mysql2 | Conector y pool de conexiones de la API con MySQL |
+| bcrypt / bcryptjs / CryptSharp | Cifrado de contraseñas |
+| Token Bearer | Autenticación de sesiones de la API |
+| Server-Sent Events (SSE) | Actualización de asistencia en tiempo real |
+| React Native + Expo | Aplicación móvil multiplataforma (Android e iOS) |
+| expo-camera | Escaneo de códigos QR para el registro de asistencia |
+| Git + GitHub | Control de versiones y trazabilidad con flujo de ramas y Pull Request |
+| Railway | Host de la API y de la base MySQL en producción |
+| Visual Studio | IDE de desarrollo del escritorio |
+| Mermaid / diagramas / Draw.io | Modelado de arquitectura y documentación |
+
+### 12.7 Criterios de selección
+
+Las tecnologías fueron elegidas por su costo cero, su madurez y documentación, su compatibilidad con
+el ambiente institucional (Windows) y por permitir una arquitectura extensible en la que los futuros
+clientes del sistema puedan sumarse sobre la misma API sin reescribir el resto de los módulos. Parte de
+estas tecnologías fue adoptada a partir de la experiencia de compañeros que las utilizan en sus
+propios proyectos.
 
 ---
 
