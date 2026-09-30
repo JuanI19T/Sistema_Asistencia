@@ -33,6 +33,7 @@
 | 10 | [Requerimientos del sistema](#s10) | Requerimientos funcionales y no funcionales por categoría |
 | 11 | [Reglas de negocio](#s11) | Reglas relevadas en la institución, agrupadas por ámbito |
 | 12 | [Arquitectura y tecnologías](#s12) | Módulos, bases de datos, despliegue, capas del escritorio y seguridad |
+| 13 | [Plan de pruebas](#s13) | Estrategia progresiva de validación: datos ficticios, aula, curso real y carga institucional |
 
 ---
 
@@ -1050,6 +1051,59 @@ el ambiente institucional (Windows) y por permitir una arquitectura extensible e
 clientes del sistema puedan sumarse sobre la misma API sin reescribir el resto de los módulos. Parte de
 estas tecnologías fue adoptada a partir de la experiencia de compañeros que las utilizan en sus
 propios proyectos.
+
+---
+
+<a id="s13"></a>
+
+## 13. Plan de pruebas (control de calidad)
+
+La estrategia de pruebas del proyecto es progresiva: se parte de una comprobación mínima y controlada y
+se avanza hacia escenarios que se acercan cada vez más al uso real, terminando en una simulación de
+carga institucional. Esta progresión permite detectar fallas en etapas tempranas, cuando corregirlas
+resulta más barato.
+
+### 13.1 CP-01; Prueba de funcionamiento con datos ficticios
+
+- **Objetivo:** verificar que el sistema funciona correctamente con una carga mínima y controlada.
+- **Descripción:** se prueban los módulos con pocos datos ficticios (algunos alumnos, profesores,
+  materias, dictados e inscripciones), validando que cada alta, baja, modificación y listado se
+  ejecute de forma correcta y que el ingreso de usuarios funcione según el rol.
+- **Criterio de éxito:** todas las operaciones de prueba se completan sin errores y los datos quedan
+  registrados y consultables.
+- **Estado:** es la prueba que se aplica de forma continua a medida que se avanza con el proyecto,
+  ejecutándose cada vez que se incorpora una funcionalidad nueva, para saber que lo desarrollado
+  funciona correctamente antes de seguir.
+
+### 13.2 CP-02; Simulación de asistencia en el aula con datos realistas
+
+- **Objetivo:** comprobar que el sistema soporta un escenario más cercano a la realidad.
+- **Descripción:** se cargan datos que se asemejen a los reales de la institución (matrícula de un
+  aula, sus materias y docentes asignados) y se toma asistencia de un aula completa, pero en forma
+  simulada: se abren clases, los alumnos registran presencia con QR y código corto, y se verifica el
+  registro de asistencias y su difusión en tiempo real.
+- **Criterio de éxito:** el sistema procesa sin fallas el registro de una clase completa, reflejando la
+  asistencia en vivo y permitiendo su consulta y corrección.
+
+### 13.3 CP-03; Prueba en funcionamiento real con el propio curso
+
+- **Objetivo:** evaluar el comportamiento del sistema en una operación real y cotidiana.
+- **Descripción:** el equipo utiliza el sistema con su propio curso: se toma la asistencia de todas
+  las clases durante una semana, en condiciones normales de uso, con los usuarios de prueba
+  correspondientes y con el flujo real docente > alumno > preceptor.
+- **Criterio de éxito:** el sistema se comporta de manera estable durante todo el período, sin pérdida
+  de datos ni interrupciones, y la experiencia de uso es fluida para los tres perfiles intervinientes.
+
+### 13.4 CP-04; Simulación de carga a escala institucional
+
+- **Objetivo:** verificar que el sistema soporta el volumen de una jornada completa de la escuela.
+- **Descripción:** se realiza una carga de datos que simula un día de funcionamiento con el sistema
+  implementado en toda la institución: se registran muchos usuarios (alumnos, profesores y
+  preceptores), se abren clases en paralelo y se toma asistencia a la totalidad, reproduciendo la
+  concurrencia de registros que se produciría en un uso real.
+- **Criterio de éxito:** la API responde correctamente bajo la carga concurrente, el registro de
+  asistencias no presenta demoras perceptibles y la difusión en tiempo real alcanza a todos los
+  suscriptos.
 
 ---
 
