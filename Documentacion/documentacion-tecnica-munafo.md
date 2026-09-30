@@ -30,6 +30,7 @@
 | 7 | [Perfiles de usuario y roles](#s7) | Perfiles, matriz de permisos y reglas de interacción |
 | 8 | [Metodología de trabajo y trazabilidad](#s8) | Organización por módulos, ciclo de desarrollo y control de versiones |
 | 9 | [División de módulos y responsabilidad](#s9) | Reparto de trabajo por integrante y matriz de responsabilidad |
+| 10 | [Requerimientos del sistema](#s10) | Requerimientos funcionales y no funcionales por categoría |
 
 ---
 
@@ -729,6 +730,97 @@ de la base de datos y de la API del sistema.
 | Extensibilidad: diagramas de futuras extensiones | X | - |
 | Documentación completa del proyecto | X | - |
 | Investigación, base de datos y selección de tecnologías | X | X |
+
+---
+
+<a id="s10"></a>
+
+## 10. Requerimientos del sistema
+
+### 10.1 Requerimientos funcionales (RF)
+
+| Código | Requerimiento |
+|:---:|---|
+| RF-01 | El sistema debe permitir la autenticación de usuarios mediante usuario y contraseña, con contraseñas almacenadas de forma cifrada (bcrypt). |
+| RF-02 | El sistema debe permitir la creación del primer Administrador cuando no exista ningún usuario cargado. |
+| RF-03 | El sistema debe gestionar usuarios y perfiles con alta, baja, modificación y activación o desactivación. |
+| RF-04 | El sistema debe administrar alumnos con alta, baja y modificación de sus datos. |
+| RF-05 | El sistema debe administrar profesores con alta, baja y modificación de sus datos. |
+| RF-06 | El sistema debe administrar preceptores con alta, baja y modificación de sus datos. |
+| RF-07 | El sistema debe administrar especialidades y materias, asociando cada materia a una especialidad. |
+| RF-08 | El sistema debe gestionar dictados, vinculando materia, profesor y preceptor. |
+| RF-09 | El sistema debe permitir la inscripción de alumnos a dictados. |
+| RF-10 | El sistema debe aplicar control de acceso por rol, filtrando menús y acciones según el perfil (administrador, directivo, secretario, preceptor, profesor y alumno). |
+| RF-11 | El docente debe poder abrir una clase desde su dictado, generando un token QR y un código corto de ingreso. |
+| RF-12 | El alumno debe poder registrar su asistencia escaneando el QR o ingresando el código corto desde la aplicación móvil. |
+| RF-13 | El sistema debe permitir registrar asistencias de forma individual y por lote, validando que el alumno pertenezca al dictado. |
+| RF-14 | El sistema debe permitir consultar la asistencia de una clase, de un dictado y el historial por alumno. |
+| RF-15 | El sistema debe actualizar la asistencia en tiempo real hacia los clientes conectados (eventos SSE), para que preceptoría siga y corrija la asistencia en vivo. |
+| RF-16 | El sistema debe gestionar los estados de las clases: apertura, cierre y consulta por fecha. |
+| RF-17 | La API debe exponer un endpoint de verificación de salud (`/api/health`) que confirme que el servidor responde. |
+| RF-18 | El sistema debe implementar baja lógica de entidades, conservando el registro activo cuando corresponda. |
+| RF-19 | El sistema debe exponer los datos a la aplicación móvil exclusivamente a través de la API, con autenticación por token. |
+| RF-20 | Las credenciales de conexión deben leerse de archivos de entorno no versionados y no estar hardcodeadas en el código. |
+| RF-21 | El sistema debe registrar errores en archivos de log para el diagnóstico de fallas de arranque y ejecución. |
+
+### 10.2 Requerimientos no funcionales (RNF)
+
+#### 10.2.1 Seguridad
+
+| Código | Requerimiento |
+|:---:|---|
+| RNF-01 | Las contraseñas deben almacenarse cifradas con bcrypt y verificarse de forma interoperable entre el escritorio y la API. |
+| RNF-02 | El acceso desde la API debe proteger las solicitudes con tokens de sesión (Bearer) firmados, que caducan y se invalidan si la clave de firma cambia. |
+| RNF-03 | Ninguna credencial real (cadenas de conexión, claves) debe quedar versionada en el repositorio; los archivos de entorno solo contienen placeholders. |
+| RNF-04 | El sistema debe restringir las acciones de cada usuario conforme a su rol, evitando el acceso a módulos no autorizados. |
+
+#### 10.2.2 Disponibilidad y confiabilidad
+
+| Código | Requerimiento |
+|:---:|---|
+| RNF-05 | La base de datos debe estar disponible de forma permanente para garantizar el registro y la consulta de asistencias, hosting en la nube. |
+| RNF-06 | La aplicación móvil debe poder reconectarse automáticamente ante pérdidas de conexión con la API. |
+| RNF-07 | El sistema debe preservar la integridad de los datos, no permitiendo combinaciones inválidas, como la asistencia de alumnos no inscriptos. |
+
+#### 10.2.3 Rendimiento
+
+| Código | Requerimiento |
+|:---:|---|
+| RNF-08 | El registro de asistencia debe completarse en segundos, permitiendo que el alumno marque presencia sin interrumpir el desarrollo de la clase. |
+| RNF-09 | La API debe soportar la carga concurrente de múltiples alumnos registrando asistencia en simultáneo, mediante un pool de conexiones. |
+| RNF-10 | La difusión en tiempo real (SSE) debe reflejar los cambios de asistencia a los suscriptores sin latencia perceptible. |
+
+#### 10.2.4 Usabilidad
+
+| Código | Requerimiento |
+|:---:|---|
+| RNF-11 | Las interfaces deben ser simples e intuitivas para usuarios sin formación técnica: docentes, preceptores y alumnos. |
+| RNF-12 | El diseño visual debe ser uniforme en todas las pantallas del escritorio. |
+| RNF-13 | El flujo de toma de asistencia en el aula debe requerir la mínima cantidad de pasos posible. |
+
+#### 10.2.5 Compatibilidad y portabilidad
+
+| Código | Requerimiento |
+|:---:|---|
+| RNF-14 | El aplicativo de escritorio debe funcionar sobre Windows 10 o superior. |
+| RNF-15 | La aplicación móvil debe ejecutarse en Android e iOS a partir de una única base de código. |
+| RNF-16 | La configuración (host, puertos, claves) debe residir en archivos de entorno, permitiendo cambiar de un entorno local a producción sin modificar el código. |
+| RNF-17 | Los nombres de tablas deben ir en minúscula para garantizar compatibilidad con el servidor de base de datos en Linux (Railway). |
+
+#### 10.2.6 Mantenibilidad y extensibilidad
+
+| Código | Requerimiento |
+|:---:|---|
+| RNF-18 | El escritorio debe implementar arquitectura en capas tipo MVC, de modo que toda futura integración solo se agregue en la capa de Modelo. |
+| RNF-19 | El sistema debe separar escritorio, API y aplicación móvil como módulos independientes, permitiendo ampliar funcionalidades sin reescribir las aplicaciones existentes. |
+| RNF-20 | El código y la documentación deben seguir convenciones claras: identificadores y base de datos en español, rutas y JSON de la API sin acentos. |
+| RNF-21 | El proyecto debe conservar documentación técnica y un historial de versiones completo que permita reconstruir el estado del sistema en cualquier momento. |
+
+#### 10.2.7 Trazabilidad
+
+| Código | Requerimiento |
+|:---:|---|
+| RNF-22 | Todo cambio debe registrarse en el control de versiones y llegar a la rama principal mediante revisión, de modo que quede constancia de la autoría de cada funcionalidad. |
 
 ---
 
