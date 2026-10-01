@@ -200,7 +200,11 @@ Sistema_Asistencia/
 │       ├── api.js
 │       └── pantallas/                        # Alumno, Preceptor, Profesor
 ├── 📘 Documentacion/                         # documentación de la EACP
-│   └── documentacion-tecnica-munafo.md
+│   └── documentacion_munafo/
+│       ├── documentacion-tecnica-munafo.md
+│       └── diagramas/                        # .drawio editables + PNG
+│           ├── punto_12/
+│           └── punto_14/
 └── .vscode/launch.json                       # debug compuesto API + App
 ```
 
@@ -481,7 +485,7 @@ graph LR
 
 | Documento | Contenido |
 |---|---|
-| 📘 [`Documentacion/documentacion-tecnica-munafo.md`](Documentacion/documentacion-tecnica-munafo.md) | Documentación técnica y análisis de requerimientos (EACP): problema real, objetivos, marco teórico, alcance, impacto, perfiles, metodología, división de módulos, requerimientos y reglas de negocio |
+| 📘 [`Documentacion/documentacion_munafo/documentacion-tecnica-munafo.md`](Documentacion/documentacion_munafo/documentacion-tecnica-munafo.md) | Documentación técnica y análisis de requerimientos (EACP): problema real, objetivos, marco teórico, alcance, impacto, perfiles, metodología, división de módulos, requerimientos, reglas de negocio, arquitectura, plan de pruebas y diagramas |
 | 📖 [`context.md`](context.md) | Contexto técnico: arquitectura, cómo levantar cada módulo, reglas del proyecto y mapa de archivos |
 | 📖 [`AGENTS.md`](AGENTS.md) | Reglas de trabajo del agente: identidad por rama, seguridad con Git, credenciales y estilo |
 | 🗺️ `Api/index.js` | Índice vivo de endpoints: `GET /` en la API devuelve la lista completa |

@@ -1,0 +1,51 @@
+<mxfile host="Electron">
+  <diagram name="Página-1" id="avUTYvSacPVA4VRuZ6Tq">
+    <mxGraphModel dx="932" dy="1193" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="iSzHTO4qkagFjTFoL8WW-7" edge="1" parent="1" source="iSzHTO4qkagFjTFoL8WW-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="iSzHTO4qkagFjTFoL8WW-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iSzHTO4qkagFjTFoL8WW-13" connectable="0" parent="iSzHTO4qkagFjTFoL8WW-7" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Datos del Personal&lt;br&gt;Y&lt;div&gt;&lt;div&gt;Cursadas&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0078" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iSzHTO4qkagFjTFoL8WW-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Directivo / Secretario" vertex="1">
+          <mxGeometry height="40" width="120" x="320" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="iSzHTO4qkagFjTFoL8WW-6" edge="1" parent="1" source="iSzHTO4qkagFjTFoL8WW-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="iSzHTO4qkagFjTFoL8WW-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iSzHTO4qkagFjTFoL8WW-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Sistema SIA&lt;br&gt;(Proceso central)" vertex="1">
+          <mxGeometry height="40" width="120" x="320" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="iSzHTO4qkagFjTFoL8WW-8" edge="1" parent="1" source="iSzHTO4qkagFjTFoL8WW-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="iSzHTO4qkagFjTFoL8WW-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iSzHTO4qkagFjTFoL8WW-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Preceptor" vertex="1">
+          <mxGeometry height="40" width="120" x="160" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="iSzHTO4qkagFjTFoL8WW-9" edge="1" parent="1" source="iSzHTO4qkagFjTFoL8WW-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="iSzHTO4qkagFjTFoL8WW-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iSzHTO4qkagFjTFoL8WW-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Profesor" vertex="1">
+          <mxGeometry height="40" width="120" x="480" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="iSzHTO4qkagFjTFoL8WW-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Alumno&lt;br&gt;(App QR)" vertex="1">
+          <mxGeometry height="40" width="120" x="320" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="iSzHTO4qkagFjTFoL8WW-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="MySQL (negocio)&lt;div&gt;gestion_asistencia&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="120" x="160" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="iSzHTO4qkagFjTFoL8WW-11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="MongoDB (usuarios)&lt;div&gt;Escritorio&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="120" x="320" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="iSzHTO4qkagFjTFoL8WW-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Bus de Eventos&lt;div&gt;SSE (tiempo real)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="120" x="480" y="320" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
