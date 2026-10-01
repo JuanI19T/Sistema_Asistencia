@@ -34,6 +34,7 @@
 | 11 | [Reglas de negocio](#s11) | Reglas relevadas en la institución, agrupadas por ámbito |
 | 12 | [Arquitectura y tecnologías](#s12) | Módulos, bases de datos, despliegue, capas del escritorio y seguridad |
 | 13 | [Plan de pruebas](#s13) | Estrategia progresiva de validación: datos ficticios, aula, curso real y carga institucional |
+| 14 | [Diagramas del sistema](#s14) | Diagrama de contexto, diagrama de procesos principales y modelo entidad-relación |
 
 ---
 
@@ -1107,13 +1108,259 @@ resulta más barato.
 
 ---
 
+<a id="s14"></a>
+
+## 14. Diagramas del sistema
+
+Esta sección presenta los tres diagramas que describen el comportamiento del sistema y la estructura de
+sus datos. Los gráficos originales, editables en diagrams.net, se versionan junto al documento en la
+carpeta [`diagramas/punto_14/`](diagramas/punto_14/):
+
+| Archivo fuente | Contenido |
+|---|---|
+| [`Diagrama de Contexto (nivel 0).drawio`](diagramas/punto_14/Diagrama%20de%20Contexto%20(nivel%200).drawio) | Vista de contexto del sistema |
+| [`Diagrama de nivel 1 (Procesos Principales).drawio`](diagramas/punto_14/Diagrama%20de%20nivel%201%20(Procesos%20Principales).drawio) | Descomposición de los procesos principales |
+| [`Modelo Entidad Relacion.drawio`](diagramas/punto_14/Modelo%20Entidad%20Relacion.drawio) | Modelo entidad-relación de la base de datos |
+
+Las representaciones que siguen son versiones en Mermaid de esos mismos gráficos, pensadas para
+leerse directamente en el repositorio sin necesidad de abrir el archivo original.
+
+### 14.1 Diagrama de contexto (nivel 0)
+
+El diagrama de contexto muestra el sistema como una única caja (el proceso central **Sistema SIA**) y
+las entidades externas que se vinculan con él. Los almacenamientos que lo sostienen son la base
+**MySQL (negocio)** `gestion_asistencia_eest`, **MongoDB (usuarios)** del escritorio y el **Bus de
+Eventos SSE (tiempo real)**.
+
+```mermaid
+graph TD
+    DS["Directivo / Secretario"] -->|Datos del personal y cursadas| SIA
+    PRE["Preceptor"] <-->|Consulta y gestiona dictados y asistencias| SIA
+    PRO["Profesor"] <-->|Abre sus clases y consulta cursadas| SIA
+    SIA -->|Clase abierta; registro por QR o código| ALU["Alumno (App QR)"]
+
+    SIA <-->|Lectura y escritura| MYSQL[("MySQL (negocio)<br/>gestion_asistencia_eest")]
+    SIA <-->|Usuarios del escritorio| MONGO[("MongoDB (usuarios)<br/>Escritorio")]
+    SIA -->|Asistencia en tiempo real| BUS["Bus de Eventos<br/>SSE"]
+
+    style SIA fill:#f8cecc,stroke:#b85450
+    style MYSQL fill:#fff2cc,stroke:#d6b656
+    style MONGO fill:#fff2cc,stroke:#d6b656
+    style BUS fill:#fff2cc,stroke:#d6b656
+    style DS fill:#dae8fc,stroke:#6c8ebf
+    style PRE fill:#dae8fc,stroke:#6c8ebf
+    style PRO fill:#dae8fc,stroke:#6c8ebf
+    style ALU fill:#dae8fc,stroke:#6c8ebf
+```
+
+Flujos que intervienen:
+
+- **Directivo / Secretario → Sistema SIA:** aporta los datos del personal y de las cursadas.
+- **Preceptor → Sistema SIA:** consulta y gestiona la información de los dictados y las asistencias.
+- **Profesor → Sistema SIA:** abre sus clases y consulta las cursadas que dicta.
+- **Sistema SIA → Alumno (App QR):** el alumno recibe la clase abierta y registra su presencia en el
+  aula mediante QR o código.
+- El sistema lee y escribe sobre **MySQL (negocio)** y **MongoDB (usuarios)**, y difunde los registros
+  de asistencia en tiempo real a través del **Bus de Eventos SSE**.
+
+### 14.2 Diagrama de nivel 1 (procesos principales)
+
+El diagrama de nivel 1 descompone el proceso central en cinco procesos, que se encadenan en el orden en
+que se ejecuta el circuito: autenticación, carga administrativa, armado de cursadas, apertura de clase
+y registro de asistencia. La numeración de referencia del gráfico es la siguiente:
+
+| N.º | Elemento | Tipo |
+|:---:|---|---|
+| 1 | Autenticación y control de roles | Proceso |
+| 2 | Gestión administrativa (ABM) | Proceso |
+| 3 | Dictados e inscripciones | Proceso |
+| 4 | Clases (Apertura QR / Código) | Proceso |
+| 5 | Registro de Asistencia (QR / código / manual) | Proceso |
+| 6 | MySQL: Asistencia | Almacenamiento |
+| 7 | Preceptor | Destino de las notificaciones |
+
+```mermaid
+graph LR
+    P1["1. Autenticación y control de roles"] --> P2["2. Gestión administrativa (ABM)"]
+    P2 --> P3["3. Dictados e inscripciones"]
+    P3 --> P4["4. Clases (Apertura QR / Código)"]
+    P4 --> P5["5. Registro de Asistencia (QR / código / manual)"]
+
+    P1 -.-> M1[("MongoDB: Usuario, Rol")]
+    P2 -.-> M2[("MySQL: Alumno, Profesor, Preceptor, Materia, Especialidad")]
+    P3 -.-> M3[("MySQL: Dictado, Inscribe")]
+    P4 -.-> M4[("MySQL: Clase, Token, Código QR")]
+    P5 --> M5["6. MySQL: Asistencia"]
+    P5 --> BUS["Bus de Eventos"]
+    BUS --> M7["7. Preceptor"]
+
+    style P1 fill:#f8cecc,stroke:#b85450
+    style P2 fill:#f8cecc,stroke:#b85450
+    style P3 fill:#f8cecc,stroke:#b85450
+    style P4 fill:#f8cecc,stroke:#b85450
+    style P5 fill:#f8cecc,stroke:#b85450
+    style M1 fill:#dae8fc,stroke:#6c8ebf
+    style M2 fill:#dae8fc,stroke:#6c8ebf
+    style M3 fill:#dae8fc,stroke:#6c8ebf
+    style M4 fill:#dae8fc,stroke:#6c8ebf
+    style M5 fill:#dae8fc,stroke:#6c8ebf
+    style M7 fill:#dae8fc,stroke:#6c8ebf
+    style BUS fill:#f8cecc,stroke:#b85450
+```
+
+- **Proceso 1, Autenticación y control de roles:** identifica al usuario y determina a qué módulos
+  accede según su perfil; lee y escribe en **MongoDB** (colecciones `Usuario` y `Rol`).
+- **Proceso 2, Gestión administrativa (ABM):** administra los datos maestros de la institución sobre
+  **MySQL**: `Alumno`, `Profesor`, `Preceptor`, `Materia` y `Especialidad`.
+- **Proceso 3, Dictados e inscripciones:** arma las cursadas y las inscripciones de los alumnos,
+  sobre **MySQL**: `Dictado` e `Inscribe`.
+- **Proceso 4, Clases (Apertura QR / Código):** abre la clase de cada dictado y genera el código QR y
+  el token de validez temporal, sobre **MySQL**: `Clase`, `Token` y `Código QR`.
+- **Proceso 5, Registro de Asistencia (QR / código / manual):** registra cada asistencia en **MySQL**
+  (`Asistencia`) —elemento **6**— y publica el registro en el **Bus de Eventos**, que notifica al
+  **Preceptor** —elemento **7**— en tiempo real.
+
+El flujo principal es 1 → 2 → 3 → 4 → 5: cada proceso habilita al siguiente, y el último cierra el
+circuito guardando la asistencia y difundiéndola por el bus de eventos.
+
+### 14.3 Modelo entidad-relación (DER)
+
+El modelo entidad-relación refleja la estructura de datos de negocio de la base relacional **MySQL**
+(`gestion_asistencia_eest`). Cada entidad corresponde a una tabla del modelo. La gestión de **usuarios
+y roles** queda fuera de este modelo por almacenarse en la base documental **MongoDB**.
+
+| Entidad | Atributos |
+|---|---|
+| Especialidad | id_especialidad (PK), nombre_especialidad, activo |
+| Materia | id_materia (PK), id_especialidad (FK), nombre_materia, carga_horaria, anio_materia, activo |
+| Profesor | id_profesor (PK), legajo_profesor, nombre_profesor, apellido_profesor, dni, correo_profesor, telefono_profesor, contrasena, activo |
+| Preceptor | id_preceptor (PK), legajo_preceptor, nombre_preceptor, apellido_preceptor, dni, correo_preceptor, telefono_preceptor, contrasena, activo |
+| Dictado | id_dictado (PK), id_materia (FK), id_profesor (FK), id_preceptor (FK), dia, horario, horario_fin, anio_lectivo, grupo, activo |
+| Inscribe | id_inscripcion (PK), id_alumno (FK), id_dictado (FK), nota_final, condicion, situacion, anio_inicio |
+| Alumno | id_alumno (PK), apellido_alumno, nombre_alumno, legajo_alumno, dni, correo_alumno, telefono_alumno, contrasena, activo |
+| Asistencia | id_asistencia (PK), id_alumno (FK), id_clase (FK), verificada, presente |
+| Clase | id_clase (PK), id_dictado (FK), fecha_clase, codigo, token, token_valido_hasta, estado |
+
+Las relaciones y sus cardinalidades son las que muestra el gráfico:
+
+| Relación | Cardinalidad | Explicación |
+|---|---|---|
+| Especialidad → Materia | 1 : N | una especialidad agrupa varias materias |
+| Materia → Dictado | 1 : N | una materia puede dictarse en varias cursadas |
+| Dictado → Profesor | N : 1 | cada dictado es dictado por un único profesor |
+| Dictado → Preceptor | N : 1 | cada dictado está a cargo de un único preceptor |
+| Dictado → Clase | 1 : N | de cada dictado se abren muchas clases a lo largo del ciclo |
+| Dictado → Inscribe | 1 : N | un dictado reúne las inscripciones de muchos alumnos |
+| Inscribe → Alumno | N : 1 | cada inscripción corresponde a un único alumno |
+| Alumno → Asistencia | 1 : N | cada alumno acumula una asistencia por clase |
+| Asistencia → Clase | N : 1 | en cada clase se registra la asistencia de muchos alumnos |
+
+```mermaid
+erDiagram
+    ESPECIALIDAD ||--o{ MATERIA : "1 : N"
+    MATERIA ||--o{ DICTADO : "1 : N"
+    PROFESOR ||--o{ DICTADO : "1 : N"
+    PRECEPTOR ||--o{ DICTADO : "1 : N"
+    DICTADO ||--o{ CLASE : "1 : N"
+    DICTADO ||--o{ INSCRIBE : "1 : N"
+    ALUMNO ||--o{ INSCRIBE : "1 : N"
+    ALUMNO ||--o{ ASISTENCIA : "1 : N"
+    CLASE ||--o{ ASISTENCIA : "1 : N"
+
+    ESPECIALIDAD {
+        int id_especialidad PK
+        string nombre_especialidad
+        bool activo
+    }
+    MATERIA {
+        int id_materia PK
+        int id_especialidad FK
+        string nombre_materia
+        int carga_horaria
+        int anio_materia
+        bool activo
+    }
+    PROFESOR {
+        int id_profesor PK
+        int legajo_profesor
+        string nombre_profesor
+        string apellido_profesor
+        int dni
+        string correo_profesor
+        string telefono_profesor
+        string contrasena
+        bool activo
+    }
+    PRECEPTOR {
+        int id_preceptor PK
+        int legajo_preceptor
+        string nombre_preceptor
+        string apellido_preceptor
+        int dni
+        string correo_preceptor
+        string telefono_preceptor
+        string contrasena
+        bool activo
+    }
+    DICTADO {
+        int id_dictado PK
+        int id_materia FK
+        int id_profesor FK
+        int id_preceptor FK
+        int dia
+        int horario
+        int horario_fin
+        int anio_lectivo
+        string grupo
+        bool activo
+    }
+    INSCRIBE {
+        int id_inscripcion PK
+        int id_alumno FK
+        int id_dictado FK
+        int nota_final
+        string condicion
+        string situacion
+        int anio_inicio
+    }
+    ALUMNO {
+        int id_alumno PK
+        string apellido_alumno
+        string nombre_alumno
+        int legajo_alumno
+        int dni
+        string correo_alumno
+        string telefono_alumno
+        string contrasena
+        bool activo
+    }
+    ASISTENCIA {
+        int id_asistencia PK
+        int id_alumno FK
+        int id_clase FK
+        bool verificada
+        bool presente
+    }
+    CLASE {
+        int id_clase PK
+        int id_dictado FK
+        date fecha_clase
+        string codigo
+        string token
+        datetime token_valido_hasta
+        string estado
+    }
+```
+
+---
+
 ## Documentos relacionados
 
 | Documento | Contenido |
 |---|---|
-| [`README.md`](../README.md) | Visión general del proyecto: alcance, tecnologías, instalación y uso |
-| [`context.md`](../context.md) | Contexto técnico: arquitectura, módulos, base de datos y mapa de archivos |
-| [`AGENTS.md`](../AGENTS.md) | Reglas de trabajo: identidad por rama, Git, credenciales y estilo |
+| [`README.md`](../../README.md) | Visión general del proyecto: alcance, tecnologías, instalación y uso |
+| [`context.md`](../../context.md) | Contexto técnico: arquitectura, módulos, base de datos y mapa de archivos |
+| [`AGENTS.md`](../../AGENTS.md) | Reglas de trabajo: identidad por rama, Git, credenciales y estilo |
 
 ---
 

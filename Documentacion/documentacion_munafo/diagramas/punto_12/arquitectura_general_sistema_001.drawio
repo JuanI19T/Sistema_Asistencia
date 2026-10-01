@@ -1,0 +1,48 @@
+<mxfile host="Electron">
+  <diagram name="Página-1" id="R-NkKa0o5frhfLaVjpuw">
+    <mxGraphModel dx="559" dy="823" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="xhW1Od2AGpVZ625_DH39-7" edge="1" parent="1" source="xhW1Od2AGpVZ625_DH39-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.618;exitY=1.001;exitDx=0;exitDy=0;exitPerimeter=0;" target="xhW1Od2AGpVZ625_DH39-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="xhW1Od2AGpVZ625_DH39-8" edge="1" parent="1" source="xhW1Od2AGpVZ625_DH39-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.373;exitY=1.027;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="xhW1Od2AGpVZ625_DH39-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="279.69" y="450.03" />
+              <mxPoint x="160.03" y="450.03" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xhW1Od2AGpVZ625_DH39-2" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;" value="Base de Datos MySQL&lt;div&gt;getion_asistencia_eest&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="160" x="220" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="xhW1Od2AGpVZ625_DH39-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Aplicativo de Escritorio&lt;div&gt;C# / WinForms&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="140" x="90" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="xhW1Od2AGpVZ625_DH39-9" edge="1" parent="1" source="xhW1Od2AGpVZ625_DH39-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="xhW1Od2AGpVZ625_DH39-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="xhW1Od2AGpVZ625_DH39-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="API REST&lt;div&gt;Node.js&lt;/div&gt;&lt;div&gt;.SSE&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="96" x="390" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="xhW1Od2AGpVZ625_DH39-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="APP Movil&lt;div&gt;React Native&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="140" x="368" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="xhW1Od2AGpVZ625_DH39-10" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#d5e8d4;strokeColor=#82b366;" value="MONGO&lt;div&gt;(Usuarios)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="70" x="265" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="xhW1Od2AGpVZ625_DH39-12" edge="1" parent="1" style="endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" target="xhW1Od2AGpVZ625_DH39-10" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="250" y="519.66" />
+            </Array>
+            <mxPoint x="230" y="519.66" as="sourcePoint" />
+            <mxPoint x="260" y="519.66" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
