@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using SistemaAsistencia.Controlador;
 using SistemaAsistencia.Modelo.DAO;
@@ -10,7 +9,7 @@ using SistemaAsistencia.Utilidades;
 
 namespace SistemaAsistencia.Vista.Alumnos
 {
-    public partial class FrmAlumnos : Form
+    public partial class FrmAlumnos : FrmBaseHijo
     {
         private readonly AlumnoController alumnoController;
         private List<Alumno> cacheAlumnos = new List<Alumno>();
@@ -24,13 +23,6 @@ namespace SistemaAsistencia.Vista.Alumnos
 
             Tema.ConfigurarFondo(this);
             Tema.EstilizarGrilla(dgvAlumnos);
-
-            Tema.EstilizarBoton(btnGuardar, true);
-            Tema.EstilizarBoton(btnModificar, true);
-            Tema.EstilizarBoton(btnBuscar, false);
-            Tema.EstilizarBoton(btnEliminar, false);
-            Tema.EstilizarBoton(btnLimpiarCrear, false);
-            Tema.EstilizarBoton(btnLimpiarEditar, false);
         }
 
         private void FrmAlumnos_Load(object sender, EventArgs e)
@@ -113,7 +105,11 @@ namespace SistemaAsistencia.Vista.Alumnos
         {
             if (!ctrl.EsValido(out string error))
             {
-                MessageBox.Show(error);
+                MessageBox.Show(
+                    error,
+                    "Alumnos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 ctrl.Enfocar();
                 return false;
             }
@@ -141,19 +137,31 @@ namespace SistemaAsistencia.Vista.Alumnos
 
                 if (alumnoController.AgregarAlumno(alumno))
                 {
-                    MessageBox.Show("Alumno agregado correctamente.");
+                    MessageBox.Show(
+                        "Alumno agregado correctamente.",
+                        "Alumnos",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
 
                     CargarAlumnos();
                     LimpiarCreacion();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo agregar el alumno.");
+                    MessageBox.Show(
+                        "No se pudo agregar el alumno.",
+                        "Alumnos",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo agregar el alumno.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo agregar el alumno.\n" + ex.Message,
+                    "Alumnos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -211,7 +219,11 @@ namespace SistemaAsistencia.Vista.Alumnos
 
             if (resultados.Count == 0)
             {
-                MessageBox.Show("Sin resultados para esa búsqueda.");
+                MessageBox.Show(
+                    "Sin resultados para esa búsqueda.",
+                    "Alumnos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 LimpiarEdicion();
             }
             else if (resultados.Count == 1)
@@ -246,7 +258,11 @@ namespace SistemaAsistencia.Vista.Alumnos
         {
             if (idAlumnoSeleccionado == 0)
             {
-                MessageBox.Show("Busque y seleccione un alumno primero.");
+                MessageBox.Show(
+                    "Busque y seleccione un alumno primero.",
+                    "Alumnos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -268,19 +284,31 @@ namespace SistemaAsistencia.Vista.Alumnos
 
                 if (alumnoController.ModificarAlumno(alumno))
                 {
-                    MessageBox.Show("Alumno modificado correctamente.");
+                    MessageBox.Show(
+                        "Alumno modificado correctamente.",
+                        "Alumnos",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
 
                     CargarAlumnos();
                     LimpiarEdicion();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo modificar el alumno.");
+                    MessageBox.Show(
+                        "No se pudo modificar el alumno.",
+                        "Alumnos",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo modificar el alumno.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo modificar el alumno.\n" + ex.Message,
+                    "Alumnos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -288,7 +316,11 @@ namespace SistemaAsistencia.Vista.Alumnos
         {
             if (idAlumnoSeleccionado == 0)
             {
-                MessageBox.Show("Busque y seleccione un alumno primero.");
+                MessageBox.Show(
+                    "Busque y seleccione un alumno primero.",
+                    "Alumnos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -312,12 +344,22 @@ namespace SistemaAsistencia.Vista.Alumnos
                     if (confirmar.Resultado == ResultadoEliminacion.Definitiva)
                     {
                         ok = alumnoController.EliminarDefinitivo(idAlumnoSeleccionado);
-                        if (ok) MessageBox.Show("Alumno eliminado definitivamente.");
+                        if (ok)
+                            MessageBox.Show(
+                                "Alumno eliminado definitivamente.",
+                                "Alumnos",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                     }
                     else
                     {
                         ok = alumnoController.DarDeBaja(idAlumnoSeleccionado);
-                        if (ok) MessageBox.Show("Alumno dado de baja.");
+                        if (ok)
+                            MessageBox.Show(
+                                "Alumno dado de baja.",
+                                "Alumnos",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                     }
 
                     if (ok)
@@ -327,13 +369,21 @@ namespace SistemaAsistencia.Vista.Alumnos
                     }
                     else
                     {
-                        MessageBox.Show("No se pudo eliminar.");
+                        MessageBox.Show(
+                            "No se pudo eliminar.",
+                            "Alumnos",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo eliminar.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo eliminar.\n" + ex.Message,
+                    "Alumnos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 

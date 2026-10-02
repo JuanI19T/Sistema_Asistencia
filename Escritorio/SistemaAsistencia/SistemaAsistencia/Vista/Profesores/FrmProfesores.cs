@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using SistemaAsistencia.Controlador;
 using SistemaAsistencia.Modelo.DAO;
@@ -10,7 +9,7 @@ using SistemaAsistencia.Utilidades;
 
 namespace SistemaAsistencia.Vista.Profesores
 {
-    public partial class FrmProfesores : Form
+    public partial class FrmProfesores : FrmBaseHijo
     {
         private readonly ProfesorController profesorController;
         private List<Profesor> cacheProfesores = new List<Profesor>();
@@ -25,20 +24,11 @@ namespace SistemaAsistencia.Vista.Profesores
             Tema.ConfigurarFondo(this);
             Tema.EstilizarGrilla(dgvProfesores);
 
-            Tema.EstilizarBoton(btnGuardar, true);
-            Tema.EstilizarBoton(btnModificar, true);
-            Tema.EstilizarBoton(btnBuscar, false);
-            Tema.EstilizarBoton(btnEliminar, false);
-            Tema.EstilizarBoton(btnLimpiarCrear, false);
-            Tema.EstilizarBoton(btnLimpiarEditar, false);
-
             // Regla EEST: legajo = DNI (autocompletado, no editable).
             txtLegajo.ReadOnly = true;
             txtLegajo.TabStop = false;
-            txtLegajo.BackColor = System.Drawing.SystemColors.Control;
             txtEditLegajo.ReadOnly = true;
             txtEditLegajo.TabStop = false;
-            txtEditLegajo.BackColor = System.Drawing.SystemColors.Control;
             txtDni.TextChanged += (s, e) => txtLegajo.Text = txtDni.Text.Trim();
             txtEditDni.TextChanged += (s, e) => txtEditLegajo.Text = txtEditDni.Text.Trim();
         }
@@ -121,7 +111,11 @@ namespace SistemaAsistencia.Vista.Profesores
         {
             if (!ctrl.EsValido(out string error))
             {
-                MessageBox.Show(error);
+                MessageBox.Show(
+                    error,
+                    "Profesores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 ctrl.Enfocar();
                 return false;
             }
@@ -149,19 +143,31 @@ namespace SistemaAsistencia.Vista.Profesores
 
                 if (profesorController.AgregarProfesor(profesor))
                 {
-                    MessageBox.Show("Profesor agregado correctamente.");
+                    MessageBox.Show(
+                        "Profesor agregado correctamente.",
+                        "Profesores",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
 
                     CargarProfesores();
                     LimpiarCreacion();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo agregar el profesor.");
+                    MessageBox.Show(
+                        "No se pudo agregar el profesor.",
+                        "Profesores",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo agregar el profesor.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo agregar el profesor.\n" + ex.Message,
+                    "Profesores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -219,7 +225,11 @@ namespace SistemaAsistencia.Vista.Profesores
 
             if (resultados.Count == 0)
             {
-                MessageBox.Show("Sin resultados para esa búsqueda.");
+                MessageBox.Show(
+                    "Sin resultados para esa búsqueda.",
+                    "Profesores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 LimpiarEdicion();
             }
             else if (resultados.Count == 1)
@@ -255,7 +265,11 @@ namespace SistemaAsistencia.Vista.Profesores
         {
             if (idProfesorSeleccionado == 0)
             {
-                MessageBox.Show("Busque y seleccione un profesor primero.");
+                MessageBox.Show(
+                    "Busque y seleccione un profesor primero.",
+                    "Profesores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -277,19 +291,31 @@ namespace SistemaAsistencia.Vista.Profesores
 
                 if (profesorController.ModificarProfesor(profesor))
                 {
-                    MessageBox.Show("Profesor modificado correctamente.");
+                    MessageBox.Show(
+                        "Profesor modificado correctamente.",
+                        "Profesores",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
 
                     CargarProfesores();
                     LimpiarEdicion();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo modificar el profesor.");
+                    MessageBox.Show(
+                        "No se pudo modificar el profesor.",
+                        "Profesores",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo modificar el profesor.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo modificar el profesor.\n" + ex.Message,
+                    "Profesores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -297,7 +323,11 @@ namespace SistemaAsistencia.Vista.Profesores
         {
             if (idProfesorSeleccionado == 0)
             {
-                MessageBox.Show("Busque y seleccione un profesor primero.");
+                MessageBox.Show(
+                    "Busque y seleccione un profesor primero.",
+                    "Profesores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -321,12 +351,22 @@ namespace SistemaAsistencia.Vista.Profesores
                     if (confirmar.Resultado == ResultadoEliminacion.Definitiva)
                     {
                         ok = profesorController.EliminarDefinitivo(idProfesorSeleccionado);
-                        if (ok) MessageBox.Show("Profesor eliminado definitivamente.");
+                        if (ok)
+                            MessageBox.Show(
+                                "Profesor eliminado definitivamente.",
+                                "Profesores",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                     }
                     else
                     {
                         ok = profesorController.DarDeBaja(idProfesorSeleccionado);
-                        if (ok) MessageBox.Show("Profesor dado de baja.");
+                        if (ok)
+                            MessageBox.Show(
+                                "Profesor dado de baja.",
+                                "Profesores",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                     }
 
                     if (ok)
@@ -336,13 +376,21 @@ namespace SistemaAsistencia.Vista.Profesores
                     }
                     else
                     {
-                        MessageBox.Show("No se pudo eliminar.");
+                        MessageBox.Show(
+                            "No se pudo eliminar.",
+                            "Profesores",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo eliminar.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo eliminar.\n" + ex.Message,
+                    "Profesores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 

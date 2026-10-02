@@ -10,7 +10,7 @@ using SistemaAsistencia.Utilidades;
 
 namespace SistemaAsistencia.Vista.Preceptores
 {
-    public partial class FrmPreceptores : Form
+    public partial class FrmPreceptores : FrmBaseHijo
     {
         private readonly PreceptorController preceptorController;
         private List<Preceptor> cachePreceptores = new List<Preceptor>();
@@ -25,20 +25,11 @@ namespace SistemaAsistencia.Vista.Preceptores
             Tema.ConfigurarFondo(this);
             Tema.EstilizarGrilla(dgvPreceptores);
 
-            Tema.EstilizarBoton(btnGuardar, true);
-            Tema.EstilizarBoton(btnModificar, true);
-            Tema.EstilizarBoton(btnBuscar, false);
-            Tema.EstilizarBoton(btnEliminar, false);
-            Tema.EstilizarBoton(btnLimpiarCrear, false);
-            Tema.EstilizarBoton(btnLimpiarEditar, false);
-
             // Regla EEST: legajo = DNI (autocompletado, no editable).
             txtLegajo.ReadOnly = true;
             txtLegajo.TabStop = false;
-            txtLegajo.BackColor = System.Drawing.SystemColors.Control;
             txtEditLegajo.ReadOnly = true;
             txtEditLegajo.TabStop = false;
-            txtEditLegajo.BackColor = System.Drawing.SystemColors.Control;
             txtDni.TextChanged += (s, e) => txtLegajo.Text = txtDni.Text.Trim();
             txtEditDni.TextChanged += (s, e) => txtEditLegajo.Text = txtEditDni.Text.Trim();
         }
@@ -123,7 +114,11 @@ namespace SistemaAsistencia.Vista.Preceptores
         {
             if (!ctrl.EsValido(out string error))
             {
-                MessageBox.Show(error);
+                MessageBox.Show(
+                    error,
+                    "Preceptores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 ctrl.Enfocar();
                 return false;
             }
@@ -139,7 +134,11 @@ namespace SistemaAsistencia.Vista.Preceptores
 
             if (!DniValido(txtDni.Text))
             {
-                MessageBox.Show("El DNI debe contener solo números.");
+                MessageBox.Show(
+                    "El DNI debe contener solo números.",
+                    "Preceptores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 txtDni.Focus();
                 return;
             }
@@ -159,19 +158,31 @@ namespace SistemaAsistencia.Vista.Preceptores
 
                 if (preceptorController.AgregarPreceptor(preceptor))
                 {
-                    MessageBox.Show("Preceptor agregado correctamente.");
+                    MessageBox.Show(
+                        "Preceptor agregado correctamente.",
+                        "Preceptores",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
 
                     CargarPreceptores();
                     LimpiarCreacion();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo agregar el preceptor.");
+                    MessageBox.Show(
+                        "No se pudo agregar el preceptor.",
+                        "Preceptores",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo agregar el preceptor.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo agregar el preceptor.\n" + ex.Message,
+                    "Preceptores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -237,7 +248,11 @@ namespace SistemaAsistencia.Vista.Preceptores
 
             if (resultados.Count == 0)
             {
-                MessageBox.Show("Sin resultados para esa búsqueda.");
+                MessageBox.Show(
+                    "Sin resultados para esa búsqueda.",
+                    "Preceptores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 LimpiarEdicion();
             }
             else if (resultados.Count == 1)
@@ -274,7 +289,11 @@ namespace SistemaAsistencia.Vista.Preceptores
         {
             if (idPreceptorSeleccionado == 0)
             {
-                MessageBox.Show("Busque y seleccione un preceptor primero.");
+                MessageBox.Show(
+                    "Busque y seleccione un preceptor primero.",
+                    "Preceptores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -283,7 +302,11 @@ namespace SistemaAsistencia.Vista.Preceptores
 
             if (!DniValido(txtEditDni.Text))
             {
-                MessageBox.Show("El DNI debe contener solo números.");
+                MessageBox.Show(
+                    "El DNI debe contener solo números.",
+                    "Preceptores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 txtEditDni.Focus();
                 return;
             }
@@ -304,19 +327,31 @@ namespace SistemaAsistencia.Vista.Preceptores
 
                 if (preceptorController.ModificarPreceptor(preceptor))
                 {
-                    MessageBox.Show("Preceptor modificado correctamente.");
+                    MessageBox.Show(
+                        "Preceptor modificado correctamente.",
+                        "Preceptores",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
 
                     CargarPreceptores();
                     LimpiarEdicion();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo modificar el preceptor.");
+                    MessageBox.Show(
+                        "No se pudo modificar el preceptor.",
+                        "Preceptores",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo modificar el preceptor.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo modificar el preceptor.\n" + ex.Message,
+                    "Preceptores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -324,7 +359,11 @@ namespace SistemaAsistencia.Vista.Preceptores
         {
             if (idPreceptorSeleccionado == 0)
             {
-                MessageBox.Show("Busque y seleccione un preceptor primero.");
+                MessageBox.Show(
+                    "Busque y seleccione un preceptor primero.",
+                    "Preceptores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -348,12 +387,22 @@ namespace SistemaAsistencia.Vista.Preceptores
                     if (confirmar.Resultado == ResultadoEliminacion.Definitiva)
                     {
                         ok = preceptorController.EliminarDefinitivo(idPreceptorSeleccionado);
-                        if (ok) MessageBox.Show("Preceptor eliminado definitivamente.");
+                        if (ok)
+                            MessageBox.Show(
+                                "Preceptor eliminado definitivamente.",
+                                "Preceptores",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                     }
                     else
                     {
                         ok = preceptorController.DarDeBaja(idPreceptorSeleccionado);
-                        if (ok) MessageBox.Show("Preceptor dado de baja.");
+                        if (ok)
+                            MessageBox.Show(
+                                "Preceptor dado de baja.",
+                                "Preceptores",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                     }
 
                     if (ok)
@@ -363,13 +412,21 @@ namespace SistemaAsistencia.Vista.Preceptores
                     }
                     else
                     {
-                        MessageBox.Show("No se pudo eliminar.");
+                        MessageBox.Show(
+                            "No se pudo eliminar.",
+                            "Preceptores",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo eliminar.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo eliminar.\n" + ex.Message,
+                    "Preceptores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
