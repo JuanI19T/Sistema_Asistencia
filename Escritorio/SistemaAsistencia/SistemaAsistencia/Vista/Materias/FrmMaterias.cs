@@ -5,10 +5,11 @@ using SistemaAsistencia.Controlador;
 using SistemaAsistencia.Modelo.DAO;
 using SistemaAsistencia.Modelo.Entidades;
 using SistemaAsistencia.Vista.Comun;
+using SistemaAsistencia.Utilidades;
 
 namespace SistemaAsistencia.Vista.Materias
 {
-    public partial class FrmMaterias : Form
+    public partial class FrmMaterias : FrmBaseHijo
     {
         private readonly MateriaController materiaController;
         private readonly EspecialidadController especialidadController;
@@ -21,6 +22,9 @@ namespace SistemaAsistencia.Vista.Materias
 
             materiaController = new MateriaController();
             especialidadController = new EspecialidadController();
+
+            Tema.ConfigurarFondo(this);
+            Tema.EstilizarGrilla(dgvMaterias);
 
             // La especialidad condiciona el año: Ciclo Básico 1-3, tecnicaturas 4-7.
             cmbEspecialidad.SelectedIndexChanged += (s, e) =>
@@ -129,13 +133,19 @@ namespace SistemaAsistencia.Vista.Materias
             if (anio >= 1 && anio <= 3 && !basico)
             {
                 MessageBox.Show(
-                    "Las materias de 1° a 3° año deben registrarse con la especialidad 'Ciclo Básico'.");
+                    "Las materias de 1° a 3° año deben registrarse con la especialidad 'Ciclo Básico'.",
+                    "Materias",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return false;
             }
             if (anio >= 4 && anio <= 7 && basico)
             {
                 MessageBox.Show(
-                    "Las materias de 4° a 7° año deben registrarse con su tecnicatura (no 'Ciclo Básico').");
+                    "Las materias de 4° a 7° año deben registrarse con su tecnicatura (no 'Ciclo Básico').",
+                    "Materias",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return false;
             }
             return true;
@@ -147,7 +157,11 @@ namespace SistemaAsistencia.Vista.Materias
         {
             if (cmbEspecialidad.SelectedIndex < 0)
             {
-                MessageBox.Show("Seleccione una especialidad.");
+                MessageBox.Show(
+                    "Seleccione una especialidad.",
+                    "Materias",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 cmbEspecialidad.Focus();
                 return;
             }
@@ -170,19 +184,31 @@ namespace SistemaAsistencia.Vista.Materias
 
                 if (materiaController.AgregarMateria(materia))
                 {
-                    MessageBox.Show("Materia agregada correctamente.");
+                    MessageBox.Show(
+                        "Materia agregada correctamente.",
+                        "Materias",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
 
                     CargarMaterias();
                     LimpiarCreacion();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo agregar la materia.");
+                    MessageBox.Show(
+                        "No se pudo agregar la materia.",
+                        "Materias",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo agregar la materia.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo agregar la materia.\n" + ex.Message,
+                    "Materias",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -231,7 +257,11 @@ namespace SistemaAsistencia.Vista.Materias
 
             if (resultados.Count == 0)
             {
-                MessageBox.Show("Sin resultados para esa búsqueda.");
+                MessageBox.Show(
+                    "Sin resultados para esa búsqueda.",
+                    "Materias",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 LimpiarEdicion();
             }
             else if (resultados.Count == 1)
@@ -278,13 +308,22 @@ namespace SistemaAsistencia.Vista.Materias
         {
             if (idMateriaSeleccionada == 0)
             {
-                MessageBox.Show("Busque y seleccione una materia primero.");
+                MessageBox.Show(
+                    "Busque y seleccione una materia primero.",
+                    "Materias",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
             if (cmbEditEspecialidad.SelectedIndex < 0)
             {
-                MessageBox.Show("Seleccione una especialidad.");
+                MessageBox.Show(
+                    "Seleccione una especialidad.",
+                    "Materias",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                cmbEditEspecialidad.Focus();
                 return;
             }
 
@@ -304,19 +343,31 @@ namespace SistemaAsistencia.Vista.Materias
 
                 if (materiaController.ModificarMateria(materia))
                 {
-                    MessageBox.Show("Materia modificada correctamente.");
+                    MessageBox.Show(
+                        "Materia modificada correctamente.",
+                        "Materias",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
 
                     CargarMaterias();
                     LimpiarEdicion();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo modificar la materia.");
+                    MessageBox.Show(
+                        "No se pudo modificar la materia.",
+                        "Materias",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo modificar la materia.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo modificar la materia.\n" + ex.Message,
+                    "Materias",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -324,7 +375,11 @@ namespace SistemaAsistencia.Vista.Materias
         {
             if (idMateriaSeleccionada == 0)
             {
-                MessageBox.Show("Busque y seleccione una materia primero.");
+                MessageBox.Show(
+                    "Busque y seleccione una materia primero.",
+                    "Materias",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -347,12 +402,22 @@ namespace SistemaAsistencia.Vista.Materias
                     if (confirmar.Resultado == ResultadoEliminacion.Definitiva)
                     {
                         ok = materiaController.EliminarDefinitivo(idMateriaSeleccionada);
-                        if (ok) MessageBox.Show("Materia eliminada definitivamente.");
+                        if (ok)
+                            MessageBox.Show(
+                                "Materia eliminada definitivamente.",
+                                "Materias",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                     }
                     else
                     {
                         ok = materiaController.DarDeBaja(idMateriaSeleccionada);
-                        if (ok) MessageBox.Show("Materia dada de baja.");
+                        if (ok)
+                            MessageBox.Show(
+                                "Materia dada de baja.",
+                                "Materias",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                     }
 
                     if (ok)
@@ -362,13 +427,21 @@ namespace SistemaAsistencia.Vista.Materias
                     }
                     else
                     {
-                        MessageBox.Show("No se pudo eliminar.");
+                        MessageBox.Show(
+                            "No se pudo eliminar.",
+                            "Materias",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo eliminar.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo eliminar.\n" + ex.Message,
+                    "Materias",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 

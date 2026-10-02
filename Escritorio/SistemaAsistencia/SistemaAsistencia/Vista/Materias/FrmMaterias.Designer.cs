@@ -28,117 +28,124 @@ namespace SistemaAsistencia.Vista.Materias
         /// </summary>
         private void InitializeComponent()
         {
-            this.grpCrear = new System.Windows.Forms.GroupBox();
-            this.btnLimpiarCrear = new System.Windows.Forms.Button();
-            this.btnGuardar = new System.Windows.Forms.Button();
-            this.nudCargaHoraria = new System.Windows.Forms.NumericUpDown();
+            this.cmbEspecialidad = new MaterialSkin.Controls.MaterialComboBox();
+            this.txtNombre = new MaterialSkin.Controls.MaterialTextBox2();
+            this.lblAnioCrear = new MaterialSkin.Controls.MaterialLabel();
             this.nudAnioMateria = new System.Windows.Forms.NumericUpDown();
-            this.cmbEspecialidad = new System.Windows.Forms.ComboBox();
-            this.txtNombre = new System.Windows.Forms.TextBox();
-            this.lblCargaHoraria = new System.Windows.Forms.Label();
-            this.lblAnio = new System.Windows.Forms.Label();
-            this.lblEspecialidad = new System.Windows.Forms.Label();
-            this.lblNombre = new System.Windows.Forms.Label();
-            this.grpModificar = new System.Windows.Forms.GroupBox();
-            this.btnLimpiarEditar = new System.Windows.Forms.Button();
-            this.btnEliminar = new System.Windows.Forms.Button();
-            this.btnModificar = new System.Windows.Forms.Button();
-            this.nudEditCarga = new System.Windows.Forms.NumericUpDown();
+            this.lblCargaCrear = new MaterialSkin.Controls.MaterialLabel();
+            this.nudCargaHoraria = new System.Windows.Forms.NumericUpDown();
+            this.btnGuardar = new MaterialSkin.Controls.MaterialButton();
+            this.btnLimpiarCrear = new MaterialSkin.Controls.MaterialButton();
+            this.cmbEditEspecialidad = new MaterialSkin.Controls.MaterialComboBox();
+            this.lblEditAnio = new MaterialSkin.Controls.MaterialLabel();
             this.nudEditAnio = new System.Windows.Forms.NumericUpDown();
-            this.cmbEditEspecialidad = new System.Windows.Forms.ComboBox();
-            this.txtEditNombre = new System.Windows.Forms.TextBox();
-            this.lblEditCarga = new System.Windows.Forms.Label();
-            this.lblEditAnio = new System.Windows.Forms.Label();
-            this.lblEditEspecialidad = new System.Windows.Forms.Label();
-            this.lblEditNombre = new System.Windows.Forms.Label();
-            this.lblEditando = new System.Windows.Forms.Label();
-            this.pnlBusqueda = new System.Windows.Forms.Panel();
+            this.txtEditNombre = new MaterialSkin.Controls.MaterialTextBox2();
+            this.lblEditCarga = new MaterialSkin.Controls.MaterialLabel();
+            this.nudEditCarga = new System.Windows.Forms.NumericUpDown();
+            this.btnModificar = new MaterialSkin.Controls.MaterialButton();
+            this.btnEliminar = new MaterialSkin.Controls.MaterialButton();
+            this.btnLimpiarEditar = new MaterialSkin.Controls.MaterialButton();
+            this.lblEditando = new MaterialSkin.Controls.MaterialLabel();
+            this.txtBuscar = new MaterialSkin.Controls.MaterialTextBox();
+            this.btnBuscar = new MaterialSkin.Controls.MaterialButton();
             this.dgvMaterias = new System.Windows.Forms.DataGridView();
-            this.pnlTopBusqueda = new System.Windows.Forms.Panel();
-            this.btnBuscar = new System.Windows.Forms.Button();
-            this.txtBuscar = new System.Windows.Forms.TextBox();
-            this.lblTBuscar = new System.Windows.Forms.Label();
-            this.tlpBase = new System.Windows.Forms.TableLayoutPanel();
-            this.pnlIzquierda = new System.Windows.Forms.Panel();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCargaHoraria)).BeginInit();
+            this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableAnioCrear = new System.Windows.Forms.TableLayoutPanel();
+            this.tableCargaCrear = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
             ((System.ComponentModel.ISupportInitialize)(this.nudAnioMateria)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEditCarga)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCargaHoraria)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEditAnio)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEditCarga)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaterias)).BeginInit();
-            this.grpCrear.SuspendLayout();
-            this.grpModificar.SuspendLayout();
-            this.pnlBusqueda.SuspendLayout();
-            this.pnlTopBusqueda.SuspendLayout();
-            this.tlpBase.SuspendLayout();
-            this.pnlIzquierda.SuspendLayout();
+            this.materialTabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableAnioCrear.SuspendLayout();
+            this.tableCargaCrear.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
             this.SuspendLayout();
-            //
-            // grpCrear
-            //
-            this.grpCrear.Controls.Add(this.btnLimpiarCrear);
-            this.grpCrear.Controls.Add(this.btnGuardar);
-            this.grpCrear.Controls.Add(this.nudCargaHoraria);
-            this.grpCrear.Controls.Add(this.nudAnioMateria);
-            this.grpCrear.Controls.Add(this.cmbEspecialidad);
-            this.grpCrear.Controls.Add(this.txtNombre);
-            this.grpCrear.Controls.Add(this.lblCargaHoraria);
-            this.grpCrear.Controls.Add(this.lblAnio);
-            this.grpCrear.Controls.Add(this.lblEspecialidad);
-            this.grpCrear.Controls.Add(this.lblNombre);
-            this.grpCrear.Dock = System.Windows.Forms.DockStyle.Top;
-            this.grpCrear.Location = new System.Drawing.Point(0, 0);
-            this.grpCrear.Name = "grpCrear";
-            this.grpCrear.Size = new System.Drawing.Size(560, 205);
-            this.grpCrear.TabIndex = 0;
-            this.grpCrear.TabStop = false;
-            this.grpCrear.Text = "1. Crear materia";
-            //
-            // lblNombre
-            //
-            this.lblNombre.AutoSize = true;
-            this.lblNombre.Location = new System.Drawing.Point(16, 90);
-            this.lblNombre.Name = "lblNombre";
-            this.lblNombre.Size = new System.Drawing.Size(44, 13);
-            this.lblNombre.TabIndex = 4;
-            this.lblNombre.Text = "Nombre";
-            //
-            // txtNombre
-            //
-            this.txtNombre.Location = new System.Drawing.Point(90, 87);
-            this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(180, 20);
-            this.txtNombre.TabIndex = 5;
-            //
-            // lblEspecialidad
-            //
-            this.lblEspecialidad.AutoSize = true;
-            this.lblEspecialidad.Location = new System.Drawing.Point(16, 30);
-            this.lblEspecialidad.Name = "lblEspecialidad";
-            this.lblEspecialidad.Size = new System.Drawing.Size(67, 13);
-            this.lblEspecialidad.TabIndex = 0;
-            this.lblEspecialidad.Text = "Especialidad";
-            //
+            // 
             // cmbEspecialidad
-            //
+            // 
+            this.cmbEspecialidad.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cmbEspecialidad.AutoResize = false;
+            this.cmbEspecialidad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cmbEspecialidad.Depth = 0;
+            this.cmbEspecialidad.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cmbEspecialidad.DropDownHeight = 174;
             this.cmbEspecialidad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEspecialidad.DropDownWidth = 121;
+            this.cmbEspecialidad.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cmbEspecialidad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.cmbEspecialidad.FormattingEnabled = true;
-            this.cmbEspecialidad.Location = new System.Drawing.Point(90, 27);
+            this.cmbEspecialidad.Hint = "Especialidad";
+            this.cmbEspecialidad.IntegralHeight = false;
+            this.cmbEspecialidad.ItemHeight = 43;
+            this.cmbEspecialidad.Location = new System.Drawing.Point(286, 25);
+            this.cmbEspecialidad.MaxDropDownItems = 4;
+            this.cmbEspecialidad.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbEspecialidad.Name = "cmbEspecialidad";
-            this.cmbEspecialidad.Size = new System.Drawing.Size(180, 21);
-            this.cmbEspecialidad.TabIndex = 1;
-            //
-            // lblAnio
-            //
-            this.lblAnio.AutoSize = true;
-            this.lblAnio.Location = new System.Drawing.Point(16, 60);
-            this.lblAnio.Name = "lblAnio";
-            this.lblAnio.Size = new System.Drawing.Size(26, 13);
-            this.lblAnio.TabIndex = 2;
-            this.lblAnio.Text = "Año";
-            //
+            this.cmbEspecialidad.Size = new System.Drawing.Size(261, 49);
+            this.cmbEspecialidad.StartIndex = -1;
+            this.cmbEspecialidad.TabIndex = 0;
+            this.cmbEspecialidad.UseAccent = false;
+            // 
+            // txtNombre
+            // 
+            this.txtNombre.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.txtNombre.AnimateReadOnly = false;
+            this.txtNombre.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.txtNombre.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
+            this.txtNombre.Depth = 0;
+            this.txtNombre.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txtNombre.HideSelection = true;
+            this.txtNombre.Hint = "Nombre";
+            this.txtNombre.LeadingIcon = null;
+            this.txtNombre.Location = new System.Drawing.Point(291, 127);
+            this.txtNombre.MaxLength = 32767;
+            this.txtNombre.MouseState = MaterialSkin.MouseState.OUT;
+            this.txtNombre.Name = "txtNombre";
+            this.txtNombre.PasswordChar = '\0';
+            this.txtNombre.PrefixSuffixText = null;
+            this.txtNombre.ReadOnly = false;
+            this.txtNombre.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.txtNombre.SelectedText = "";
+            this.txtNombre.SelectionLength = 0;
+            this.txtNombre.SelectionStart = 0;
+            this.txtNombre.ShortcutsEnabled = true;
+            this.txtNombre.Size = new System.Drawing.Size(250, 48);
+            this.txtNombre.TabIndex = 1;
+            this.txtNombre.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.txtNombre.TrailingIcon = null;
+            this.txtNombre.UseSystemPasswordChar = false;
+            // 
+            // lblAnioCrear
+            // 
+            this.lblAnioCrear.AutoSize = true;
+            this.lblAnioCrear.Depth = 0;
+            this.lblAnioCrear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblAnioCrear.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.lblAnioCrear.Location = new System.Drawing.Point(3, 0);
+            this.lblAnioCrear.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lblAnioCrear.Name = "lblAnioCrear";
+            this.lblAnioCrear.Size = new System.Drawing.Size(84, 95);
+            this.lblAnioCrear.TabIndex = 0;
+            this.lblAnioCrear.Text = "Año";
+            this.lblAnioCrear.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // nudAnioMateria
-            //
-            this.nudAnioMateria.Location = new System.Drawing.Point(90, 57);
+            // 
+            this.nudAnioMateria.Location = new System.Drawing.Point(93, 3);
             this.nudAnioMateria.Maximum = new decimal(new int[] {
             7,
             0,
@@ -150,128 +157,123 @@ namespace SistemaAsistencia.Vista.Materias
             0,
             0});
             this.nudAnioMateria.Name = "nudAnioMateria";
-            this.nudAnioMateria.Size = new System.Drawing.Size(120, 20);
-            this.nudAnioMateria.TabIndex = 3;
-            //
-            // lblCargaHoraria
-            //
-            this.lblCargaHoraria.AutoSize = true;
-            this.lblCargaHoraria.Location = new System.Drawing.Point(16, 120);
-            this.lblCargaHoraria.Name = "lblCargaHoraria";
-            this.lblCargaHoraria.Size = new System.Drawing.Size(73, 13);
-            this.lblCargaHoraria.TabIndex = 6;
-            this.lblCargaHoraria.Text = "Carga Horaria";
-            //
+            this.nudAnioMateria.Size = new System.Drawing.Size(120, 25);
+            this.nudAnioMateria.TabIndex = 2;
+            this.nudAnioMateria.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblCargaCrear
+            // 
+            this.lblCargaCrear.AutoSize = true;
+            this.lblCargaCrear.Depth = 0;
+            this.lblCargaCrear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCargaCrear.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.lblCargaCrear.Location = new System.Drawing.Point(3, 0);
+            this.lblCargaCrear.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lblCargaCrear.Name = "lblCargaCrear";
+            this.lblCargaCrear.Size = new System.Drawing.Size(84, 95);
+            this.lblCargaCrear.TabIndex = 0;
+            this.lblCargaCrear.Text = "Carga horaria";
+            this.lblCargaCrear.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // nudCargaHoraria
-            //
-            this.nudCargaHoraria.Location = new System.Drawing.Point(90, 117);
+            // 
+            this.nudCargaHoraria.Location = new System.Drawing.Point(93, 3);
             this.nudCargaHoraria.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
             this.nudCargaHoraria.Name = "nudCargaHoraria";
-            this.nudCargaHoraria.Size = new System.Drawing.Size(120, 20);
-            this.nudCargaHoraria.TabIndex = 7;
-            //
+            this.nudCargaHoraria.Size = new System.Drawing.Size(120, 25);
+            this.nudCargaHoraria.TabIndex = 3;
+            // 
             // btnGuardar
-            //
-            this.btnGuardar.Location = new System.Drawing.Point(90, 158);
+            // 
+            this.btnGuardar.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnGuardar.AutoSize = false;
+            this.btnGuardar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnGuardar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnGuardar.Depth = 0;
+            this.btnGuardar.HighEmphasis = true;
+            this.btnGuardar.Icon = null;
+            this.btnGuardar.Location = new System.Drawing.Point(193, 26);
+            this.btnGuardar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnGuardar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(105, 32);
-            this.btnGuardar.TabIndex = 8;
+            this.btnGuardar.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnGuardar.Size = new System.Drawing.Size(181, 36);
+            this.btnGuardar.TabIndex = 4;
             this.btnGuardar.Text = "Guardar";
+            this.btnGuardar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnGuardar.UseAccentColor = false;
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
-            //
+            // 
             // btnLimpiarCrear
-            //
-            this.btnLimpiarCrear.Location = new System.Drawing.Point(210, 158);
+            // 
+            this.btnLimpiarCrear.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnLimpiarCrear.AutoSize = false;
+            this.btnLimpiarCrear.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnLimpiarCrear.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnLimpiarCrear.Depth = 0;
+            this.btnLimpiarCrear.HighEmphasis = true;
+            this.btnLimpiarCrear.Icon = null;
+            this.btnLimpiarCrear.Location = new System.Drawing.Point(44, 26);
+            this.btnLimpiarCrear.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnLimpiarCrear.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLimpiarCrear.Name = "btnLimpiarCrear";
-            this.btnLimpiarCrear.Size = new System.Drawing.Size(105, 32);
-            this.btnLimpiarCrear.TabIndex = 9;
+            this.btnLimpiarCrear.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnLimpiarCrear.Size = new System.Drawing.Size(100, 36);
+            this.btnLimpiarCrear.TabIndex = 5;
             this.btnLimpiarCrear.Text = "Limpiar";
+            this.btnLimpiarCrear.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
+            this.btnLimpiarCrear.UseAccentColor = false;
             this.btnLimpiarCrear.UseVisualStyleBackColor = true;
             this.btnLimpiarCrear.Click += new System.EventHandler(this.btnLimpiarCrear_Click);
-            //
-            // grpModificar
-            //
-            this.grpModificar.Controls.Add(this.btnLimpiarEditar);
-            this.grpModificar.Controls.Add(this.btnEliminar);
-            this.grpModificar.Controls.Add(this.btnModificar);
-            this.grpModificar.Controls.Add(this.nudEditCarga);
-            this.grpModificar.Controls.Add(this.nudEditAnio);
-            this.grpModificar.Controls.Add(this.cmbEditEspecialidad);
-            this.grpModificar.Controls.Add(this.txtEditNombre);
-            this.grpModificar.Controls.Add(this.lblEditCarga);
-            this.grpModificar.Controls.Add(this.lblEditAnio);
-            this.grpModificar.Controls.Add(this.lblEditEspecialidad);
-            this.grpModificar.Controls.Add(this.lblEditNombre);
-            this.grpModificar.Controls.Add(this.lblEditando);
-            this.grpModificar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grpModificar.Location = new System.Drawing.Point(0, 205);
-            this.grpModificar.Name = "grpModificar";
-            this.grpModificar.Size = new System.Drawing.Size(560, 395);
-            this.grpModificar.TabIndex = 1;
-            this.grpModificar.TabStop = false;
-            this.grpModificar.Text = "2. Modificar materia";
-            //
-            // lblEditando
-            //
-            this.lblEditando.AutoSize = true;
-            this.lblEditando.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEditando.Location = new System.Drawing.Point(16, 26);
-            this.lblEditando.Name = "lblEditando";
-            this.lblEditando.Size = new System.Drawing.Size(242, 17);
-            this.lblEditando.TabIndex = 0;
-            this.lblEditando.Text = "Editando: (seleccione de la lista)";
-            //
-            // lblEditNombre
-            //
-            this.lblEditNombre.AutoSize = true;
-            this.lblEditNombre.Location = new System.Drawing.Point(16, 118);
-            this.lblEditNombre.Name = "lblEditNombre";
-            this.lblEditNombre.Size = new System.Drawing.Size(44, 13);
-            this.lblEditNombre.TabIndex = 5;
-            this.lblEditNombre.Text = "Nombre";
-            //
-            // txtEditNombre
-            //
-            this.txtEditNombre.Location = new System.Drawing.Point(90, 115);
-            this.txtEditNombre.Name = "txtEditNombre";
-            this.txtEditNombre.Size = new System.Drawing.Size(180, 20);
-            this.txtEditNombre.TabIndex = 6;
-            //
-            // lblEditEspecialidad
-            //
-            this.lblEditEspecialidad.AutoSize = true;
-            this.lblEditEspecialidad.Location = new System.Drawing.Point(16, 58);
-            this.lblEditEspecialidad.Name = "lblEditEspecialidad";
-            this.lblEditEspecialidad.Size = new System.Drawing.Size(67, 13);
-            this.lblEditEspecialidad.TabIndex = 1;
-            this.lblEditEspecialidad.Text = "Especialidad";
-            //
+            // 
             // cmbEditEspecialidad
-            //
+            // 
+            this.cmbEditEspecialidad.AutoResize = false;
+            this.cmbEditEspecialidad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cmbEditEspecialidad.Depth = 0;
+            this.cmbEditEspecialidad.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cmbEditEspecialidad.DropDownHeight = 174;
             this.cmbEditEspecialidad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEditEspecialidad.DropDownWidth = 121;
+            this.cmbEditEspecialidad.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cmbEditEspecialidad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.cmbEditEspecialidad.FormattingEnabled = true;
-            this.cmbEditEspecialidad.Location = new System.Drawing.Point(90, 55);
+            this.cmbEditEspecialidad.Hint = "Especialidad";
+            this.cmbEditEspecialidad.IntegralHeight = false;
+            this.cmbEditEspecialidad.ItemHeight = 43;
+            this.cmbEditEspecialidad.Location = new System.Drawing.Point(95, 45);
+            this.cmbEditEspecialidad.MaxDropDownItems = 4;
+            this.cmbEditEspecialidad.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbEditEspecialidad.Name = "cmbEditEspecialidad";
-            this.cmbEditEspecialidad.Size = new System.Drawing.Size(180, 21);
+            this.cmbEditEspecialidad.Size = new System.Drawing.Size(180, 49);
+            this.cmbEditEspecialidad.StartIndex = -1;
             this.cmbEditEspecialidad.TabIndex = 2;
-            //
+            this.cmbEditEspecialidad.UseAccent = false;
+            // 
             // lblEditAnio
-            //
+            // 
             this.lblEditAnio.AutoSize = true;
-            this.lblEditAnio.Location = new System.Drawing.Point(16, 88);
+            this.lblEditAnio.Depth = 0;
+            this.lblEditAnio.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.lblEditAnio.Location = new System.Drawing.Point(20, 112);
+            this.lblEditAnio.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblEditAnio.Name = "lblEditAnio";
-            this.lblEditAnio.Size = new System.Drawing.Size(26, 13);
+            this.lblEditAnio.Size = new System.Drawing.Size(29, 19);
             this.lblEditAnio.TabIndex = 3;
             this.lblEditAnio.Text = "Año";
-            //
+            // 
             // nudEditAnio
-            //
-            this.nudEditAnio.Location = new System.Drawing.Point(90, 85);
+            // 
+            this.nudEditAnio.Location = new System.Drawing.Point(95, 109);
             this.nudEditAnio.Maximum = new decimal(new int[] {
             7,
             0,
@@ -283,211 +285,420 @@ namespace SistemaAsistencia.Vista.Materias
             0,
             0});
             this.nudEditAnio.Name = "nudEditAnio";
-            this.nudEditAnio.Size = new System.Drawing.Size(120, 20);
-            this.nudEditAnio.TabIndex = 4;
-            //
+            this.nudEditAnio.Size = new System.Drawing.Size(120, 25);
+            this.nudEditAnio.TabIndex = 3;
+            this.nudEditAnio.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // txtEditNombre
+            // 
+            this.txtEditNombre.AnimateReadOnly = false;
+            this.txtEditNombre.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.txtEditNombre.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
+            this.txtEditNombre.Depth = 0;
+            this.txtEditNombre.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txtEditNombre.HideSelection = true;
+            this.txtEditNombre.Hint = "Nombre";
+            this.txtEditNombre.LeadingIcon = null;
+            this.txtEditNombre.Location = new System.Drawing.Point(95, 140);
+            this.txtEditNombre.MaxLength = 32767;
+            this.txtEditNombre.MouseState = MaterialSkin.MouseState.OUT;
+            this.txtEditNombre.Name = "txtEditNombre";
+            this.txtEditNombre.PasswordChar = '\0';
+            this.txtEditNombre.PrefixSuffixText = null;
+            this.txtEditNombre.ReadOnly = false;
+            this.txtEditNombre.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.txtEditNombre.SelectedText = "";
+            this.txtEditNombre.SelectionLength = 0;
+            this.txtEditNombre.SelectionStart = 0;
+            this.txtEditNombre.ShortcutsEnabled = true;
+            this.txtEditNombre.Size = new System.Drawing.Size(180, 48);
+            this.txtEditNombre.TabIndex = 4;
+            this.txtEditNombre.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.txtEditNombre.TrailingIcon = null;
+            this.txtEditNombre.UseSystemPasswordChar = false;
+            // 
             // lblEditCarga
-            //
+            // 
             this.lblEditCarga.AutoSize = true;
-            this.lblEditCarga.Location = new System.Drawing.Point(16, 148);
+            this.lblEditCarga.Depth = 0;
+            this.lblEditCarga.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.lblEditCarga.Location = new System.Drawing.Point(20, 206);
+            this.lblEditCarga.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblEditCarga.Name = "lblEditCarga";
-            this.lblEditCarga.Size = new System.Drawing.Size(73, 13);
-            this.lblEditCarga.TabIndex = 7;
-            this.lblEditCarga.Text = "Carga Horaria";
-            //
+            this.lblEditCarga.Size = new System.Drawing.Size(97, 19);
+            this.lblEditCarga.TabIndex = 5;
+            this.lblEditCarga.Text = "Carga horaria";
+            // 
             // nudEditCarga
-            //
-            this.nudEditCarga.Location = new System.Drawing.Point(90, 145);
+            // 
+            this.nudEditCarga.Location = new System.Drawing.Point(135, 203);
             this.nudEditCarga.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
             this.nudEditCarga.Name = "nudEditCarga";
-            this.nudEditCarga.Size = new System.Drawing.Size(120, 20);
-            this.nudEditCarga.TabIndex = 8;
-            //
+            this.nudEditCarga.Size = new System.Drawing.Size(120, 25);
+            this.nudEditCarga.TabIndex = 5;
+            // 
             // btnModificar
-            //
-            this.btnModificar.Location = new System.Drawing.Point(40, 186);
+            // 
+            this.btnModificar.AutoSize = false;
+            this.btnModificar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnModificar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnModificar.Depth = 0;
+            this.btnModificar.HighEmphasis = true;
+            this.btnModificar.Icon = null;
+            this.btnModificar.Location = new System.Drawing.Point(20, 240);
+            this.btnModificar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnModificar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnModificar.Name = "btnModificar";
-            this.btnModificar.Size = new System.Drawing.Size(105, 32);
-            this.btnModificar.TabIndex = 9;
+            this.btnModificar.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnModificar.Size = new System.Drawing.Size(100, 36);
+            this.btnModificar.TabIndex = 6;
             this.btnModificar.Text = "Modificar";
+            this.btnModificar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnModificar.UseAccentColor = false;
             this.btnModificar.UseVisualStyleBackColor = true;
             this.btnModificar.Click += new System.EventHandler(this.btnModificar_Click);
-            //
+            // 
             // btnEliminar
-            //
-            this.btnEliminar.Location = new System.Drawing.Point(160, 186);
+            // 
+            this.btnEliminar.AutoSize = false;
+            this.btnEliminar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnEliminar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnEliminar.Depth = 0;
+            this.btnEliminar.HighEmphasis = true;
+            this.btnEliminar.Icon = null;
+            this.btnEliminar.Location = new System.Drawing.Point(130, 240);
+            this.btnEliminar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnEliminar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnEliminar.Name = "btnEliminar";
-            this.btnEliminar.Size = new System.Drawing.Size(105, 32);
-            this.btnEliminar.TabIndex = 10;
+            this.btnEliminar.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnEliminar.Size = new System.Drawing.Size(100, 36);
+            this.btnEliminar.TabIndex = 7;
             this.btnEliminar.Text = "Eliminar";
+            this.btnEliminar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
+            this.btnEliminar.UseAccentColor = false;
             this.btnEliminar.UseVisualStyleBackColor = true;
             this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
-            //
+            // 
             // btnLimpiarEditar
-            //
-            this.btnLimpiarEditar.Location = new System.Drawing.Point(280, 186);
+            // 
+            this.btnLimpiarEditar.AutoSize = false;
+            this.btnLimpiarEditar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnLimpiarEditar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnLimpiarEditar.Depth = 0;
+            this.btnLimpiarEditar.HighEmphasis = true;
+            this.btnLimpiarEditar.Icon = null;
+            this.btnLimpiarEditar.Location = new System.Drawing.Point(240, 240);
+            this.btnLimpiarEditar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnLimpiarEditar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLimpiarEditar.Name = "btnLimpiarEditar";
-            this.btnLimpiarEditar.Size = new System.Drawing.Size(105, 32);
-            this.btnLimpiarEditar.TabIndex = 11;
+            this.btnLimpiarEditar.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnLimpiarEditar.Size = new System.Drawing.Size(100, 36);
+            this.btnLimpiarEditar.TabIndex = 8;
             this.btnLimpiarEditar.Text = "Limpiar";
+            this.btnLimpiarEditar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
+            this.btnLimpiarEditar.UseAccentColor = false;
             this.btnLimpiarEditar.UseVisualStyleBackColor = true;
             this.btnLimpiarEditar.Click += new System.EventHandler(this.btnLimpiarEditar_Click);
-            //
-            // pnlBusqueda
-            //
-            this.pnlBusqueda.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.pnlBusqueda.Controls.Add(this.dgvMaterias);
-            this.pnlBusqueda.Controls.Add(this.pnlTopBusqueda);
-            this.pnlBusqueda.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlBusqueda.Name = "pnlBusqueda";
-            this.pnlBusqueda.TabIndex = 2;
-            //
-            // pnlTopBusqueda
-            //
-            this.pnlTopBusqueda.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.pnlTopBusqueda.Controls.Add(this.lblTBuscar);
-            this.pnlTopBusqueda.Controls.Add(this.txtBuscar);
-            this.pnlTopBusqueda.Controls.Add(this.btnBuscar);
-            this.pnlTopBusqueda.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTopBusqueda.Location = new System.Drawing.Point(0, 0);
-            this.pnlTopBusqueda.Name = "pnlTopBusqueda";
-            this.pnlTopBusqueda.Size = new System.Drawing.Size(300, 78);
-            this.pnlTopBusqueda.TabIndex = 0;
-            //
-            // lblTBuscar
-            //
-            this.lblTBuscar.AutoSize = true;
-            this.lblTBuscar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTBuscar.Location = new System.Drawing.Point(12, 10);
-            this.lblTBuscar.Name = "lblTBuscar";
-            this.lblTBuscar.Size = new System.Drawing.Size(106, 15);
-            this.lblTBuscar.TabIndex = 0;
-            this.lblTBuscar.Text = "Buscar materia";
-            //
+            // 
+            // lblEditando
+            // 
+            this.lblEditando.AutoSize = true;
+            this.lblEditando.Depth = 0;
+            this.lblEditando.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.lblEditando.Location = new System.Drawing.Point(20, 15);
+            this.lblEditando.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lblEditando.Name = "lblEditando";
+            this.lblEditando.Size = new System.Drawing.Size(229, 19);
+            this.lblEditando.TabIndex = 9;
+            this.lblEditando.Text = "Editando: (seleccione de la lista)";
+            // 
             // txtBuscar
-            //
-            this.txtBuscar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBuscar.Location = new System.Drawing.Point(12, 34);
+            // 
+            this.txtBuscar.AnimateReadOnly = false;
+            this.txtBuscar.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtBuscar.Depth = 0;
+            this.txtBuscar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtBuscar.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txtBuscar.Hint = "Buscar materia";
+            this.txtBuscar.LeadingIcon = null;
+            this.txtBuscar.Location = new System.Drawing.Point(3, 3);
+            this.txtBuscar.MaxLength = 50;
+            this.txtBuscar.MouseState = MaterialSkin.MouseState.OUT;
+            this.txtBuscar.Multiline = false;
             this.txtBuscar.Name = "txtBuscar";
-            this.txtBuscar.Size = new System.Drawing.Size(182, 20);
-            this.txtBuscar.TabIndex = 1;
+            this.txtBuscar.Size = new System.Drawing.Size(353, 50);
+            this.txtBuscar.TabIndex = 0;
+            this.txtBuscar.Text = "";
+            this.txtBuscar.TrailingIcon = null;
             this.txtBuscar.TextChanged += new System.EventHandler(this.txtBuscar_TextChanged);
-            //
+            // 
             // btnBuscar
-            //
-            this.btnBuscar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBuscar.Location = new System.Drawing.Point(200, 32);
+            // 
+            this.btnBuscar.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnBuscar.AutoSize = false;
+            this.btnBuscar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnBuscar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnBuscar.Depth = 0;
+            this.btnBuscar.HighEmphasis = true;
+            this.btnBuscar.Icon = null;
+            this.btnBuscar.Location = new System.Drawing.Point(364, 6);
+            this.btnBuscar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnBuscar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.Size = new System.Drawing.Size(76, 24);
-            this.btnBuscar.TabIndex = 2;
+            this.btnBuscar.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnBuscar.Size = new System.Drawing.Size(90, 34);
+            this.btnBuscar.TabIndex = 1;
             this.btnBuscar.Text = "Buscar";
+            this.btnBuscar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnBuscar.UseAccentColor = false;
             this.btnBuscar.UseVisualStyleBackColor = true;
             this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
-            //
+            // 
             // dgvMaterias
-            //
-            this.dgvMaterias.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvMaterias.BackgroundColor = System.Drawing.Color.White;
+            // 
             this.dgvMaterias.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvMaterias.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvMaterias.Location = new System.Drawing.Point(0, 78);
+            this.dgvMaterias.Location = new System.Drawing.Point(3, 55);
             this.dgvMaterias.Name = "dgvMaterias";
-            this.dgvMaterias.Size = new System.Drawing.Size(300, 522);
+            this.dgvMaterias.Size = new System.Drawing.Size(459, 381);
             this.dgvMaterias.TabIndex = 1;
             this.dgvMaterias.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMaterias_CellClick);
-            //
-            // tlpBase
-            //
-            this.tlpBase.ColumnCount = 2;
-            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 68F));
-            this.tlpBase.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32F));
-            this.tlpBase.Controls.Add(this.pnlIzquierda, 0, 0);
-            this.tlpBase.Controls.Add(this.pnlBusqueda, 1, 0);
-            this.tlpBase.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpBase.Location = new System.Drawing.Point(0, 0);
-            this.tlpBase.Name = "tlpBase";
-            this.tlpBase.RowCount = 1;
-            this.tlpBase.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpBase.Size = new System.Drawing.Size(860, 600);
-            this.tlpBase.TabIndex = 3;
-            //
-            // pnlIzquierda
-            //
-            this.pnlIzquierda.Controls.Add(this.grpModificar);
-            this.pnlIzquierda.Controls.Add(this.grpCrear);
-            this.pnlIzquierda.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlIzquierda.Location = new System.Drawing.Point(3, 3);
-            this.pnlIzquierda.Name = "pnlIzquierda";
-            this.pnlIzquierda.Size = new System.Drawing.Size(578, 594);
-            this.pnlIzquierda.TabIndex = 0;
-            //
+            // 
+            // materialTabControl1
+            // 
+            this.materialTabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.materialTabControl1.Controls.Add(this.tabPage1);
+            this.materialTabControl1.Controls.Add(this.tabPage2);
+            this.materialTabControl1.Depth = 0;
+            this.materialTabControl1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            this.materialTabControl1.Location = new System.Drawing.Point(6, 51);
+            this.materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialTabControl1.Multiline = true;
+            this.materialTabControl1.Name = "materialTabControl1";
+            this.materialTabControl1.SelectedIndex = 0;
+            this.materialTabControl1.Size = new System.Drawing.Size(848, 543);
+            this.materialTabControl1.TabIndex = 14;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.BackColor = System.Drawing.Color.White;
+            this.tabPage1.Controls.Add(this.tableLayoutPanel1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 26);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(840, 513);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Crear una Materia";
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.Controls.Add(this.cmbEspecialidad, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.txtNombre, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tableAnioCrear, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.tableCargaCrear, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 4);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(834, 507);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // tableAnioCrear
+            // 
+            this.tableAnioCrear.ColumnCount = 2;
+            this.tableAnioCrear.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.tableAnioCrear.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableAnioCrear.Controls.Add(this.lblAnioCrear, 0, 0);
+            this.tableAnioCrear.Controls.Add(this.nudAnioMateria, 1, 0);
+            this.tableAnioCrear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableAnioCrear.Location = new System.Drawing.Point(211, 205);
+            this.tableAnioCrear.Name = "tableAnioCrear";
+            this.tableAnioCrear.RowCount = 1;
+            this.tableAnioCrear.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableAnioCrear.Size = new System.Drawing.Size(411, 95);
+            this.tableAnioCrear.TabIndex = 2;
+            // 
+            // tableCargaCrear
+            // 
+            this.tableCargaCrear.ColumnCount = 2;
+            this.tableCargaCrear.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.tableCargaCrear.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableCargaCrear.Controls.Add(this.lblCargaCrear, 0, 0);
+            this.tableCargaCrear.Controls.Add(this.nudCargaHoraria, 1, 0);
+            this.tableCargaCrear.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableCargaCrear.Location = new System.Drawing.Point(211, 306);
+            this.tableCargaCrear.Name = "tableCargaCrear";
+            this.tableCargaCrear.RowCount = 1;
+            this.tableCargaCrear.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableCargaCrear.Size = new System.Drawing.Size(411, 95);
+            this.tableCargaCrear.TabIndex = 3;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.btnGuardar, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnLimpiarCrear, 0, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(227, 411);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(378, 88);
+            this.tableLayoutPanel2.TabIndex = 4;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.BackColor = System.Drawing.Color.White;
+            this.tabPage2.Controls.Add(this.tableLayoutPanel3);
+            this.tabPage2.Controls.Add(this.lblEditando);
+            this.tabPage2.Controls.Add(this.cmbEditEspecialidad);
+            this.tabPage2.Controls.Add(this.lblEditAnio);
+            this.tabPage2.Controls.Add(this.nudEditAnio);
+            this.tabPage2.Controls.Add(this.txtEditNombre);
+            this.tabPage2.Controls.Add(this.lblEditCarga);
+            this.tabPage2.Controls.Add(this.nudEditCarga);
+            this.tabPage2.Controls.Add(this.btnModificar);
+            this.tabPage2.Controls.Add(this.btnEliminar);
+            this.tabPage2.Controls.Add(this.btnLimpiarEditar);
+            this.tabPage2.Location = new System.Drawing.Point(4, 26);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(840, 450);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Modificar una Materia";
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel3.ColumnCount = 1;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Controls.Add(this.dgvMaterias, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 0, 0);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(366, 3);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 2;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 88F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(465, 439);
+            this.tableLayoutPanel3.TabIndex = 10;
+            // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel4.Controls.Add(this.txtBuscar, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.btnBuscar, 1, 0);
+            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(459, 46);
+            this.tableLayoutPanel4.TabIndex = 0;
+            // 
+            // materialTabSelector1
+            // 
+            this.materialTabSelector1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.materialTabSelector1.BaseTabControl = this.materialTabControl1;
+            this.materialTabSelector1.CharacterCasing = MaterialSkin.Controls.MaterialTabSelector.CustomCharacterCasing.Normal;
+            this.materialTabSelector1.Depth = 0;
+            this.materialTabSelector1.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialTabSelector1.Location = new System.Drawing.Point(6, 4);
+            this.materialTabSelector1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialTabSelector1.Name = "materialTabSelector1";
+            this.materialTabSelector1.Size = new System.Drawing.Size(848, 41);
+            this.materialTabSelector1.TabIndex = 15;
+            // 
             // FrmMaterias
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(860, 600);
-            this.MinimumSize = new System.Drawing.Size(800, 520);
-            this.Controls.Add(this.tlpBase);
+            this.Controls.Add(this.materialTabSelector1);
+            this.Controls.Add(this.materialTabControl1);
+            this.MinimumSize = new System.Drawing.Size(860, 600);
             this.Name = "FrmMaterias";
             this.Text = "Materias";
             this.Load += new System.EventHandler(this.FrmMaterias_Load);
-            this.grpCrear.ResumeLayout(false);
-            this.grpCrear.PerformLayout();
-            this.grpModificar.ResumeLayout(false);
-            this.grpModificar.PerformLayout();
-            this.pnlBusqueda.ResumeLayout(false);
-            this.pnlTopBusqueda.ResumeLayout(false);
-            this.pnlTopBusqueda.PerformLayout();
-            this.tlpBase.ResumeLayout(false);
-            this.pnlIzquierda.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMaterias)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCargaHoraria)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAnioMateria)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEditCarga)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCargaHoraria)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEditAnio)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEditCarga)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMaterias)).EndInit();
+            this.materialTabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableAnioCrear.ResumeLayout(false);
+            this.tableAnioCrear.PerformLayout();
+            this.tableCargaCrear.ResumeLayout(false);
+            this.tableCargaCrear.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.GroupBox grpCrear;
-        private System.Windows.Forms.Label lblNombre;
-        private System.Windows.Forms.TextBox txtNombre;
-        private System.Windows.Forms.Label lblEspecialidad;
-        private System.Windows.Forms.ComboBox cmbEspecialidad;
-        private System.Windows.Forms.Label lblAnio;
+        private MaterialSkin.Controls.MaterialComboBox cmbEspecialidad;
+        private MaterialSkin.Controls.MaterialTextBox2 txtNombre;
+        private MaterialSkin.Controls.MaterialLabel lblAnioCrear;
         private System.Windows.Forms.NumericUpDown nudAnioMateria;
-        private System.Windows.Forms.Label lblCargaHoraria;
+        private MaterialSkin.Controls.MaterialLabel lblCargaCrear;
         private System.Windows.Forms.NumericUpDown nudCargaHoraria;
-        private System.Windows.Forms.Button btnGuardar;
-        private System.Windows.Forms.Button btnLimpiarCrear;
-        private System.Windows.Forms.GroupBox grpModificar;
-        private System.Windows.Forms.Label lblEditando;
-        private System.Windows.Forms.Label lblEditNombre;
-        private System.Windows.Forms.TextBox txtEditNombre;
-        private System.Windows.Forms.Label lblEditEspecialidad;
-        private System.Windows.Forms.ComboBox cmbEditEspecialidad;
-        private System.Windows.Forms.Label lblEditAnio;
+        private MaterialSkin.Controls.MaterialButton btnGuardar;
+        private MaterialSkin.Controls.MaterialButton btnLimpiarCrear;
+        private MaterialSkin.Controls.MaterialComboBox cmbEditEspecialidad;
+        private MaterialSkin.Controls.MaterialLabel lblEditAnio;
         private System.Windows.Forms.NumericUpDown nudEditAnio;
-        private System.Windows.Forms.Label lblEditCarga;
+        private MaterialSkin.Controls.MaterialTextBox2 txtEditNombre;
+        private MaterialSkin.Controls.MaterialLabel lblEditCarga;
         private System.Windows.Forms.NumericUpDown nudEditCarga;
-        private System.Windows.Forms.Button btnModificar;
-        private System.Windows.Forms.Button btnEliminar;
-        private System.Windows.Forms.Button btnLimpiarEditar;
-        private System.Windows.Forms.Panel pnlBusqueda;
-        private System.Windows.Forms.Panel pnlTopBusqueda;
-        private System.Windows.Forms.Label lblTBuscar;
-        private System.Windows.Forms.TextBox txtBuscar;
-        private System.Windows.Forms.Button btnBuscar;
+        private MaterialSkin.Controls.MaterialButton btnModificar;
+        private MaterialSkin.Controls.MaterialButton btnEliminar;
+        private MaterialSkin.Controls.MaterialButton btnLimpiarEditar;
+        private MaterialSkin.Controls.MaterialLabel lblEditando;
+        private MaterialSkin.Controls.MaterialTextBox txtBuscar;
+        private MaterialSkin.Controls.MaterialButton btnBuscar;
         private System.Windows.Forms.DataGridView dgvMaterias;
-        private System.Windows.Forms.TableLayoutPanel tlpBase;
-        private System.Windows.Forms.Panel pnlIzquierda;
+        private MaterialSkin.Controls.MaterialTabControl materialTabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableAnioCrear;
+        private System.Windows.Forms.TableLayoutPanel tableCargaCrear;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private MaterialSkin.Controls.MaterialTabSelector materialTabSelector1;
     }
 }

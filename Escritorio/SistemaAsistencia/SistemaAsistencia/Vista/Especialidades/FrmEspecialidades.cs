@@ -9,7 +9,7 @@ using SistemaAsistencia.Utilidades;
 
 namespace SistemaAsistencia.Vista.Especialidades
 {
-    public partial class FrmEspecialidades : Form
+    public partial class FrmEspecialidades : FrmBaseHijo
     {
         private readonly EspecialidadController especialidadController;
         private List<Especialidad> cacheEspecialidades = new List<Especialidad>();
@@ -24,25 +24,25 @@ namespace SistemaAsistencia.Vista.Especialidades
             Tema.ConfigurarFondo(this);
             Tema.EstilizarGrilla(dgvEspecialidades);
 
-            Tema.EstilizarBoton(btnBuscar, false);
-            Tema.EstilizarBoton(btnLimpiarEditar, false);
-
             // Catálogo fijo (Ciclo Básico + 5 tecnicaturas): solo consulta.
-            // El ABM existe por normalización pero no se edita a mano.
-            grpCrear.Visible = false;
-            btnModificar.Visible = false;
-            btnEliminar.Visible = false;
+            // La pestaña Crear queda bloqueada (aviso + campo deshabilitado)
+            // y en Modificar no se edita a mano (el ABM existe por
+            // normalización pero las filas no se tocan).
+            btnGuardar.Visible = false;
+            btnLimpiarCrear.Visible = false;
+            txtNombre.ReadOnly = true;
+            txtNombre.TabStop = false;
             txtEditNombre.ReadOnly = true;
-            grpModificar.Text = "Catálogo (solo consulta)";
+            // Solo consulta: se esconde la pestaña Crear.
+            materialTabControl1.TabPages.Remove(tabPage1);
             var aviso = new Label
             {
                 AutoSize = true,
-                Location = new System.Drawing.Point(16, 150),
+                Location = new System.Drawing.Point(20, 170),
                 Text = "Catálogo fijo: Ciclo Básico + 5 tecnicaturas (se eligen desde Materias).",
                 ForeColor = System.Drawing.Color.Gray
             };
-            grpModificar.Controls.Add(aviso);
-            txtEditNombre.Location = new System.Drawing.Point(90, 57);
+            tabPage2.Controls.Add(aviso);
         }
 
         private void FrmEspecialidades_Load(object sender, EventArgs e)
@@ -88,7 +88,11 @@ namespace SistemaAsistencia.Vista.Especialidades
         {
             if (string.IsNullOrWhiteSpace(txtNombre.Text))
             {
-                MessageBox.Show("Ingrese el nombre de la especialidad.");
+                MessageBox.Show(
+                    "Ingrese el nombre de la especialidad.",
+                    "Especialidades",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 txtNombre.Focus();
                 return;
             }
@@ -102,19 +106,31 @@ namespace SistemaAsistencia.Vista.Especialidades
 
                 if (especialidadController.AgregarEspecialidad(especialidad))
                 {
-                    MessageBox.Show("Especialidad agregada correctamente.");
+                    MessageBox.Show(
+                        "Especialidad agregada correctamente.",
+                        "Especialidades",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
 
                     CargarEspecialidades();
                     LimpiarCreacion();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo agregar la especialidad.");
+                    MessageBox.Show(
+                        "No se pudo agregar la especialidad.",
+                        "Especialidades",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo agregar la especialidad.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo agregar la especialidad.\n" + ex.Message,
+                    "Especialidades",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -161,7 +177,11 @@ namespace SistemaAsistencia.Vista.Especialidades
 
             if (resultados.Count == 0)
             {
-                MessageBox.Show("Sin resultados para esa búsqueda.");
+                MessageBox.Show(
+                    "Sin resultados para esa búsqueda.",
+                    "Especialidades",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 LimpiarEdicion();
             }
             else if (resultados.Count == 1)
@@ -191,13 +211,22 @@ namespace SistemaAsistencia.Vista.Especialidades
         {
             if (idEspecialidadSeleccionada == 0)
             {
-                MessageBox.Show("Busque y seleccione una especialidad primero.");
+                MessageBox.Show(
+                    "Busque y seleccione una especialidad primero.",
+                    "Especialidades",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(txtEditNombre.Text))
             {
-                MessageBox.Show("Ingrese el nombre de la especialidad.");
+                MessageBox.Show(
+                    "Ingrese el nombre de la especialidad.",
+                    "Especialidades",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                txtEditNombre.Focus();
                 return;
             }
 
@@ -211,19 +240,31 @@ namespace SistemaAsistencia.Vista.Especialidades
 
                 if (especialidadController.ModificarEspecialidad(especialidad))
                 {
-                    MessageBox.Show("Especialidad modificada correctamente.");
+                    MessageBox.Show(
+                        "Especialidad modificada correctamente.",
+                        "Especialidades",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
 
                     CargarEspecialidades();
                     LimpiarEdicion();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo modificar la especialidad.");
+                    MessageBox.Show(
+                        "No se pudo modificar la especialidad.",
+                        "Especialidades",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo modificar la especialidad.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo modificar la especialidad.\n" + ex.Message,
+                    "Especialidades",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -231,7 +272,11 @@ namespace SistemaAsistencia.Vista.Especialidades
         {
             if (idEspecialidadSeleccionada == 0)
             {
-                MessageBox.Show("Busque y seleccione una especialidad primero.");
+                MessageBox.Show(
+                    "Busque y seleccione una especialidad primero.",
+                    "Especialidades",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -256,12 +301,22 @@ namespace SistemaAsistencia.Vista.Especialidades
                     if (confirmar.Resultado == ResultadoEliminacion.Definitiva)
                     {
                         ok = especialidadController.EliminarDefinitivo(idEspecialidadSeleccionada);
-                        if (ok) MessageBox.Show("Especialidad eliminada definitivamente.");
+                        if (ok)
+                            MessageBox.Show(
+                                "Especialidad eliminada definitivamente.",
+                                "Especialidades",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                     }
                     else
                     {
                         ok = especialidadController.DarDeBaja(idEspecialidadSeleccionada);
-                        if (ok) MessageBox.Show("Especialidad dada de baja.");
+                        if (ok)
+                            MessageBox.Show(
+                                "Especialidad dada de baja.",
+                                "Especialidades",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                     }
 
                     if (ok)
@@ -271,13 +326,21 @@ namespace SistemaAsistencia.Vista.Especialidades
                     }
                     else
                     {
-                        MessageBox.Show("No se pudo eliminar.");
+                        MessageBox.Show(
+                            "No se pudo eliminar.",
+                            "Especialidades",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo eliminar.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo eliminar.\n" + ex.Message,
+                    "Especialidades",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -291,6 +354,11 @@ namespace SistemaAsistencia.Vista.Especialidades
             idEspecialidadSeleccionada = 0;
             lblEditando.Text = "Editando: (seleccione de la lista)";
             txtEditNombre.Clear();
+        }
+
+        private void materialTabSelector1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
