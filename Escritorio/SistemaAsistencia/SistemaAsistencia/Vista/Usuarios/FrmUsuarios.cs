@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using SistemaAsistencia.Controlador;
 using SistemaAsistencia.Modelo.Entidades;
+using SistemaAsistencia.Utilidades;
+using SistemaAsistencia.Vista.Comun;
 
 namespace SistemaAsistencia.Vista.Usuarios
 {
-    public partial class FrmUsuarios : Form
+    public partial class FrmUsuarios : FrmBaseHijo
     {
         private readonly UsuarioController usuarioController;
         private List<Usuario> cacheUsuarios = new List<Usuario>();
@@ -17,13 +19,21 @@ namespace SistemaAsistencia.Vista.Usuarios
             InitializeComponent();
 
             usuarioController = new UsuarioController();
+
+            Tema.ConfigurarFondo(this);
+            Tema.EstilizarGrilla(dgvUsuarios);
+
+            InicializarRolesEstaticos();
         }
+
 
         private void FrmUsuarios_Load(object sender, EventArgs e)
         {
+            // La fuente del selector la unifica FrmBaseHijo.
             try
             {
-                CargarRoles();
+                // Ya no hace falta llamar a CargarRoles() aquí. 
+                // El evento Load se concentra exclusivamente en los datos dinámicos.
                 CargarUsuarios();
             }
             catch (Exception ex)
@@ -36,9 +46,9 @@ namespace SistemaAsistencia.Vista.Usuarios
             }
         }
 
-        private void CargarRoles()
+        private void InicializarRolesEstaticos()
         {
-            string[] roles = { "Administrador", "Directivo", "Preceptor", "Docente" };
+            string[] roles = { "Administrador", "Directivo", "Preceptor", "Profesor" };
 
             cmbRol.Items.Clear();
             cmbRol.Items.AddRange(roles);
@@ -79,21 +89,33 @@ namespace SistemaAsistencia.Vista.Usuarios
         {
             if (string.IsNullOrWhiteSpace(txtUsuario.Text))
             {
-                MessageBox.Show("Ingrese un nombre de usuario.");
+                MessageBox.Show(
+                    "Ingrese un nombre de usuario.",
+                    "Usuarios",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 txtUsuario.Focus();
                 return;
             }
 
             if (string.IsNullOrEmpty(txtPassword.Text))
             {
-                MessageBox.Show("Ingrese una contraseña.");
+                MessageBox.Show(
+                    "Ingrese una contraseña.",
+                    "Usuarios",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 txtPassword.Focus();
                 return;
             }
 
             if (cmbRol.SelectedIndex < 0)
             {
-                MessageBox.Show("Seleccione un rol.");
+                MessageBox.Show(
+                    "Seleccione un rol.",
+                    "Usuarios",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 cmbRol.Focus();
                 return;
             }
@@ -110,19 +132,30 @@ namespace SistemaAsistencia.Vista.Usuarios
 
                 if (usuarioController.AgregarUsuario(usuario))
                 {
-                    MessageBox.Show("Usuario agregado correctamente.");
-
+                    MessageBox.Show(
+                        "Usuario agregado correctamente.",
+                        "Usuarios",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                     CargarUsuarios();
                     LimpiarCreacion();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo agregar el usuario (¿nombre duplicado?).");
+                    MessageBox.Show(
+                        "No se pudo agregar el usuario (¿nombre duplicado?).",
+                        "Usuarios",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo agregar el usuario.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo agregar el usuario.\n" + ex.Message,
+                    "Usuarios",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -136,6 +169,16 @@ namespace SistemaAsistencia.Vista.Usuarios
             txtUsuario.Clear();
             txtPassword.Clear();
             cmbRol.SelectedIndex = -1;
+        }
+
+        private void LimpiarEdicion()
+        {
+            idUsuarioSeleccionado = null;
+            lblEditando.Text = "Editando: (seleccione de la lista)";
+            txtEditUsuario.Clear();
+            txtEditPassword.Clear();
+            cmbEditRol.SelectedIndex = -1;
+            chkEditActivo.Checked = false;
         }
 
         // ---------------- 2. Buscar y modificar ----------------
@@ -170,7 +213,11 @@ namespace SistemaAsistencia.Vista.Usuarios
 
             if (resultados.Count == 0)
             {
-                MessageBox.Show("Sin resultados para esa búsqueda.");
+                MessageBox.Show(
+                    "Sin resultados para esa búsqueda.",
+                    "Usuarios",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
                 LimpiarEdicion();
             }
             else if (resultados.Count == 1)
@@ -203,30 +250,51 @@ namespace SistemaAsistencia.Vista.Usuarios
             if (string.IsNullOrWhiteSpace(rol))
             {
                 combo.SelectedIndex = -1;
-                return;
             }
+            else
+            {
+                string rolNormalizado = rol.Trim();
 
-            int indice = combo.FindStringExact(rol.Trim());
-            combo.SelectedIndex = indice >= 0 ? indice : -1;
+                // "Docente" viene de la BD legacy y equivale a "Profesor".
+                if (string.Equals(rolNormalizado, "Docente", StringComparison.OrdinalIgnoreCase))
+                    rolNormalizado = "Profesor";
+
+                int indice = combo.FindStringExact(rolNormalizado);
+                combo.SelectedIndex = indice >= 0 ? indice : -1;
+            }
         }
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
             if (idUsuarioSeleccionado == null)
             {
-                MessageBox.Show("Busque y seleccione un usuario primero.");
+                MessageBox.Show(
+                    "Busque y seleccione un usuario primero.",
+                    "Usuarios",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(txtEditUsuario.Text))
             {
-                MessageBox.Show("Ingrese un nombre de usuario.");
+                MessageBox.Show(
+                    "Ingrese un nombre de usuario.",
+                    "Usuarios",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                txtEditUsuario.Focus();
                 return;
             }
 
             if (cmbEditRol.SelectedIndex < 0)
             {
-                MessageBox.Show("Seleccione un rol.");
+                MessageBox.Show(
+                    "Seleccione un rol.",
+                    "Usuarios",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                cmbEditRol.Focus();
                 return;
             }
 
@@ -236,7 +304,6 @@ namespace SistemaAsistencia.Vista.Usuarios
                 {
                     IdUsuario = idUsuarioSeleccionado.Value,
                     NombreUsuario = txtEditUsuario.Text.Trim(),
-                    // Vacío = no se cambia (el DAO solo la pisa si hay texto).
                     Contrasena = txtEditPassword.Text,
                     Rol = cmbEditRol.SelectedItem.ToString(),
                     Activo = chkEditActivo.Checked
@@ -244,19 +311,30 @@ namespace SistemaAsistencia.Vista.Usuarios
 
                 if (usuarioController.ModificarUsuario(usuario))
                 {
-                    MessageBox.Show("Usuario modificado correctamente.");
-
+                    MessageBox.Show(
+                        "Usuario modificado correctamente.",
+                        "Usuarios",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                     CargarUsuarios();
                     LimpiarEdicion();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo modificar el usuario.");
+                    MessageBox.Show(
+                        "No se pudo modificar el usuario.",
+                        "Usuarios",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo modificar el usuario.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo modificar el usuario.\n" + ex.Message,
+                    "Usuarios",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -264,13 +342,17 @@ namespace SistemaAsistencia.Vista.Usuarios
         {
             if (idUsuarioSeleccionado == null)
             {
-                MessageBox.Show("Busque y seleccione un usuario primero.");
+                MessageBox.Show(
+                    "Busque y seleccione un usuario primero.",
+                    "Usuarios",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
             DialogResult resultado = MessageBox.Show(
                 "¿Desea eliminar este usuario?",
-                "Confirmar",
+                "Usuarios",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
@@ -280,63 +362,36 @@ namespace SistemaAsistencia.Vista.Usuarios
             {
                 if (usuarioController.EliminarUsuario(idUsuarioSeleccionado.Value))
                 {
-                    MessageBox.Show("Usuario eliminado.");
-
+                    MessageBox.Show(
+                        "Usuario eliminado.",
+                        "Usuarios",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                     CargarUsuarios();
                     LimpiarEdicion();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo eliminar.");
+                    MessageBox.Show(
+                        "No se pudo eliminar.",
+                        "Usuarios",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudo eliminar.\n" + ex.Message);
-            }
-        }
-
-        private void btnActivar_Click(object sender, EventArgs e)
-        {
-            if (idUsuarioSeleccionado == null)
-            {
-                MessageBox.Show("Busque y seleccione un usuario primero.");
-                return;
-            }
-
-            try
-            {
-                if (usuarioController.ActivarUsuario(idUsuarioSeleccionado.Value))
-                {
-                    MessageBox.Show("Usuario activado correctamente.");
-
-                    CargarUsuarios();
-                    LimpiarEdicion();
-                }
-                else
-                {
-                    MessageBox.Show("No se pudo activar el usuario.");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("No se pudo activar.\n" + ex.Message);
+                MessageBox.Show(
+                    "No se pudo eliminar.\n" + ex.Message,
+                    "Usuarios",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
         private void btnLimpiarEditar_Click(object sender, EventArgs e)
         {
             LimpiarEdicion();
-        }
-
-        private void LimpiarEdicion()
-        {
-            idUsuarioSeleccionado = null;
-            lblEditando.Text = "Editando: (seleccione de la lista)";
-            txtEditUsuario.Clear();
-            txtEditPassword.Clear();
-            cmbEditRol.SelectedIndex = -1;
-            chkEditActivo.Checked = false;
         }
     }
 }

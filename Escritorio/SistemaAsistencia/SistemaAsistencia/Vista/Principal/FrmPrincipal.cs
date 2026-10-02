@@ -384,6 +384,7 @@ namespace SistemaAsistencia.Vista.Principal
                 panelContenido.Controls.Add(form);
                 panelContenido.Controls.Add(cinta);
                 panelContenido.ResumeLayout(true);
+
                 form.Show();
                 form.BringToFront();
             }
