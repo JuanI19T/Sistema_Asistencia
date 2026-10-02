@@ -31,6 +31,17 @@ namespace SistemaAsistencia.Controlador
                 () => dictadoDAO.ObtenerTodos());
         }
 
+        /// <summary>
+        /// Rangos globales de división y grupo. Son el sobre máximo: el
+        /// rango fino de división depende del ciclo (Ciclo Básico 1-7,
+        /// Tecnicaturas 1-6) y ese lo valida la vista, que conoce la
+        /// materia seleccionada. Grupo: 1-2 en todos los casos
+        /// (0/NULL = todo el curso o toda la división). Acá se defienden
+        /// los límites que MySQL impone y la coherencia entre los dos campos.
+        /// </summary>
+        private const int DivisionMaxima = 7;
+        private const int GrupoMaximo = 2;
+
         // La hora de fin es obligatoria y posterior al inicio.
         private static void Validar(Dictado dictado)
         {
@@ -42,6 +53,18 @@ namespace SistemaAsistencia.Controlador
                 throw new DatosException("Horario de fin inválido. Ejemplo: 10:00");
             if (fin <= inicio)
                 throw new DatosException("La hora de fin debe ser posterior a la de inicio.");
+
+            // Sin división y sin grupo el dictado es de todo el curso: válido.
+            // Con división, el grupo es opcional (toda la división).
+            // Con grupo, la división es obligatoria: un grupo suelto no existe.
+            if (dictado.Grupo.HasValue && !dictado.Division.HasValue)
+                throw new DatosException("Si indicás un grupo, tenés que indicar también la división.");
+            if (dictado.Division.HasValue
+                && (dictado.Division.Value < 1 || dictado.Division.Value > DivisionMaxima))
+                throw new DatosException("La división debe estar entre 1 y " + DivisionMaxima + ".");
+            if (dictado.Grupo.HasValue
+                && (dictado.Grupo.Value < 1 || dictado.Grupo.Value > GrupoMaximo))
+                throw new DatosException("El grupo debe estar entre 1 y " + GrupoMaximo + ".");
         }
 
         /// <summary>
