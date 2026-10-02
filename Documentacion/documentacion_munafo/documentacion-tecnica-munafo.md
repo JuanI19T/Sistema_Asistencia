@@ -35,6 +35,7 @@
 | 12 | [Arquitectura y tecnologías](#s12) | Módulos, bases de datos, despliegue, capas del escritorio y seguridad |
 | 13 | [Plan de pruebas](#s13) | Estrategia progresiva de validación: datos ficticios, aula, curso real y carga institucional |
 | 14 | [Diagramas del sistema](#s14) | Diagrama de contexto, diagrama de procesos principales y modelo entidad-relación |
+| 15 | [Manual de instalación](#s15) | Requisitos, puesta en marcha por módulo y diferencias con la entrega definitiva |
 
 ---
 
@@ -1351,6 +1352,226 @@ erDiagram
         string estado
     }
 ```
+
+---
+
+<a id="s15"></a>
+
+## 15. Manual de instalación y ejecución
+
+El sistema SIA está compuesto por tres módulos que se instalan y ejecutan de forma distinta: el
+aplicativo de escritorio (C# / .NET, se compila con Visual Studio), la API REST (Node.js, se instala
+con npm y se ejecuta con un comando) y la aplicación móvil (React Native / Expo, se ejecuta desde el
+celular con Expo Go). Por eso el manual se organiza por módulo.
+
+Es importante tener en cuenta el estado del proyecto: el sistema todavía está en desarrollo. La
+instalación que se describe a continuación es la de un entorno de desarrollo / prueba, pensada para
+una computadora con las herramientas instaladas, y no es la misma que se entregará cuando la
+aplicación esté terminada. Al final de este manual se aclara en qué diferirá la instalación definitiva
+(instalador del escritorio, aplicación móvil publicada, etc.).
+
+### 15.1 Requisitos previos
+
+#### Hardware
+
+- PC con Windows 10 o superior (para el escritorio y la API).
+- Celular con Android o iOS (para la app móvil).
+- PC y celular en la misma red Wi-Fi para probar la app contra la API local, o conexión a Internet para
+  usar la API desplegada en Railway.
+
+#### Software por módulo
+
+| Módulo | Herramientas necesarias |
+|---|---|
+| Todos | Git (para clonar el repositorio) |
+| Escritorio | Visual Studio 2022 con el workload "Desarrollo de escritorio con .NET"; .NET Framework 4.7.2 Developer Pack |
+| API | Node.js 20+ (incluye npm) |
+| App móvil | Node.js 20+ y la aplicación Expo Go instalada en el celular |
+| Base de datos | MySQL 8.0.16 o superior (o las credenciales de la base ya desplegada en Railway) y un cliente de MySQL (MySQL Workbench o el cliente `mysql` por consola) |
+
+### 15.2 Paso A: clonar el repositorio de GitHub
+
+1. Abrir una terminal (cmd) o Git Bash y ejecutar:
+
+   ```bash
+   git clone https://github.com/JuanI19T/Sistema_Asistencia.git
+   ```
+
+2. Entrar a la carpeta del proyecto:
+
+   ```bash
+   cd Sistema_Asistencia
+   ```
+
+Dentro quedarán las carpetas de los tres módulos: `.net/` (escritorio), `Api/` (API REST) y `App/`
+(aplicación móvil).
+
+### 15.3 Paso B: importar la base de datos
+
+La base de datos se crea importando el archivo de script SQL incluido en el repositorio:
+[`.net/SistemaAsistencia/BD/2026-09-26_reconstruccion_definitiva.sql`](../../.net/SistemaAsistencia/BD/2026-09-26_reconstruccion_definitiva.sql)
+
+El script crea la base `gestion_asistencia_eest` con todas las tablas, las reglas de negocio y los
+datos de prueba ya cargados.
+
+**Con MySQL Workbench:**
+
+1. Abrir MySQL Workbench y conectarse al servidor MySQL.
+2. Menú `File` > `Open SQL Script` y seleccionar el archivo `.sql` indicado.
+3. Ejecutar el script con el botón de rayo (o `Ctrl` + `Shift` + `Enter`).
+
+**Con consola (desde la raíz del proyecto):**
+
+```bash
+mysql -u TU_USUARIO -p < .net/SistemaAsistencia/BD/2026-09-26_reconstruccion_definitiva.sql
+```
+
+> [!WARNING]
+> El script es **destructivo**: elimina la base entera si ya existe y la vuelve a crear desde cero,
+> descartando los datos previos. Debe ejecutarse una sola vez y contra la base que se quiera dejar
+> como definitiva.
+
+Los datos de prueba ya vienen en el script. Para probar el sistema, la contraseña inicial de cada
+usuario es su DNI.
+
+| Rol | Usuario | DNI (contraseña) |
+|---|---|---|
+| Profesor | Carlos Gutiérrez | `30111222` |
+| Profesor | María Fernández | `31222333` |
+| Preceptor | Laura Martínez | `34555666` |
+| Alumno | Juan Pérez | `45222001` |
+| Alumno | Ana Gómez | `45222002` |
+| Alumno | Luis Díaz | `45222003` |
+
+### 15.4 Instalación del aplicativo de escritorio
+
+La aplicación de escritorio se compila con Visual Studio; no se instala como un programa común.
+
+1. Abrir la solución del proyecto con Visual Studio 2022:
+   [`.net/SistemaAsistencia/SistemaAsistencia.slnx`](../../.net/SistemaAsistencia/SistemaAsistencia.slnx)
+2. Restaurar paquetes NuGet. Visual Studio lo hace automáticamente; si no, clic derecho sobre la
+   solución > `Restaurar paquetes NuGet`. Se restauran `MySql.Data`, `MongoDB.Driver`,
+   `MaterialSkin.2` y `CryptSharpOfficial`.
+3. Crear el archivo de credenciales, que es **obligatorio**: el escritorio no arranca sin él y no
+   viene en el repositorio. Se copia desde la plantilla y se completa con las cadenas reales:
+
+   ```bash
+   cd .net/SistemaAsistencia/SistemaAsistencia
+   copy credenciales.env.example credenciales.env
+   ```
+
+   Editar `credenciales.env` y completar las dos líneas:
+
+   ```env
+   MYSQL=Server=localhost;Port=3306;Database=gestion_asistencia_eest;Uid=TU_USUARIO;Pwd=TU_CONTRASEÑA;
+   MONGO=mongodb+srv://USUARIO:CONTRASEÑA@TU_CLUSTER.mongodb.net/
+   ```
+
+   El formato debe ser exacto: sin comillas y sin espacios alrededor del `=`.
+4. Compilar y ejecutar con `F5`. Si no existen usuarios, se abre la pantalla de creación del primer
+   Administrador (`FrmPrimerUsuario`); luego se ingresa con la pantalla de login.
+
+> [!NOTE]
+> En el archivo `App.config` solo hay placeholders de respaldo. Las cadenas reales van siempre en
+> `credenciales.env`, que git ignora.
+
+### 15.5 Instalación de la API REST
+
+1. Ubicarse en la carpeta `Api/` y crear el archivo de configuración desde la plantilla:
+
+   ```bash
+   cd Api
+   copy .env.example .env
+   ```
+
+2. Completar los valores del `.env` con los datos de conexión:
+
+   | Variable | Qué es |
+   |---|---|
+   | `DB_HOST` | Host de MySQL (`localhost`) |
+   | `DB_PORT` | Puerto de MySQL (por defecto `3306`) |
+   | `DB_NAME` | Nombre de la base (`gestion_asistencia_eest`) |
+   | `DB_USER` / `DB_PASS` | Usuario y contraseña de MySQL |
+   | `PORT` | Puerto HTTP de la API (por defecto `3000`) |
+   | `SESSION_SECRET` | Clave secreta para firmar los tokens. Debe ser siempre la misma |
+
+3. Instalar las dependencias y levantar la API:
+
+   ```bash
+   npm install
+   npm start
+   ```
+
+   Para el desarrollo se puede usar `npm run dev`, que recarga automáticamente ante cambios.
+4. Verificar que quedó funcionando en `http://localhost:3000`, por ejemplo abriendo en el navegador
+   `http://localhost:3000/api/health`, que responde un JSON con `"ok": true`.
+
+> [!IMPORTANT]
+> La variable `SESSION_SECRET` es obligatoria: si no se define, la API genera una clave distinta en
+> cada reinicio y todos los tokens quedan inválidos, con lo que hay que volver a iniciar sesión.
+
+### 15.6 Instalación de la aplicación móvil
+
+La app móvil no se instala como un APK todavía: se ejecuta en modo desarrollo con Expo Go desde el
+celular.
+
+1. Ubicarse en la carpeta `App/` e instalar las dependencias:
+
+   ```bash
+   cd App
+   npm install
+   ```
+
+2. Iniciar Expo:
+
+   ```bash
+   npx expo start
+   ```
+
+3. En el celular, abrir la aplicación Expo Go y escanear el código QR que muestra la consola. El
+   celular y la PC deben estar en la misma red Wi-Fi.
+
+Para apuntar la app a la API: por defecto la app detecta la IP de la PC y usa la API local. Si se
+quiere usar la API desplegada en Railway, hay que crear el archivo `App/.env` (ignorado por git) con:
+
+```env
+EXPO_PUBLIC_API_URL=https://NOMBRE_DEL_SERVICIO.up.railway.app
+```
+
+> [!WARNING]
+> Las variables `EXPO_PUBLIC_` viajan dentro de la aplicación: solo deben contener URLs públicas,
+> nunca contraseñas ni secretos.
+
+La contraseña inicial de las cuentas de prueba es el DNI. En modo desarrollo, la pantalla de login
+ofrece las cuentas de prueba como botones de acceso rápido.
+
+### 15.7 Orden de puesta en marcha
+
+Para que el sistema funcione completo, los componentes deben levantarse en este orden:
+
+1. Base de datos importada (punto 15.3).
+2. API en funcionamiento (punto 15.5).
+3. App móvil conectada a la API (punto 15.6).
+4. Escritorio compilado y conectado a la base (punto 15.4).
+
+**Circuito de uso:** el profesor abre una clase desde su dictado en la app (la API genera el código QR
+y el código corto), los alumnos registran su presencia escaneando el QR o ingresando el código, y el
+preceptor ve la asistencia en tiempo real.
+
+### 15.8 Instalación actual vs. instalación definitiva
+
+Como la aplicación aún no está terminada, la forma de instalarla hoy es la de un entorno de
+desarrollo, y será distinta cuando esté lista para entregarse:
+
+| Componente | Hoy (desarrollo) | Cuando esté terminado |
+|---|---|---|
+| Escritorio | Se compila y ejecuta desde Visual Studio (`F5`) | Se distribuiría un instalador (`.exe` / `.msi`) que se instala con doble clic en cualquier PC |
+| API REST | Se levanta local con `npm start` | Ya estaría desplegada en la nube (Railway), sin que el usuario tenga que instalarla |
+| App móvil | Se ejecuta con Expo Go desde el código fuente | Se publicaría un APK instalable (o en las tiendas), y los usuarios la instalarían como cualquier aplicación del celular |
+| Base de datos | Se importa el script en un MySQL local | Ya estaría en servidores de producción, con sus credenciales fuera del repositorio |
+
+En ambos casos se mantiene una regla fija: las credenciales reales de conexión nunca van versionadas
+en el repositorio, solo plantillas (`.example`) con placeholders.
 
 ---
 
