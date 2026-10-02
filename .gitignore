@@ -34,7 +34,7 @@ yarn-error.*
 Thumbs.db
 
 # --- Credenciales reales del escritorio (contienen passwords: NUNCA versionar) ---
-.net/SistemaAsistencia/SistemaAsistencia/credenciales.env
+Escritorio/SistemaAsistencia/SistemaAsistencia/credenciales.env
 
 # --- Respaldos de diagrams.net (archivos .bkp, no son fuente) ---
 *.drawio.bkp
