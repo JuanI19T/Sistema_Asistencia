@@ -47,7 +47,7 @@
 
 | Módulo | Carpeta | Descripción |
 |---|---|---|
-| 🖥️ **Aplicativo de escritorio** | `.net/` | Gestión institucional: alumnos, profesores, preceptores, cursos, materias, dictados, inscripciones y usuarios |
+| 🖥️ **Aplicativo de escritorio** | `Escritorio/` | Gestión institucional: alumnos, profesores, preceptores, cursos, materias, dictados, inscripciones y usuarios |
 | 🔌 **API REST** | `Api/` | Expone los datos a la app, emite eventos en tiempo real (SSE) y gestiona clases con token QR |
 | 📱 **App móvil** | `App/` | Registro de asistencia desde el celular (escaneo QR o código corto) |
 
@@ -122,7 +122,7 @@
 
 ## 5. Tecnologías y arquitectura
 
-**🖥️ Escritorio (`.net/`):**
+**🖥️ Escritorio (`Escritorio/`):**
 - 💬 **Lenguaje:** C# .NET Framework 4.7.2
 - 🪟 **Interfaz:** Windows Forms + MaterialSkin.2
 - 🗄️ **Base relacional:** MySQL `gestion_asistencia_eest`
@@ -164,7 +164,7 @@ Sistema_Asistencia/
 ├── 📖 context.md                             # contexto técnico para humanos y agentes de IA
 ├── 📖 AGENTS.md                              # reglas de trabajo del agente: Git, credenciales y estilo
 ├── .gitignore
-├── 🖥️ .net/                                  # módulo escritorio
+├── 🖥️ Escritorio/                             # módulo escritorio
 │   └── SistemaAsistencia/
 │       ├── SistemaAsistencia.slnx            # abrir en Visual Studio
 │       ├── BD/
@@ -209,7 +209,7 @@ Sistema_Asistencia/
 ```
 
 > 🔒 Archivos **que no están en git** porque contienen datos locales o secretos:
-> `.net/SistemaAsistencia/SistemaAsistencia/credenciales.env` · `Api/.env` · `App/.env`
+> `Escritorio/SistemaAsistencia/SistemaAsistencia/credenciales.env` · `Api/.env` · `App/.env`
 
 ## 7. Requisitos previos
 
@@ -238,13 +238,13 @@ Sistema_Asistencia/
    git clone -b Juan-Torres https://github.com/JuanI19T/Sistema_Asistencia.git
    ```
 
-2. **Abrir la solución:** `.net/SistemaAsistencia/SistemaAsistencia.slnx` en Visual Studio.
+2. **Abrir la solución:** `Escritorio/SistemaAsistencia/SistemaAsistencia.slnx` en Visual Studio.
 
 3. **Restaurar paquetes NuGet** (VS lo hace automático; si no: clic derecho en la solución → *Restaurar paquetes NuGet*). Incluye `MySql.Data`, `MongoDB.Driver`, `MaterialSkin.2` y `CryptSharpOfficial` (**2.1.0.0**, fijo en `packages.config`).
 
 4. 🔴 **Crear el archivo de credenciales.** Este paso es **obligatorio**: sin él el escritorio no arranca, y no viene en el repo.
    ```bash
-   cd .net/SistemaAsistencia/SistemaAsistencia
+   cd Escritorio/SistemaAsistencia/SistemaAsistencia
    copy credenciales.env.example credenciales.env
    ```
    Editá `credenciales.env` y completá las dos líneas con tus cadenas reales:
@@ -267,7 +267,7 @@ Sistema_Asistencia/
 El script definitivo reconstruye todo el esquema, **borra los datos anteriores** e incluye catálogo y datos de prueba:
 
 ```bash
-mysql -u usuario -p < .net/SistemaAsistencia/BD/2026-09-26_reconstruccion_definitiva.sql
+mysql -u usuario -p < Escritorio/SistemaAsistencia/BD/2026-09-26_reconstruccion_definitiva.sql
 ```
 
 🟢 No hace falta ningún script de carga de datos aparte: el dataset de prueba ya viene incluido en el script definitivo, y la contraseña inicial de cada usuario es su DNI (ver [§9](#9-uso-del-sistema)).
