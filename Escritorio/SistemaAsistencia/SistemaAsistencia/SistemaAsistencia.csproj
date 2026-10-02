@@ -216,8 +216,12 @@
     <Compile Include="Utilidades\Ejecutor.cs" />
     <Compile Include="Utilidades\Tema.cs" />
     <Compile Include="Utilidades\TelefonoHelper.cs" />
+    <Compile Include="Utilidades\CicloHelper.cs" />
     <Compile Include="Vista\Comun\CtrlTelefono.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Vista\Comun\FrmBaseHijo.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Vista\Comun\FrmConfirmarEliminar.cs">
       <SubType>Form</SubType>
@@ -234,7 +238,6 @@
     <Compile Include="Vista\PrimerUsuario\FrmPrimerUsuario.Designer.cs">
       <DependentUpon>FrmPrimerUsuario.cs</DependentUpon>
     </Compile>
-    <Compile Include="Vista\PrimerUsuario\UIHelper.cs" />
     <Compile Include="Vista\Principal\FrmInicio.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -305,8 +308,17 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Vista\Dictados\FrmDictados.resx">
+      <DependentUpon>FrmDictados.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Vista\Especialidades\FrmEspecialidades.resx">
+      <DependentUpon>FrmEspecialidades.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Vista\Login\FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Vista\Preceptores\FrmPreceptores.resx">
+      <DependentUpon>FrmPreceptores.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Vista\PrimerUsuario\FrmPrimerUsuario.resx">
       <DependentUpon>FrmPrimerUsuario.cs</DependentUpon>

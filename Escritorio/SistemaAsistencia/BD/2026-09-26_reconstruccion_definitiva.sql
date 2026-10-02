@@ -1,5 +1,5 @@
 -- ============================================================
--- Reconstrucción completa y DEFINITIVA (v7 - reglas EEST)
+-- Reconstrucción completa y DEFINITIVA (v8 - reglas EEST)
 --
 -- 1) ELIMINA la base entera si existe (¡descartás todos los datos!).
 -- 2) Crea la base y TODAS las tablas desde cero.
@@ -19,8 +19,34 @@
 --  d) MATERIA.anio_materia: 1-7 (EEST: 1-3 Ciclo Básico, 4-7 Superior).
 --  e) Teléfono único por persona (se eliminan telefono_emergencia/
 --     telefono_padre/telefono_madre de ALUMNO: la app ya no los usa).
+--  f) DICTADO.division: nueva columna. Junto con `grupo` define a quién
+--     va el dictado, y ambos admiten NULL para los dictados de curso
+--     completo. NO se agregó una tabla `curso`: el alumno no pertenece a
+--     un curso, solo cursa materias de un año, así que división y grupo
+--     son etiquetas del DICTADO y no del alumno.
+--
+--     Alcance de un dictado (sin flags: los NULL ya lo describen):
+--       division NULL | grupo NULL -> todo el curso del año
+--       division  X   | grupo NULL -> toda la división X
+--       division  X   | grupo Y    -> división X, grupo Y
+--
+--     Rangos reales por ciclo (EEST): Ciclo Básico (años 1-3) división
+--     1-7; Tecnicaturas (años 4-7) división 1-6. Grupo 1-2 en todos
+--     los casos (0/NULL = ambos grupos).
+--     Los CHECK de abajo solo acotan el rango máximo global: un CHECK no
+--     puede leer `materia.anio_materia` de otra tabla, así que la regla
+--     fina por ciclo se valida en la app (FrmDictados), igual que la
+--     franja horaria y el ciclo de la materia.
 --
 -- Requiere MySQL 8.0.16+ (CHECK + REGEXP).
+-- Ejecutar como SCRIPT COMPLETO (todo el archivo de una vez), con
+-- "stop on error" activado: si se corta en el medio queda la base a medias.
+--
+-- OJO con DBeaver: como el script borra y recrea la base desde la misma
+-- sesión, DBeaver conserva el árbol de metadatos cacheado de la base vieja
+-- y la columna nueva no aparece. Hay que RECONECTAR la conexión (F2, o
+-- click derecho -> Reconnect), no alcanza con recargar el schema.
+--
 -- Reemplaza al script v6.2 (la semilla de datos también viene incluida:
 -- Api/scripts/seed.js fue retirado).
 -- ============================================================
@@ -131,6 +157,7 @@ CREATE TABLE `alumno` (
 
 -- ------------------------------------------------------------
 -- dictado
+--   division/grupo NULL = todo el curso (ver encabezado, regla f)
 -- ------------------------------------------------------------
 CREATE TABLE `dictado` (
   `id_dictado` int NOT NULL AUTO_INCREMENT,
@@ -140,17 +167,20 @@ CREATE TABLE `dictado` (
   `dia` varchar(15) COLLATE utf8mb4_spanish_ci NOT NULL,
   `horario` time NOT NULL,
   `horario_fin` time DEFAULT NULL,
-  `grupo` varchar(50) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `division` int DEFAULT NULL,
+  `grupo` int DEFAULT NULL,
   `anio_lectivo` int NOT NULL,
   `activo` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_dictado`),
   KEY `FK_DICTADO_MATERIA` (`id_materia`),
   KEY `FK_DICTADO_PROFESOR` (`id_profesor`),
   KEY `FK_DICTADO_PRECEPTOR` (`id_preceptor`),
+  KEY `IX_DICTADO_ALCANCE` (`anio_lectivo`,`division`,`grupo`),
   CONSTRAINT `FK_DICTADO_MATERIA` FOREIGN KEY (`id_materia`) REFERENCES `materia` (`id_materia`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `FK_DICTADO_PRECEPTOR` FOREIGN KEY (`id_preceptor`) REFERENCES `preceptor` (`id_preceptor`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `FK_DICTADO_PROFESOR` FOREIGN KEY (`id_profesor`) REFERENCES `profesor` (`id_profesor`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `CHK_DICTADO_GRUPO` CHECK (`grupo` IN ('1', '2', '3')),
+  CONSTRAINT `CHK_DICTADO_GRUPO` CHECK (`grupo` IS NULL OR `grupo` BETWEEN 1 AND 2),
+  CONSTRAINT `CHK_DICTADO_DIVISION` CHECK (`division` IS NULL OR `division` BETWEEN 1 AND 7),
   CONSTRAINT `CHK_DICTADO_HORARIO` CHECK (`horario_fin` IS NULL OR `horario_fin` > `horario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
@@ -227,7 +257,7 @@ CREATE TABLE `usuario` (
 -- IDs predecibles porque la base nace vacía:
 --   especialidad 1=Ciclo Básico, 2=Programación, 3=Química, ...
 --   materia 1-2=Ciclo Básico (años 1-2), 3-4=tecnicaturas (año 4)
---   profesor 1-2, preceptor 1, alumno 1-3, dictado 1-2
+--   profesor 1-2, preceptor 1, alumno 1-3, dictado 1-3
 -- Contraseñas = DNI con bcrypt cost 10 (formato del portal),
 -- así el portal loguea con DNI desde el día uno.
 -- ============================================================
@@ -268,16 +298,25 @@ INSERT INTO `alumno`
    'luis.diaz@escuela.edu.ar', '54 115 5550021',
    '$2b$10$RAu0I.Iz4nb.dQ2DE06PRun9BaWLG3gAj8x3QrZFLsONrl0XAL5au');
 
+-- Los 3 dictados cubren los tres alcances posibles:
+--   1) división + grupo -> clase de una división y un grupo
+--   2) división + grupo -> ídem en Ciclo Básico
+--   3) NULL + NULL      -> materia que se da a TODO EL CURSO
 INSERT INTO `dictado`
-  (`id_materia`, `id_profesor`, `id_preceptor`, `dia`, `horario`, `horario_fin`, `grupo`, `anio_lectivo`) VALUES
-  (3, 1, 1, 'LUNES', '08:00:00', '10:00:00', '2', 2026),
-  (1, 2, 1, 'MARTES', '10:00:00', '12:00:00', '1', 2026);
+  (`id_materia`, `id_profesor`, `id_preceptor`, `dia`, `horario`, `horario_fin`,
+   `division`, `grupo`, `anio_lectivo`) VALUES
+  (3, 1, 1, 'LUNES',    '08:00:00', '10:00:00', 1, 2, 2026),
+  (1, 2, 1, 'MARTES',   '10:00:00', '12:00:00', 3, 1, 2026),
+  (2, 1, 1, 'MIÉRCOLES','09:00:00', '11:00:00', NULL, NULL, 2026);
 
 INSERT INTO `inscribe` (`id_alumno`, `id_dictado`, `anio_inicio`) VALUES
   (1, 1, 2026),
   (2, 1, 2026),
   (3, 1, 2026),
-  (1, 2, 2026);
+  (1, 2, 2026),
+  (1, 3, 2026),
+  (2, 3, 2026),
+  (3, 3, 2026);
 
 INSERT INTO `clase` (`id_dictado`, `fecha_clase`, `estado`) VALUES
   (1, CURDATE(), 'programada');

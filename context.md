@@ -38,7 +38,7 @@ intermedia y una app móvil para registrar asistencia en el aula (QR / código c
 
 | Módulo | Carpeta | Stack | Rol |
 |---|---|---|---|
-| 🖥️ **Escritorio** | `.net/SistemaAsistencia/` | C# .NET Framework 4.7.2, WinForms, MaterialSkin | ABMs institucionales (alumnos, profesores, preceptores, materias, especialidades, dictados, inscripciones, usuarios). Escribe **directo a MySQL**. Autentica usuarios propios contra **MongoDB Atlas** |
+| 🖥️ **Escritorio** | `Escritorio/SistemaAsistencia/` | C# .NET Framework 4.7.2, WinForms, MaterialSkin | ABMs institucionales (alumnos, profesores, preceptores, materias, especialidades, dictados, inscripciones, usuarios). Escribe **directo a MySQL**. Autentica usuarios propios contra **MongoDB Atlas** |
 | 🔌 **API** | `Api/` | Node.js, Express 5, mysql2, bcryptjs | Único acceso a MySQL de la app. Endpoints REST + **SSE** (`/api/eventos`). Login por rol con `dni` + bcrypt, token Bearer |
 | 📱 **App móvil** | `App/` | React Native + Expo 57 (Expo Go) | Login y pantallas por rol. Escaneo QR (`expo-camera`), SSE con reconexión automática. **Habla solo con la API**, nunca directo a la BD |
 
@@ -79,24 +79,41 @@ graph TB
 ## 3. Base de datos (MySQL) 🗄️
 
 **Script definitivo:**
-`.net/SistemaAsistencia/BD/2026-09-26_reconstruccion_definitiva.sql`
+`Escritorio/SistemaAsistencia/BD/2026-09-26_reconstruccion_definitiva.sql`
 
 Reconstruye todo el esquema, **borra los datos previos** e incluye catálogo y datos de prueba.
 
 **Tablas:** `especialidad`, `materia`, `profesor`, `preceptor`, `alumno`, `dictado`, `inscribe`,
 `clase`, `asistencia`, `usuario`.
 
+**Alcance de un dictado 🔴** · `dictado` lleva `division` y `grupo`, y **ambos admiten NULL**.
+No hay tabla `curso`: el alumno no pertenece a un curso, solo cursa materias de un año, así que
+división y grupo son etiquetas **del dictado**, no del alumno.
+
+| `division` | `grupo` | Significa |
+|---|---|---|
+| `NULL` | `NULL` | **Todo el curso** (materia que se da al curso entero) |
+| `5` | `NULL` | Toda la división 5 |
+| `5` | `2` | División 5, grupo 2 |
+
+Rangos reales por ciclo: **Ciclo Básico** (años 1-3) división 1-7; **Tecnicaturas**
+(años 4-7) división 1-6. **Grupo 1-2 en todos los casos** (0/`NULL` = ambos grupos).
+Los `CHECK` de MySQL solo acotan el máximo global, porque
+un `CHECK` no puede leer `materia.anio_materia` de otra tabla: la regla fina por ciclo se valida
+en `FrmDictados.AlcanceValido()` y en `DictadoController.Validar()`.
+En la UI el `0` representa el `NULL` ("todo el curso").
+
 **Restaurar** (desde la raíz del repo):
 
 ```bash
-mysql -u usuario -p < .net/SistemaAsistencia/BD/2026-09-26_reconstruccion_definitiva.sql
+mysql -u usuario -p < Escritorio/SistemaAsistencia/BD/2026-09-26_reconstruccion_definitiva.sql
 ```
 
 <a id="s4"></a>
 
 ## 4. Arquitectura del escritorio (MVC en capas) 🏛️
 
-Raíz del proyecto: `.net/SistemaAsistencia/SistemaAsistencia/`
+Raíz del proyecto: `Escritorio/SistemaAsistencia/SistemaAsistencia/`
 
 | Capa | Contenido |
 |---|---|
@@ -120,7 +137,7 @@ Orden sugerido: **BD → API → App**. El escritorio es independiente de los ot
 El escritorio **no arranca sin** `credenciales.env`. No está en git, hay que crearlo una vez por máquina:
 
 ```bash
-cd .net/SistemaAsistencia/SistemaAsistencia
+cd Escritorio/SistemaAsistencia/SistemaAsistencia
 copy credenciales.env.example credenciales.env
 ```
 
@@ -172,7 +189,7 @@ Escaneá el QR con **Expo Go**. Requisito: PC y celular en la **misma red Wi-Fi*
 
 ### 4 — Escritorio 🖥️
 
-Abrí `.net/SistemaAsistencia/SistemaAsistencia.slnx` en Visual Studio, restaurá NuGet y F5.
+Abrí `Escritorio/SistemaAsistencia/SistemaAsistencia.slnx` en Visual Studio, restaurá NuGet y F5.
 
 > 🔴 **Build por consola**: usá el **MSBuild de Visual Studio 18**
 > (`C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe`).
@@ -302,14 +319,16 @@ Por eso el escritorio normalizó sus queries (`FROM alumno`, no `FROM ALUMNO`).
 | `Api/utilidades/autenticacion.js` | Emisión y verificación del token (Bearer) |
 | `Api/utilidades/eventos.js` | Bus de eventos SSE en memoria |
 | `Api/utilidades/asistencia.js` | Validaciones del módulo de asistencia |
+| `Api/utilidades/alcance.js` | Texto del alcance de un dictado (división/grupo/`NULL`) |
+| `App/src/alcance.js` | Idem en la app, con fallback si la API es vieja |
 | `Api/.env.example` | Plantilla de configuración de la API |
 | `App/App.js` | Login + enrutado por rol |
 | `App/src/api.js` | Cliente HTTP/SSE (detecta host, guarda el token) |
 | `App/src/pantallas/` | `ProfesorPrincipal.js` · `PreceptorPrincipal.js` · `AlumnoPrincipal.js` |
-| `.net/.../SistemaAsistencia.slnx` | Solución del escritorio (abrir en Visual Studio) |
-| `.net/.../Modelo/Conexion/Credenciales.cs` | Lee el `.env` del escritorio (versionado, sin secretos) |
-| `.net/.../credenciales.env.example` | Plantilla de credenciales del escritorio |
-| `.net/SistemaAsistencia/BD/` | Script SQL definitivo de reconstrucción |
+| `Escritorio/.../SistemaAsistencia.slnx` | Solución del escritorio (abrir en Visual Studio) |
+| `Escritorio/.../Modelo/Conexion/Credenciales.cs` | Lee el `.env` del escritorio (versionado, sin secretos) |
+| `Escritorio/.../credenciales.env.example` | Plantilla de credenciales del escritorio |
+| `Escritorio/SistemaAsistencia/BD/` | Script SQL definitivo de reconstrucción |
 | `.vscode/launch.json` | Debug de API + App en un F5 |
 
 <a id="s11"></a>
