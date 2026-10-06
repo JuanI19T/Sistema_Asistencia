@@ -47,39 +47,29 @@ namespace SistemaAsistencia.Vista.Especialidades
 
         private void FrmEspecialidades_Load(object sender, EventArgs e)
         {
-            try
-            {
-                CargarEspecialidades();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo cargar especialidades.\n" + ex.Message,
-                    "Error de conexión",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            CargaVista.IntentarCarga(CargarEspecialidades, "especialidades");
         }
 
         private void CargarEspecialidades()
         {
             cacheEspecialidades =
-                especialidadController.ObtenerEspecialidades() ?? new List<Especialidad>();
+                CargaVista.ObtenerLista(() => especialidadController.ObtenerEspecialidades());
             MostrarEnGrilla(cacheEspecialidades);
         }
 
         private void MostrarEnGrilla(List<Especialidad> lista)
         {
-            dgvEspecialidades.DataSource = null;
-            dgvEspecialidades.DataSource = lista;
+            CargaVista.MostrarEnGrilla(dgvEspecialidades, lista, ConfigurarColumnasEspecialidades);
+        }
 
-            if (dgvEspecialidades.Columns.Count > 0)
-            {
-                if (dgvEspecialidades.Columns.Contains("IdEspecialidad"))
-                    dgvEspecialidades.Columns["IdEspecialidad"].Visible = false;
-                if (dgvEspecialidades.Columns.Contains("NombreEspecialidad"))
-                    dgvEspecialidades.Columns["NombreEspecialidad"].HeaderText = "Especialidad";
-            }
+        private void ConfigurarColumnasEspecialidades(DataGridView dgv)
+        {
+            if (dgv.Columns.Count == 0) return;
+
+            if (dgv.Columns.Contains("IdEspecialidad"))
+                dgv.Columns["IdEspecialidad"].Visible = false;
+            if (dgv.Columns.Contains("NombreEspecialidad"))
+                dgv.Columns["NombreEspecialidad"].HeaderText = "Especialidad";
         }
 
         // ---------------- 1. Crear ----------------
@@ -97,41 +87,44 @@ namespace SistemaAsistencia.Vista.Especialidades
                 return;
             }
 
-            try
+            EjecutarConLayout(() =>
             {
-                Especialidad especialidad = new Especialidad
+                try
                 {
-                    NombreEspecialidad = txtNombre.Text.Trim().ToUpper()
-                };
+                    Especialidad especialidad = new Especialidad
+                    {
+                        NombreEspecialidad = txtNombre.Text.Trim().ToUpper()
+                    };
 
-                if (especialidadController.AgregarEspecialidad(especialidad))
+                    if (especialidadController.AgregarEspecialidad(especialidad))
+                    {
+                        MessageBox.Show(
+                            "Especialidad agregada correctamente.",
+                            "Especialidades",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+
+                        CargarEspecialidades();
+                        LimpiarCreacion();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "No se pudo agregar la especialidad.",
+                            "Especialidades",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show(
-                        "Especialidad agregada correctamente.",
+                        "No se pudo agregar la especialidad.\n" + ex.Message,
                         "Especialidades",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
-                    CargarEspecialidades();
-                    LimpiarCreacion();
+                        MessageBoxIcon.Error);
                 }
-                else
-                {
-                    MessageBox.Show(
-                        "No se pudo agregar la especialidad.",
-                        "Especialidades",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo agregar la especialidad.\n" + ex.Message,
-                    "Especialidades",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            });
         }
 
         private void btnLimpiarCrear_Click(object sender, EventArgs e)
@@ -161,33 +154,16 @@ namespace SistemaAsistencia.Vista.Especialidades
         {
             string texto = txtBuscar.Text.Trim();
 
-            if (string.IsNullOrEmpty(texto))
-            {
-                MostrarEnGrilla(cacheEspecialidades);
-                return;
-            }
-
-            List<Especialidad> resultados = cacheEspecialidades.FindAll(item =>
-                item.NombreEspecialidad != null &&
-                item.NombreEspecialidad.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0);
-
-            MostrarEnGrilla(resultados);
-
-            if (!interactivo) return;
-
-            if (resultados.Count == 0)
-            {
-                MessageBox.Show(
-                    "Sin resultados para esa búsqueda.",
-                    "Especialidades",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-                LimpiarEdicion();
-            }
-            else if (resultados.Count == 1)
-            {
-                CargarEnEdicion(resultados[0]);
-            }
+            CargaVista.FiltrarCache(
+                cacheEspecialidades,
+                texto,
+                item => item.NombreEspecialidad != null &&
+                        item.NombreEspecialidad.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0,
+                MostrarEnGrilla,
+                CargarEnEdicion,
+                LimpiarEdicion,
+                "Especialidades",
+                interactivo);
         }
 
         private void dgvEspecialidades_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -202,9 +178,12 @@ namespace SistemaAsistencia.Vista.Especialidades
 
         private void CargarEnEdicion(Especialidad especialidad)
         {
-            idEspecialidadSeleccionada = especialidad.IdEspecialidad;
-            lblEditando.Text = "Editando: " + especialidad.NombreEspecialidad;
-            txtEditNombre.Text = especialidad.NombreEspecialidad;
+            EjecutarConLayout(() =>
+            {
+                idEspecialidadSeleccionada = especialidad.IdEspecialidad;
+                lblEditando.Text = "Editando: " + especialidad.NombreEspecialidad;
+                txtEditNombre.Text = especialidad.NombreEspecialidad;
+            });
         }
 
         private void btnModificar_Click(object sender, EventArgs e)
@@ -230,42 +209,45 @@ namespace SistemaAsistencia.Vista.Especialidades
                 return;
             }
 
-            try
+            EjecutarConLayout(() =>
             {
-                Especialidad especialidad = new Especialidad
+                try
                 {
-                    IdEspecialidad = idEspecialidadSeleccionada,
-                    NombreEspecialidad = txtEditNombre.Text.Trim().ToUpper()
-                };
+                    Especialidad especialidad = new Especialidad
+                    {
+                        IdEspecialidad = idEspecialidadSeleccionada,
+                        NombreEspecialidad = txtEditNombre.Text.Trim().ToUpper()
+                    };
 
-                if (especialidadController.ModificarEspecialidad(especialidad))
+                    if (especialidadController.ModificarEspecialidad(especialidad))
+                    {
+                        MessageBox.Show(
+                            "Especialidad modificada correctamente.",
+                            "Especialidades",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+
+                        CargarEspecialidades();
+                        LimpiarEdicion();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "No se pudo modificar la especialidad.",
+                            "Especialidades",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show(
-                        "Especialidad modificada correctamente.",
+                        "No se pudo modificar la especialidad.\n" + ex.Message,
                         "Especialidades",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
-                    CargarEspecialidades();
-                    LimpiarEdicion();
+                        MessageBoxIcon.Error);
                 }
-                else
-                {
-                    MessageBox.Show(
-                        "No se pudo modificar la especialidad.",
-                        "Especialidades",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo modificar la especialidad.\n" + ex.Message,
-                    "Especialidades",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            });
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
@@ -285,63 +267,66 @@ namespace SistemaAsistencia.Vista.Especialidades
 
             if (especialidad == null) return;
 
-            try
+            EjecutarConLayout(() =>
             {
-                string descripcion = "Especialidad: " + especialidad.NombreEspecialidad;
-
-                List<Dependencia> dependencias =
-                    especialidadController.ObtenerDependencias(idEspecialidadSeleccionada);
-
-                using (var confirmar = new FrmConfirmarEliminar(descripcion, dependencias))
+                try
                 {
-                    if (confirmar.ShowDialog(this) != DialogResult.OK) return;
+                    string descripcion = "Especialidad: " + especialidad.NombreEspecialidad;
 
-                    bool ok;
+                    List<Dependencia> dependencias =
+                        especialidadController.ObtenerDependencias(idEspecialidadSeleccionada);
 
-                    if (confirmar.Resultado == ResultadoEliminacion.Definitiva)
+                    using (var confirmar = new FrmConfirmarEliminar(descripcion, dependencias))
                     {
-                        ok = especialidadController.EliminarDefinitivo(idEspecialidadSeleccionada);
+                        if (confirmar.ShowDialog(this) != DialogResult.OK) return;
+
+                        bool ok;
+
+                        if (confirmar.Resultado == ResultadoEliminacion.Definitiva)
+                        {
+                            ok = especialidadController.EliminarDefinitivo(idEspecialidadSeleccionada);
+                            if (ok)
+                                MessageBox.Show(
+                                    "Especialidad eliminada definitivamente.",
+                                    "Especialidades",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            ok = especialidadController.DarDeBaja(idEspecialidadSeleccionada);
+                            if (ok)
+                                MessageBox.Show(
+                                    "Especialidad dada de baja.",
+                                    "Especialidades",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                        }
+
                         if (ok)
+                        {
+                            CargarEspecialidades();
+                            LimpiarEdicion();
+                        }
+                        else
+                        {
                             MessageBox.Show(
-                                "Especialidad eliminada definitivamente.",
+                                "No se pudo eliminar.",
                                 "Especialidades",
                                 MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        ok = especialidadController.DarDeBaja(idEspecialidadSeleccionada);
-                        if (ok)
-                            MessageBox.Show(
-                                "Especialidad dada de baja.",
-                                "Especialidades",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-                    }
-
-                    if (ok)
-                    {
-                        CargarEspecialidades();
-                        LimpiarEdicion();
-                    }
-                    else
-                    {
-                        MessageBox.Show(
-                            "No se pudo eliminar.",
-                            "Especialidades",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
+                                MessageBoxIcon.Warning);
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo eliminar.\n" + ex.Message,
-                    "Especialidades",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        "No se pudo eliminar.\n" + ex.Message,
+                        "Especialidades",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            });
         }
 
         private void btnLimpiarEditar_Click(object sender, EventArgs e)

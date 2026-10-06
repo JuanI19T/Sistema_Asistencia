@@ -69,43 +69,28 @@ namespace SistemaAsistencia.Vista.Dictados
 
         private void FrmDictados_Load(object sender, EventArgs e)
         {
-            try
+            CargaVista.IntentarCarga(() =>
             {
                 CargarFiltrosEspecialidad();
                 CargarMaterias();
                 CargarProfesores();
                 CargarDictados();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo cargar dictados.\n" + ex.Message,
-                    "Error de conexión",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            }, "dictados");
         }
 
         private void CargarFiltrosEspecialidad()
         {
-            List<Especialidad> lista = especialidadController.ObtenerEspecialidades()
-                ?? new List<Especialidad>();
+            List<Especialidad> lista = CargaVista.ObtenerLista(
+                () => especialidadController.ObtenerEspecialidades());
 
             // Sin "Todas": la cascada exige elegir especialidad (paso 1).
-            cmbFiltroEspecialidad.DataSource = new List<Especialidad>(lista);
-            cmbFiltroEspecialidad.DisplayMember = "NombreEspecialidad";
-            cmbFiltroEspecialidad.ValueMember = "IdEspecialidad";
-            cmbFiltroEspecialidad.SelectedIndex = -1;
-
-            cmbEditFiltroEspecialidad.DataSource = new List<Especialidad>(lista);
-            cmbEditFiltroEspecialidad.DisplayMember = "NombreEspecialidad";
-            cmbEditFiltroEspecialidad.ValueMember = "IdEspecialidad";
-            cmbEditFiltroEspecialidad.SelectedIndex = -1;
+            CargaVista.CargarCombo(cmbFiltroEspecialidad, lista, "NombreEspecialidad", "IdEspecialidad");
+            CargaVista.CargarCombo(cmbEditFiltroEspecialidad, lista, "NombreEspecialidad", "IdEspecialidad");
         }
 
         private void CargarMaterias()
         {
-            cacheMaterias = materiaController.ObtenerMaterias() ?? new List<Materia>();
+            cacheMaterias = CargaVista.ObtenerLista(() => materiaController.ObtenerMaterias());
             FiltrarMateriasCrear();
             FiltrarMateriasEditar();
         }
@@ -379,60 +364,55 @@ namespace SistemaAsistencia.Vista.Dictados
 
         private void CargarProfesores()
         {
-            List<Profesor> lista = profesorController.ObtenerProfesores();
+            List<Profesor> lista = CargaVista.ObtenerLista(
+                () => profesorController.ObtenerProfesores());
 
-            cmbProfesor.DataSource = new List<Profesor>(lista);
-            cmbProfesor.DisplayMember = "NombreCompleto";
-            cmbProfesor.ValueMember = "IdProfesor";
-            cmbProfesor.SelectedIndex = -1;
-
-            cmbEditProfesor.DataSource = new List<Profesor>(lista);
-            cmbEditProfesor.DisplayMember = "NombreCompleto";
-            cmbEditProfesor.ValueMember = "IdProfesor";
-            cmbEditProfesor.SelectedIndex = -1;
+            CargaVista.CargarCombo(cmbProfesor, lista, "NombreCompleto", "IdProfesor");
+            CargaVista.CargarCombo(cmbEditProfesor, lista, "NombreCompleto", "IdProfesor");
         }
 
         private void CargarDictados()
         {
-            cacheDictados = dictadoController.ObtenerDictados() ?? new List<Dictado>();
+            cacheDictados = CargaVista.ObtenerLista(() => dictadoController.ObtenerDictados());
             MostrarEnGrilla(cacheDictados);
         }
 
         private void MostrarEnGrilla(List<Dictado> lista)
         {
-            dgvDictados.DataSource = null;
-            dgvDictados.DataSource = lista;
+            CargaVista.MostrarEnGrilla(dgvDictados, lista, ConfigurarColumnasDictados);
+        }
 
-            if (dgvDictados.Columns.Count > 0)
+        private void ConfigurarColumnasDictados(DataGridView dgv)
+        {
+            if (dgv.Columns.Count == 0) return;
+
+            if (dgv.Columns.Contains("IdDictado"))
+                dgv.Columns["IdDictado"].Visible = false;
+            if (dgv.Columns.Contains("IdMateria"))
+                dgv.Columns["IdMateria"].Visible = false;
+            if (dgv.Columns.Contains("IdProfesor"))
+                dgv.Columns["IdProfesor"].Visible = false;
+            // Se muestra el alcance ya resuelto ("Todo el curso",
+            // "Div. 3 - Grupo 1") en vez de los dos números crudos.
+            if (dgv.Columns.Contains("Division"))
+                dgv.Columns["Division"].Visible = false;
+            if (dgv.Columns.Contains("Grupo"))
+                dgv.Columns["Grupo"].Visible = false;
+            if (dgv.Columns.Contains("Activo"))
+                dgv.Columns["Activo"].Visible = false;
+            if (dgv.Columns.Contains("Descripcion"))
+                dgv.Columns["Descripcion"].Visible = false;
+            if (dgv.Columns.Contains("Alcance"))
             {
-                if (dgvDictados.Columns.Contains("IdDictado"))
-                    dgvDictados.Columns["IdDictado"].Visible = false;
-                if (dgvDictados.Columns.Contains("IdMateria"))
-                    dgvDictados.Columns["IdMateria"].Visible = false;
-                if (dgvDictados.Columns.Contains("IdProfesor"))
-                    dgvDictados.Columns["IdProfesor"].Visible = false;
-                // Se muestra el alcance ya resuelto ("Todo el curso",
-                // "Div. 3 - Grupo 1") en vez de los dos números crudos.
-                if (dgvDictados.Columns.Contains("Division"))
-                    dgvDictados.Columns["Division"].Visible = false;
-                if (dgvDictados.Columns.Contains("Grupo"))
-                    dgvDictados.Columns["Grupo"].Visible = false;
-                if (dgvDictados.Columns.Contains("Activo"))
-                    dgvDictados.Columns["Activo"].Visible = false;
-                if (dgvDictados.Columns.Contains("Descripcion"))
-                    dgvDictados.Columns["Descripcion"].Visible = false;
-                if (dgvDictados.Columns.Contains("Alcance"))
-                {
-                    dgvDictados.Columns["Alcance"].HeaderText = "Alcance";
-                    dgvDictados.Columns["Alcance"].DisplayIndex = 1;
-                }
-                if (dgvDictados.Columns.Contains("NombreMateria"))
-                    dgvDictados.Columns["NombreMateria"].HeaderText = "Materia";
-                if (dgvDictados.Columns.Contains("ApellidoProfesor"))
-                    dgvDictados.Columns["ApellidoProfesor"].HeaderText = "Profesor";
-                if (dgvDictados.Columns.Contains("AnioLectivo"))
-                    dgvDictados.Columns["AnioLectivo"].HeaderText = "Año";
+                dgv.Columns["Alcance"].HeaderText = "Alcance";
+                dgv.Columns["Alcance"].DisplayIndex = 1;
             }
+            if (dgv.Columns.Contains("NombreMateria"))
+                dgv.Columns["NombreMateria"].HeaderText = "Materia";
+            if (dgv.Columns.Contains("ApellidoProfesor"))
+                dgv.Columns["ApellidoProfesor"].HeaderText = "Profesor";
+            if (dgv.Columns.Contains("AnioLectivo"))
+                dgv.Columns["AnioLectivo"].HeaderText = "Año";
         }
 
         // ---------------- 1. Crear ----------------
@@ -451,48 +431,51 @@ namespace SistemaAsistencia.Vista.Dictados
             if (!AlcanceValido(idMateriaCrear, nudDivision, nudGrupo))
                 return;
 
-            try
+            EjecutarConLayout(() =>
             {
-                Dictado dictado = new Dictado
+                try
                 {
-                    IdMateria = idMateriaCrear,
-                    IdProfesor = Convert.ToInt32(cmbProfesor.SelectedValue),
-                    Dia = Convert.ToString(cmbDia.SelectedItem),
-                    Horario = FormatearHora(dtpHorario.Value),
-                    HorarioFin = FormatearHora(dtpHorarioFin.Value),
-                    Division = AlcanceOpcional(nudDivision),
-                    Grupo = AlcanceOpcional(nudGrupo),
-                    AnioLectivo = Convert.ToInt32(nudAnioLectivo.Value)
-                };
+                    Dictado dictado = new Dictado
+                    {
+                        IdMateria = idMateriaCrear,
+                        IdProfesor = Convert.ToInt32(cmbProfesor.SelectedValue),
+                        Dia = Convert.ToString(cmbDia.SelectedItem),
+                        Horario = FormatearHora(dtpHorario.Value),
+                        HorarioFin = FormatearHora(dtpHorarioFin.Value),
+                        Division = AlcanceOpcional(nudDivision),
+                        Grupo = AlcanceOpcional(nudGrupo),
+                        AnioLectivo = Convert.ToInt32(nudAnioLectivo.Value)
+                    };
 
-                if (dictadoController.AgregarDictado(dictado))
+                    if (dictadoController.AgregarDictado(dictado))
+                    {
+                        MessageBox.Show(
+                            "Dictado agregado correctamente.",
+                            "Dictados",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+
+                        CargarDictados();
+                        LimpiarCreacion();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "No se pudo agregar el dictado.",
+                            "Dictados",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show(
-                        "Dictado agregado correctamente.",
+                        "No se pudo agregar el dictado.\n" + ex.Message,
                         "Dictados",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
-                    CargarDictados();
-                    LimpiarCreacion();
+                        MessageBoxIcon.Error);
                 }
-                else
-                {
-                    MessageBox.Show(
-                        "No se pudo agregar el dictado.",
-                        "Dictados",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo agregar el dictado.\n" + ex.Message,
-                    "Dictados",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            });
         }
 
         private void btnLimpiarCrear_Click(object sender, EventArgs e)
@@ -505,14 +488,14 @@ namespace SistemaAsistencia.Vista.Dictados
             _bloqueo++;
             try
             {
-                cmbFiltroEspecialidad.SelectedIndex = -1;
+                CargaVista.ReiniciarCombo(cmbFiltroEspecialidad);
                 nudAnioMateria.Value = nudAnioMateria.Minimum;
                 nudDivision.Value = 0;
                 nudGrupo.Value = 0;
                 idMateriaCrear = 0;
                 dgvMateriaSel.DataSource = null;
-                cmbProfesor.SelectedIndex = -1;
-                cmbDia.SelectedIndex = -1;
+                CargaVista.ReiniciarCombo(cmbProfesor);
+                CargaVista.ReiniciarCombo(cmbDia);
                 FijarRango(dtpHorario, TimeSpan.Zero, new TimeSpan(23, 59, 0), new TimeSpan(8, 0, 0));
                 FijarRango(dtpHorarioFin, TimeSpan.Zero, new TimeSpan(23, 59, 0), new TimeSpan(10, 0, 0));
                 nudAnioLectivo.Value = LimitarAnio(nudAnioLectivo, DateTime.Now.Year);
@@ -543,33 +526,16 @@ namespace SistemaAsistencia.Vista.Dictados
         {
             string texto = txtBuscar.Text.Trim();
 
-            if (string.IsNullOrEmpty(texto))
-            {
-                MostrarEnGrilla(cacheDictados);
-                return;
-            }
-
-            List<Dictado> resultados = cacheDictados.FindAll(d =>
-                d.Descripcion != null &&
-                d.Descripcion.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0);
-
-            MostrarEnGrilla(resultados);
-
-            if (!interactivo) return;
-
-            if (resultados.Count == 0)
-            {
-                MessageBox.Show(
-                    "Sin resultados para esa búsqueda.",
-                    "Dictados",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-                LimpiarEdicion();
-            }
-            else if (resultados.Count == 1)
-            {
-                CargarEnEdicion(resultados[0]);
-            }
+            CargaVista.FiltrarCache(
+                cacheDictados,
+                texto,
+                d => d.Descripcion != null &&
+                     d.Descripcion.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0,
+                MostrarEnGrilla,
+                CargarEnEdicion,
+                LimpiarEdicion,
+                "Dictados",
+                interactivo);
         }
 
         private void dgvDictados_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -583,55 +549,60 @@ namespace SistemaAsistencia.Vista.Dictados
 
         private void CargarEnEdicion(Dictado dictado)
         {
-            _bloqueo++;
-            try
+            EjecutarConLayout(() =>
             {
-                idDictadoSeleccionado = dictado.IdDictado;
-                lblEditando.Text = "Editando: " + dictado.Descripcion;
-
-                // Orden de cascada: Especialidad -> Año -> fila -> División.
-                Materia mat = cacheMaterias.Find(m => m.IdMateria == dictado.IdMateria);
-                if (mat != null)
+                _bloqueo++;
+                try
                 {
-                    SeleccionarValor(cmbEditFiltroEspecialidad, mat.IdEspecialidad);
-                    nudEditAnioMateria.Enabled = true;
-                    nudEditAnioMateria.Value = LimitarAnioMateria(nudEditAnioMateria, mat.AnioMateria);
+                    idDictadoSeleccionado = dictado.IdDictado;
+                    lblEditando.Text = "Editando: " + dictado.Descripcion;
+
+                    // Orden de cascada: Especialidad -> Año -> fila -> División.
+                    Materia mat = cacheMaterias.Find(m => m.IdMateria == dictado.IdMateria);
+                    if (mat != null)
+                    {
+                        SeleccionarValor(cmbEditFiltroEspecialidad, mat.IdEspecialidad);
+                        nudEditAnioMateria.Enabled = true;
+                        nudEditAnioMateria.Value = LimitarAnioMateria(nudEditAnioMateria, mat.AnioMateria);
+                    }
+                    FiltrarMateriasEditar();
+                    SeleccionarFilaMateria(dgvEditMateriaSel, dictado.IdMateria);
+                    idMateriaEditar = IdMateriaDeFila(dgvEditMateriaSel);
+                    nudEditDivision.Enabled = true;
+                    // NULL (todo el curso) se representa con 0 en los NumericUpDown.
+                    nudEditDivision.Value = LimitarAlcance(nudEditDivision, dictado.Division);
+                    nudEditGrupo.Value = LimitarAlcance(nudEditGrupo, dictado.Grupo);
+                    nudEditGrupo.Enabled = nudEditDivision.Value > 0;
+                    SeleccionarValor(cmbEditProfesor, dictado.IdProfesor);
+                    cmbEditDia.SelectedItem = dictado.Dia;
+                    CargaVista.Refrescar(cmbEditDia);
+                    // Rango amplio primero (el select de materia lo recorta después).
+                    FijarRango(dtpEditHorario, TimeSpan.Zero, new TimeSpan(23, 59, 0),
+                        HoraDesdeTexto(dictado.Horario, new TimeSpan(8, 0, 0)));
+                    FijarRango(dtpEditHorarioFin, TimeSpan.Zero, new TimeSpan(23, 59, 0),
+                        HoraDesdeTexto(dictado.HorarioFin, new TimeSpan(10, 0, 0)));
+                    // Recorta a la franja de la materia (normaliza horarios viejos).
+                    AplicarFranjaPorMateria(idMateriaEditar, dtpEditHorario, dtpEditHorarioFin);
+                    nudEditAnio.Value = LimitarAnio(nudEditAnio, dictado.AnioLectivo);
                 }
-                FiltrarMateriasEditar();
-                SeleccionarFilaMateria(dgvEditMateriaSel, dictado.IdMateria);
-                idMateriaEditar = IdMateriaDeFila(dgvEditMateriaSel);
-                nudEditDivision.Enabled = true;
-                // NULL (todo el curso) se representa con 0 en los NumericUpDown.
-                nudEditDivision.Value = LimitarAlcance(nudEditDivision, dictado.Division);
-                nudEditGrupo.Value = LimitarAlcance(nudEditGrupo, dictado.Grupo);
-                nudEditGrupo.Enabled = nudEditDivision.Value > 0;
-                SeleccionarValor(cmbEditProfesor, dictado.IdProfesor);
-                cmbEditDia.SelectedItem = dictado.Dia;
-                // Rango amplio primero (el select de materia lo recorta después).
-                FijarRango(dtpEditHorario, TimeSpan.Zero, new TimeSpan(23, 59, 0),
-                    HoraDesdeTexto(dictado.Horario, new TimeSpan(8, 0, 0)));
-                FijarRango(dtpEditHorarioFin, TimeSpan.Zero, new TimeSpan(23, 59, 0),
-                    HoraDesdeTexto(dictado.HorarioFin, new TimeSpan(10, 0, 0)));
-                // Recorta a la franja de la materia (normaliza horarios viejos).
-                AplicarFranjaPorMateria(idMateriaEditar, dtpEditHorario, dtpEditHorarioFin);
-                nudEditAnio.Value = LimitarAnio(nudEditAnio, dictado.AnioLectivo);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo cargar el dictado para editar.\n" + ex.Message,
-                    "Dictados",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                LimpiarEdicion();
-            }
-            finally { _bloqueo--; }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        "No se pudo cargar el dictado para editar.\n" + ex.Message,
+                        "Dictados",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    LimpiarEdicion();
+                }
+                finally { _bloqueo--; }
+            });
         }
 
         private static void SeleccionarValor(ComboBox combo, int id)
         {
             try { combo.SelectedValue = id; }
             catch { combo.SelectedIndex = -1; }
+            CargaVista.Refrescar(combo);
         }
 
         private static decimal LimitarAnio(NumericUpDown nud, int valor)
@@ -682,49 +653,52 @@ namespace SistemaAsistencia.Vista.Dictados
             if (!AlcanceValido(idMateriaEditar, nudEditDivision, nudEditGrupo))
                 return;
 
-            try
+            EjecutarConLayout(() =>
             {
-                Dictado dictado = new Dictado
+                try
                 {
-                    IdDictado = idDictadoSeleccionado,
-                    IdMateria = idMateriaEditar,
-                    IdProfesor = Convert.ToInt32(cmbEditProfesor.SelectedValue),
-                    Dia = Convert.ToString(cmbEditDia.SelectedItem),
-                    Horario = FormatearHora(dtpEditHorario.Value),
-                    HorarioFin = FormatearHora(dtpEditHorarioFin.Value),
-                    Division = AlcanceOpcional(nudEditDivision),
-                    Grupo = AlcanceOpcional(nudEditGrupo),
-                    AnioLectivo = Convert.ToInt32(nudEditAnio.Value)
-                };
+                    Dictado dictado = new Dictado
+                    {
+                        IdDictado = idDictadoSeleccionado,
+                        IdMateria = idMateriaEditar,
+                        IdProfesor = Convert.ToInt32(cmbEditProfesor.SelectedValue),
+                        Dia = Convert.ToString(cmbEditDia.SelectedItem),
+                        Horario = FormatearHora(dtpEditHorario.Value),
+                        HorarioFin = FormatearHora(dtpEditHorarioFin.Value),
+                        Division = AlcanceOpcional(nudEditDivision),
+                        Grupo = AlcanceOpcional(nudEditGrupo),
+                        AnioLectivo = Convert.ToInt32(nudEditAnio.Value)
+                    };
 
-                if (dictadoController.ModificarDictado(dictado))
+                    if (dictadoController.ModificarDictado(dictado))
+                    {
+                        MessageBox.Show(
+                            "Dictado modificado correctamente.",
+                            "Dictados",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+
+                        CargarDictados();
+                        LimpiarEdicion();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "No se pudo modificar el dictado.",
+                            "Dictados",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show(
-                        "Dictado modificado correctamente.",
+                        "No se pudo modificar el dictado.\n" + ex.Message,
                         "Dictados",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
-                    CargarDictados();
-                    LimpiarEdicion();
+                        MessageBoxIcon.Error);
                 }
-                else
-                {
-                    MessageBox.Show(
-                        "No se pudo modificar el dictado.",
-                        "Dictados",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo modificar el dictado.\n" + ex.Message,
-                    "Dictados",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            });
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
@@ -742,63 +716,66 @@ namespace SistemaAsistencia.Vista.Dictados
             Dictado dictado = cacheDictados.Find(d => d.IdDictado == idDictadoSeleccionado);
             if (dictado == null) return;
 
-            try
+            EjecutarConLayout(() =>
             {
-                string descripcion = "Dictado: " + dictado.Descripcion;
-
-                List<Dependencia> dependencias =
-                    dictadoController.ObtenerDependencias(idDictadoSeleccionado);
-
-                using (var confirmar = new FrmConfirmarEliminar(descripcion, dependencias))
+                try
                 {
-                    if (confirmar.ShowDialog(this) != DialogResult.OK) return;
+                    string descripcion = "Dictado: " + dictado.Descripcion;
 
-                    bool ok;
+                    List<Dependencia> dependencias =
+                        dictadoController.ObtenerDependencias(idDictadoSeleccionado);
 
-                    if (confirmar.Resultado == ResultadoEliminacion.Definitiva)
+                    using (var confirmar = new FrmConfirmarEliminar(descripcion, dependencias))
                     {
-                        ok = dictadoController.EliminarDefinitivo(idDictadoSeleccionado);
+                        if (confirmar.ShowDialog(this) != DialogResult.OK) return;
+
+                        bool ok;
+
+                        if (confirmar.Resultado == ResultadoEliminacion.Definitiva)
+                        {
+                            ok = dictadoController.EliminarDefinitivo(idDictadoSeleccionado);
+                            if (ok)
+                                MessageBox.Show(
+                                    "Dictado eliminado definitivamente.",
+                                    "Dictados",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            ok = dictadoController.DarDeBaja(idDictadoSeleccionado);
+                            if (ok)
+                                MessageBox.Show(
+                                    "Dictado dado de baja.",
+                                    "Dictados",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                        }
+
                         if (ok)
+                        {
+                            CargarDictados();
+                            LimpiarEdicion();
+                        }
+                        else
+                        {
                             MessageBox.Show(
-                                "Dictado eliminado definitivamente.",
+                                "No se pudo eliminar.",
                                 "Dictados",
                                 MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        ok = dictadoController.DarDeBaja(idDictadoSeleccionado);
-                        if (ok)
-                            MessageBox.Show(
-                                "Dictado dado de baja.",
-                                "Dictados",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-                    }
-
-                    if (ok)
-                    {
-                        CargarDictados();
-                        LimpiarEdicion();
-                    }
-                    else
-                    {
-                        MessageBox.Show(
-                            "No se pudo eliminar.",
-                            "Dictados",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
+                                MessageBoxIcon.Warning);
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo eliminar.\n" + ex.Message,
-                    "Dictados",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        "No se pudo eliminar.\n" + ex.Message,
+                        "Dictados",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            });
         }
 
         private void btnLimpiarEditar_Click(object sender, EventArgs e)
@@ -813,14 +790,14 @@ namespace SistemaAsistencia.Vista.Dictados
             {
                 idDictadoSeleccionado = 0;
                 lblEditando.Text = "Editando: (seleccione de la lista)";
-                cmbEditFiltroEspecialidad.SelectedIndex = -1;
+                CargaVista.ReiniciarCombo(cmbEditFiltroEspecialidad);
                 nudEditAnioMateria.Value = nudEditAnioMateria.Minimum;
                 nudEditDivision.Value = 0;
                 nudEditGrupo.Value = 0;
                 idMateriaEditar = 0;
                 dgvEditMateriaSel.DataSource = null;
-                cmbEditProfesor.SelectedIndex = -1;
-                cmbEditDia.SelectedIndex = -1;
+                CargaVista.ReiniciarCombo(cmbEditProfesor);
+                CargaVista.ReiniciarCombo(cmbEditDia);
                 FijarRango(dtpEditHorario, TimeSpan.Zero, new TimeSpan(23, 59, 0), new TimeSpan(8, 0, 0));
                 FijarRango(dtpEditHorarioFin, TimeSpan.Zero, new TimeSpan(23, 59, 0), new TimeSpan(10, 0, 0));
                 nudEditAnio.Value = LimitarAnio(nudEditAnio, DateTime.Now.Year);

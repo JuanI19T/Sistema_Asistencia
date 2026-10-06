@@ -27,75 +27,65 @@ namespace SistemaAsistencia.Vista.Alumnos
 
         private void FrmAlumnos_Load(object sender, EventArgs e)
         {
-            try
-            {
-                CargarAlumnos();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo cargar alumnos.\n" + ex.Message,
-                    "Error de conexión",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            CargaVista.IntentarCarga(CargarAlumnos, "alumnos");
         }
 
         private void CargarAlumnos()
         {
-            cacheAlumnos = alumnoController.ObtenerAlumnos() ?? new List<Alumno>();
+            cacheAlumnos = CargaVista.ObtenerLista(() => alumnoController.ObtenerAlumnos());
             MostrarEnGrilla(cacheAlumnos);
         }
 
         private void MostrarEnGrilla(List<Alumno> lista)
         {
-            dgvAlumnos.DataSource = null;
-            dgvAlumnos.DataSource = lista;
+            CargaVista.MostrarEnGrilla(dgvAlumnos, lista, ConfigurarColumnasAlumnos);
+        }
 
-            if (dgvAlumnos.Columns.Count > 0)
-            {
+        private void ConfigurarColumnasAlumnos(DataGridView dgv)
+        {
                 // Solo campos relevantes: Nombre, Apellido, DNI, Legajo, Correo, Teléfono, Activo.
                 // Los teléfonos extra siguen en BD pero no se muestran (UI limpia).
                 string[] soloRelevantes = { "NombreAlumno", "ApellidoAlumno", "DniAlumno", "LegajoAlumno", "CorreoAlumno", "TelefonoAlumno", "Activo" };
                 foreach (DataGridViewColumn col in dgvAlumnos.Columns)
                     col.Visible = System.Array.IndexOf(soloRelevantes, col.Name) >= 0;
 
-                if (dgvAlumnos.Columns.Contains("NombreAlumno"))
-                {
-                    dgvAlumnos.Columns["NombreAlumno"].HeaderText = "Nombre";
-                    dgvAlumnos.Columns["NombreAlumno"].DisplayIndex = 0;
-                }
-                if (dgvAlumnos.Columns.Contains("ApellidoAlumno"))
-                {
-                    dgvAlumnos.Columns["ApellidoAlumno"].HeaderText = "Apellido";
-                    dgvAlumnos.Columns["ApellidoAlumno"].DisplayIndex = 1;
-                }
-                if (dgvAlumnos.Columns.Contains("DniAlumno"))
-                {
-                    dgvAlumnos.Columns["DniAlumno"].HeaderText = "DNI";
-                    dgvAlumnos.Columns["DniAlumno"].DisplayIndex = 2;
-                }
-                if (dgvAlumnos.Columns.Contains("LegajoAlumno"))
-                {
-                    dgvAlumnos.Columns["LegajoAlumno"].HeaderText = "Legajo";
-                    dgvAlumnos.Columns["LegajoAlumno"].DisplayIndex = 3;
-                }
-                if (dgvAlumnos.Columns.Contains("CorreoAlumno"))
-                {
-                    dgvAlumnos.Columns["CorreoAlumno"].HeaderText = "Correo";
-                    dgvAlumnos.Columns["CorreoAlumno"].DisplayIndex = 4;
-                }
-                if (dgvAlumnos.Columns.Contains("TelefonoAlumno"))
-                {
-                    dgvAlumnos.Columns["TelefonoAlumno"].HeaderText = "Teléfono";
-                    dgvAlumnos.Columns["TelefonoAlumno"].DisplayIndex = 5;
-                }
-                if (dgvAlumnos.Columns.Contains("Activo"))
-                {
-                    dgvAlumnos.Columns["Activo"].HeaderText = "Activo";
-                    dgvAlumnos.Columns["Activo"].DisplayIndex = 6;
-                    dgvAlumnos.Columns["Activo"].ReadOnly = true;
-                }
+            if (dgv.Columns.Count == 0) return;
+
+            if (dgv.Columns.Contains("NombreAlumno"))
+            {
+                dgv.Columns["NombreAlumno"].HeaderText = "Nombre";
+                dgv.Columns["NombreAlumno"].DisplayIndex = 0;
+            }
+            if (dgv.Columns.Contains("ApellidoAlumno"))
+            {
+                dgv.Columns["ApellidoAlumno"].HeaderText = "Apellido";
+                dgv.Columns["ApellidoAlumno"].DisplayIndex = 1;
+            }
+            if (dgv.Columns.Contains("DniAlumno"))
+            {
+                dgv.Columns["DniAlumno"].HeaderText = "DNI";
+                dgv.Columns["DniAlumno"].DisplayIndex = 2;
+            }
+            if (dgv.Columns.Contains("LegajoAlumno"))
+            {
+                dgv.Columns["LegajoAlumno"].HeaderText = "Legajo";
+                dgv.Columns["LegajoAlumno"].DisplayIndex = 3;
+            }
+            if (dgv.Columns.Contains("CorreoAlumno"))
+            {
+                dgv.Columns["CorreoAlumno"].HeaderText = "Correo";
+                dgv.Columns["CorreoAlumno"].DisplayIndex = 4;
+            }
+            if (dgv.Columns.Contains("TelefonoAlumno"))
+            {
+                dgv.Columns["TelefonoAlumno"].HeaderText = "Teléfono";
+                dgv.Columns["TelefonoAlumno"].DisplayIndex = 5;
+            }
+            if (dgv.Columns.Contains("Activo"))
+            {
+                dgv.Columns["Activo"].HeaderText = "Activo";
+                dgv.Columns["Activo"].DisplayIndex = 6;
+                dgv.Columns["Activo"].ReadOnly = true;
             }
         }
 
@@ -123,46 +113,49 @@ namespace SistemaAsistencia.Vista.Alumnos
             if (!TelefonoValidoSimple(ctrlTelCrear))
                 return;
 
-            try
+            EjecutarConLayout(() =>
             {
-                Alumno alumno = new Alumno
+                try
                 {
-                    NombreAlumno = txtNombre.Text,
-                    ApellidoAlumno = txtApellido.Text,
-                    DniAlumno = txtDni.Text,
-                    LegajoAlumno = txtLegajo.Text,
-                    CorreoAlumno = txtCorreo.Text,
-                    TelefonoAlumno = ctrlTelCrear.Telefono
-                };
+                    Alumno alumno = new Alumno
+                    {
+                        NombreAlumno = txtNombre.Text,
+                        ApellidoAlumno = txtApellido.Text,
+                        DniAlumno = txtDni.Text,
+                        LegajoAlumno = txtLegajo.Text,
+                        CorreoAlumno = txtCorreo.Text,
+                        TelefonoAlumno = ctrlTelCrear.Telefono
+                    };
 
-                if (alumnoController.AgregarAlumno(alumno))
+                    if (alumnoController.AgregarAlumno(alumno))
+                    {
+                        MessageBox.Show(
+                            "Alumno agregado correctamente.",
+                            "Alumnos",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+
+                        CargarAlumnos();
+                        LimpiarCreacion();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "No se pudo agregar el alumno.",
+                            "Alumnos",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show(
-                        "Alumno agregado correctamente.",
+                        "No se pudo agregar el alumno.\n" + ex.Message,
                         "Alumnos",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
-                    CargarAlumnos();
-                    LimpiarCreacion();
+                        MessageBoxIcon.Error);
                 }
-                else
-                {
-                    MessageBox.Show(
-                        "No se pudo agregar el alumno.",
-                        "Alumnos",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo agregar el alumno.\n" + ex.Message,
-                    "Alumnos",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            });
         }
 
         private void btnLimpiarCrear_Click(object sender, EventArgs e)
@@ -197,39 +190,22 @@ namespace SistemaAsistencia.Vista.Alumnos
         {
             string texto = txtBuscar.Text.Trim();
 
-            if (string.IsNullOrEmpty(texto))
-            {
-                MostrarEnGrilla(cacheAlumnos);
-                return;
-            }
-
-            List<Alumno> resultados = cacheAlumnos.FindAll(a =>
-                (a.NombreAlumno != null &&
-                    a.NombreAlumno.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
-                (a.ApellidoAlumno != null &&
-                    a.ApellidoAlumno.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
-                (a.DniAlumno != null &&
-                    a.DniAlumno.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
-                (a.LegajoAlumno != null &&
-                    a.LegajoAlumno.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0));
-
-            MostrarEnGrilla(resultados);
-
-            if (!interactivo) return;
-
-            if (resultados.Count == 0)
-            {
-                MessageBox.Show(
-                    "Sin resultados para esa búsqueda.",
-                    "Alumnos",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-                LimpiarEdicion();
-            }
-            else if (resultados.Count == 1)
-            {
-                CargarEnEdicion(resultados[0]);
-            }
+            CargaVista.FiltrarCache(
+                cacheAlumnos,
+                texto,
+                a => (a.NombreAlumno != null &&
+                        a.NombreAlumno.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                    (a.ApellidoAlumno != null &&
+                        a.ApellidoAlumno.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                    (a.DniAlumno != null &&
+                        a.DniAlumno.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                    (a.LegajoAlumno != null &&
+                        a.LegajoAlumno.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0),
+                MostrarEnGrilla,
+                CargarEnEdicion,
+                LimpiarEdicion,
+                "Alumnos",
+                interactivo);
         }
 
         private void dgvAlumnos_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -243,15 +219,18 @@ namespace SistemaAsistencia.Vista.Alumnos
 
         private void CargarEnEdicion(Alumno alumno)
         {
-            idAlumnoSeleccionado = alumno.IdAlumno;
-            lblEditando.Text =
-                "Editando: " + alumno.ApellidoAlumno + ", " + alumno.NombreAlumno;
-            txtEditNombre.Text = alumno.NombreAlumno;
-            txtEditApellido.Text = alumno.ApellidoAlumno;
-            txtEditDni.Text = alumno.DniAlumno;
-            txtEditLegajo.Text = alumno.LegajoAlumno;
-            txtEditCorreo.Text = alumno.CorreoAlumno;
-            ctrlTelEdit.Telefono = alumno.TelefonoAlumno;
+            EjecutarConLayout(() =>
+            {
+                idAlumnoSeleccionado = alumno.IdAlumno;
+                lblEditando.Text =
+                    "Editando: " + alumno.ApellidoAlumno + ", " + alumno.NombreAlumno;
+                txtEditNombre.Text = alumno.NombreAlumno;
+                txtEditApellido.Text = alumno.ApellidoAlumno;
+                txtEditDni.Text = alumno.DniAlumno;
+                txtEditLegajo.Text = alumno.LegajoAlumno;
+                txtEditCorreo.Text = alumno.CorreoAlumno;
+                ctrlTelEdit.Telefono = alumno.TelefonoAlumno;
+            });
         }
 
         private void btnModificar_Click(object sender, EventArgs e)
@@ -269,47 +248,50 @@ namespace SistemaAsistencia.Vista.Alumnos
             if (!TelefonoValidoSimple(ctrlTelEdit))
                 return;
 
-            try
+            EjecutarConLayout(() =>
             {
-                Alumno alumno = new Alumno
+                try
                 {
-                    IdAlumno = idAlumnoSeleccionado,
-                    NombreAlumno = txtEditNombre.Text,
-                    ApellidoAlumno = txtEditApellido.Text,
-                    DniAlumno = txtEditDni.Text,
-                    LegajoAlumno = txtEditLegajo.Text,
-                    CorreoAlumno = txtEditCorreo.Text,
-                    TelefonoAlumno = ctrlTelEdit.Telefono
-                };
+                    Alumno alumno = new Alumno
+                    {
+                        IdAlumno = idAlumnoSeleccionado,
+                        NombreAlumno = txtEditNombre.Text,
+                        ApellidoAlumno = txtEditApellido.Text,
+                        DniAlumno = txtEditDni.Text,
+                        LegajoAlumno = txtEditLegajo.Text,
+                        CorreoAlumno = txtEditCorreo.Text,
+                        TelefonoAlumno = ctrlTelEdit.Telefono
+                    };
 
-                if (alumnoController.ModificarAlumno(alumno))
+                    if (alumnoController.ModificarAlumno(alumno))
+                    {
+                        MessageBox.Show(
+                            "Alumno modificado correctamente.",
+                            "Alumnos",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+
+                        CargarAlumnos();
+                        LimpiarEdicion();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "No se pudo modificar el alumno.",
+                            "Alumnos",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show(
-                        "Alumno modificado correctamente.",
+                        "No se pudo modificar el alumno.\n" + ex.Message,
                         "Alumnos",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
-                    CargarAlumnos();
-                    LimpiarEdicion();
+                        MessageBoxIcon.Error);
                 }
-                else
-                {
-                    MessageBox.Show(
-                        "No se pudo modificar el alumno.",
-                        "Alumnos",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo modificar el alumno.\n" + ex.Message,
-                    "Alumnos",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            });
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
@@ -327,64 +309,67 @@ namespace SistemaAsistencia.Vista.Alumnos
             Alumno alumno = cacheAlumnos.Find(a => a.IdAlumno == idAlumnoSeleccionado);
             if (alumno == null) return;
 
-            try
+            EjecutarConLayout(() =>
             {
-                string descripcion = "Alumno: " + alumno.ApellidoAlumno + ", " +
-                    alumno.NombreAlumno + " (Legajo " + alumno.LegajoAlumno + ")";
-
-                List<Dependencia> dependencias =
-                    alumnoController.ObtenerDependencias(idAlumnoSeleccionado);
-
-                using (var confirmar = new FrmConfirmarEliminar(descripcion, dependencias))
+                try
                 {
-                    if (confirmar.ShowDialog(this) != DialogResult.OK) return;
+                    string descripcion = "Alumno: " + alumno.ApellidoAlumno + ", " +
+                        alumno.NombreAlumno + " (Legajo " + alumno.LegajoAlumno + ")";
 
-                    bool ok;
+                    List<Dependencia> dependencias =
+                        alumnoController.ObtenerDependencias(idAlumnoSeleccionado);
 
-                    if (confirmar.Resultado == ResultadoEliminacion.Definitiva)
+                    using (var confirmar = new FrmConfirmarEliminar(descripcion, dependencias))
                     {
-                        ok = alumnoController.EliminarDefinitivo(idAlumnoSeleccionado);
+                        if (confirmar.ShowDialog(this) != DialogResult.OK) return;
+
+                        bool ok;
+
+                        if (confirmar.Resultado == ResultadoEliminacion.Definitiva)
+                        {
+                            ok = alumnoController.EliminarDefinitivo(idAlumnoSeleccionado);
+                            if (ok)
+                                MessageBox.Show(
+                                    "Alumno eliminado definitivamente.",
+                                    "Alumnos",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            ok = alumnoController.DarDeBaja(idAlumnoSeleccionado);
+                            if (ok)
+                                MessageBox.Show(
+                                    "Alumno dado de baja.",
+                                    "Alumnos",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                        }
+
                         if (ok)
+                        {
+                            CargarAlumnos();
+                            LimpiarEdicion();
+                        }
+                        else
+                        {
                             MessageBox.Show(
-                                "Alumno eliminado definitivamente.",
+                                "No se pudo eliminar.",
                                 "Alumnos",
                                 MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        ok = alumnoController.DarDeBaja(idAlumnoSeleccionado);
-                        if (ok)
-                            MessageBox.Show(
-                                "Alumno dado de baja.",
-                                "Alumnos",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-                    }
-
-                    if (ok)
-                    {
-                        CargarAlumnos();
-                        LimpiarEdicion();
-                    }
-                    else
-                    {
-                        MessageBox.Show(
-                            "No se pudo eliminar.",
-                            "Alumnos",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
+                                MessageBoxIcon.Warning);
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo eliminar.\n" + ex.Message,
-                    "Alumnos",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        "No se pudo eliminar.\n" + ex.Message,
+                        "Alumnos",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            });
         }
 
         private void btnLimpiarEditar_Click(object sender, EventArgs e)

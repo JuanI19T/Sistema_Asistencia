@@ -84,13 +84,14 @@ namespace SistemaAsistencia.Utilidades
 
         /// <summary>
         /// Carga un combo desde una lista de BD (DisplayMember/ValueMember),
-        /// sin selección inicial y refrescado.
+        /// sin selección inicial y refrescado. Cada combo recibe su propia
+        /// copia: dos combos con la misma instancia sincronizarían selección.
         /// </summary>
         public static void CargarCombo<T>(ComboBox combo, IList<T> datos, string displayMember, string valueMember)
         {
             if (combo == null || combo.IsDisposed) return;
             combo.DataSource = null;
-            combo.DataSource = datos;
+            combo.DataSource = datos == null ? null : new List<T>(datos);
             if (!string.IsNullOrEmpty(displayMember))
                 combo.DisplayMember = displayMember;
             if (!string.IsNullOrEmpty(valueMember))
