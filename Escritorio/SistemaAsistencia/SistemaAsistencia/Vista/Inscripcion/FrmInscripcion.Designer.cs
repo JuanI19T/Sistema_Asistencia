@@ -28,21 +28,27 @@ namespace SistemaAsistencia.Vista.Inscripcion
         /// </summary>
         private void InitializeComponent()
         {
-            this.panelFiltros = new System.Windows.Forms.Panel();
-            this.lblEspecialidad = new MaterialSkin.Controls.MaterialLabel();
-            this.cmbEspecialidad = new MaterialSkin.Controls.MaterialComboBox();
             this.lblAnio = new MaterialSkin.Controls.MaterialLabel();
             this.nudAnio = new System.Windows.Forms.NumericUpDown();
             this.lblDivision = new MaterialSkin.Controls.MaterialLabel();
             this.nudDivision = new System.Windows.Forms.NumericUpDown();
             this.lblGrupo = new MaterialSkin.Controls.MaterialLabel();
             this.nudGrupo = new System.Windows.Forms.NumericUpDown();
-            this.lblDictado = new MaterialSkin.Controls.MaterialLabel();
-            this.cmbDictado = new MaterialSkin.Controls.MaterialComboBox();
             this.panelBotones = new System.Windows.Forms.Panel();
             this.btnGuardar = new MaterialSkin.Controls.MaterialButton();
             this.btnCancelar = new MaterialSkin.Controls.MaterialButton();
             this.dgvInscripciones = new System.Windows.Forms.DataGridView();
+            this.dgvDictados = new System.Windows.Forms.DataGridView();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.cmbEspecialidad = new MaterialSkin.Controls.MaterialComboBox();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.Materia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Anio = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Division = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Grupo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IdDictado = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IdAlumno = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ApellidoAlumno = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NombreAlumno = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -51,83 +57,33 @@ namespace SistemaAsistencia.Vista.Inscripcion
             ((System.ComponentModel.ISupportInitialize)(this.nudAnio)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDivision)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudGrupo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvInscripciones)).BeginInit();
-            this.panelFiltros.SuspendLayout();
             this.panelBotones.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvInscripciones)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDictados)).BeginInit();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
             this.SuspendLayout();
-            //
-            // panelFiltros
-            //
-            this.panelFiltros.BackColor = System.Drawing.Color.White;
-            this.panelFiltros.Controls.Add(this.lblEspecialidad);
-            this.panelFiltros.Controls.Add(this.cmbEspecialidad);
-            this.panelFiltros.Controls.Add(this.lblAnio);
-            this.panelFiltros.Controls.Add(this.nudAnio);
-            this.panelFiltros.Controls.Add(this.lblDivision);
-            this.panelFiltros.Controls.Add(this.nudDivision);
-            this.panelFiltros.Controls.Add(this.lblGrupo);
-            this.panelFiltros.Controls.Add(this.nudGrupo);
-            this.panelFiltros.Controls.Add(this.lblDictado);
-            this.panelFiltros.Controls.Add(this.cmbDictado);
-            this.panelFiltros.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelFiltros.Location = new System.Drawing.Point(0, 0);
-            this.panelFiltros.Name = "panelFiltros";
-            this.panelFiltros.Size = new System.Drawing.Size(860, 140);
-            this.panelFiltros.TabIndex = 0;
-            //
-            // lblEspecialidad
-            //
-            this.lblEspecialidad.AutoSize = true;
-            this.lblEspecialidad.BackColor = System.Drawing.Color.White;
-            this.lblEspecialidad.Depth = 0;
-            this.lblEspecialidad.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEspecialidad.Location = new System.Drawing.Point(16, 28);
-            this.lblEspecialidad.MouseState = MaterialSkin.MouseState.HOVER;
-            this.lblEspecialidad.Name = "lblEspecialidad";
-            this.lblEspecialidad.Size = new System.Drawing.Size(101, 19);
-            this.lblEspecialidad.TabIndex = 0;
-            this.lblEspecialidad.Text = "Especialidad";
-            //
-            // cmbEspecialidad
-            //
-            this.cmbEspecialidad.AutoResize = false;
-            this.cmbEspecialidad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cmbEspecialidad.Depth = 0;
-            this.cmbEspecialidad.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.cmbEspecialidad.DropDownHeight = 174;
-            this.cmbEspecialidad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEspecialidad.DropDownWidth = 121;
-            this.cmbEspecialidad.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.cmbEspecialidad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cmbEspecialidad.FormattingEnabled = true;
-            this.cmbEspecialidad.Hint = "Especialidad";
-            this.cmbEspecialidad.IntegralHeight = false;
-            this.cmbEspecialidad.ItemHeight = 43;
-            this.cmbEspecialidad.Location = new System.Drawing.Point(130, 12);
-            this.cmbEspecialidad.MaxDropDownItems = 4;
-            this.cmbEspecialidad.MouseState = MaterialSkin.MouseState.OUT;
-            this.cmbEspecialidad.Name = "cmbEspecialidad";
-            this.cmbEspecialidad.Size = new System.Drawing.Size(240, 49);
-            this.cmbEspecialidad.StartIndex = -1;
-            this.cmbEspecialidad.TabIndex = 0;
-            this.cmbEspecialidad.UseAccent = false;
-            //
+            // 
             // lblAnio
-            //
+            // 
+            this.lblAnio.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblAnio.AutoSize = true;
             this.lblAnio.BackColor = System.Drawing.Color.White;
             this.lblAnio.Depth = 0;
             this.lblAnio.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblAnio.Location = new System.Drawing.Point(390, 28);
+            this.lblAnio.Location = new System.Drawing.Point(61, 13);
             this.lblAnio.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblAnio.Name = "lblAnio";
-            this.lblAnio.Size = new System.Drawing.Size(32, 19);
+            this.lblAnio.Size = new System.Drawing.Size(29, 19);
             this.lblAnio.TabIndex = 1;
             this.lblAnio.Text = "Año";
-            //
+            // 
             // nudAnio
-            //
-            this.nudAnio.Location = new System.Drawing.Point(435, 25);
+            // 
+            this.nudAnio.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.nudAnio.Location = new System.Drawing.Point(209, 12);
             this.nudAnio.Maximum = new decimal(new int[] {
             7,
             0,
@@ -139,137 +95,85 @@ namespace SistemaAsistencia.Vista.Inscripcion
             0,
             0});
             this.nudAnio.Name = "nudAnio";
-            this.nudAnio.Size = new System.Drawing.Size(70, 20);
+            this.nudAnio.Size = new System.Drawing.Size(35, 20);
             this.nudAnio.TabIndex = 1;
             this.nudAnio.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            //
+            // 
             // lblDivision
-            //
+            // 
+            this.lblDivision.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblDivision.AutoSize = true;
             this.lblDivision.BackColor = System.Drawing.Color.White;
             this.lblDivision.Depth = 0;
             this.lblDivision.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblDivision.Location = new System.Drawing.Point(525, 28);
+            this.lblDivision.Location = new System.Drawing.Point(46, 13);
             this.lblDivision.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblDivision.Name = "lblDivision";
-            this.lblDivision.Size = new System.Drawing.Size(62, 19);
+            this.lblDivision.Size = new System.Drawing.Size(58, 19);
             this.lblDivision.TabIndex = 2;
             this.lblDivision.Text = "División";
-            //
+            // 
             // nudDivision
-            //
-            this.nudDivision.Location = new System.Drawing.Point(600, 25);
+            // 
+            this.nudDivision.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.nudDivision.Location = new System.Drawing.Point(207, 12);
             this.nudDivision.Maximum = new decimal(new int[] {
             7,
             0,
             0,
             0});
-            this.nudDivision.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.nudDivision.Name = "nudDivision";
-            this.nudDivision.Size = new System.Drawing.Size(70, 20);
+            this.nudDivision.Size = new System.Drawing.Size(39, 20);
             this.nudDivision.TabIndex = 2;
             this.nudDivision.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            //
+            // 
             // lblGrupo
-            //
+            // 
+            this.lblGrupo.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblGrupo.AutoSize = true;
             this.lblGrupo.BackColor = System.Drawing.Color.White;
             this.lblGrupo.Depth = 0;
             this.lblGrupo.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblGrupo.Location = new System.Drawing.Point(690, 28);
+            this.lblGrupo.Location = new System.Drawing.Point(12, 13);
             this.lblGrupo.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblGrupo.Name = "lblGrupo";
-            this.lblGrupo.Size = new System.Drawing.Size(110, 19);
+            this.lblGrupo.Size = new System.Drawing.Size(126, 19);
             this.lblGrupo.TabIndex = 3;
             this.lblGrupo.Text = "Grupo (0=ambos)";
-            //
+            // 
             // nudGrupo
-            //
-            this.nudGrupo.Location = new System.Drawing.Point(745, 25);
+            // 
+            this.nudGrupo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.nudGrupo.Location = new System.Drawing.Point(203, 13);
             this.nudGrupo.Maximum = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.nudGrupo.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
             this.nudGrupo.Name = "nudGrupo";
-            this.nudGrupo.Size = new System.Drawing.Size(70, 20);
+            this.nudGrupo.Size = new System.Drawing.Size(47, 20);
             this.nudGrupo.TabIndex = 3;
-            this.nudGrupo.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            //
-            // lblDictado
-            //
-            this.lblDictado.AutoSize = true;
-            this.lblDictado.BackColor = System.Drawing.Color.White;
-            this.lblDictado.Depth = 0;
-            this.lblDictado.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblDictado.Location = new System.Drawing.Point(16, 98);
-            this.lblDictado.MouseState = MaterialSkin.MouseState.HOVER;
-            this.lblDictado.Name = "lblDictado";
-            this.lblDictado.Size = new System.Drawing.Size(60, 19);
-            this.lblDictado.TabIndex = 4;
-            this.lblDictado.Text = "Dictado";
-            //
-            // cmbDictado
-            //
-            this.cmbDictado.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbDictado.AutoResize = false;
-            this.cmbDictado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cmbDictado.Depth = 0;
-            this.cmbDictado.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.cmbDictado.DropDownHeight = 174;
-            this.cmbDictado.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDictado.DropDownWidth = 121;
-            this.cmbDictado.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.cmbDictado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cmbDictado.FormattingEnabled = true;
-            this.cmbDictado.Hint = "Dictado (elegí especialidad, año, división y grupo)";
-            this.cmbDictado.IntegralHeight = false;
-            this.cmbDictado.ItemHeight = 43;
-            this.cmbDictado.Location = new System.Drawing.Point(130, 82);
-            this.cmbDictado.MaxDropDownItems = 4;
-            this.cmbDictado.MouseState = MaterialSkin.MouseState.OUT;
-            this.cmbDictado.Name = "cmbDictado";
-            this.cmbDictado.Size = new System.Drawing.Size(700, 49);
-            this.cmbDictado.StartIndex = -1;
-            this.cmbDictado.TabIndex = 4;
-            this.cmbDictado.UseAccent = false;
-            this.cmbDictado.SelectedIndexChanged += new System.EventHandler(this.cmbDictado_SelectedIndexChanged);
-            //
+            // 
             // panelBotones
-            //
+            // 
             this.panelBotones.BackColor = System.Drawing.Color.White;
             this.panelBotones.Controls.Add(this.btnGuardar);
             this.panelBotones.Controls.Add(this.btnCancelar);
-            this.panelBotones.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBotones.Location = new System.Drawing.Point(0, 548);
+            this.panelBotones.Location = new System.Drawing.Point(0, 423);
             this.panelBotones.Name = "panelBotones";
-            this.panelBotones.Size = new System.Drawing.Size(860, 52);
+            this.panelBotones.Size = new System.Drawing.Size(854, 52);
             this.panelBotones.TabIndex = 2;
-            //
+            // 
             // btnGuardar
-            //
+            // 
             this.btnGuardar.AutoSize = false;
             this.btnGuardar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnGuardar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
@@ -288,9 +192,9 @@ namespace SistemaAsistencia.Vista.Inscripcion
             this.btnGuardar.UseAccentColor = false;
             this.btnGuardar.UseVisualStyleBackColor = true;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
-            //
+            // 
             // btnCancelar
-            //
+            // 
             this.btnCancelar.AutoSize = false;
             this.btnCancelar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnCancelar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
@@ -309,11 +213,12 @@ namespace SistemaAsistencia.Vista.Inscripcion
             this.btnCancelar.UseAccentColor = false;
             this.btnCancelar.UseVisualStyleBackColor = true;
             this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
-            //
+            // 
             // dgvInscripciones
-            //
+            // 
             this.dgvInscripciones.AllowUserToAddRows = false;
             this.dgvInscripciones.AllowUserToDeleteRows = false;
+            this.dgvInscripciones.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dgvInscripciones.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvInscripciones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvInscripciones.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -322,56 +227,191 @@ namespace SistemaAsistencia.Vista.Inscripcion
             this.NombreAlumno,
             this.LegajoAlumno,
             this.Inscripto});
-            this.dgvInscripciones.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvInscripciones.Location = new System.Drawing.Point(0, 140);
+            this.dgvInscripciones.Location = new System.Drawing.Point(321, 5);
             this.dgvInscripciones.Name = "dgvInscripciones";
             this.dgvInscripciones.RowHeadersVisible = false;
-            this.dgvInscripciones.Size = new System.Drawing.Size(860, 408);
+            this.dgvInscripciones.Size = new System.Drawing.Size(533, 412);
             this.dgvInscripciones.TabIndex = 5;
-            //
+            // 
+            // dgvDictados
+            // 
+            this.dgvDictados.AllowUserToAddRows = false;
+            this.dgvDictados.AllowUserToDeleteRows = false;
+            this.dgvDictados.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvDictados.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDictados.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Materia,
+            this.Anio,
+            this.Division,
+            this.Grupo,
+            this.IdDictado});
+            this.dgvDictados.Location = new System.Drawing.Point(6, 213);
+            this.dgvDictados.MultiSelect = false;
+            this.dgvDictados.Name = "dgvDictados";
+            this.dgvDictados.ReadOnly = true;
+            this.dgvDictados.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvDictados.Size = new System.Drawing.Size(309, 204);
+            this.dgvDictados.TabIndex = 6;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.cmbEspecialidad, 0, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 5);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(309, 205);
+            this.tableLayoutPanel1.TabIndex = 7;
+            // 
+            // cmbEspecialidad
+            // 
+            this.cmbEspecialidad.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cmbEspecialidad.AutoResize = false;
+            this.cmbEspecialidad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cmbEspecialidad.Depth = 0;
+            this.cmbEspecialidad.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.cmbEspecialidad.DropDownHeight = 174;
+            this.cmbEspecialidad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEspecialidad.DropDownWidth = 121;
+            this.cmbEspecialidad.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.cmbEspecialidad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cmbEspecialidad.FormattingEnabled = true;
+            this.cmbEspecialidad.Hint = "Especialidad";
+            this.cmbEspecialidad.IntegralHeight = false;
+            this.cmbEspecialidad.ItemHeight = 43;
+            this.cmbEspecialidad.Location = new System.Drawing.Point(36, 3);
+            this.cmbEspecialidad.MaxDropDownItems = 4;
+            this.cmbEspecialidad.MouseState = MaterialSkin.MouseState.OUT;
+            this.cmbEspecialidad.Name = "cmbEspecialidad";
+            this.cmbEspecialidad.Size = new System.Drawing.Size(236, 49);
+            this.cmbEspecialidad.StartIndex = -1;
+            this.cmbEspecialidad.TabIndex = 0;
+            this.cmbEspecialidad.UseAccent = false;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.nudAnio, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.lblAnio, 0, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 54);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(303, 45);
+            this.tableLayoutPanel2.TabIndex = 1;
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 2;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Controls.Add(this.nudDivision, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.lblDivision, 0, 0);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 105);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(303, 45);
+            this.tableLayoutPanel3.TabIndex = 2;
+            // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.Controls.Add(this.nudGrupo, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.lblGrupo, 0, 0);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 156);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(303, 46);
+            this.tableLayoutPanel4.TabIndex = 3;
+            // 
+            // Materia
+            // 
+            this.Materia.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Materia.HeaderText = "Materia";
+            this.Materia.Name = "Materia";
+            this.Materia.ReadOnly = true;
+            // 
+            // Anio
+            // 
+            this.Anio.HeaderText = "Año";
+            this.Anio.Name = "Anio";
+            this.Anio.ReadOnly = true;
+            // 
+            // Division
+            // 
+            this.Division.HeaderText = "División";
+            this.Division.Name = "Division";
+            this.Division.ReadOnly = true;
+            // 
+            // Grupo
+            // 
+            this.Grupo.HeaderText = "Grupo";
+            this.Grupo.Name = "Grupo";
+            this.Grupo.ReadOnly = true;
+            // 
+            // IdDictado
+            // 
+            this.IdDictado.HeaderText = "Dictado";
+            this.IdDictado.Name = "IdDictado";
+            this.IdDictado.ReadOnly = true;
+            this.IdDictado.Visible = false;
+            // 
             // IdAlumno
-            //
+            // 
             this.IdAlumno.HeaderText = "IdAlumno";
             this.IdAlumno.Name = "IdAlumno";
             this.IdAlumno.ReadOnly = true;
             this.IdAlumno.Visible = false;
-            //
+            // 
             // ApellidoAlumno
-            //
+            // 
+            this.ApellidoAlumno.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ApellidoAlumno.HeaderText = "Apellido";
             this.ApellidoAlumno.Name = "ApellidoAlumno";
             this.ApellidoAlumno.ReadOnly = true;
-            this.ApellidoAlumno.Width = 120;
-            //
+            // 
             // NombreAlumno
-            //
+            // 
+            this.NombreAlumno.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.NombreAlumno.HeaderText = "Nombre";
             this.NombreAlumno.Name = "NombreAlumno";
             this.NombreAlumno.ReadOnly = true;
-            this.NombreAlumno.Width = 120;
-            //
+            // 
             // LegajoAlumno
-            //
+            // 
             this.LegajoAlumno.HeaderText = "Legajo";
             this.LegajoAlumno.Name = "LegajoAlumno";
             this.LegajoAlumno.ReadOnly = true;
-            this.LegajoAlumno.Width = 100;
-            //
+            // 
             // Inscripto
-            //
+            // 
             this.Inscripto.HeaderText = "Inscripto";
             this.Inscripto.Name = "Inscripto";
-            this.Inscripto.Width = 80;
-            //
+            // 
             // FrmInscripcion
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(860, 600);
+            this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.dgvDictados);
             this.Controls.Add(this.dgvInscripciones);
             this.Controls.Add(this.panelBotones);
-            this.Controls.Add(this.panelFiltros);
             this.MinimumSize = new System.Drawing.Size(860, 600);
             this.Name = "FrmInscripcion";
             this.Text = "Inscripciones";
@@ -379,32 +419,42 @@ namespace SistemaAsistencia.Vista.Inscripcion
             ((System.ComponentModel.ISupportInitialize)(this.nudAnio)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDivision)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudGrupo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvInscripciones)).EndInit();
-            this.panelFiltros.ResumeLayout(false);
-            this.panelFiltros.PerformLayout();
             this.panelBotones.ResumeLayout(false);
-            this.panelBotones.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvInscripciones)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDictados)).EndInit();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel panelFiltros;
-        private MaterialSkin.Controls.MaterialLabel lblEspecialidad;
-        private MaterialSkin.Controls.MaterialComboBox cmbEspecialidad;
         private MaterialSkin.Controls.MaterialLabel lblAnio;
         private System.Windows.Forms.NumericUpDown nudAnio;
         private MaterialSkin.Controls.MaterialLabel lblDivision;
         private System.Windows.Forms.NumericUpDown nudDivision;
         private MaterialSkin.Controls.MaterialLabel lblGrupo;
         private System.Windows.Forms.NumericUpDown nudGrupo;
-        private MaterialSkin.Controls.MaterialLabel lblDictado;
-        private MaterialSkin.Controls.MaterialComboBox cmbDictado;
         private System.Windows.Forms.Panel panelBotones;
         private MaterialSkin.Controls.MaterialButton btnGuardar;
         private MaterialSkin.Controls.MaterialButton btnCancelar;
         private System.Windows.Forms.DataGridView dgvInscripciones;
+        private System.Windows.Forms.DataGridView dgvDictados;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private MaterialSkin.Controls.MaterialComboBox cmbEspecialidad;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Materia;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Anio;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Division;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Grupo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn IdDictado;
         private System.Windows.Forms.DataGridViewTextBoxColumn IdAlumno;
         private System.Windows.Forms.DataGridViewTextBoxColumn ApellidoAlumno;
         private System.Windows.Forms.DataGridViewTextBoxColumn NombreAlumno;

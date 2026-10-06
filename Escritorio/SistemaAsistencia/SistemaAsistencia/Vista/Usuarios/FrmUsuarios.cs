@@ -57,14 +57,37 @@ namespace SistemaAsistencia.Vista.Usuarios
         {
             if (dgv.Columns.Count == 0) return;
 
+            // Ocultar las columnas que no se deben mostrar
             if (dgv.Columns.Contains("IdUsuario"))
                 dgv.Columns["IdUsuario"].Visible = false;
+
             if (dgv.Columns.Contains("Contrasena"))
                 dgv.Columns["Contrasena"].Visible = false;
+
+            // Configurar NombreUsuario con Fill
             if (dgv.Columns.Contains("NombreUsuario"))
+            {
                 dgv.Columns["NombreUsuario"].HeaderText = "Usuario";
+                dgv.Columns["NombreUsuario"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgv.Columns["NombreUsuario"].FillWeight = 40; // Ocupará el 40% del espacio
+            }
+
+            // Configurar Rol con Fill
+            if (dgv.Columns.Contains("Rol"))
+            {
+                dgv.Columns["Rol"].HeaderText = "Rol";
+                dgv.Columns["Rol"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgv.Columns["Rol"].FillWeight = 35; // Ocupará el 35% del espacio
+            }
+
+            // Configurar Activo con Fill
             if (dgv.Columns.Contains("Activo"))
+            {
+                dgv.Columns["Activo"].HeaderText = "Activo";
                 dgv.Columns["Activo"].ReadOnly = true;
+                dgv.Columns["Activo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgv.Columns["Activo"].FillWeight = 25; // Ocupará el 25% del espacio
+            }
         }
 
         // ---------------- 1. Crear ----------------

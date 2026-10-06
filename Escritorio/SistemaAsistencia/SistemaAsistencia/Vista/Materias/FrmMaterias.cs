@@ -88,8 +88,10 @@ namespace SistemaAsistencia.Vista.Materias
                 dgv.Columns["IdEspecialidad"].Visible = false;
             if (dgv.Columns.Contains("NombreMateria"))
                 dgv.Columns["NombreMateria"].HeaderText = "Materia";
+                dgv.Columns["NombreMateria"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             if (dgv.Columns.Contains("NombreEspecialidad"))
                 dgv.Columns["NombreEspecialidad"].HeaderText = "Especialidad";
+                dgv.Columns["NombreEspecialidad"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             if (dgv.Columns.Contains("CargaHoraria"))
                 dgv.Columns["CargaHoraria"].HeaderText = "Carga Horaria";
             if (dgv.Columns.Contains("AnioMateria"))

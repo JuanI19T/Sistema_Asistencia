@@ -34,9 +34,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.lblCDivision = new MaterialSkin.Controls.MaterialLabel();
             this.nudDivision = new System.Windows.Forms.NumericUpDown();
             this.dgvMateriaSel = new System.Windows.Forms.DataGridView();
-            this.lblCProfesor = new MaterialSkin.Controls.MaterialLabel();
             this.cmbProfesor = new MaterialSkin.Controls.MaterialComboBox();
-            this.lblCDia = new MaterialSkin.Controls.MaterialLabel();
             this.cmbDia = new MaterialSkin.Controls.MaterialComboBox();
             this.lblCHorario = new MaterialSkin.Controls.MaterialLabel();
             this.dtpHorario = new System.Windows.Forms.DateTimePicker();
@@ -49,16 +47,13 @@ namespace SistemaAsistencia.Vista.Dictados
             this.btnGuardar = new MaterialSkin.Controls.MaterialButton();
             this.btnLimpiarCrear = new MaterialSkin.Controls.MaterialButton();
             this.lblEditando = new MaterialSkin.Controls.MaterialLabel();
-            this.lblEditFiltroEsp = new MaterialSkin.Controls.MaterialLabel();
             this.cmbEditFiltroEspecialidad = new MaterialSkin.Controls.MaterialComboBox();
             this.lblEditAnioMateria = new MaterialSkin.Controls.MaterialLabel();
             this.nudEditAnioMateria = new System.Windows.Forms.NumericUpDown();
             this.lblEditDivision = new MaterialSkin.Controls.MaterialLabel();
             this.nudEditDivision = new System.Windows.Forms.NumericUpDown();
             this.dgvEditMateriaSel = new System.Windows.Forms.DataGridView();
-            this.lblEditProfesor = new MaterialSkin.Controls.MaterialLabel();
             this.cmbEditProfesor = new MaterialSkin.Controls.MaterialComboBox();
-            this.lblEditDia = new MaterialSkin.Controls.MaterialLabel();
             this.cmbEditDia = new MaterialSkin.Controls.MaterialComboBox();
             this.lblEditHorario = new MaterialSkin.Controls.MaterialLabel();
             this.dtpEditHorario = new System.Windows.Forms.DateTimePicker();
@@ -77,12 +72,18 @@ namespace SistemaAsistencia.Vista.Dictados
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.pnlCrear = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.pnlEdit = new System.Windows.Forms.Panel();
             this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
-            this.lblCFiltroEsp = new MaterialSkin.Controls.MaterialLabel();
             ((System.ComponentModel.ISupportInitialize)(this.nudAnioMateria)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDivision)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMateriaSel)).BeginInit();
@@ -97,6 +98,13 @@ namespace SistemaAsistencia.Vista.Dictados
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.pnlCrear.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel9.SuspendLayout();
+            this.tableLayoutPanel8.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel5.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
+            this.tableLayoutPanel7.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
@@ -105,6 +113,7 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             // cmbFiltroEspecialidad
             // 
+            this.cmbFiltroEspecialidad.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.cmbFiltroEspecialidad.AutoResize = false;
             this.cmbFiltroEspecialidad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.cmbFiltroEspecialidad.Depth = 0;
@@ -118,22 +127,23 @@ namespace SistemaAsistencia.Vista.Dictados
             this.cmbFiltroEspecialidad.Hint = "Especialidad";
             this.cmbFiltroEspecialidad.IntegralHeight = false;
             this.cmbFiltroEspecialidad.ItemHeight = 43;
-            this.cmbFiltroEspecialidad.Location = new System.Drawing.Point(130, 12);
+            this.cmbFiltroEspecialidad.Location = new System.Drawing.Point(90, 17);
             this.cmbFiltroEspecialidad.MaxDropDownItems = 4;
             this.cmbFiltroEspecialidad.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbFiltroEspecialidad.Name = "cmbFiltroEspecialidad";
-            this.cmbFiltroEspecialidad.Size = new System.Drawing.Size(250, 49);
+            this.cmbFiltroEspecialidad.Size = new System.Drawing.Size(234, 49);
             this.cmbFiltroEspecialidad.StartIndex = -1;
             this.cmbFiltroEspecialidad.TabIndex = 0;
             this.cmbFiltroEspecialidad.UseAccent = false;
             // 
             // lblCAnioMateria
             // 
+            this.lblCAnioMateria.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblCAnioMateria.AutoSize = true;
             this.lblCAnioMateria.BackColor = System.Drawing.Color.White;
             this.lblCAnioMateria.Depth = 0;
             this.lblCAnioMateria.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblCAnioMateria.Location = new System.Drawing.Point(16, 75);
+            this.lblCAnioMateria.Location = new System.Drawing.Point(58, 29);
             this.lblCAnioMateria.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblCAnioMateria.Name = "lblCAnioMateria";
             this.lblCAnioMateria.Size = new System.Drawing.Size(29, 19);
@@ -142,7 +152,8 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             // nudAnioMateria
             // 
-            this.nudAnioMateria.Location = new System.Drawing.Point(130, 72);
+            this.nudAnioMateria.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.nudAnioMateria.Location = new System.Drawing.Point(174, 26);
             this.nudAnioMateria.Maximum = new decimal(new int[] {
             7,
             0,
@@ -164,60 +175,59 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             // lblCDivision
             // 
+            this.lblCDivision.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblCDivision.AutoSize = true;
             this.lblCDivision.BackColor = System.Drawing.Color.White;
             this.lblCDivision.Depth = 0;
             this.lblCDivision.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblCDivision.Location = new System.Drawing.Point(16, 105);
+            this.lblCDivision.Location = new System.Drawing.Point(39, 29);
             this.lblCDivision.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblCDivision.Name = "lblCDivision";
-            this.lblCDivision.Size = new System.Drawing.Size(123, 19);
+            this.lblCDivision.Size = new System.Drawing.Size(62, 19);
             this.lblCDivision.TabIndex = 2;
-            this.lblCDivision.Text = "División (0=todo)";
+            this.lblCDivision.Text = "División ";
             // 
             // nudDivision
             // 
-            this.nudDivision.Location = new System.Drawing.Point(160, 102);
+            this.nudDivision.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.nudDivision.Location = new System.Drawing.Point(165, 26);
             this.nudDivision.Maximum = new decimal(new int[] {
             7,
+            0,
+            0,
+            0});
+            this.nudDivision.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
             this.nudDivision.Name = "nudDivision";
             this.nudDivision.Size = new System.Drawing.Size(90, 25);
             this.nudDivision.TabIndex = 2;
+            this.nudDivision.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // dgvMateriaSel
             // 
             this.dgvMateriaSel.AllowUserToAddRows = false;
             this.dgvMateriaSel.AllowUserToDeleteRows = false;
-            this.dgvMateriaSel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvMateriaSel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMateriaSel.Location = new System.Drawing.Point(16, 160);
+            this.dgvMateriaSel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvMateriaSel.Location = new System.Drawing.Point(3, 335);
             this.dgvMateriaSel.MultiSelect = false;
             this.dgvMateriaSel.Name = "dgvMateriaSel";
             this.dgvMateriaSel.ReadOnly = true;
             this.dgvMateriaSel.RowHeadersVisible = false;
             this.dgvMateriaSel.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMateriaSel.Size = new System.Drawing.Size(786, 140);
+            this.dgvMateriaSel.Size = new System.Drawing.Size(408, 81);
             this.dgvMateriaSel.TabIndex = 4;
-            // 
-            // lblCProfesor
-            // 
-            this.lblCProfesor.AutoSize = true;
-            this.lblCProfesor.BackColor = System.Drawing.Color.White;
-            this.lblCProfesor.Depth = 0;
-            this.lblCProfesor.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblCProfesor.Location = new System.Drawing.Point(16, 310);
-            this.lblCProfesor.MouseState = MaterialSkin.MouseState.HOVER;
-            this.lblCProfesor.Name = "lblCProfesor";
-            this.lblCProfesor.Size = new System.Drawing.Size(61, 19);
-            this.lblCProfesor.TabIndex = 4;
-            this.lblCProfesor.Text = "Profesor";
             // 
             // cmbProfesor
             // 
+            this.cmbProfesor.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.cmbProfesor.AutoResize = false;
             this.cmbProfesor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.cmbProfesor.Depth = 0;
@@ -231,30 +241,18 @@ namespace SistemaAsistencia.Vista.Dictados
             this.cmbProfesor.Hint = "Profesor";
             this.cmbProfesor.IntegralHeight = false;
             this.cmbProfesor.ItemHeight = 43;
-            this.cmbProfesor.Location = new System.Drawing.Point(130, 307);
+            this.cmbProfesor.Location = new System.Drawing.Point(500, 17);
             this.cmbProfesor.MaxDropDownItems = 4;
             this.cmbProfesor.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbProfesor.Name = "cmbProfesor";
-            this.cmbProfesor.Size = new System.Drawing.Size(280, 49);
+            this.cmbProfesor.Size = new System.Drawing.Size(241, 49);
             this.cmbProfesor.StartIndex = -1;
             this.cmbProfesor.TabIndex = 5;
             this.cmbProfesor.UseAccent = false;
             // 
-            // lblCDia
-            // 
-            this.lblCDia.AutoSize = true;
-            this.lblCDia.BackColor = System.Drawing.Color.White;
-            this.lblCDia.Depth = 0;
-            this.lblCDia.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblCDia.Location = new System.Drawing.Point(16, 366);
-            this.lblCDia.MouseState = MaterialSkin.MouseState.HOVER;
-            this.lblCDia.Name = "lblCDia";
-            this.lblCDia.Size = new System.Drawing.Size(25, 19);
-            this.lblCDia.TabIndex = 5;
-            this.lblCDia.Text = "Día";
-            // 
             // cmbDia
             // 
+            this.cmbDia.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.cmbDia.AutoResize = false;
             this.cmbDia.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.cmbDia.Depth = 0;
@@ -274,22 +272,23 @@ namespace SistemaAsistencia.Vista.Dictados
             "MIÉRCOLES",
             "JUEVES",
             "VIERNES"});
-            this.cmbDia.Location = new System.Drawing.Point(130, 363);
+            this.cmbDia.Location = new System.Drawing.Point(500, 100);
             this.cmbDia.MaxDropDownItems = 4;
             this.cmbDia.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbDia.Name = "cmbDia";
-            this.cmbDia.Size = new System.Drawing.Size(200, 49);
+            this.cmbDia.Size = new System.Drawing.Size(241, 49);
             this.cmbDia.StartIndex = -1;
             this.cmbDia.TabIndex = 6;
             this.cmbDia.UseAccent = false;
             // 
             // lblCHorario
             // 
+            this.lblCHorario.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblCHorario.AutoSize = true;
             this.lblCHorario.BackColor = System.Drawing.Color.White;
             this.lblCHorario.Depth = 0;
             this.lblCHorario.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblCHorario.Location = new System.Drawing.Point(16, 422);
+            this.lblCHorario.Location = new System.Drawing.Point(31, 29);
             this.lblCHorario.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblCHorario.Name = "lblCHorario";
             this.lblCHorario.Size = new System.Drawing.Size(39, 19);
@@ -298,21 +297,23 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             // dtpHorario
             // 
+            this.dtpHorario.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dtpHorario.CustomFormat = "HH:mm";
             this.dtpHorario.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpHorario.Location = new System.Drawing.Point(130, 419);
+            this.dtpHorario.Location = new System.Drawing.Point(123, 26);
             this.dtpHorario.Name = "dtpHorario";
             this.dtpHorario.ShowUpDown = true;
-            this.dtpHorario.Size = new System.Drawing.Size(90, 20);
+            this.dtpHorario.Size = new System.Drawing.Size(60, 25);
             this.dtpHorario.TabIndex = 7;
             // 
             // lblCFin
             // 
+            this.lblCFin.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblCFin.AutoSize = true;
             this.lblCFin.BackColor = System.Drawing.Color.White;
             this.lblCFin.Depth = 0;
             this.lblCFin.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblCFin.Location = new System.Drawing.Point(250, 422);
+            this.lblCFin.Location = new System.Drawing.Point(243, 29);
             this.lblCFin.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblCFin.Name = "lblCFin";
             this.lblCFin.Size = new System.Drawing.Size(23, 19);
@@ -321,21 +322,23 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             // dtpHorarioFin
             // 
+            this.dtpHorarioFin.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dtpHorarioFin.CustomFormat = "HH:mm";
             this.dtpHorarioFin.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpHorarioFin.Location = new System.Drawing.Point(300, 419);
+            this.dtpHorarioFin.Location = new System.Drawing.Point(327, 26);
             this.dtpHorarioFin.Name = "dtpHorarioFin";
             this.dtpHorarioFin.ShowUpDown = true;
-            this.dtpHorarioFin.Size = new System.Drawing.Size(90, 20);
+            this.dtpHorarioFin.Size = new System.Drawing.Size(60, 25);
             this.dtpHorarioFin.TabIndex = 8;
             // 
             // lblCGrupo
             // 
+            this.lblCGrupo.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblCGrupo.AutoSize = true;
             this.lblCGrupo.BackColor = System.Drawing.Color.White;
             this.lblCGrupo.Depth = 0;
             this.lblCGrupo.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblCGrupo.Location = new System.Drawing.Point(16, 135);
+            this.lblCGrupo.Location = new System.Drawing.Point(14, 29);
             this.lblCGrupo.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblCGrupo.Name = "lblCGrupo";
             this.lblCGrupo.Size = new System.Drawing.Size(109, 19);
@@ -344,23 +347,25 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             // nudGrupo
             // 
-            this.nudGrupo.Location = new System.Drawing.Point(160, 132);
+            this.nudGrupo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.nudGrupo.Location = new System.Drawing.Point(161, 26);
             this.nudGrupo.Maximum = new decimal(new int[] {
             2,
             0,
             0,
             0});
             this.nudGrupo.Name = "nudGrupo";
-            this.nudGrupo.Size = new System.Drawing.Size(90, 20);
+            this.nudGrupo.Size = new System.Drawing.Size(90, 25);
             this.nudGrupo.TabIndex = 3;
             // 
             // lblCAnio
             // 
+            this.lblCAnio.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblCAnio.AutoSize = true;
             this.lblCAnio.BackColor = System.Drawing.Color.White;
             this.lblCAnio.Depth = 0;
             this.lblCAnio.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblCAnio.Location = new System.Drawing.Point(16, 482);
+            this.lblCAnio.Location = new System.Drawing.Point(62, 29);
             this.lblCAnio.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblCAnio.Name = "lblCAnio";
             this.lblCAnio.Size = new System.Drawing.Size(79, 19);
@@ -369,7 +374,8 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             // nudAnioLectivo
             // 
-            this.nudAnioLectivo.Location = new System.Drawing.Point(160, 479);
+            this.nudAnioLectivo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.nudAnioLectivo.Location = new System.Drawing.Point(261, 26);
             this.nudAnioLectivo.Maximum = new decimal(new int[] {
             2100,
             0,
@@ -391,18 +397,19 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             // btnGuardar
             // 
+            this.btnGuardar.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnGuardar.AutoSize = false;
             this.btnGuardar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnGuardar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.btnGuardar.Depth = 0;
             this.btnGuardar.HighEmphasis = true;
             this.btnGuardar.Icon = null;
-            this.btnGuardar.Location = new System.Drawing.Point(130, 515);
+            this.btnGuardar.Location = new System.Drawing.Point(40, 22);
             this.btnGuardar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnGuardar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnGuardar.Size = new System.Drawing.Size(150, 36);
+            this.btnGuardar.Size = new System.Drawing.Size(123, 36);
             this.btnGuardar.TabIndex = 10;
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -412,13 +419,14 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             // btnLimpiarCrear
             // 
+            this.btnLimpiarCrear.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnLimpiarCrear.AutoSize = false;
             this.btnLimpiarCrear.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnLimpiarCrear.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.btnLimpiarCrear.Depth = 0;
             this.btnLimpiarCrear.HighEmphasis = true;
             this.btnLimpiarCrear.Icon = null;
-            this.btnLimpiarCrear.Location = new System.Drawing.Point(290, 515);
+            this.btnLimpiarCrear.Location = new System.Drawing.Point(251, 22);
             this.btnLimpiarCrear.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnLimpiarCrear.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLimpiarCrear.Name = "btnLimpiarCrear";
@@ -433,29 +441,15 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             // lblEditando
             // 
-            this.lblEditando.AutoSize = true;
             this.lblEditando.BackColor = System.Drawing.Color.White;
             this.lblEditando.Depth = 0;
             this.lblEditando.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditando.Location = new System.Drawing.Point(10, 10);
+            this.lblEditando.Location = new System.Drawing.Point(11, 10);
             this.lblEditando.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblEditando.Name = "lblEditando";
-            this.lblEditando.Size = new System.Drawing.Size(229, 19);
+            this.lblEditando.Size = new System.Drawing.Size(403, 19);
             this.lblEditando.TabIndex = 15;
             this.lblEditando.Text = "Editando: (seleccione de la lista)";
-            // 
-            // lblEditFiltroEsp
-            // 
-            this.lblEditFiltroEsp.AutoSize = true;
-            this.lblEditFiltroEsp.BackColor = System.Drawing.Color.White;
-            this.lblEditFiltroEsp.Depth = 0;
-            this.lblEditFiltroEsp.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditFiltroEsp.Location = new System.Drawing.Point(10, 53);
-            this.lblEditFiltroEsp.MouseState = MaterialSkin.MouseState.HOVER;
-            this.lblEditFiltroEsp.Name = "lblEditFiltroEsp";
-            this.lblEditFiltroEsp.Size = new System.Drawing.Size(91, 19);
-            this.lblEditFiltroEsp.TabIndex = 2;
-            this.lblEditFiltroEsp.Text = "Especialidad";
             // 
             // cmbEditFiltroEspecialidad
             // 
@@ -472,11 +466,11 @@ namespace SistemaAsistencia.Vista.Dictados
             this.cmbEditFiltroEspecialidad.Hint = "Especialidad";
             this.cmbEditFiltroEspecialidad.IntegralHeight = false;
             this.cmbEditFiltroEspecialidad.ItemHeight = 43;
-            this.cmbEditFiltroEspecialidad.Location = new System.Drawing.Point(120, 37);
+            this.cmbEditFiltroEspecialidad.Location = new System.Drawing.Point(10, 32);
             this.cmbEditFiltroEspecialidad.MaxDropDownItems = 4;
             this.cmbEditFiltroEspecialidad.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbEditFiltroEspecialidad.Name = "cmbEditFiltroEspecialidad";
-            this.cmbEditFiltroEspecialidad.Size = new System.Drawing.Size(280, 49);
+            this.cmbEditFiltroEspecialidad.Size = new System.Drawing.Size(230, 49);
             this.cmbEditFiltroEspecialidad.StartIndex = -1;
             this.cmbEditFiltroEspecialidad.TabIndex = 2;
             this.cmbEditFiltroEspecialidad.UseAccent = false;
@@ -496,7 +490,7 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             // nudEditAnioMateria
             // 
-            this.nudEditAnioMateria.Location = new System.Drawing.Point(120, 97);
+            this.nudEditAnioMateria.Location = new System.Drawing.Point(150, 97);
             this.nudEditAnioMateria.Maximum = new decimal(new int[] {
             7,
             0,
@@ -552,21 +546,8 @@ namespace SistemaAsistencia.Vista.Dictados
             this.dgvEditMateriaSel.ReadOnly = true;
             this.dgvEditMateriaSel.RowHeadersVisible = false;
             this.dgvEditMateriaSel.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvEditMateriaSel.Size = new System.Drawing.Size(400, 140);
+            this.dgvEditMateriaSel.Size = new System.Drawing.Size(274, 59);
             this.dgvEditMateriaSel.TabIndex = 6;
-            // 
-            // lblEditProfesor
-            // 
-            this.lblEditProfesor.AutoSize = true;
-            this.lblEditProfesor.BackColor = System.Drawing.Color.White;
-            this.lblEditProfesor.Depth = 0;
-            this.lblEditProfesor.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditProfesor.Location = new System.Drawing.Point(10, 335);
-            this.lblEditProfesor.MouseState = MaterialSkin.MouseState.HOVER;
-            this.lblEditProfesor.Name = "lblEditProfesor";
-            this.lblEditProfesor.Size = new System.Drawing.Size(61, 19);
-            this.lblEditProfesor.TabIndex = 6;
-            this.lblEditProfesor.Text = "Profesor";
             // 
             // cmbEditProfesor
             // 
@@ -583,27 +564,14 @@ namespace SistemaAsistencia.Vista.Dictados
             this.cmbEditProfesor.Hint = "Profesor";
             this.cmbEditProfesor.IntegralHeight = false;
             this.cmbEditProfesor.ItemHeight = 43;
-            this.cmbEditProfesor.Location = new System.Drawing.Point(120, 332);
+            this.cmbEditProfesor.Location = new System.Drawing.Point(13, 250);
             this.cmbEditProfesor.MaxDropDownItems = 4;
             this.cmbEditProfesor.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbEditProfesor.Name = "cmbEditProfesor";
-            this.cmbEditProfesor.Size = new System.Drawing.Size(280, 49);
+            this.cmbEditProfesor.Size = new System.Drawing.Size(227, 49);
             this.cmbEditProfesor.StartIndex = -1;
             this.cmbEditProfesor.TabIndex = 7;
             this.cmbEditProfesor.UseAccent = false;
-            // 
-            // lblEditDia
-            // 
-            this.lblEditDia.AutoSize = true;
-            this.lblEditDia.BackColor = System.Drawing.Color.White;
-            this.lblEditDia.Depth = 0;
-            this.lblEditDia.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditDia.Location = new System.Drawing.Point(10, 391);
-            this.lblEditDia.MouseState = MaterialSkin.MouseState.HOVER;
-            this.lblEditDia.Name = "lblEditDia";
-            this.lblEditDia.Size = new System.Drawing.Size(25, 19);
-            this.lblEditDia.TabIndex = 7;
-            this.lblEditDia.Text = "Día";
             // 
             // cmbEditDia
             // 
@@ -626,11 +594,11 @@ namespace SistemaAsistencia.Vista.Dictados
             "MIÉRCOLES",
             "JUEVES",
             "VIERNES"});
-            this.cmbEditDia.Location = new System.Drawing.Point(120, 388);
+            this.cmbEditDia.Location = new System.Drawing.Point(13, 307);
             this.cmbEditDia.MaxDropDownItems = 4;
             this.cmbEditDia.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbEditDia.Name = "cmbEditDia";
-            this.cmbEditDia.Size = new System.Drawing.Size(200, 49);
+            this.cmbEditDia.Size = new System.Drawing.Size(227, 49);
             this.cmbEditDia.StartIndex = -1;
             this.cmbEditDia.TabIndex = 8;
             this.cmbEditDia.UseAccent = false;
@@ -641,7 +609,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.lblEditHorario.BackColor = System.Drawing.Color.White;
             this.lblEditHorario.Depth = 0;
             this.lblEditHorario.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditHorario.Location = new System.Drawing.Point(10, 447);
+            this.lblEditHorario.Location = new System.Drawing.Point(10, 366);
             this.lblEditHorario.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblEditHorario.Name = "lblEditHorario";
             this.lblEditHorario.Size = new System.Drawing.Size(39, 19);
@@ -652,10 +620,10 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             this.dtpEditHorario.CustomFormat = "HH:mm";
             this.dtpEditHorario.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpEditHorario.Location = new System.Drawing.Point(120, 444);
+            this.dtpEditHorario.Location = new System.Drawing.Point(73, 362);
             this.dtpEditHorario.Name = "dtpEditHorario";
             this.dtpEditHorario.ShowUpDown = true;
-            this.dtpEditHorario.Size = new System.Drawing.Size(90, 20);
+            this.dtpEditHorario.Size = new System.Drawing.Size(60, 25);
             this.dtpEditHorario.TabIndex = 9;
             // 
             // lblEditFin
@@ -664,7 +632,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.lblEditFin.BackColor = System.Drawing.Color.White;
             this.lblEditFin.Depth = 0;
             this.lblEditFin.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditFin.Location = new System.Drawing.Point(230, 447);
+            this.lblEditFin.Location = new System.Drawing.Point(261, 366);
             this.lblEditFin.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblEditFin.Name = "lblEditFin";
             this.lblEditFin.Size = new System.Drawing.Size(23, 19);
@@ -675,10 +643,10 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             this.dtpEditHorarioFin.CustomFormat = "HH:mm";
             this.dtpEditHorarioFin.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpEditHorarioFin.Location = new System.Drawing.Point(280, 444);
+            this.dtpEditHorarioFin.Location = new System.Drawing.Point(290, 362);
             this.dtpEditHorarioFin.Name = "dtpEditHorarioFin";
             this.dtpEditHorarioFin.ShowUpDown = true;
-            this.dtpEditHorarioFin.Size = new System.Drawing.Size(90, 20);
+            this.dtpEditHorarioFin.Size = new System.Drawing.Size(60, 25);
             this.dtpEditHorarioFin.TabIndex = 10;
             // 
             // lblEditGrupo
@@ -703,7 +671,7 @@ namespace SistemaAsistencia.Vista.Dictados
             0,
             0});
             this.nudEditGrupo.Name = "nudEditGrupo";
-            this.nudEditGrupo.Size = new System.Drawing.Size(90, 20);
+            this.nudEditGrupo.Size = new System.Drawing.Size(90, 25);
             this.nudEditGrupo.TabIndex = 5;
             // 
             // lblEditAnio
@@ -712,7 +680,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.lblEditAnio.BackColor = System.Drawing.Color.White;
             this.lblEditAnio.Depth = 0;
             this.lblEditAnio.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditAnio.Location = new System.Drawing.Point(10, 477);
+            this.lblEditAnio.Location = new System.Drawing.Point(10, 396);
             this.lblEditAnio.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblEditAnio.Name = "lblEditAnio";
             this.lblEditAnio.Size = new System.Drawing.Size(79, 19);
@@ -721,7 +689,7 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             // nudEditAnio
             // 
-            this.nudEditAnio.Location = new System.Drawing.Point(150, 474);
+            this.nudEditAnio.Location = new System.Drawing.Point(150, 393);
             this.nudEditAnio.Maximum = new decimal(new int[] {
             2100,
             0,
@@ -749,7 +717,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.btnModificar.Depth = 0;
             this.btnModificar.HighEmphasis = true;
             this.btnModificar.Icon = null;
-            this.btnModificar.Location = new System.Drawing.Point(10, 510);
+            this.btnModificar.Location = new System.Drawing.Point(4, 426);
             this.btnModificar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnModificar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnModificar.Name = "btnModificar";
@@ -770,7 +738,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.btnEliminar.Depth = 0;
             this.btnEliminar.HighEmphasis = true;
             this.btnEliminar.Icon = null;
-            this.btnEliminar.Location = new System.Drawing.Point(130, 510);
+            this.btnEliminar.Location = new System.Drawing.Point(122, 426);
             this.btnEliminar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnEliminar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnEliminar.Name = "btnEliminar";
@@ -791,7 +759,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.btnLimpiarEditar.Depth = 0;
             this.btnLimpiarEditar.HighEmphasis = true;
             this.btnLimpiarEditar.Icon = null;
-            this.btnLimpiarEditar.Location = new System.Drawing.Point(250, 510);
+            this.btnLimpiarEditar.Location = new System.Drawing.Point(240, 426);
             this.btnLimpiarEditar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnLimpiarEditar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLimpiarEditar.Name = "btnLimpiarEditar";
@@ -887,32 +855,129 @@ namespace SistemaAsistencia.Vista.Dictados
             // pnlCrear
             // 
             this.pnlCrear.AutoScroll = true;
-            this.pnlCrear.Controls.Add(this.lblCFiltroEsp);
-            this.pnlCrear.Controls.Add(this.cmbFiltroEspecialidad);
-            this.pnlCrear.Controls.Add(this.lblCAnioMateria);
-            this.pnlCrear.Controls.Add(this.nudAnioMateria);
-            this.pnlCrear.Controls.Add(this.lblCDivision);
-            this.pnlCrear.Controls.Add(this.nudDivision);
-            this.pnlCrear.Controls.Add(this.dgvMateriaSel);
-            this.pnlCrear.Controls.Add(this.lblCProfesor);
-            this.pnlCrear.Controls.Add(this.cmbProfesor);
-            this.pnlCrear.Controls.Add(this.lblCDia);
-            this.pnlCrear.Controls.Add(this.cmbDia);
-            this.pnlCrear.Controls.Add(this.lblCHorario);
-            this.pnlCrear.Controls.Add(this.dtpHorario);
-            this.pnlCrear.Controls.Add(this.lblCFin);
-            this.pnlCrear.Controls.Add(this.dtpHorarioFin);
-            this.pnlCrear.Controls.Add(this.lblCGrupo);
-            this.pnlCrear.Controls.Add(this.nudGrupo);
-            this.pnlCrear.Controls.Add(this.lblCAnio);
-            this.pnlCrear.Controls.Add(this.nudAnioLectivo);
-            this.pnlCrear.Controls.Add(this.btnGuardar);
-            this.pnlCrear.Controls.Add(this.btnLimpiarCrear);
+            this.pnlCrear.Controls.Add(this.tableLayoutPanel1);
             this.pnlCrear.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCrear.Location = new System.Drawing.Point(3, 3);
             this.pnlCrear.Name = "pnlCrear";
             this.pnlCrear.Size = new System.Drawing.Size(834, 506);
             this.pnlCrear.TabIndex = 12;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel9, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel8, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.cmbDia, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.cmbProfesor, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.dgvMateriaSel, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.cmbFiltroEspecialidad, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel7, 1, 2);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(828, 419);
+            this.tableLayoutPanel1.TabIndex = 12;
+            // 
+            // tableLayoutPanel9
+            // 
+            this.tableLayoutPanel9.ColumnCount = 2;
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel9.Controls.Add(this.btnGuardar, 0, 0);
+            this.tableLayoutPanel9.Controls.Add(this.btnLimpiarCrear, 1, 0);
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(417, 335);
+            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+            this.tableLayoutPanel9.RowCount = 1;
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(408, 81);
+            this.tableLayoutPanel9.TabIndex = 7;
+            // 
+            // tableLayoutPanel8
+            // 
+            this.tableLayoutPanel8.ColumnCount = 2;
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.Controls.Add(this.lblCAnio, 0, 0);
+            this.tableLayoutPanel8.Controls.Add(this.nudAnioLectivo, 1, 0);
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(417, 252);
+            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
+            this.tableLayoutPanel8.RowCount = 1;
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(408, 77);
+            this.tableLayoutPanel8.TabIndex = 4;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.nudAnioMateria, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.lblCAnioMateria, 0, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(61, 86);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(292, 77);
+            this.tableLayoutPanel2.TabIndex = 1;
+            // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.tableLayoutPanel5.ColumnCount = 2;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.Controls.Add(this.lblCDivision, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.nudDivision, 1, 0);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(67, 169);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 1;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(280, 77);
+            this.tableLayoutPanel5.TabIndex = 2;
+            // 
+            // tableLayoutPanel6
+            // 
+            this.tableLayoutPanel6.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.tableLayoutPanel6.ColumnCount = 2;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.Controls.Add(this.lblCGrupo, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.nudGrupo, 1, 0);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(69, 252);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 1;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(275, 77);
+            this.tableLayoutPanel6.TabIndex = 3;
+            // 
+            // tableLayoutPanel7
+            // 
+            this.tableLayoutPanel7.ColumnCount = 4;
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel7.Controls.Add(this.lblCHorario, 0, 0);
+            this.tableLayoutPanel7.Controls.Add(this.dtpHorarioFin, 3, 0);
+            this.tableLayoutPanel7.Controls.Add(this.lblCFin, 2, 0);
+            this.tableLayoutPanel7.Controls.Add(this.dtpHorario, 1, 0);
+            this.tableLayoutPanel7.Location = new System.Drawing.Point(417, 169);
+            this.tableLayoutPanel7.Name = "tableLayoutPanel7";
+            this.tableLayoutPanel7.RowCount = 1;
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(408, 77);
+            this.tableLayoutPanel7.TabIndex = 4;
             // 
             // tabPage2
             // 
@@ -922,7 +987,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(840, 450);
+            this.tabPage2.Size = new System.Drawing.Size(840, 512);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Modificar un Dictado";
             // 
@@ -963,16 +1028,13 @@ namespace SistemaAsistencia.Vista.Dictados
             | System.Windows.Forms.AnchorStyles.Left)));
             this.pnlEdit.AutoScroll = true;
             this.pnlEdit.Controls.Add(this.lblEditando);
-            this.pnlEdit.Controls.Add(this.lblEditFiltroEsp);
             this.pnlEdit.Controls.Add(this.cmbEditFiltroEspecialidad);
             this.pnlEdit.Controls.Add(this.lblEditAnioMateria);
             this.pnlEdit.Controls.Add(this.nudEditAnioMateria);
             this.pnlEdit.Controls.Add(this.lblEditDivision);
             this.pnlEdit.Controls.Add(this.nudEditDivision);
             this.pnlEdit.Controls.Add(this.dgvEditMateriaSel);
-            this.pnlEdit.Controls.Add(this.lblEditProfesor);
             this.pnlEdit.Controls.Add(this.cmbEditProfesor);
-            this.pnlEdit.Controls.Add(this.lblEditDia);
             this.pnlEdit.Controls.Add(this.cmbEditDia);
             this.pnlEdit.Controls.Add(this.lblEditHorario);
             this.pnlEdit.Controls.Add(this.dtpEditHorario);
@@ -987,7 +1049,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.pnlEdit.Controls.Add(this.btnLimpiarEditar);
             this.pnlEdit.Location = new System.Drawing.Point(3, 3);
             this.pnlEdit.Name = "pnlEdit";
-            this.pnlEdit.Size = new System.Drawing.Size(430, 438);
+            this.pnlEdit.Size = new System.Drawing.Size(434, 438);
             this.pnlEdit.TabIndex = 2;
             // 
             // materialTabSelector1
@@ -1003,19 +1065,6 @@ namespace SistemaAsistencia.Vista.Dictados
             this.materialTabSelector1.Name = "materialTabSelector1";
             this.materialTabSelector1.Size = new System.Drawing.Size(848, 41);
             this.materialTabSelector1.TabIndex = 17;
-            // 
-            // lblCFiltroEsp
-            // 
-            this.lblCFiltroEsp.AutoSize = true;
-            this.lblCFiltroEsp.BackColor = System.Drawing.Color.White;
-            this.lblCFiltroEsp.Depth = 0;
-            this.lblCFiltroEsp.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblCFiltroEsp.Location = new System.Drawing.Point(16, 28);
-            this.lblCFiltroEsp.MouseState = MaterialSkin.MouseState.HOVER;
-            this.lblCFiltroEsp.Name = "lblCFiltroEsp";
-            this.lblCFiltroEsp.Size = new System.Drawing.Size(91, 19);
-            this.lblCFiltroEsp.TabIndex = 0;
-            this.lblCFiltroEsp.Text = "Especialidad";
             // 
             // FrmDictados
             // 
@@ -1043,7 +1092,18 @@ namespace SistemaAsistencia.Vista.Dictados
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.pnlCrear.ResumeLayout(false);
-            this.pnlCrear.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel9.ResumeLayout(false);
+            this.tableLayoutPanel8.ResumeLayout(false);
+            this.tableLayoutPanel8.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
+            this.tableLayoutPanel5.ResumeLayout(false);
+            this.tableLayoutPanel5.PerformLayout();
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.tableLayoutPanel6.PerformLayout();
+            this.tableLayoutPanel7.ResumeLayout(false);
+            this.tableLayoutPanel7.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
@@ -1060,9 +1120,7 @@ namespace SistemaAsistencia.Vista.Dictados
         private MaterialSkin.Controls.MaterialLabel lblCDivision;
         private System.Windows.Forms.NumericUpDown nudDivision;
         private System.Windows.Forms.DataGridView dgvMateriaSel;
-        private MaterialSkin.Controls.MaterialLabel lblCProfesor;
         private MaterialSkin.Controls.MaterialComboBox cmbProfesor;
-        private MaterialSkin.Controls.MaterialLabel lblCDia;
         private MaterialSkin.Controls.MaterialComboBox cmbDia;
         private MaterialSkin.Controls.MaterialLabel lblCHorario;
         private System.Windows.Forms.DateTimePicker dtpHorario;
@@ -1075,16 +1133,13 @@ namespace SistemaAsistencia.Vista.Dictados
         private MaterialSkin.Controls.MaterialButton btnGuardar;
         private MaterialSkin.Controls.MaterialButton btnLimpiarCrear;
         private MaterialSkin.Controls.MaterialLabel lblEditando;
-        private MaterialSkin.Controls.MaterialLabel lblEditFiltroEsp;
         private MaterialSkin.Controls.MaterialComboBox cmbEditFiltroEspecialidad;
         private MaterialSkin.Controls.MaterialLabel lblEditAnioMateria;
         private System.Windows.Forms.NumericUpDown nudEditAnioMateria;
         private MaterialSkin.Controls.MaterialLabel lblEditDivision;
         private System.Windows.Forms.NumericUpDown nudEditDivision;
         private System.Windows.Forms.DataGridView dgvEditMateriaSel;
-        private MaterialSkin.Controls.MaterialLabel lblEditProfesor;
         private MaterialSkin.Controls.MaterialComboBox cmbEditProfesor;
-        private MaterialSkin.Controls.MaterialLabel lblEditDia;
         private MaterialSkin.Controls.MaterialComboBox cmbEditDia;
         private MaterialSkin.Controls.MaterialLabel lblEditHorario;
         private System.Windows.Forms.DateTimePicker dtpEditHorario;
@@ -1108,6 +1163,12 @@ namespace SistemaAsistencia.Vista.Dictados
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private MaterialSkin.Controls.MaterialTabSelector materialTabSelector1;
-        private MaterialSkin.Controls.MaterialLabel lblCFiltroEsp;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
     }
 }

@@ -19,10 +19,7 @@ namespace SistemaAsistencia.Vista.Inscripcion
         private List<Dictado> cacheDictados = new List<Dictado>();
         private List<Materia> cacheMaterias = new List<Materia>();
 
-        // Contador (no flag) para distinguir cambios programáticos
-        // (carga, reseteos) de los del usuario. Anidado seguro.
-        private int _bloqueo = 0;
-        private bool Programando => _bloqueo > 0;
+        private bool _cargando = false;
 
         public FrmInscripcion()
         {
@@ -36,287 +33,281 @@ namespace SistemaAsistencia.Vista.Inscripcion
 
             Tema.ConfigurarFondo(this);
             Tema.EstilizarGrilla(dgvInscripciones);
+            Tema.EstilizarGrilla(dgvDictados);
 
-            // Cascada por pasos: Especialidad -> Año -> División -> Grupo -> Dictado.
-            // No se puede elegir el siguiente sin el anterior.
-            cmbEspecialidad.SelectedIndexChanged += (s, e) => Especialidad_Cambiada();
-            nudAnio.ValueChanged += (s, e) => Anio_Cambiado();
-            nudDivision.ValueChanged += (s, e) => Division_Cambiada();
-            nudGrupo.ValueChanged += (s, e) => Grupo_Cambiado();
+            // Vinculación de eventos
+            cmbEspecialidad.SelectedIndexChanged += CmbEspecialidad_SelectedIndexChanged;
+            nudAnio.ValueChanged += NudAnio_ValueChanged;
+            nudDivision.ValueChanged += NudFiltro_ValueChanged;
+            nudGrupo.ValueChanged += NudFiltro_ValueChanged;
+            dgvDictados.SelectionChanged += DgvDictados_SelectionChanged;
 
-            // Arranque bloqueado: se habilita por pasos al elegir.
+            // Estado inicial
             nudAnio.Enabled = false;
             nudDivision.Enabled = false;
             nudGrupo.Enabled = false;
-            cmbDictado.Enabled = false;
+            dgvDictados.Enabled = false;
         }
 
         private void FrmInscripcion_Load(object sender, EventArgs e)
         {
             CargaVista.IntentarCarga(() =>
             {
+                ConfigurarGrillaDictados();
                 CargarEspecialidades();
                 CargarDatos();
                 dgvInscripciones.Rows.Clear();
             }, "inscripciones");
         }
 
+        private void ConfigurarGrillaDictados()
+        {
+            if (dgvDictados.Columns.Count == 0)
+            {
+                dgvDictados.Columns.Add("IdDictado", "IdDictado");
+                dgvDictados.Columns["IdDictado"].Visible = false;
+                dgvDictados.Columns.Add("Materia", "Materia");
+                dgvDictados.Columns.Add("Anio", "Año");
+                dgvDictados.Columns.Add("Division", "División");
+                dgvDictados.Columns.Add("Grupo", "Grupo");
+            }
+        }
+
         private void CargarEspecialidades()
         {
-            List<Especialidad> lista = CargaVista.ObtenerLista(
-                () => especialidadController.ObtenerEspecialidades());
-
-            // Sin "Todas": la cascada exige elegir especialidad (paso 1).
-            CargaVista.CargarCombo(cmbEspecialidad, lista, "NombreEspecialidad", "IdEspecialidad");
+            _cargando = true;
+            try
+            {
+                List<Especialidad> lista = CargaVista.ObtenerLista(
+                    () => especialidadController.ObtenerEspecialidades());
+                CargaVista.CargarCombo(cmbEspecialidad, lista, "NombreEspecialidad", "IdEspecialidad");
+            }
+            finally
+            {
+                _cargando = false;
+            }
         }
 
         private void CargarDatos()
         {
-            cacheMaterias = CargaVista.ObtenerLista(() => materiaController.ObtenerMaterias());
-            cacheDictados = CargaVista.ObtenerLista(() => dictadoController.ObtenerDictados());
+            cacheMaterias = CargaVista.ObtenerLista(() => materiaController.ObtenerMaterias()) ?? new List<Materia>();
+            cacheDictados = CargaVista.ObtenerLista(() => dictadoController.ObtenerDictados()) ?? new List<Dictado>();
         }
 
-        // ---- Cascada por pasos ----
-
-        private void Especialidad_Cambiada()
+        private void CmbEspecialidad_SelectedIndexChanged(object sender, EventArgs e)
         {
-            bool hayEsp = cmbEspecialidad.SelectedIndex >= 0;
+            if (_cargando) return;
 
-            _bloqueo++;
+            _cargando = true;
             try
             {
+                bool hayEsp = cmbEspecialidad.SelectedIndex >= 0;
                 if (hayEsp)
                 {
-                    bool basico = CicloHelper.EsCicloBasico(
-                        CicloHelper.NombreEspecialidadDe(cmbEspecialidad));
-                    CicloHelper.AplicarRangoAnio(nudAnio,
-                        CicloHelper.NombreEspecialidadDe(cmbEspecialidad));
-                    nudDivision.Value = nudDivision.Minimum;
+                    string nomEsp = CicloHelper.NombreEspecialidadDe(cmbEspecialidad);
+                    bool basico = CicloHelper.EsCicloBasico(nomEsp);
+
+                    CicloHelper.AplicarRangoAnio(nudAnio, nomEsp);
                     nudDivision.Maximum = CicloHelper.DivisionMaxima(basico);
                 }
-                else
-                {
-                    nudAnio.Maximum = 7;
-                    nudAnio.Minimum = 1;
-                    nudDivision.Maximum = 7;
-                }
+
                 nudAnio.Value = nudAnio.Minimum;
                 nudDivision.Value = nudDivision.Minimum;
                 nudGrupo.Value = nudGrupo.Minimum;
-                cmbDictado.DataSource = null;
-                dgvInscripciones.Rows.Clear();
-            }
-            finally { _bloqueo--; }
 
-            nudAnio.Enabled = hayEsp;
-            nudDivision.Enabled = false;
-            nudGrupo.Enabled = false;
-            cmbDictado.Enabled = false;
+                dgvDictados.Rows.Clear();
+                dgvInscripciones.Rows.Clear();
+
+                nudAnio.Enabled = hayEsp;
+                nudDivision.Enabled = false;
+                nudGrupo.Enabled = false;
+                dgvDictados.Enabled = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cambiar especialidad: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                _cargando = false;
+            }
         }
 
-        private void Anio_Cambiado()
+        private void NudAnio_ValueChanged(object sender, EventArgs e)
         {
-            if (Programando) return;
+            if (_cargando) return;
 
-            // El usuario eligió Año: se resetea lo de abajo y se abre División.
-            _bloqueo++;
+            _cargando = true;
             try
             {
                 nudDivision.Value = nudDivision.Minimum;
                 nudGrupo.Value = nudGrupo.Minimum;
-                cmbDictado.DataSource = null;
+
+                nudDivision.Enabled = true;
+                nudGrupo.Enabled = true;
+                dgvDictados.Enabled = true;
+            }
+            finally
+            {
+                _cargando = false;
+            }
+
+            FiltrarDictados();
+        }
+
+        private void NudFiltro_ValueChanged(object sender, EventArgs e)
+        {
+            if (_cargando) return;
+            FiltrarDictados();
+        }
+
+        private void FiltrarDictados()
+        {
+            if (_cargando) return;
+
+            _cargando = true;
+            try
+            {
+                dgvDictados.Rows.Clear();
                 dgvInscripciones.Rows.Clear();
-            }
-            finally { _bloqueo--; }
 
-            nudDivision.Enabled = true;
-            nudGrupo.Enabled = false;
-            cmbDictado.Enabled = false;
-        }
+                var esp = cmbEspecialidad.SelectedItem as Especialidad;
+                if (esp == null || !nudAnio.Enabled) return;
 
-        private void Division_Cambiada()
-        {
-            if (Programando) return;
+                int anio = Convert.ToInt32(nudAnio.Value);
+                int division = Convert.ToInt32(nudDivision.Value);
+                int grupo = Convert.ToInt32(nudGrupo.Value);
 
-            _bloqueo++;
-            try
-            {
-                nudGrupo.Value = nudGrupo.Minimum;
-                cmbDictado.DataSource = null;
-                dgvInscripciones.Rows.Clear();
-            }
-            finally { _bloqueo--; }
+                foreach (Dictado d in cacheDictados)
+                {
+                    Materia m = cacheMaterias.Find(x => x.IdMateria == d.IdMateria);
+                    if (m == null) continue;
+                    if (m.IdEspecialidad != esp.IdEspecialidad) continue;
+                    if (m.AnioMateria != anio) continue;
 
-            nudGrupo.Enabled = true;
-            cmbDictado.Enabled = false;
-        }
+                    // Filtro por División (0 = Muestra solo las dictadas para "Todas", o el número exacto)
+                    if (division > (int)nudDivision.Minimum)
+                    {
+                        int divDictado = d.Division.HasValue ? d.Division.Value : 0;
+                        if (divDictado != division)
+                            continue;
+                    }
 
-        private void Grupo_Cambiado()
-        {
-            if (Programando) return;
+                    // Filtro estricto por Grupo:
+                    // grupo = 0 -> muestra solo dictados asignados a 0/null ("Todos")
+                    // grupo = 1 -> muestra solo dictados asignados a 1
+                    // grupo = 2 -> muestra solo dictados asignados a 2
+                    int grupoDictado = d.Grupo.HasValue ? d.Grupo.Value : 0;
+                    if (grupoDictado != grupo)
+                    {
+                        continue;
+                    }
 
-            _bloqueo++;
-            try
-            {
-                cmbDictado.DataSource = null;
-                dgvInscripciones.Rows.Clear();
-            }
-            finally { _bloqueo--; }
+                    int fila = dgvDictados.Rows.Add();
+                    dgvDictados.Rows[fila].Cells["IdDictado"].Value = d.IdDictado;
+                    dgvDictados.Rows[fila].Cells["Materia"].Value = m.NombreMateria ?? "Sin nombre";
+                    dgvDictados.Rows[fila].Cells["Anio"].Value = m.AnioMateria;
+                    dgvDictados.Rows[fila].Cells["Division"].Value = (!d.Division.HasValue || d.Division.Value == 0) ? "Todas" : d.Division.Value.ToString();
+                    dgvDictados.Rows[fila].Cells["Grupo"].Value = (!d.Grupo.HasValue || d.Grupo.Value == 0) ? "Todos" : d.Grupo.Value.ToString();
+                }
 
-            cmbDictado.Enabled = true;
-            CargarDictadosFiltrados();
-        }
-
-        private void CargarDictadosFiltrados()
-        {
-            var esp = cmbEspecialidad.SelectedItem as Especialidad;
-            if (esp == null) return;
-
-            int anio = Convert.ToInt32(nudAnio.Value);
-            int division = Convert.ToInt32(nudDivision.Value);
-            int grupo = Convert.ToInt32(nudGrupo.Value);
-
-            var lista = new List<Dictado>();
-            foreach (Dictado d in cacheDictados)
-            {
-                Materia m = cacheMaterias.Find(x => x.IdMateria == d.IdMateria);
-                if (m == null) continue;
-                if (m.IdEspecialidad != esp.IdEspecialidad) continue;
-                if (m.AnioMateria != anio) continue;
-                // Alcance total (NULL) cubre cualquier división/grupo.
-                if (d.Division.HasValue && d.Division.Value != division) continue;
-                if (d.Grupo.HasValue && d.Grupo.Value != grupo) continue;
-                lista.Add(d);
-            }
-
-            _bloqueo++;
-            try
-            {
-                CargaVista.CargarCombo(cmbDictado, lista, "Descripcion", "IdDictado");
-            }
-            finally { _bloqueo--; }
-
-            if (lista.Count == 0)
-            {
-                MessageBox.Show(
-                    "Sin dictados para esos filtros.",
-                    "Inscripciones",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
-        }
-
-        private void cmbDictado_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                CargarTabla();
+                dgvDictados.ClearSelection();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "No se pudo cargar la tabla.\n" + ex.Message,
-                    "Error de conexión",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show("Error al filtrar dictados: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                _cargando = false;
             }
         }
 
-        private void CargarTabla()
+        private void DgvDictados_SelectionChanged(object sender, EventArgs e)
         {
-            dgvInscripciones.Rows.Clear();
+            if (_cargando) return;
 
-            if (cmbDictado.SelectedIndex < 0 ||
-                cmbDictado.SelectedValue == null)
+            if (dgvDictados.SelectedRows.Count == 0 && dgvDictados.CurrentRow == null)
             {
+                dgvInscripciones.Rows.Clear();
                 return;
             }
 
-            int idDictado = Convert.ToInt32(cmbDictado.SelectedValue);
+            CargarTablaAlumnos();
+        }
 
-            List<int> inscriptos =
-                inscripcionController.ObtenerAlumnosInscriptos(idDictado);
+        private void CargarTablaAlumnos()
+        {
+            dgvInscripciones.Rows.Clear();
 
-            foreach (Alumno alumno in alumnoController.ObtenerAlumnos())
+            if (dgvDictados.CurrentRow == null || dgvDictados.CurrentRow.Cells["IdDictado"].Value == null)
+                return;
+
+            if (!int.TryParse(dgvDictados.CurrentRow.Cells["IdDictado"].Value.ToString(), out int idDictado))
+                return;
+
+            try
             {
-                int fila = dgvInscripciones.Rows.Add();
+                List<int> inscriptos = inscripcionController.ObtenerAlumnosInscriptos(idDictado) ?? new List<int>();
 
-                dgvInscripciones.Rows[fila].Cells["IdAlumno"].Value = alumno.IdAlumno;
-                dgvInscripciones.Rows[fila].Cells["ApellidoAlumno"].Value = alumno.ApellidoAlumno;
-                dgvInscripciones.Rows[fila].Cells["NombreAlumno"].Value = alumno.NombreAlumno;
-                dgvInscripciones.Rows[fila].Cells["LegajoAlumno"].Value = alumno.LegajoAlumno;
-                dgvInscripciones.Rows[fila].Cells["Inscripto"].Value =
-                    inscriptos.Contains(alumno.IdAlumno);
+                foreach (Alumno alumno in alumnoController.ObtenerAlumnos())
+                {
+                    int fila = dgvInscripciones.Rows.Add();
+                    dgvInscripciones.Rows[fila].Cells["IdAlumno"].Value = alumno.IdAlumno;
+                    dgvInscripciones.Rows[fila].Cells["ApellidoAlumno"].Value = alumno.ApellidoAlumno;
+                    dgvInscripciones.Rows[fila].Cells["NombreAlumno"].Value = alumno.NombreAlumno;
+                    dgvInscripciones.Rows[fila].Cells["LegajoAlumno"].Value = alumno.LegajoAlumno;
+                    dgvInscripciones.Rows[fila].Cells["Inscripto"].Value = inscriptos.Contains(alumno.IdAlumno);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar alumnos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            if (cmbDictado.SelectedIndex < 0)
+            if (dgvDictados.CurrentRow == null || dgvDictados.CurrentRow.Cells["IdDictado"].Value == null)
             {
-                MessageBox.Show(
-                    "Seleccione un dictado.",
-                    "Inscripciones",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                cmbDictado.Focus();
+                MessageBox.Show("Seleccione un dictado de la lista.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            int idDictado = Convert.ToInt32(cmbDictado.SelectedValue);
+            int idDictadoVal = Convert.ToInt32(dgvDictados.CurrentRow.Cells["IdDictado"].Value);
             int anioInicio = DateTime.Now.Year;
 
-            List<int> inscriptosActuales =
-                inscripcionController.ObtenerAlumnosInscriptos(idDictado);
+            List<int> inscriptosActuales = inscripcionController.ObtenerAlumnosInscriptos(idDictadoVal) ?? new List<int>();
 
             int agregados = 0;
             int bajas = 0;
 
             foreach (DataGridViewRow fila in dgvInscripciones.Rows)
             {
+                if (fila.IsNewRow) continue;
+
                 int idAlumno = Convert.ToInt32(fila.Cells["IdAlumno"].Value);
                 bool marcado = Convert.ToBoolean(fila.Cells["Inscripto"].Value);
 
                 if (marcado && !inscriptosActuales.Contains(idAlumno))
                 {
-                    if (inscripcionController.AgregarInscripcion(
-                            idAlumno, idDictado, anioInicio))
-                    {
+                    if (inscripcionController.AgregarInscripcion(idAlumno, idDictadoVal, anioInicio))
                         agregados++;
-                    }
                 }
                 else if (!marcado && inscriptosActuales.Contains(idAlumno))
                 {
-                    if (inscripcionController.EliminarInscripcion(idAlumno, idDictado))
-                    {
+                    if (inscripcionController.EliminarInscripcion(idAlumno, idDictadoVal))
                         bajas++;
-                    }
                 }
             }
 
-            if (agregados == 0 && bajas == 0)
-            {
-                MessageBox.Show(
-                    "No hubo cambios en las inscripciones.",
-                    "Inscripciones",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show(
-                    $"Inscripciones actualizadas: {agregados} agregadas, {bajas} bajas.",
-                    "Inscripciones",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
-
-            CargarTabla();
+            MessageBox.Show($"Inscripciones actualizadas: {agregados} agregadas, {bajas} bajas.", "Inscripciones", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            CargarTablaAlumnos();
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            CargarTabla();
+            CargarTablaAlumnos();
         }
     }
 }

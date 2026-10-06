@@ -126,7 +126,7 @@ namespace SistemaAsistencia.Vista.Dictados
                     nudAnioMateria.Minimum = 1;
                 }
                 nudAnioMateria.Value = nudAnioMateria.Minimum;
-                nudDivision.Value = 0;
+                nudDivision.Value = 1;
                 nudGrupo.Value = 0;
                 idMateriaCrear = 0;
                 dgvMateriaSel.DataSource = null;
@@ -153,7 +153,7 @@ namespace SistemaAsistencia.Vista.Dictados
             _bloqueo++;
             try
             {
-                nudDivision.Value = 0;
+                nudDivision.Value = 1;
                 nudGrupo.Value = 0;
             }
             finally { _bloqueo--; }
@@ -490,8 +490,8 @@ namespace SistemaAsistencia.Vista.Dictados
             {
                 CargaVista.ReiniciarCombo(cmbFiltroEspecialidad);
                 nudAnioMateria.Value = nudAnioMateria.Minimum;
-                nudDivision.Value = 0;
-                nudGrupo.Value = 0;
+                nudDivision.Value = 1;
+                nudGrupo.Value = 1;
                 idMateriaCrear = 0;
                 dgvMateriaSel.DataSource = null;
                 CargaVista.ReiniciarCombo(cmbProfesor);
@@ -555,7 +555,6 @@ namespace SistemaAsistencia.Vista.Dictados
                 try
                 {
                     idDictadoSeleccionado = dictado.IdDictado;
-                    lblEditando.Text = "Editando: " + dictado.Descripcion;
 
                     // Orden de cascada: Especialidad -> Año -> fila -> División.
                     Materia mat = cacheMaterias.Find(m => m.IdMateria == dictado.IdMateria);
@@ -565,23 +564,43 @@ namespace SistemaAsistencia.Vista.Dictados
                         nudEditAnioMateria.Enabled = true;
                         nudEditAnioMateria.Value = LimitarAnioMateria(nudEditAnioMateria, mat.AnioMateria);
                     }
+
+                    // Nombre de la materia
+                    string nombreMateria = mat != null ? mat.NombreMateria : (dictado.NombreMateria ?? "Materia");
+
+                    // Formato de División
+                    string divTexto = dictado.Division.HasValue && dictado.Division > 0
+                        ? $"Div. {dictado.Division}"
+                        : "Sin Div.";
+
+                    // Formato de Grupo
+                    string grupoTexto = dictado.Grupo.HasValue && dictado.Grupo > 0
+                        ? $"Grupo {dictado.Grupo}"
+                        : "Grupo 0";
+
+                    // Asignación con el nuevo formato: Materia + División + Grupo
+                    lblEditando.Text = $"Editando: {nombreMateria} - {divTexto} - {grupoTexto}";
+
                     FiltrarMateriasEditar();
                     SeleccionarFilaMateria(dgvEditMateriaSel, dictado.IdMateria);
                     idMateriaEditar = IdMateriaDeFila(dgvEditMateriaSel);
                     nudEditDivision.Enabled = true;
-                    // NULL (todo el curso) se representa con 0 en los NumericUpDown.
+
+                    // Carga de división y grupo en los controles
                     nudEditDivision.Value = LimitarAlcance(nudEditDivision, dictado.Division);
                     nudEditGrupo.Value = LimitarAlcance(nudEditGrupo, dictado.Grupo);
                     nudEditGrupo.Enabled = nudEditDivision.Value > 0;
+
                     SeleccionarValor(cmbEditProfesor, dictado.IdProfesor);
                     cmbEditDia.SelectedItem = dictado.Dia;
                     CargaVista.Refrescar(cmbEditDia);
-                    // Rango amplio primero (el select de materia lo recorta después).
+
+                    // Horarios sin restricciones
                     FijarRango(dtpEditHorario, TimeSpan.Zero, new TimeSpan(23, 59, 0),
                         HoraDesdeTexto(dictado.Horario, new TimeSpan(8, 0, 0)));
                     FijarRango(dtpEditHorarioFin, TimeSpan.Zero, new TimeSpan(23, 59, 0),
                         HoraDesdeTexto(dictado.HorarioFin, new TimeSpan(10, 0, 0)));
-                    // Recorta a la franja de la materia (normaliza horarios viejos).
+
                     AplicarFranjaPorMateria(idMateriaEditar, dtpEditHorario, dtpEditHorarioFin);
                     nudEditAnio.Value = LimitarAnio(nudEditAnio, dictado.AnioLectivo);
                 }
@@ -898,18 +917,8 @@ namespace SistemaAsistencia.Vista.Dictados
 
         private static void FranjaDe(int? anioMateria, out TimeSpan min, out TimeSpan max)
         {
-            if (anioMateria >= 1 && anioMateria <= 3)
-            {
-                min = new TimeSpan(7, 30, 0); max = new TimeSpan(17, 0, 0);
-            }
-            else if (anioMateria >= 4 && anioMateria <= 7)
-            {
-                min = new TimeSpan(13, 0, 0); max = new TimeSpan(21, 0, 0);
-            }
-            else
-            {
-                min = TimeSpan.Zero; max = new TimeSpan(23, 59, 0);
-            }
+            min = TimeSpan.Zero;
+            max = new TimeSpan(23, 59, 0);
         }
 
         // Sin fila elegida: no clickeables; con fila: franja de esa materia.
@@ -941,8 +950,7 @@ namespace SistemaAsistencia.Vista.Dictados
 
         // Rango de división según el ciclo de la materia elegida:
         // Ciclo Básico (años 1-3) división 1-7; Tecnicaturas (años 4-7) 1-6.
-        // Grupo: 1-2 en todos los casos.
-        // El 0 significa "todo el curso" y siempre es válido.
+        // Grupo: 1-2 en todos los casos (0 = todo el curso dentro de la división).
         private bool AlcanceValido(int idMateria, NumericUpDown nudDivision, NumericUpDown nudGrupo)
         {
             Materia mat = cacheMaterias.Find(m => m.IdMateria == idMateria);
@@ -956,11 +964,22 @@ namespace SistemaAsistencia.Vista.Dictados
             int division = Convert.ToInt32(nudDivision.Value);
             int grupo = Convert.ToInt32(nudGrupo.Value);
 
+            // Validación: división es obligatoria (no se permite 0)
+            if (division <= 0)
+            {
+                MessageBox.Show(
+                    "Debe seleccionar una división válida (no puede ser 0).",
+                    "Dictados",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                nudDivision.Focus();
+                return false;
+            }
+
             if (division > maxDivision)
             {
                 MessageBox.Show(
-                    $"En {donde} la división va de 1 a {maxDivision}. " +
-                    "Usá 0 si el dictado es para todo el curso.",
+                    $"En {donde} la división va de 1 a {maxDivision}.",
                     "Dictados",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -971,17 +990,7 @@ namespace SistemaAsistencia.Vista.Dictados
             {
                 MessageBox.Show(
                     $"En {donde} el grupo va de 1 a {maxGrupo}. " +
-                    "Usá 0 si el dictado es para todo el curso.",
-                    "Dictados",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return false;
-            }
-
-            if (grupo > 0 && division == 0)
-            {
-                MessageBox.Show(
-                    "Si indicás un grupo, tenés que indicar también la división.",
+                    "Usá 0 si el dictado es para toda la división.",
                     "Dictados",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -991,37 +1000,11 @@ namespace SistemaAsistencia.Vista.Dictados
             return true;
         }
 
-        // Franjas EEST según el ciclo de la materia elegida:
-        // Ciclo Básico (años 1-3) 07:30-17:00, Superior (4-7) 13:00-21:00.
+        // Sin restricción de franja horaria
         private bool FranjaValida(int idMateria, TimeSpan inicio, TimeSpan fin)
         {
-            Materia mat = cacheMaterias.Find(m => m.IdMateria == idMateria);
-            if (mat == null) return true;
-
-            TimeSpan min, max;
-            string ciclo;
-            if (mat.AnioMateria >= 1 && mat.AnioMateria <= 3)
-            {
-                min = new TimeSpan(7, 30, 0); max = new TimeSpan(17, 0, 0);
-                ciclo = "Ciclo Básico (07:30 a 17:00)";
-            }
-            else
-            {
-                min = new TimeSpan(13, 0, 0); max = new TimeSpan(21, 0, 0);
-                ciclo = "Ciclo Superior (13:00 a 21:00)";
-            }
-
-            if (inicio < min || fin > max)
-            {
-                MessageBox.Show(
-                    $"La materia es de {ciclo}: el dictado debe estar entre {min:hh\\:mm} y {max:hh\\:mm}.",
-                    "Dictados",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                return false;
-            }
+            // Restricciones de horario removidas
             return true;
         }
-
     }
 }

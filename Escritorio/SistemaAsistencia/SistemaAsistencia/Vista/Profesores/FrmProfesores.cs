@@ -82,6 +82,7 @@ namespace SistemaAsistencia.Vista.Profesores
             {
                 dgv.Columns["CorreoProfesor"].HeaderText = "Correo";
                 dgv.Columns["CorreoProfesor"].DisplayIndex = 4;
+                dgv.Columns["CorreoProfesor"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
             if (dgv.Columns.Contains("TelefonoProfesor"))
             {

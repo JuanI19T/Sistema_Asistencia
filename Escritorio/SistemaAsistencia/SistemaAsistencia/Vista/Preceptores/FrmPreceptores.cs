@@ -83,6 +83,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             {
                 dgv.Columns["CorreoPreceptor"].HeaderText = "Correo";
                 dgv.Columns["CorreoPreceptor"].DisplayIndex = 4;
+                dgv.Columns["CorreoPreceptor"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
             if (dgv.Columns.Contains("TelefonoPreceptor"))
             {
