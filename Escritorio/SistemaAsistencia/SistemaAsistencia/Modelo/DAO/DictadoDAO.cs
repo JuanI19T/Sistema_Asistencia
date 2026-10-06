@@ -16,6 +16,24 @@ namespace SistemaAsistencia.Modelo.DAO
         private readonly ConexionBD conexionBD = new ConexionBD();
 
         /// <summary>
+        /// Lee una columna entera que admite NULL (division, grupo).
+        /// Sin valor el dictado va a todo el curso; en el modelo eso es null,
+        /// y la vista manda 0 en el NumericUpDown para el mismo significado.
+        /// </summary>
+        /// <param name="dr">DataReader con el registro actual.</param>
+        /// <param name="columna">Nombre de la columna a leer.</param>
+        /// <returns>El valor, o null si la columna está vacía o es 0.</returns>
+        private static int? LeerEnteroOpcional(MySqlDataReader dr, string columna)
+        {
+            object valor = dr[columna];
+            if (valor == null || DBNull.Value.Equals(valor)) return null;
+
+            int numero = Convert.ToInt32(valor);
+
+            return numero == 0 ? (int?)null : numero;
+        }
+
+        /// <summary>
         /// Convierte un registro obtenido desde la base de datos
         /// en un objeto Dictado.
         /// </summary>
@@ -39,7 +57,8 @@ namespace SistemaAsistencia.Modelo.DAO
                 Dia = Convert.ToString(dr["dia"]),
                 Horario = Convert.ToString(dr["horario"]),
                 HorarioFin = fin,
-                Grupo = Convert.ToString(dr["grupo"]),
+                Division = LeerEnteroOpcional(dr, "division"),
+                Grupo = LeerEnteroOpcional(dr, "grupo"),
                 AnioLectivo = Convert.ToInt32(dr["anio_lectivo"]),
                 NombreMateria = Convert.ToString(dr["nombre_materia"]),
                 ApellidoProfesor = Convert.ToString(dr["apellido_profesor"])
@@ -58,7 +77,8 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
 string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
-                                      D.dia, D.horario, D.horario_fin, D.grupo, D.anio_lectivo,
+                                      D.dia, D.horario, D.horario_fin,
+                                      D.division, D.grupo, D.anio_lectivo,
                                       M.nombre_materia, P.apellido_profesor
                                FROM dictado D
                                INNER JOIN materia M
@@ -66,7 +86,7 @@ string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
                                INNER JOIN profesor P
                                     ON P.id_profesor = D.id_profesor
                                WHERE D.activo = 1
-                               ORDER BY D.anio_lectivo, D.grupo,
+                               ORDER BY D.anio_lectivo, D.division, D.grupo,
                                         M.nombre_materia, D.dia, D.horario";
 
                 var cmd = new MySqlCommand(sql, cn);
@@ -93,9 +113,9 @@ string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
                 cn.Open();
 
                 string sql = @"INSERT INTO dictado
-                                (id_materia, id_profesor, dia, horario, horario_fin, grupo, anio_lectivo)
+                                (id_materia, id_profesor, dia, horario, horario_fin, division, grupo, anio_lectivo)
                                 VALUES
-                                (@id_materia, @id_profesor, @dia, @horario, @horario_fin, @grupo, @anio_lectivo)";
+                                (@id_materia, @id_profesor, @dia, @horario, @horario_fin, @division, @grupo, @anio_lectivo)";
 
                 var cmd = new MySqlCommand(sql, cn);
 
@@ -105,6 +125,8 @@ string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
                 cmd.Parameters.AddWithValue("@horario", dictado.Horario);
                 cmd.Parameters.AddWithValue("@horario_fin",
                     string.IsNullOrWhiteSpace(dictado.HorarioFin) ? (object)System.DBNull.Value : dictado.HorarioFin);
+                cmd.Parameters.AddWithValue("@division",
+                    dictado.Division.HasValue ? (object)dictado.Division.Value : System.DBNull.Value);
                 cmd.Parameters.AddWithValue("@grupo", dictado.Grupo);
                 cmd.Parameters.AddWithValue("@anio_lectivo", dictado.AnioLectivo);
 
@@ -127,6 +149,7 @@ string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
                                     dia = @dia,
                                     horario = @horario,
                                     horario_fin = @horario_fin,
+                                    division = @division,
                                     grupo = @grupo,
                                     anio_lectivo = @anio_lectivo
                                 WHERE id_dictado = @id";
@@ -139,6 +162,8 @@ string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
                 cmd.Parameters.AddWithValue("@horario", dictado.Horario);
                 cmd.Parameters.AddWithValue("@horario_fin",
                     string.IsNullOrWhiteSpace(dictado.HorarioFin) ? (object)System.DBNull.Value : dictado.HorarioFin);
+                cmd.Parameters.AddWithValue("@division",
+                    dictado.Division.HasValue ? (object)dictado.Division.Value : System.DBNull.Value);
                 cmd.Parameters.AddWithValue("@grupo", dictado.Grupo);
                 cmd.Parameters.AddWithValue("@anio_lectivo", dictado.AnioLectivo);
                 cmd.Parameters.AddWithValue("@id", dictado.IdDictado);
