@@ -217,6 +217,7 @@
     <Compile Include="Utilidades\Tema.cs" />
     <Compile Include="Utilidades\TelefonoHelper.cs" />
     <Compile Include="Utilidades\CicloHelper.cs" />
+    <Compile Include="Utilidades\CargaVista.cs" />
     <Compile Include="Vista\Comun\CtrlTelefono.cs">
       <SubType>UserControl</SubType>
     </Compile>

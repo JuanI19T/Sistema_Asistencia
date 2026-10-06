@@ -77,7 +77,10 @@
             this.ClientSize = new System.Drawing.Size(900, 560);
             this.MaximizeBox = true;
             this.MinimizeBox = true;
-            this.MinimumSize = new System.Drawing.Size(1024, 650);
+            // Mínimo calibrado para monitores chicos (ej. 1366x768@100%):
+            // la ventana entra cómoda y panelContenido conserva aire.
+            // El scroll de seguridad lo aporta FrmBaseHijo.AutoScroll.
+            this.MinimumSize = new System.Drawing.Size(960, 600);
             this.panelEstado.Controls.Add(this.lblRol);
             this.panelEstado.Controls.Add(this.lblUsuario);
             this.Controls.Add(this.panelContenido);

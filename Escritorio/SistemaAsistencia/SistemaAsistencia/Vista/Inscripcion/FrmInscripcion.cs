@@ -53,38 +53,27 @@ namespace SistemaAsistencia.Vista.Inscripcion
 
         private void FrmInscripcion_Load(object sender, EventArgs e)
         {
-            try
+            CargaVista.IntentarCarga(() =>
             {
                 CargarEspecialidades();
                 CargarDatos();
                 dgvInscripciones.Rows.Clear();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo cargar inscripciones.\n" + ex.Message,
-                    "Error de conexión",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            }, "inscripciones");
         }
 
         private void CargarEspecialidades()
         {
-            List<Especialidad> lista = especialidadController.ObtenerEspecialidades()
-                ?? new List<Especialidad>();
+            List<Especialidad> lista = CargaVista.ObtenerLista(
+                () => especialidadController.ObtenerEspecialidades());
 
             // Sin "Todas": la cascada exige elegir especialidad (paso 1).
-            cmbEspecialidad.DataSource = new List<Especialidad>(lista);
-            cmbEspecialidad.DisplayMember = "NombreEspecialidad";
-            cmbEspecialidad.ValueMember = "IdEspecialidad";
-            cmbEspecialidad.SelectedIndex = -1;
+            CargaVista.CargarCombo(cmbEspecialidad, lista, "NombreEspecialidad", "IdEspecialidad");
         }
 
         private void CargarDatos()
         {
-            cacheMaterias = materiaController.ObtenerMaterias() ?? new List<Materia>();
-            cacheDictados = dictadoController.ObtenerDictados() ?? new List<Dictado>();
+            cacheMaterias = CargaVista.ObtenerLista(() => materiaController.ObtenerMaterias());
+            cacheDictados = CargaVista.ObtenerLista(() => dictadoController.ObtenerDictados());
         }
 
         // ---- Cascada por pasos ----
@@ -203,11 +192,7 @@ namespace SistemaAsistencia.Vista.Inscripcion
             _bloqueo++;
             try
             {
-                cmbDictado.DataSource = null;
-                cmbDictado.DisplayMember = "Descripcion";
-                cmbDictado.ValueMember = "IdDictado";
-                cmbDictado.DataSource = lista;
-                cmbDictado.SelectedIndex = -1;
+                CargaVista.CargarCombo(cmbDictado, lista, "Descripcion", "IdDictado");
             }
             finally { _bloqueo--; }
 

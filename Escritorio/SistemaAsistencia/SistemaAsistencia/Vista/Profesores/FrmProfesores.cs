@@ -35,74 +35,64 @@ namespace SistemaAsistencia.Vista.Profesores
 
         private void FrmProfesores_Load(object sender, EventArgs e)
         {
-            try
-            {
-                CargarProfesores();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo cargar profesores.\n" + ex.Message,
-                    "Error de conexión",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            CargaVista.IntentarCarga(CargarProfesores, "profesores");
         }
 
         private void CargarProfesores()
         {
             cacheProfesores =
-                profesorController.ObtenerProfesores() ?? new List<Profesor>();
+                CargaVista.ObtenerLista(() => profesorController.ObtenerProfesores());
             MostrarEnGrilla(cacheProfesores);
         }
 
         private void MostrarEnGrilla(List<Profesor> lista)
         {
-            dgvProfesores.DataSource = null;
-            dgvProfesores.DataSource = lista;
+            CargaVista.MostrarEnGrilla(dgvProfesores, lista, ConfigurarColumnasProfesores);
+        }
 
-            if (dgvProfesores.Columns.Count > 0)
+        private void ConfigurarColumnasProfesores(DataGridView dgv)
+        {
+            if (dgv.Columns.Count == 0) return;
+
+            string[] soloRelevantes = { "NombreProfesor", "ApellidoProfesor", "DniProfesor", "LegajoProfesor", "CorreoProfesor", "TelefonoProfesor", "Activo" };
+            foreach (DataGridViewColumn col in dgv.Columns)
+                col.Visible = System.Array.IndexOf(soloRelevantes, col.Name) >= 0;
+
+            if (dgv.Columns.Contains("NombreProfesor"))
             {
-                string[] soloRelevantes = { "NombreProfesor", "ApellidoProfesor", "DniProfesor", "LegajoProfesor", "CorreoProfesor", "TelefonoProfesor", "Activo" };
-                foreach (DataGridViewColumn col in dgvProfesores.Columns)
-                    col.Visible = System.Array.IndexOf(soloRelevantes, col.Name) >= 0;
-
-                if (dgvProfesores.Columns.Contains("NombreProfesor"))
-                {
-                    dgvProfesores.Columns["NombreProfesor"].HeaderText = "Nombre";
-                    dgvProfesores.Columns["NombreProfesor"].DisplayIndex = 0;
-                }
-                if (dgvProfesores.Columns.Contains("ApellidoProfesor"))
-                {
-                    dgvProfesores.Columns["ApellidoProfesor"].HeaderText = "Apellido";
-                    dgvProfesores.Columns["ApellidoProfesor"].DisplayIndex = 1;
-                }
-                if (dgvProfesores.Columns.Contains("DniProfesor"))
-                {
-                    dgvProfesores.Columns["DniProfesor"].HeaderText = "DNI";
-                    dgvProfesores.Columns["DniProfesor"].DisplayIndex = 2;
-                }
-                if (dgvProfesores.Columns.Contains("LegajoProfesor"))
-                {
-                    dgvProfesores.Columns["LegajoProfesor"].HeaderText = "Legajo";
-                    dgvProfesores.Columns["LegajoProfesor"].DisplayIndex = 3;
-                }
-                if (dgvProfesores.Columns.Contains("CorreoProfesor"))
-                {
-                    dgvProfesores.Columns["CorreoProfesor"].HeaderText = "Correo";
-                    dgvProfesores.Columns["CorreoProfesor"].DisplayIndex = 4;
-                }
-                if (dgvProfesores.Columns.Contains("TelefonoProfesor"))
-                {
-                    dgvProfesores.Columns["TelefonoProfesor"].HeaderText = "Teléfono";
-                    dgvProfesores.Columns["TelefonoProfesor"].DisplayIndex = 5;
-                }
-                if (dgvProfesores.Columns.Contains("Activo"))
-                {
-                    dgvProfesores.Columns["Activo"].HeaderText = "Activo";
-                    dgvProfesores.Columns["Activo"].DisplayIndex = 6;
-                    dgvProfesores.Columns["Activo"].ReadOnly = true;
-                }
+                dgv.Columns["NombreProfesor"].HeaderText = "Nombre";
+                dgv.Columns["NombreProfesor"].DisplayIndex = 0;
+            }
+            if (dgv.Columns.Contains("ApellidoProfesor"))
+            {
+                dgv.Columns["ApellidoProfesor"].HeaderText = "Apellido";
+                dgv.Columns["ApellidoProfesor"].DisplayIndex = 1;
+            }
+            if (dgv.Columns.Contains("DniProfesor"))
+            {
+                dgv.Columns["DniProfesor"].HeaderText = "DNI";
+                dgv.Columns["DniProfesor"].DisplayIndex = 2;
+            }
+            if (dgv.Columns.Contains("LegajoProfesor"))
+            {
+                dgv.Columns["LegajoProfesor"].HeaderText = "Legajo";
+                dgv.Columns["LegajoProfesor"].DisplayIndex = 3;
+            }
+            if (dgv.Columns.Contains("CorreoProfesor"))
+            {
+                dgv.Columns["CorreoProfesor"].HeaderText = "Correo";
+                dgv.Columns["CorreoProfesor"].DisplayIndex = 4;
+            }
+            if (dgv.Columns.Contains("TelefonoProfesor"))
+            {
+                dgv.Columns["TelefonoProfesor"].HeaderText = "Teléfono";
+                dgv.Columns["TelefonoProfesor"].DisplayIndex = 5;
+            }
+            if (dgv.Columns.Contains("Activo"))
+            {
+                dgv.Columns["Activo"].HeaderText = "Activo";
+                dgv.Columns["Activo"].DisplayIndex = 6;
+                dgv.Columns["Activo"].ReadOnly = true;
             }
         }
 
@@ -129,46 +119,49 @@ namespace SistemaAsistencia.Vista.Profesores
             if (!TelefonoValidoSimple(ctrlTelCrear))
                 return;
 
-            try
+            EjecutarConLayout(() =>
             {
-                Profesor profesor = new Profesor
+                try
                 {
-                    NombreProfesor = txtNombre.Text,
-                    ApellidoProfesor = txtApellido.Text,
-                    DniProfesor = txtDni.Text,
-                    LegajoProfesor = txtDni.Text.Trim(),
-                    CorreoProfesor = txtCorreo.Text,
-                    TelefonoProfesor = ctrlTelCrear.Telefono
-                };
+                    Profesor profesor = new Profesor
+                    {
+                        NombreProfesor = txtNombre.Text,
+                        ApellidoProfesor = txtApellido.Text,
+                        DniProfesor = txtDni.Text,
+                        LegajoProfesor = txtDni.Text.Trim(),
+                        CorreoProfesor = txtCorreo.Text,
+                        TelefonoProfesor = ctrlTelCrear.Telefono
+                    };
 
-                if (profesorController.AgregarProfesor(profesor))
+                    if (profesorController.AgregarProfesor(profesor))
+                    {
+                        MessageBox.Show(
+                            "Profesor agregado correctamente.",
+                            "Profesores",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+
+                        CargarProfesores();
+                        LimpiarCreacion();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "No se pudo agregar el profesor.",
+                            "Profesores",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show(
-                        "Profesor agregado correctamente.",
+                        "No se pudo agregar el profesor.\n" + ex.Message,
                         "Profesores",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
-                    CargarProfesores();
-                    LimpiarCreacion();
+                        MessageBoxIcon.Error);
                 }
-                else
-                {
-                    MessageBox.Show(
-                        "No se pudo agregar el profesor.",
-                        "Profesores",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo agregar el profesor.\n" + ex.Message,
-                    "Profesores",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            });
         }
 
         private void btnLimpiarCrear_Click(object sender, EventArgs e)
@@ -203,39 +196,22 @@ namespace SistemaAsistencia.Vista.Profesores
         {
             string texto = txtBuscar.Text.Trim();
 
-            if (string.IsNullOrEmpty(texto))
-            {
-                MostrarEnGrilla(cacheProfesores);
-                return;
-            }
-
-            List<Profesor> resultados = cacheProfesores.FindAll(p =>
-                (p.NombreProfesor != null &&
-                    p.NombreProfesor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
-                (p.ApellidoProfesor != null &&
-                    p.ApellidoProfesor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
-                (p.DniProfesor != null &&
-                    p.DniProfesor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
-                (p.LegajoProfesor != null &&
-                    p.LegajoProfesor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0));
-
-            MostrarEnGrilla(resultados);
-
-            if (!interactivo) return;
-
-            if (resultados.Count == 0)
-            {
-                MessageBox.Show(
-                    "Sin resultados para esa búsqueda.",
-                    "Profesores",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-                LimpiarEdicion();
-            }
-            else if (resultados.Count == 1)
-            {
-                CargarEnEdicion(resultados[0]);
-            }
+            CargaVista.FiltrarCache(
+                cacheProfesores,
+                texto,
+                p => (p.NombreProfesor != null &&
+                        p.NombreProfesor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                    (p.ApellidoProfesor != null &&
+                        p.ApellidoProfesor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                    (p.DniProfesor != null &&
+                        p.DniProfesor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                    (p.LegajoProfesor != null &&
+                        p.LegajoProfesor.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0),
+                MostrarEnGrilla,
+                CargarEnEdicion,
+                LimpiarEdicion,
+                "Profesores",
+                interactivo);
         }
 
         private void dgvProfesores_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -250,15 +226,18 @@ namespace SistemaAsistencia.Vista.Profesores
 
         private void CargarEnEdicion(Profesor profesor)
         {
-            idProfesorSeleccionado = profesor.IdProfesor;
-            lblEditando.Text =
-                "Editando: " + profesor.ApellidoProfesor + ", " + profesor.NombreProfesor;
-            txtEditNombre.Text = profesor.NombreProfesor;
-            txtEditApellido.Text = profesor.ApellidoProfesor;
-            txtEditDni.Text = profesor.DniProfesor;
-            txtEditLegajo.Text = profesor.LegajoProfesor;
-            txtEditCorreo.Text = profesor.CorreoProfesor;
-            ctrlTelEdit.Telefono = profesor.TelefonoProfesor;
+            EjecutarConLayout(() =>
+            {
+                idProfesorSeleccionado = profesor.IdProfesor;
+                lblEditando.Text =
+                    "Editando: " + profesor.ApellidoProfesor + ", " + profesor.NombreProfesor;
+                txtEditNombre.Text = profesor.NombreProfesor;
+                txtEditApellido.Text = profesor.ApellidoProfesor;
+                txtEditDni.Text = profesor.DniProfesor;
+                txtEditLegajo.Text = profesor.LegajoProfesor;
+                txtEditCorreo.Text = profesor.CorreoProfesor;
+                ctrlTelEdit.Telefono = profesor.TelefonoProfesor;
+            });
         }
 
         private void btnModificar_Click(object sender, EventArgs e)
@@ -276,47 +255,50 @@ namespace SistemaAsistencia.Vista.Profesores
             if (!TelefonoValidoSimple(ctrlTelEdit))
                 return;
 
-            try
+            EjecutarConLayout(() =>
             {
-                Profesor profesor = new Profesor
+                try
                 {
-                    IdProfesor = idProfesorSeleccionado,
-                    NombreProfesor = txtEditNombre.Text,
-                    ApellidoProfesor = txtEditApellido.Text,
-                    DniProfesor = txtEditDni.Text,
-                    LegajoProfesor = txtEditDni.Text.Trim(),
-                    CorreoProfesor = txtEditCorreo.Text,
-                    TelefonoProfesor = ctrlTelEdit.Telefono
-                };
+                    Profesor profesor = new Profesor
+                    {
+                        IdProfesor = idProfesorSeleccionado,
+                        NombreProfesor = txtEditNombre.Text,
+                        ApellidoProfesor = txtEditApellido.Text,
+                        DniProfesor = txtEditDni.Text,
+                        LegajoProfesor = txtEditDni.Text.Trim(),
+                        CorreoProfesor = txtEditCorreo.Text,
+                        TelefonoProfesor = ctrlTelEdit.Telefono
+                    };
 
-                if (profesorController.ModificarProfesor(profesor))
+                    if (profesorController.ModificarProfesor(profesor))
+                    {
+                        MessageBox.Show(
+                            "Profesor modificado correctamente.",
+                            "Profesores",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+
+                        CargarProfesores();
+                        LimpiarEdicion();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "No se pudo modificar el profesor.",
+                            "Profesores",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show(
-                        "Profesor modificado correctamente.",
+                        "No se pudo modificar el profesor.\n" + ex.Message,
                         "Profesores",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
-                    CargarProfesores();
-                    LimpiarEdicion();
+                        MessageBoxIcon.Error);
                 }
-                else
-                {
-                    MessageBox.Show(
-                        "No se pudo modificar el profesor.",
-                        "Profesores",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo modificar el profesor.\n" + ex.Message,
-                    "Profesores",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            });
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
@@ -334,64 +316,67 @@ namespace SistemaAsistencia.Vista.Profesores
             Profesor profesor = cacheProfesores.Find(p => p.IdProfesor == idProfesorSeleccionado);
             if (profesor == null) return;
 
-            try
+            EjecutarConLayout(() =>
             {
-                string descripcion = "Profesor: " + profesor.NombreCompleto +
-                    " (Legajo " + profesor.LegajoProfesor + ")";
-
-                List<Dependencia> dependencias =
-                    profesorController.ObtenerDependencias(idProfesorSeleccionado);
-
-                using (var confirmar = new FrmConfirmarEliminar(descripcion, dependencias))
+                try
                 {
-                    if (confirmar.ShowDialog(this) != DialogResult.OK) return;
+                    string descripcion = "Profesor: " + profesor.NombreCompleto +
+                        " (Legajo " + profesor.LegajoProfesor + ")";
 
-                    bool ok;
+                    List<Dependencia> dependencias =
+                        profesorController.ObtenerDependencias(idProfesorSeleccionado);
 
-                    if (confirmar.Resultado == ResultadoEliminacion.Definitiva)
+                    using (var confirmar = new FrmConfirmarEliminar(descripcion, dependencias))
                     {
-                        ok = profesorController.EliminarDefinitivo(idProfesorSeleccionado);
+                        if (confirmar.ShowDialog(this) != DialogResult.OK) return;
+
+                        bool ok;
+
+                        if (confirmar.Resultado == ResultadoEliminacion.Definitiva)
+                        {
+                            ok = profesorController.EliminarDefinitivo(idProfesorSeleccionado);
+                            if (ok)
+                                MessageBox.Show(
+                                    "Profesor eliminado definitivamente.",
+                                    "Profesores",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            ok = profesorController.DarDeBaja(idProfesorSeleccionado);
+                            if (ok)
+                                MessageBox.Show(
+                                    "Profesor dado de baja.",
+                                    "Profesores",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                        }
+
                         if (ok)
+                        {
+                            CargarProfesores();
+                            LimpiarEdicion();
+                        }
+                        else
+                        {
                             MessageBox.Show(
-                                "Profesor eliminado definitivamente.",
+                                "No se pudo eliminar.",
                                 "Profesores",
                                 MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        ok = profesorController.DarDeBaja(idProfesorSeleccionado);
-                        if (ok)
-                            MessageBox.Show(
-                                "Profesor dado de baja.",
-                                "Profesores",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-                    }
-
-                    if (ok)
-                    {
-                        CargarProfesores();
-                        LimpiarEdicion();
-                    }
-                    else
-                    {
-                        MessageBox.Show(
-                            "No se pudo eliminar.",
-                            "Profesores",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
+                                MessageBoxIcon.Warning);
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo eliminar.\n" + ex.Message,
-                    "Profesores",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        "No se pudo eliminar.\n" + ex.Message,
+                        "Profesores",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            });
         }
 
         private void btnLimpiarEditar_Click(object sender, EventArgs e)
