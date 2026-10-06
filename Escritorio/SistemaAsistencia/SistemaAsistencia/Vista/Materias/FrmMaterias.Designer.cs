@@ -56,14 +56,14 @@ namespace SistemaAsistencia.Vista.Materias
             this.lblAnioCrear = new MaterialSkin.Controls.MaterialLabel();
             this.nudAnioMateria = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
+            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
             ((System.ComponentModel.ISupportInitialize)(this.nudCargaHoraria)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEditAnio)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEditCarga)).BeginInit();
@@ -76,13 +76,13 @@ namespace SistemaAsistencia.Vista.Materias
             this.tableAnioCrear.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAnioMateria)).BeginInit();
             this.tabPage2.SuspendLayout();
-            this.tableLayoutPanel3.SuspendLayout();
-            this.tableLayoutPanel4.SuspendLayout();
+            this.tableLayoutPanel9.SuspendLayout();
             this.tableLayoutPanel5.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
-            this.tableLayoutPanel9.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmbEspecialidad
@@ -197,7 +197,7 @@ namespace SistemaAsistencia.Vista.Materias
             this.cmbEditEspecialidad.Hint = "Especialidad";
             this.cmbEditEspecialidad.IntegralHeight = false;
             this.cmbEditEspecialidad.ItemHeight = 43;
-            this.cmbEditEspecialidad.Location = new System.Drawing.Point(73, 65);
+            this.cmbEditEspecialidad.Location = new System.Drawing.Point(72, 66);
             this.cmbEditEspecialidad.MaxDropDownItems = 4;
             this.cmbEditEspecialidad.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbEditEspecialidad.Name = "cmbEditEspecialidad";
@@ -222,7 +222,7 @@ namespace SistemaAsistencia.Vista.Materias
             // nudEditAnio
             // 
             this.nudEditAnio.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nudEditAnio.Location = new System.Drawing.Point(171, 21);
+            this.nudEditAnio.Location = new System.Drawing.Point(170, 21);
             this.nudEditAnio.Maximum = new decimal(new int[] {
             7,
             0,
@@ -253,7 +253,7 @@ namespace SistemaAsistencia.Vista.Materias
             this.txtEditNombre.HideSelection = true;
             this.txtEditNombre.Hint = "Nombre";
             this.txtEditNombre.LeadingIcon = null;
-            this.txtEditNombre.Location = new System.Drawing.Point(73, 212);
+            this.txtEditNombre.Location = new System.Drawing.Point(72, 212);
             this.txtEditNombre.MaxLength = 32767;
             this.txtEditNombre.MouseState = MaterialSkin.MouseState.OUT;
             this.txtEditNombre.Name = "txtEditNombre";
@@ -288,7 +288,7 @@ namespace SistemaAsistencia.Vista.Materias
             // nudEditCarga
             // 
             this.nudEditCarga.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nudEditCarga.Location = new System.Drawing.Point(171, 21);
+            this.nudEditCarga.Location = new System.Drawing.Point(170, 21);
             this.nudEditCarga.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -356,7 +356,7 @@ namespace SistemaAsistencia.Vista.Materias
             this.btnLimpiarEditar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLimpiarEditar.Name = "btnLimpiarEditar";
             this.btnLimpiarEditar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnLimpiarEditar.Size = new System.Drawing.Size(96, 36);
+            this.btnLimpiarEditar.Size = new System.Drawing.Size(95, 36);
             this.btnLimpiarEditar.TabIndex = 8;
             this.btnLimpiarEditar.Text = "Limpiar";
             this.btnLimpiarEditar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
@@ -391,7 +391,7 @@ namespace SistemaAsistencia.Vista.Materias
             this.txtBuscar.MouseState = MaterialSkin.MouseState.OUT;
             this.txtBuscar.Multiline = false;
             this.txtBuscar.Name = "txtBuscar";
-            this.txtBuscar.Size = new System.Drawing.Size(396, 50);
+            this.txtBuscar.Size = new System.Drawing.Size(397, 50);
             this.txtBuscar.TabIndex = 0;
             this.txtBuscar.Text = "";
             this.txtBuscar.TrailingIcon = null;
@@ -406,7 +406,7 @@ namespace SistemaAsistencia.Vista.Materias
             this.btnBuscar.Depth = 0;
             this.btnBuscar.HighEmphasis = true;
             this.btnBuscar.Icon = null;
-            this.btnBuscar.Location = new System.Drawing.Point(407, 6);
+            this.btnBuscar.Location = new System.Drawing.Point(408, 6);
             this.btnBuscar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnBuscar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnBuscar.Name = "btnBuscar";
@@ -425,7 +425,7 @@ namespace SistemaAsistencia.Vista.Materias
             this.dgvMaterias.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvMaterias.Location = new System.Drawing.Point(3, 53);
             this.dgvMaterias.Name = "dgvMaterias";
-            this.dgvMaterias.Size = new System.Drawing.Size(502, 364);
+            this.dgvMaterias.Size = new System.Drawing.Size(503, 364);
             this.dgvMaterias.TabIndex = 1;
             this.dgvMaterias.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMaterias_CellClick);
             // 
@@ -607,49 +607,20 @@ namespace SistemaAsistencia.Vista.Materias
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Modificar una Materia";
             // 
-            // tableLayoutPanel3
+            // tableLayoutPanel9
             // 
-            this.tableLayoutPanel3.ColumnCount = 1;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Controls.Add(this.dgvMaterias, 0, 1);
-            this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 0, 0);
-            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(323, 3);
-            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 2;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 88F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(508, 420);
-            this.tableLayoutPanel3.TabIndex = 10;
-            // 
-            // tableLayoutPanel4
-            // 
-            this.tableLayoutPanel4.ColumnCount = 2;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tableLayoutPanel4.Controls.Add(this.txtBuscar, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.btnBuscar, 1, 0);
-            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 1;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(502, 44);
-            this.tableLayoutPanel4.TabIndex = 0;
-            // 
-            // materialTabSelector1
-            // 
-            this.materialTabSelector1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.materialTabSelector1.BaseTabControl = this.materialTabControl1;
-            this.materialTabSelector1.CharacterCasing = MaterialSkin.Controls.MaterialTabSelector.CustomCharacterCasing.Normal;
-            this.materialTabSelector1.Depth = 0;
-            this.materialTabSelector1.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialTabSelector1.Location = new System.Drawing.Point(6, 4);
-            this.materialTabSelector1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialTabSelector1.Name = "materialTabSelector1";
-            this.materialTabSelector1.Size = new System.Drawing.Size(848, 41);
-            this.materialTabSelector1.TabIndex = 15;
+            this.tableLayoutPanel9.ColumnCount = 2;
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.3693F));
+            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 61.6307F));
+            this.tableLayoutPanel9.Controls.Add(this.tableLayoutPanel5, 0, 0);
+            this.tableLayoutPanel9.Controls.Add(this.tableLayoutPanel3, 1, 0);
+            this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+            this.tableLayoutPanel9.RowCount = 1;
+            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(834, 426);
+            this.tableLayoutPanel9.TabIndex = 12;
             // 
             // tableLayoutPanel5
             // 
@@ -671,7 +642,7 @@ namespace SistemaAsistencia.Vista.Materias
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(314, 420);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(313, 420);
             this.tableLayoutPanel5.TabIndex = 11;
             // 
             // tableLayoutPanel6
@@ -686,7 +657,7 @@ namespace SistemaAsistencia.Vista.Materias
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(308, 67);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(307, 67);
             this.tableLayoutPanel6.TabIndex = 10;
             // 
             // tableLayoutPanel7
@@ -701,7 +672,7 @@ namespace SistemaAsistencia.Vista.Materias
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(308, 67);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(307, 67);
             this.tableLayoutPanel7.TabIndex = 11;
             // 
             // tableLayoutPanel8
@@ -718,23 +689,52 @@ namespace SistemaAsistencia.Vista.Materias
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 1;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(308, 68);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(307, 68);
             this.tableLayoutPanel8.TabIndex = 12;
             // 
-            // tableLayoutPanel9
+            // tableLayoutPanel3
             // 
-            this.tableLayoutPanel9.ColumnCount = 2;
-            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.3693F));
-            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 61.6307F));
-            this.tableLayoutPanel9.Controls.Add(this.tableLayoutPanel5, 0, 0);
-            this.tableLayoutPanel9.Controls.Add(this.tableLayoutPanel3, 1, 0);
-            this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel9.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
-            this.tableLayoutPanel9.RowCount = 1;
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(834, 426);
-            this.tableLayoutPanel9.TabIndex = 12;
+            this.tableLayoutPanel3.ColumnCount = 1;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Controls.Add(this.dgvMaterias, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 0, 0);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(322, 3);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 2;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 88F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(509, 420);
+            this.tableLayoutPanel3.TabIndex = 10;
+            // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel4.Controls.Add(this.txtBuscar, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.btnBuscar, 1, 0);
+            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 1;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(503, 44);
+            this.tableLayoutPanel4.TabIndex = 0;
+            // 
+            // materialTabSelector1
+            // 
+            this.materialTabSelector1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.materialTabSelector1.BaseTabControl = this.materialTabControl1;
+            this.materialTabSelector1.CharacterCasing = MaterialSkin.Controls.MaterialTabSelector.CustomCharacterCasing.Normal;
+            this.materialTabSelector1.Depth = 0;
+            this.materialTabSelector1.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialTabSelector1.Location = new System.Drawing.Point(6, 4);
+            this.materialTabSelector1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialTabSelector1.Name = "materialTabSelector1";
+            this.materialTabSelector1.Size = new System.Drawing.Size(848, 41);
+            this.materialTabSelector1.TabIndex = 15;
             // 
             // FrmMaterias
             // 
@@ -763,8 +763,7 @@ namespace SistemaAsistencia.Vista.Materias
             this.tableAnioCrear.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAnioMateria)).EndInit();
             this.tabPage2.ResumeLayout(false);
-            this.tableLayoutPanel3.ResumeLayout(false);
-            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel9.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel5.PerformLayout();
             this.tableLayoutPanel6.ResumeLayout(false);
@@ -772,7 +771,8 @@ namespace SistemaAsistencia.Vista.Materias
             this.tableLayoutPanel7.ResumeLayout(false);
             this.tableLayoutPanel7.PerformLayout();
             this.tableLayoutPanel8.ResumeLayout(false);
-            this.tableLayoutPanel9.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

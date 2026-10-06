@@ -62,6 +62,9 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPreceptores)).BeginInit();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -71,6 +74,9 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.tabPage2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
+            this.tableLayoutPanel5.SuspendLayout();
+            this.tableLayoutPanel6.SuspendLayout();
+            this.tableLayoutPanel7.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtNombre
@@ -323,6 +329,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             // 
             // txtEditNombre
             // 
+            this.txtEditNombre.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtEditNombre.AnimateReadOnly = false;
             this.txtEditNombre.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.txtEditNombre.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
@@ -331,7 +338,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.txtEditNombre.HideSelection = true;
             this.txtEditNombre.Hint = "Nombre";
             this.txtEditNombre.LeadingIcon = null;
-            this.txtEditNombre.Location = new System.Drawing.Point(95, 45);
+            this.txtEditNombre.Location = new System.Drawing.Point(70, 33);
             this.txtEditNombre.MaxLength = 32767;
             this.txtEditNombre.MouseState = MaterialSkin.MouseState.OUT;
             this.txtEditNombre.Name = "txtEditNombre";
@@ -352,6 +359,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             // 
             // txtEditApellido
             // 
+            this.txtEditApellido.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtEditApellido.AnimateReadOnly = false;
             this.txtEditApellido.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.txtEditApellido.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
@@ -360,7 +368,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.txtEditApellido.HideSelection = true;
             this.txtEditApellido.Hint = "Apellido";
             this.txtEditApellido.LeadingIcon = null;
-            this.txtEditApellido.Location = new System.Drawing.Point(95, 94);
+            this.txtEditApellido.Location = new System.Drawing.Point(70, 76);
             this.txtEditApellido.MaxLength = 32767;
             this.txtEditApellido.MouseState = MaterialSkin.MouseState.OUT;
             this.txtEditApellido.Name = "txtEditApellido";
@@ -381,6 +389,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             // 
             // txtEditDni
             // 
+            this.txtEditDni.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtEditDni.AnimateReadOnly = false;
             this.txtEditDni.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.txtEditDni.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
@@ -389,7 +398,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.txtEditDni.HideSelection = true;
             this.txtEditDni.Hint = "DNI";
             this.txtEditDni.LeadingIcon = null;
-            this.txtEditDni.Location = new System.Drawing.Point(95, 143);
+            this.txtEditDni.Location = new System.Drawing.Point(70, 128);
             this.txtEditDni.MaxLength = 8;
             this.txtEditDni.MouseState = MaterialSkin.MouseState.OUT;
             this.txtEditDni.Name = "txtEditDni";
@@ -410,6 +419,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             // 
             // txtEditLegajo
             // 
+            this.txtEditLegajo.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtEditLegajo.AnimateReadOnly = false;
             this.txtEditLegajo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.txtEditLegajo.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
@@ -418,7 +428,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.txtEditLegajo.HideSelection = true;
             this.txtEditLegajo.Hint = "Legajo (= DNI)";
             this.txtEditLegajo.LeadingIcon = null;
-            this.txtEditLegajo.Location = new System.Drawing.Point(95, 192);
+            this.txtEditLegajo.Location = new System.Drawing.Point(70, 176);
             this.txtEditLegajo.MaxLength = 32767;
             this.txtEditLegajo.MouseState = MaterialSkin.MouseState.OUT;
             this.txtEditLegajo.Name = "txtEditLegajo";
@@ -439,6 +449,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             // 
             // txtEditCorreo
             // 
+            this.txtEditCorreo.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtEditCorreo.AnimateReadOnly = false;
             this.txtEditCorreo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.txtEditCorreo.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
@@ -447,7 +458,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.txtEditCorreo.HideSelection = true;
             this.txtEditCorreo.Hint = "Correo";
             this.txtEditCorreo.LeadingIcon = null;
-            this.txtEditCorreo.Location = new System.Drawing.Point(95, 241);
+            this.txtEditCorreo.Location = new System.Drawing.Point(70, 224);
             this.txtEditCorreo.MaxLength = 32767;
             this.txtEditCorreo.MouseState = MaterialSkin.MouseState.OUT;
             this.txtEditCorreo.Name = "txtEditCorreo";
@@ -468,6 +479,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             // 
             // txtEditContrasena
             // 
+            this.txtEditContrasena.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.txtEditContrasena.AnimateReadOnly = false;
             this.txtEditContrasena.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.txtEditContrasena.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
@@ -476,7 +488,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.txtEditContrasena.HideSelection = true;
             this.txtEditContrasena.Hint = "Contraseña";
             this.txtEditContrasena.LeadingIcon = null;
-            this.txtEditContrasena.Location = new System.Drawing.Point(95, 290);
+            this.txtEditContrasena.Location = new System.Drawing.Point(70, 281);
             this.txtEditContrasena.MaxLength = 32767;
             this.txtEditContrasena.MouseState = MaterialSkin.MouseState.OUT;
             this.txtEditContrasena.Name = "txtEditContrasena";
@@ -497,10 +509,11 @@ namespace SistemaAsistencia.Vista.Preceptores
             // 
             // lblTelEdit
             // 
+            this.lblTelEdit.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTelEdit.AutoSize = true;
             this.lblTelEdit.Depth = 0;
             this.lblTelEdit.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblTelEdit.Location = new System.Drawing.Point(20, 361);
+            this.lblTelEdit.Location = new System.Drawing.Point(11, 23);
             this.lblTelEdit.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblTelEdit.Name = "lblTelEdit";
             this.lblTelEdit.Size = new System.Drawing.Size(64, 19);
@@ -509,27 +522,29 @@ namespace SistemaAsistencia.Vista.Preceptores
             // 
             // ctrlTelEdit
             // 
-            this.ctrlTelEdit.Location = new System.Drawing.Point(95, 345);
+            this.ctrlTelEdit.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.ctrlTelEdit.Location = new System.Drawing.Point(89, 8);
             this.ctrlTelEdit.MinimumSize = new System.Drawing.Size(220, 48);
             this.ctrlTelEdit.Name = "ctrlTelEdit";
-            this.ctrlTelEdit.Size = new System.Drawing.Size(245, 48);
+            this.ctrlTelEdit.Size = new System.Drawing.Size(222, 48);
             this.ctrlTelEdit.TabIndex = 8;
             this.ctrlTelEdit.Telefono = "";
             // 
             // btnModificar
             // 
+            this.btnModificar.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnModificar.AutoSize = false;
             this.btnModificar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnModificar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.btnModificar.Depth = 0;
             this.btnModificar.HighEmphasis = true;
             this.btnModificar.Icon = null;
-            this.btnModificar.Location = new System.Drawing.Point(20, 400);
+            this.btnModificar.Location = new System.Drawing.Point(4, 6);
             this.btnModificar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnModificar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnModificar.Name = "btnModificar";
             this.btnModificar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnModificar.Size = new System.Drawing.Size(100, 36);
+            this.btnModificar.Size = new System.Drawing.Size(96, 43);
             this.btnModificar.TabIndex = 9;
             this.btnModificar.Text = "Modificar";
             this.btnModificar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -539,18 +554,19 @@ namespace SistemaAsistencia.Vista.Preceptores
             // 
             // btnEliminar
             // 
+            this.btnEliminar.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnEliminar.AutoSize = false;
             this.btnEliminar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnEliminar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.btnEliminar.Depth = 0;
             this.btnEliminar.HighEmphasis = true;
             this.btnEliminar.Icon = null;
-            this.btnEliminar.Location = new System.Drawing.Point(130, 400);
+            this.btnEliminar.Location = new System.Drawing.Point(108, 6);
             this.btnEliminar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnEliminar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnEliminar.Name = "btnEliminar";
             this.btnEliminar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnEliminar.Size = new System.Drawing.Size(100, 36);
+            this.btnEliminar.Size = new System.Drawing.Size(96, 43);
             this.btnEliminar.TabIndex = 10;
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
@@ -560,18 +576,19 @@ namespace SistemaAsistencia.Vista.Preceptores
             // 
             // btnLimpiarEditar
             // 
+            this.btnLimpiarEditar.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnLimpiarEditar.AutoSize = false;
             this.btnLimpiarEditar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnLimpiarEditar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.btnLimpiarEditar.Depth = 0;
             this.btnLimpiarEditar.HighEmphasis = true;
             this.btnLimpiarEditar.Icon = null;
-            this.btnLimpiarEditar.Location = new System.Drawing.Point(240, 400);
+            this.btnLimpiarEditar.Location = new System.Drawing.Point(212, 6);
             this.btnLimpiarEditar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnLimpiarEditar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLimpiarEditar.Name = "btnLimpiarEditar";
             this.btnLimpiarEditar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnLimpiarEditar.Size = new System.Drawing.Size(100, 36);
+            this.btnLimpiarEditar.Size = new System.Drawing.Size(98, 43);
             this.btnLimpiarEditar.TabIndex = 11;
             this.btnLimpiarEditar.Text = "Limpiar";
             this.btnLimpiarEditar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
@@ -581,10 +598,11 @@ namespace SistemaAsistencia.Vista.Preceptores
             // 
             // lblEditando
             // 
+            this.lblEditando.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblEditando.AutoSize = true;
             this.lblEditando.Depth = 0;
             this.lblEditando.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditando.Location = new System.Drawing.Point(20, 15);
+            this.lblEditando.Location = new System.Drawing.Point(45, 5);
             this.lblEditando.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblEditando.Name = "lblEditando";
             this.lblEditando.Size = new System.Drawing.Size(229, 19);
@@ -620,7 +638,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.btnBuscar.Depth = 0;
             this.btnBuscar.HighEmphasis = true;
             this.btnBuscar.Icon = null;
-            this.btnBuscar.Location = new System.Drawing.Point(383, 6);
+            this.btnBuscar.Location = new System.Drawing.Point(383, 8);
             this.btnBuscar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnBuscar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnBuscar.Name = "btnBuscar";
@@ -637,9 +655,9 @@ namespace SistemaAsistencia.Vista.Preceptores
             // 
             this.dgvPreceptores.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPreceptores.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvPreceptores.Location = new System.Drawing.Point(3, 55);
+            this.dgvPreceptores.Location = new System.Drawing.Point(3, 59);
             this.dgvPreceptores.Name = "dgvPreceptores";
-            this.dgvPreceptores.Size = new System.Drawing.Size(478, 381);
+            this.dgvPreceptores.Size = new System.Drawing.Size(478, 409);
             this.dgvPreceptores.TabIndex = 1;
             this.dgvPreceptores.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPreceptores_CellClick);
             // 
@@ -737,19 +755,8 @@ namespace SistemaAsistencia.Vista.Preceptores
             // 
             this.tabPage2.AutoScroll = true;
             this.tabPage2.BackColor = System.Drawing.Color.White;
+            this.tabPage2.Controls.Add(this.tableLayoutPanel5);
             this.tabPage2.Controls.Add(this.tableLayoutPanel3);
-            this.tabPage2.Controls.Add(this.lblEditando);
-            this.tabPage2.Controls.Add(this.txtEditNombre);
-            this.tabPage2.Controls.Add(this.txtEditApellido);
-            this.tabPage2.Controls.Add(this.txtEditDni);
-            this.tabPage2.Controls.Add(this.txtEditLegajo);
-            this.tabPage2.Controls.Add(this.txtEditCorreo);
-            this.tabPage2.Controls.Add(this.txtEditContrasena);
-            this.tabPage2.Controls.Add(this.lblTelEdit);
-            this.tabPage2.Controls.Add(this.ctrlTelEdit);
-            this.tabPage2.Controls.Add(this.btnModificar);
-            this.tabPage2.Controls.Add(this.btnEliminar);
-            this.tabPage2.Controls.Add(this.btnLimpiarEditar);
             this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -765,12 +772,12 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.Controls.Add(this.dgvPreceptores, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 0, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(347, 3);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(330, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 88F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(484, 439);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(484, 471);
             this.tableLayoutPanel3.TabIndex = 14;
             // 
             // tableLayoutPanel4
@@ -785,7 +792,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(478, 46);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(478, 50);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // materialTabSelector1
@@ -801,6 +808,66 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.materialTabSelector1.Name = "materialTabSelector1";
             this.materialTabSelector1.Size = new System.Drawing.Size(848, 41);
             this.materialTabSelector1.TabIndex = 15;
+            // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.ColumnCount = 1;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel5.Controls.Add(this.lblEditando, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.txtEditNombre, 0, 1);
+            this.tableLayoutPanel5.Controls.Add(this.txtEditContrasena, 0, 6);
+            this.tableLayoutPanel5.Controls.Add(this.txtEditCorreo, 0, 5);
+            this.tableLayoutPanel5.Controls.Add(this.txtEditLegajo, 0, 4);
+            this.tableLayoutPanel5.Controls.Add(this.txtEditDni, 0, 3);
+            this.tableLayoutPanel5.Controls.Add(this.txtEditApellido, 0, 2);
+            this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel6, 0, 7);
+            this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel7, 0, 8);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(7, 6);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 9;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17.16172F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15.84158F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15.18152F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 19.14191F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 18.48185F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 71F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 58F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(320, 465);
+            this.tableLayoutPanel5.TabIndex = 15;
+            // 
+            // tableLayoutPanel6
+            // 
+            this.tableLayoutPanel6.ColumnCount = 2;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.38853F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.61147F));
+            this.tableLayoutPanel6.Controls.Add(this.lblTelEdit, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.ctrlTelEdit, 1, 0);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 336);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 1;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(314, 65);
+            this.tableLayoutPanel6.TabIndex = 14;
+            // 
+            // tableLayoutPanel7
+            // 
+            this.tableLayoutPanel7.ColumnCount = 3;
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel7.Controls.Add(this.btnModificar, 0, 0);
+            this.tableLayoutPanel7.Controls.Add(this.btnLimpiarEditar, 2, 0);
+            this.tableLayoutPanel7.Controls.Add(this.btnEliminar, 1, 0);
+            this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel7.Location = new System.Drawing.Point(3, 407);
+            this.tableLayoutPanel7.Name = "tableLayoutPanel7";
+            this.tableLayoutPanel7.RowCount = 1;
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(314, 55);
+            this.tableLayoutPanel7.TabIndex = 15;
             // 
             // FrmPreceptores
             // 
@@ -823,9 +890,13 @@ namespace SistemaAsistencia.Vista.Preceptores
             this.tableTelCrear.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel5.ResumeLayout(false);
+            this.tableLayoutPanel5.PerformLayout();
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.tableLayoutPanel6.PerformLayout();
+            this.tableLayoutPanel7.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -866,5 +937,8 @@ namespace SistemaAsistencia.Vista.Preceptores
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private MaterialSkin.Controls.MaterialTabSelector materialTabSelector1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
     }
 }
