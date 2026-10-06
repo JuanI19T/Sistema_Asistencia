@@ -30,57 +30,41 @@ namespace SistemaAsistencia.Vista.Usuarios
         private void FrmUsuarios_Load(object sender, EventArgs e)
         {
             // La fuente del selector la unifica FrmBaseHijo.
-            try
-            {
-                // Ya no hace falta llamar a CargarRoles() aquí. 
-                // El evento Load se concentra exclusivamente en los datos dinámicos.
-                CargarUsuarios();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo cargar usuarios.\n" + ex.Message,
-                    "Error de conexión",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            // El evento Load se concentra exclusivamente en los datos dinámicos.
+            CargaVista.IntentarCarga(CargarUsuarios, "usuarios");
         }
 
         private void InicializarRolesEstaticos()
         {
             string[] roles = { "Administrador", "Directivo", "Preceptor", "Profesor" };
 
-            cmbRol.Items.Clear();
-            cmbRol.Items.AddRange(roles);
-            cmbRol.SelectedIndex = -1;
-
-            cmbEditRol.Items.Clear();
-            cmbEditRol.Items.AddRange(roles);
-            cmbEditRol.SelectedIndex = -1;
+            CargaVista.CargarItems(cmbRol, roles);
+            CargaVista.CargarItems(cmbEditRol, roles);
         }
 
         private void CargarUsuarios()
         {
-            cacheUsuarios = usuarioController.ObtenerUsuarios() ?? new List<Usuario>();
+            cacheUsuarios = CargaVista.ObtenerLista(() => usuarioController.ObtenerUsuarios());
             MostrarEnGrilla(cacheUsuarios);
         }
 
         private void MostrarEnGrilla(List<Usuario> lista)
         {
-            dgvUsuarios.DataSource = null;
-            dgvUsuarios.DataSource = lista;
+            CargaVista.MostrarEnGrilla(dgvUsuarios, lista, ConfigurarColumnasUsuarios);
+        }
 
-            if (dgvUsuarios.Columns.Count > 0)
-            {
-                if (dgvUsuarios.Columns.Contains("IdUsuario"))
-                    dgvUsuarios.Columns["IdUsuario"].Visible = false;
-                if (dgvUsuarios.Columns.Contains("Contrasena"))
-                    dgvUsuarios.Columns["Contrasena"].Visible = false;
-                if (dgvUsuarios.Columns.Contains("NombreUsuario"))
-                    dgvUsuarios.Columns["NombreUsuario"].HeaderText = "Usuario";
-                if (dgvUsuarios.Columns.Contains("Activo"))
-                    dgvUsuarios.Columns["Activo"].ReadOnly = true;
-            }
+        private void ConfigurarColumnasUsuarios(DataGridView dgv)
+        {
+            if (dgv.Columns.Count == 0) return;
+
+            if (dgv.Columns.Contains("IdUsuario"))
+                dgv.Columns["IdUsuario"].Visible = false;
+            if (dgv.Columns.Contains("Contrasena"))
+                dgv.Columns["Contrasena"].Visible = false;
+            if (dgv.Columns.Contains("NombreUsuario"))
+                dgv.Columns["NombreUsuario"].HeaderText = "Usuario";
+            if (dgv.Columns.Contains("Activo"))
+                dgv.Columns["Activo"].ReadOnly = true;
         }
 
         // ---------------- 1. Crear ----------------
@@ -120,43 +104,46 @@ namespace SistemaAsistencia.Vista.Usuarios
                 return;
             }
 
-            try
+            EjecutarConLayout(() =>
             {
-                Usuario usuario = new Usuario
+                try
                 {
-                    NombreUsuario = txtUsuario.Text.Trim(),
-                    Contrasena = txtPassword.Text,
-                    Rol = cmbRol.SelectedItem.ToString(),
-                    Activo = true
-                };
+                    Usuario usuario = new Usuario
+                    {
+                        NombreUsuario = txtUsuario.Text.Trim(),
+                        Contrasena = txtPassword.Text,
+                        Rol = cmbRol.SelectedItem.ToString(),
+                        Activo = true
+                    };
 
-                if (usuarioController.AgregarUsuario(usuario))
+                    if (usuarioController.AgregarUsuario(usuario))
+                    {
+                        MessageBox.Show(
+                            "Usuario agregado correctamente.",
+                            "Usuarios",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                        CargarUsuarios();
+                        LimpiarCreacion();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "No se pudo agregar el usuario (¿nombre duplicado?).",
+                            "Usuarios",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show(
-                        "Usuario agregado correctamente.",
+                        "No se pudo agregar el usuario.\n" + ex.Message,
                         "Usuarios",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-                    CargarUsuarios();
-                    LimpiarCreacion();
+                        MessageBoxIcon.Error);
                 }
-                else
-                {
-                    MessageBox.Show(
-                        "No se pudo agregar el usuario (¿nombre duplicado?).",
-                        "Usuarios",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo agregar el usuario.\n" + ex.Message,
-                    "Usuarios",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            });
         }
 
         private void btnLimpiarCrear_Click(object sender, EventArgs e)
@@ -168,7 +155,7 @@ namespace SistemaAsistencia.Vista.Usuarios
         {
             txtUsuario.Clear();
             txtPassword.Clear();
-            cmbRol.SelectedIndex = -1;
+            CargaVista.ReiniciarCombo(cmbRol);
         }
 
         private void LimpiarEdicion()
@@ -177,7 +164,7 @@ namespace SistemaAsistencia.Vista.Usuarios
             lblEditando.Text = "Editando: (seleccione de la lista)";
             txtEditUsuario.Clear();
             txtEditPassword.Clear();
-            cmbEditRol.SelectedIndex = -1;
+            CargaVista.ReiniciarCombo(cmbEditRol);
             chkEditActivo.Checked = false;
         }
 
@@ -197,33 +184,16 @@ namespace SistemaAsistencia.Vista.Usuarios
         {
             string texto = txtBuscar.Text.Trim();
 
-            if (string.IsNullOrEmpty(texto))
-            {
-                MostrarEnGrilla(cacheUsuarios);
-                return;
-            }
-
-            List<Usuario> resultados = cacheUsuarios.FindAll(u =>
-                u.NombreUsuario != null &&
-                u.NombreUsuario.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0);
-
-            MostrarEnGrilla(resultados);
-
-            if (!interactivo) return;
-
-            if (resultados.Count == 0)
-            {
-                MessageBox.Show(
-                    "Sin resultados para esa búsqueda.",
-                    "Usuarios",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-                LimpiarEdicion();
-            }
-            else if (resultados.Count == 1)
-            {
-                CargarEnEdicion(resultados[0]);
-            }
+            CargaVista.FiltrarCache(
+                cacheUsuarios,
+                texto,
+                u => u.NombreUsuario != null &&
+                     u.NombreUsuario.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0,
+                MostrarEnGrilla,
+                CargarEnEdicion,
+                LimpiarEdicion,
+                "Usuarios",
+                interactivo);
         }
 
         private void dgvUsuarios_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -237,12 +207,15 @@ namespace SistemaAsistencia.Vista.Usuarios
 
         private void CargarEnEdicion(Usuario usuario)
         {
-            idUsuarioSeleccionado = usuario.IdUsuario;
-            lblEditando.Text = "Editando: " + usuario.NombreUsuario;
-            txtEditUsuario.Text = usuario.NombreUsuario;
-            txtEditPassword.Clear();
-            SeleccionarRol(cmbEditRol, usuario.Rol);
-            chkEditActivo.Checked = usuario.Activo;
+            EjecutarConLayout(() =>
+            {
+                idUsuarioSeleccionado = usuario.IdUsuario;
+                lblEditando.Text = "Editando: " + usuario.NombreUsuario;
+                txtEditUsuario.Text = usuario.NombreUsuario;
+                txtEditPassword.Clear();
+                SeleccionarRol(cmbEditRol, usuario.Rol);
+                chkEditActivo.Checked = usuario.Activo;
+            });
         }
 
         private static void SeleccionarRol(ComboBox combo, string rol)
@@ -262,6 +235,8 @@ namespace SistemaAsistencia.Vista.Usuarios
                 int indice = combo.FindStringExact(rolNormalizado);
                 combo.SelectedIndex = indice >= 0 ? indice : -1;
             }
+
+            CargaVista.Refrescar(combo);
         }
 
         private void btnModificar_Click(object sender, EventArgs e)
@@ -298,44 +273,47 @@ namespace SistemaAsistencia.Vista.Usuarios
                 return;
             }
 
-            try
+            EjecutarConLayout(() =>
             {
-                Usuario usuario = new Usuario
+                try
                 {
-                    IdUsuario = idUsuarioSeleccionado.Value,
-                    NombreUsuario = txtEditUsuario.Text.Trim(),
-                    Contrasena = txtEditPassword.Text,
-                    Rol = cmbEditRol.SelectedItem.ToString(),
-                    Activo = chkEditActivo.Checked
-                };
+                    Usuario usuario = new Usuario
+                    {
+                        IdUsuario = idUsuarioSeleccionado.Value,
+                        NombreUsuario = txtEditUsuario.Text.Trim(),
+                        Contrasena = txtEditPassword.Text,
+                        Rol = cmbEditRol.SelectedItem.ToString(),
+                        Activo = chkEditActivo.Checked
+                    };
 
-                if (usuarioController.ModificarUsuario(usuario))
+                    if (usuarioController.ModificarUsuario(usuario))
+                    {
+                        MessageBox.Show(
+                            "Usuario modificado correctamente.",
+                            "Usuarios",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                        CargarUsuarios();
+                        LimpiarEdicion();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "No se pudo modificar el usuario.",
+                            "Usuarios",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show(
-                        "Usuario modificado correctamente.",
+                        "No se pudo modificar el usuario.\n" + ex.Message,
                         "Usuarios",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-                    CargarUsuarios();
-                    LimpiarEdicion();
+                        MessageBoxIcon.Error);
                 }
-                else
-                {
-                    MessageBox.Show(
-                        "No se pudo modificar el usuario.",
-                        "Usuarios",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo modificar el usuario.\n" + ex.Message,
-                    "Usuarios",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            });
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
@@ -358,35 +336,38 @@ namespace SistemaAsistencia.Vista.Usuarios
 
             if (resultado != DialogResult.Yes) return;
 
-            try
+            EjecutarConLayout(() =>
             {
-                if (usuarioController.EliminarUsuario(idUsuarioSeleccionado.Value))
+                try
+                {
+                    if (usuarioController.EliminarUsuario(idUsuarioSeleccionado.Value))
+                    {
+                        MessageBox.Show(
+                            "Usuario eliminado.",
+                            "Usuarios",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                        CargarUsuarios();
+                        LimpiarEdicion();
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            "No se pudo eliminar.",
+                            "Usuarios",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show(
-                        "Usuario eliminado.",
+                        "No se pudo eliminar.\n" + ex.Message,
                         "Usuarios",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-                    CargarUsuarios();
-                    LimpiarEdicion();
+                        MessageBoxIcon.Error);
                 }
-                else
-                {
-                    MessageBox.Show(
-                        "No se pudo eliminar.",
-                        "Usuarios",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "No se pudo eliminar.\n" + ex.Message,
-                    "Usuarios",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            });
         }
 
         private void btnLimpiarEditar_Click(object sender, EventArgs e)

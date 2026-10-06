@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using MaterialSkin.Controls;
+using SistemaAsistencia.Utilidades;
 
 namespace SistemaAsistencia.Vista.Comun
 {
@@ -28,6 +29,26 @@ namespace SistemaAsistencia.Vista.Comun
             this.AutoScroll = true;
 
             this.Load += FrmBaseHijo_Load;
+        }
+
+        /// <summary>
+        /// Ejecuta una acción con el layout del form suspendido (ver
+        /// CargaVista): altas, modificaciones, bajas y cargas que tocan
+        /// varios controles a la vez, sin parpadeos ni estados intermedios.
+        /// Todos los formularios la heredan.
+        /// </summary>
+        protected void EjecutarConLayout(Action accion)
+        {
+            CargaVista.EjecutarConLayout(this, accion);
+        }
+
+        /// <summary>
+        /// Fuerza el repintado inmediato de un control Material.
+        /// Todos los formularios la heredan.
+        /// </summary>
+        protected void Refrescar(Control control)
+        {
+            CargaVista.Refrescar(control);
         }
 
         private void FrmBaseHijo_Load(object sender, EventArgs e)
