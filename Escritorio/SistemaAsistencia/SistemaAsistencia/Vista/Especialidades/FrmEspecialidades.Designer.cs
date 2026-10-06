@@ -193,6 +193,7 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.btnLimpiarEditar.HighEmphasis = true;
             this.btnLimpiarEditar.Icon = null;
             this.btnLimpiarEditar.Location = new System.Drawing.Point(20, 110);
+
             this.btnLimpiarEditar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnLimpiarEditar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLimpiarEditar.Name = "btnLimpiarEditar";
@@ -281,6 +282,8 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            // Scroll de seguridad para monitores chicos (igual que tabPage2).
+            this.tabPage1.AutoScroll = true;
             this.tabPage1.Size = new System.Drawing.Size(840, 514);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Crear una Especialidad";
@@ -295,13 +298,18 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.tableLayoutPanel1.Controls.Add(this.btnLimpiarCrear, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.lblAvisoCrear, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.txtNombre, 1, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            // La tabla se autoajusta al contenido y va arriba: si los campos
+            // re-escalados crecen, la pestaña scrollea en vez de recortar
+            // la botonera de la última fila (antes: Dock.Fill la comprimía).
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(834, 508);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -315,6 +323,10 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            // Scroll de seguridad para monitores chicos: si los campos
+            // re-escalados desbordan, aparecen scrollbars en vez de
+            // recortar los botones de abajo.
+            this.tabPage2.AutoScroll = true;
             this.tabPage2.Size = new System.Drawing.Size(840, 514);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Consultar Especialidades";

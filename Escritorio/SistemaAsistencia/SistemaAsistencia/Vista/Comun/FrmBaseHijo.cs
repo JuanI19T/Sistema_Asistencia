@@ -20,6 +20,13 @@ namespace SistemaAsistencia.Vista.Comun
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
 
+            // Red de contención para monitores chicos: si el contenido
+            // interno desborda (ej. tras el re-escalado por fuente/DPI),
+            // el form muestra scrollbars en vez de recortar botones.
+            // El form va Dock.Fill en panelContenido, así que su tamaño
+            // lo manda el panel; esto cubre el desborde interno.
+            this.AutoScroll = true;
+
             this.Load += FrmBaseHijo_Load;
         }
 

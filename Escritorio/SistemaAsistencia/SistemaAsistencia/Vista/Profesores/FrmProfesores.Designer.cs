@@ -456,6 +456,7 @@ namespace SistemaAsistencia.Vista.Profesores
             this.btnModificar.HighEmphasis = true;
             this.btnModificar.Icon = null;
             this.btnModificar.Location = new System.Drawing.Point(20, 380);
+
             this.btnModificar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnModificar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnModificar.Name = "btnModificar";
@@ -477,6 +478,7 @@ namespace SistemaAsistencia.Vista.Profesores
             this.btnEliminar.HighEmphasis = true;
             this.btnEliminar.Icon = null;
             this.btnEliminar.Location = new System.Drawing.Point(130, 380);
+
             this.btnEliminar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnEliminar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnEliminar.Name = "btnEliminar";
@@ -498,6 +500,7 @@ namespace SistemaAsistencia.Vista.Profesores
             this.btnLimpiarEditar.HighEmphasis = true;
             this.btnLimpiarEditar.Icon = null;
             this.btnLimpiarEditar.Location = new System.Drawing.Point(240, 380);
+
             this.btnLimpiarEditar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnLimpiarEditar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLimpiarEditar.Name = "btnLimpiarEditar";
@@ -598,6 +601,8 @@ namespace SistemaAsistencia.Vista.Profesores
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            // Scroll de seguridad para monitores chicos (igual que tabPage2).
+            this.tabPage1.AutoScroll = true;
             this.tabPage1.Size = new System.Drawing.Size(840, 512);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Crear un Profesor";
@@ -615,17 +620,22 @@ namespace SistemaAsistencia.Vista.Profesores
             this.tableLayoutPanel1.Controls.Add(this.txtCorreo, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.tableTelCrear, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 6);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            // La tabla se autoajusta al contenido y va arriba: si los campos
+            // re-escalados crecen, la pestaña scrollea en vez de recortar
+            // la botonera de la última fila (antes: Dock.Fill la comprimía).
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 7;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28572F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(834, 506);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -677,6 +687,10 @@ namespace SistemaAsistencia.Vista.Profesores
             this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            // Scroll de seguridad para monitores chicos: si los campos
+            // re-escalados desbordan, aparecen scrollbars en vez de
+            // recortar los botones de abajo.
+            this.tabPage2.AutoScroll = true;
             this.tabPage2.Size = new System.Drawing.Size(840, 512);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Modificar un Profesor";
