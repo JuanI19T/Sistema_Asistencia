@@ -25,6 +25,9 @@
 --     Alcance de un dictado:
 --       division  X   | grupo NULL -> toda la división X
 --       division  X   | grupo Y    -> división X, grupo Y
+--  g) Ningún profesor toma dos dictados superpuestos: mismo día,
+--     mismo año lectivo, ambos activos (triggers TRG_DICTADO_SIN_SOLAPE_*).
+--     Pegados (fin == inicio ajeno) sí se permiten.
 --
 -- Requiere MySQL 8.0.16+ (CHECK + REGEXP).
 -- Ejecutar como SCRIPT COMPLETO (todo el archivo de una vez), con
@@ -46,17 +49,21 @@ CREATE TABLE `especialidad` (
   `id_especialidad` int NOT NULL AUTO_INCREMENT,
   `nombre_especialidad` varchar(100) COLLATE utf8mb4_spanish_ci NOT NULL,
   `activo` tinyint(1) NOT NULL DEFAULT '1',
+  `division` int DEFAULT NULL,
   PRIMARY KEY (`id_especialidad`),
-  UNIQUE KEY `UQ_ESPECIALIDAD_NOMBRE` (`nombre_especialidad`)
+  UNIQUE KEY `UQ_ESPECIALIDAD_NOMBRE` (`nombre_especialidad`),
+  CONSTRAINT `CHK_ESPECIALIDAD_DIVISION` CHECK (`division` IS NULL OR (`division` BETWEEN 1 AND 6)),
+  UNIQUE KEY `UQ_ESPECIALIDAD_DIVISION` (`division`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+  
 
-INSERT INTO `especialidad` (`nombre_especialidad`, `activo`) VALUES
-  ('Ciclo Básico', 1),
-  ('Programación', 1),
-  ('Química', 1),
-  ('Electrónica', 1),
-  ('Electromecánica', 1),
-  ('Electricidad', 1);
+INSERT INTO `especialidad` (`nombre_especialidad`, `division`, `activo`) VALUES
+  ('Ciclo Básico', NULL, 1),
+  ('Programación', 6, 1),
+  ('Química', 1, 1),
+  ('Electrónica', 3, 1),
+  ('Electromecánica', 2, 1),
+  ('Electricidad', 5, 1);
 
 -- ------------------------------------------------------------
 -- materia
@@ -163,6 +170,57 @@ CREATE TABLE `dictado` (
   CONSTRAINT `CHK_DICTADO_DIVISION` CHECK (`division` BETWEEN 1 AND 7),
   CONSTRAINT `CHK_DICTADO_HORARIO` CHECK (`horario_fin` IS NULL OR `horario_fin` > `horario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+-- ------------------------------------------------------------
+-- Sin solapamiento de horarios por profesor: mismo día, mismo
+-- año lectivo, ambos activos. Pegados (fin == inicio ajeno) sí
+-- se permiten. El escritorio también lo valida (DictadoController);
+-- el trigger cubre altas directas por SQL u otros clientes.
+-- ------------------------------------------------------------
+DELIMITER $$
+
+CREATE TRIGGER `TRG_DICTADO_SIN_SOLAPE_INS`
+BEFORE INSERT ON `dictado`
+FOR EACH ROW
+BEGIN
+    IF NEW.activo = 1 AND NEW.horario_fin IS NOT NULL THEN
+        IF EXISTS (
+            SELECT 1 FROM `dictado` d
+            WHERE d.id_profesor = NEW.id_profesor
+              AND d.dia = NEW.dia
+              AND d.anio_lectivo = NEW.anio_lectivo
+              AND d.activo = 1
+              AND TIME(d.horario) < TIME(NEW.horario_fin)
+              AND TIME(d.horario_fin) > TIME(NEW.horario)
+        ) THEN
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'El profesor ya tiene un dictado que se superpone en ese día y horario.';
+        END IF;
+    END IF;
+END$$
+
+CREATE TRIGGER `TRG_DICTADO_SIN_SOLAPE_UPD`
+BEFORE UPDATE ON `dictado`
+FOR EACH ROW
+BEGIN
+    IF NEW.activo = 1 AND NEW.horario_fin IS NOT NULL THEN
+        IF EXISTS (
+            SELECT 1 FROM `dictado` d
+            WHERE d.id_profesor = NEW.id_profesor
+              AND d.dia = NEW.dia
+              AND d.anio_lectivo = NEW.anio_lectivo
+              AND d.activo = 1
+              AND d.id_dictado <> NEW.id_dictado
+              AND TIME(d.horario) < TIME(NEW.horario_fin)
+              AND TIME(d.horario_fin) > TIME(NEW.horario)
+        ) THEN
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'El profesor ya tiene un dictado que se superpone en ese día y horario.';
+        END IF;
+    END IF;
+END$$
+
+DELIMITER ;
 
 -- ------------------------------------------------------------
 -- inscribe (alumno <-> dictado)

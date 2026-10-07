@@ -32,6 +32,15 @@ namespace SistemaAsistencia.Controlador
         }
 
         /// <summary>
+        /// Obtiene todos los dictados, incluyendo inactivos (solo ABM).
+        /// </summary>
+        public List<Dictado> ObtenerDictadosIncluyendoInactivos()
+        {
+            return Ejecutor.Ejecutar("Dictado.ObtenerDictadosIncluyendoInactivos",
+                () => dictadoDAO.ObtenerTodosIncluyendoInactivos());
+        }
+
+        /// <summary>
         /// Rangos globales de división y grupo. Son el sobre máximo: el
         /// rango fino de división depende del ciclo (Ciclo Básico 1-7,
         /// Tecnicaturas 1-6) y ese lo valida la vista, que conoce la
@@ -67,12 +76,24 @@ namespace SistemaAsistencia.Controlador
                 throw new DatosException("El grupo debe estar entre 1 y " + GrupoMaximo + ".");
         }
 
+        // Ningún profesor toma dos dictados superpuestos: mismo día,
+        // mismo año lectivo, ambos activos. Pegados sí se permiten.
+        private void ValidarSolapamiento(Dictado dictado)
+        {
+            if (dictadoDAO.ExisteSolapamiento(
+                    dictado.IdProfesor, dictado.Dia, dictado.Horario,
+                    dictado.HorarioFin, dictado.AnioLectivo, dictado.IdDictado))
+                throw new DatosException(
+                    "El profesor ya tiene un dictado que se superpone en ese día y horario.");
+        }
+
         /// <summary>
         /// Agrega un nuevo dictado.
         /// </summary>
         public bool AgregarDictado(Dictado dictado)
         {
             Validar(dictado);
+            ValidarSolapamiento(dictado);
             return Ejecutor.Ejecutar("Dictado.AgregarDictado",
                 () => dictadoDAO.Agregar(dictado));
         }
@@ -83,6 +104,7 @@ namespace SistemaAsistencia.Controlador
         public bool ModificarDictado(Dictado dictado)
         {
             Validar(dictado);
+            ValidarSolapamiento(dictado);
             return Ejecutor.Ejecutar("Dictado.ModificarDictado",
                 () => dictadoDAO.Modificar(dictado));
         }
@@ -99,11 +121,38 @@ namespace SistemaAsistencia.Controlador
 
         /// <summary>
         /// Da de baja lógica a un dictado (conserva su histórico).
+        /// Solo Administrador y Directivo.
         /// </summary>
         public bool DarDeBaja(int idDictado)
         {
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede dar de baja.");
             return Ejecutor.Ejecutar("Dictado.DarDeBaja",
                 () => dictadoDAO.DarDeBaja(idDictado));
+        }
+
+        /// <summary>
+        /// Da de alta a un dictado (reverso de la baja logica).
+        /// Solo Administrador y Directivo.
+        /// </summary>
+        public bool DarDeAlta(int idDictado)
+        {
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede dar de alta.");
+            return Ejecutor.Ejecutar("Dictado.DarDeAlta",
+                () => dictadoDAO.DarDeAlta(idDictado));
+        }
+
+        /// <summary>
+        /// Asigna un preceptor al dictado (NULL = quitar la asignacion).
+        /// Solo Administrador y Directivo.
+        /// </summary>
+        public bool AsignarPreceptor(int idDictado, int? idPreceptor)
+        {
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede asignar preceptores.");
+            return Ejecutor.Ejecutar("Dictado.AsignarPreceptor",
+                () => dictadoDAO.AsignarPreceptor(idDictado, idPreceptor));
         }
 
         /// <summary>

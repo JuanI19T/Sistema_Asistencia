@@ -31,6 +31,15 @@ namespace SistemaAsistencia.Controlador
                 () => materiaDAO.ObtenerTodos());
         }
 
+        /// <summary>
+        /// Obtiene todas las materias, incluyendo inactivas (solo ABM).
+        /// </summary>
+        public List<Materia> ObtenerMateriasIncluyendoInactivos()
+        {
+            return Ejecutor.Ejecutar("Materia.ObtenerMateriasIncluyendoInactivos",
+                () => materiaDAO.ObtenerTodosIncluyendoInactivos());
+        }
+
         // La EEST tiene 7 años: el NumericUpDown limita a 1-7,
         // esto es defensa por si se escribe el valor a mano.
         private static void Validar(Materia materia)
@@ -73,11 +82,26 @@ namespace SistemaAsistencia.Controlador
 
         /// <summary>
         /// Da de baja lógica a una materia (conserva su histórico).
+        /// Solo Administrador y Directivo.
         /// </summary>
         public bool DarDeBaja(int idMateria)
         {
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede dar de baja.");
             return Ejecutor.Ejecutar("Materia.DarDeBaja",
                 () => materiaDAO.DarDeBaja(idMateria));
+        }
+
+        /// <summary>
+        /// Da de alta a una materia (reverso de la baja logica).
+        /// Solo Administrador y Directivo.
+        /// </summary>
+        public bool DarDeAlta(int idMateria)
+        {
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede dar de alta.");
+            return Ejecutor.Ejecutar("Materia.DarDeAlta",
+                () => materiaDAO.DarDeAlta(idMateria));
         }
 
         /// <summary>

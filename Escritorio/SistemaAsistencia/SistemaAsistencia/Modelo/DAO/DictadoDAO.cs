@@ -60,9 +60,28 @@ namespace SistemaAsistencia.Modelo.DAO
                 Division = LeerEnteroOpcional(dr, "division"),
                 Grupo = LeerEnteroOpcional(dr, "grupo"),
                 AnioLectivo = Convert.ToInt32(dr["anio_lectivo"]),
+                IdPreceptor = LeerEnteroOpcional(dr, "id_preceptor"),
+                AnioMateria = Convert.ToInt32(dr["anio_materia"]),
                 NombreMateria = Convert.ToString(dr["nombre_materia"]),
-                ApellidoProfesor = Convert.ToString(dr["apellido_profesor"])
+                NombreEspecialidad = Convert.ToString(dr["nombre_especialidad"]),
+                ApellidoProfesor = Convert.ToString(dr["apellido_profesor"]),
+                Activo = LeerActivo(dr)
             };
+        }
+
+        /// <summary>
+        /// Lee la columna activo si el SELECT la trae (defensivo: si no
+        /// existe se asume true para no romper listados viejos).
+        /// </summary>
+        private static bool LeerActivo(MySqlDataReader dr)
+        {
+            try
+            {
+                int o = dr.GetOrdinal("activo");
+                if (!dr.IsDBNull(o)) return Convert.ToBoolean(dr["activo"]);
+            }
+            catch (IndexOutOfRangeException) { }
+            return true;
         }
 
         /// <summary>
@@ -76,15 +95,18 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
-string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
+                string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
                                       D.dia, D.horario, D.horario_fin,
-                                      D.division, D.grupo, D.anio_lectivo,
-                                      M.nombre_materia, P.apellido_profesor
+                                      D.division, D.grupo, D.anio_lectivo, D.id_preceptor, D.activo,
+                                      M.nombre_materia, M.anio_materia, P.apellido_profesor,
+                                      E.nombre_especialidad
                                FROM dictado D
                                INNER JOIN materia M
                                    ON M.id_materia = D.id_materia
                                INNER JOIN profesor P
                                     ON P.id_profesor = D.id_profesor
+                               INNER JOIN especialidad E
+                                   ON E.id_especialidad = M.id_especialidad
                                WHERE D.activo = 1
                                ORDER BY D.anio_lectivo, D.division, D.grupo,
                                         M.nombre_materia, D.dia, D.horario";
@@ -104,6 +126,83 @@ string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
         }
 
         /// <summary>
+        /// Obtiene todos los dictados, incluyendo inactivos.
+        /// Solo para los ABM (el toggle Activar necesita ver los inactivos).
+        /// </summary>
+        public List<Dictado> ObtenerTodosIncluyendoInactivos()
+        {
+            List<Dictado> lista = new List<Dictado>();
+
+            using (MySqlConnection cn = conexionBD.ObtenerConexion())
+            {
+                cn.Open();
+
+                string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
+                                      D.dia, D.horario, D.horario_fin,
+                                      D.division, D.grupo, D.anio_lectivo, D.id_preceptor, D.activo,
+                                      M.nombre_materia, M.anio_materia, P.apellido_profesor,
+                                      E.nombre_especialidad
+                               FROM dictado D
+                               INNER JOIN materia M
+                                   ON M.id_materia = D.id_materia
+                               INNER JOIN profesor P
+                                    ON P.id_profesor = D.id_profesor
+                               INNER JOIN especialidad E
+                                   ON E.id_especialidad = M.id_especialidad
+                               ORDER BY D.anio_lectivo, D.division, D.grupo,
+                                        M.nombre_materia, D.dia, D.horario";
+
+                var cmd = new MySqlCommand(sql, cn);
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        lista.Add(MapearDictado(dr));
+                    }
+                }
+            }
+
+            return lista;
+        }
+
+        /// <summary>
+        /// Indica si el profesor ya tiene un dictado activo del mismo año
+        /// lectivo que se superpone en día y horario. Pegados (fin == inicio
+        /// ajeno) no cuentan como superposición. Se excluye un dictado
+        /// (el propio, al modificar).
+        /// </summary>
+        public bool ExisteSolapamiento(int idProfesor, string dia, string inicio,
+            string fin, int anioLectivo, int excluirIdDictado)
+        {
+            using (MySqlConnection cn = conexionBD.ObtenerConexion())
+            {
+                cn.Open();
+
+                string sql = @"SELECT COUNT(*)
+                                FROM dictado
+                                WHERE id_profesor = @prof
+                                  AND dia = @dia
+                                  AND anio_lectivo = @anio
+                                  AND activo = 1
+                                  AND id_dictado <> @excluir
+                                  AND TIME(horario) < @fin
+                                  AND TIME(horario_fin) > @inicio";
+
+                var cmd = new MySqlCommand(sql, cn);
+
+                cmd.Parameters.AddWithValue("@prof", idProfesor);
+                cmd.Parameters.AddWithValue("@dia", dia ?? string.Empty);
+                cmd.Parameters.AddWithValue("@anio", anioLectivo);
+                cmd.Parameters.AddWithValue("@excluir", excluirIdDictado);
+                cmd.Parameters.AddWithValue("@inicio", inicio);
+                cmd.Parameters.AddWithValue("@fin", fin);
+
+                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+            }
+        }
+
+        /// <summary>
         /// Agrega un nuevo dictado a la base de datos.
         /// </summary>
         public bool Agregar(Dictado dictado)
@@ -113,9 +212,9 @@ string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
                 cn.Open();
 
                 string sql = @"INSERT INTO dictado
-                                (id_materia, id_profesor, dia, horario, horario_fin, division, grupo, anio_lectivo)
+                                (id_materia, id_profesor, dia, horario, horario_fin, division, grupo, anio_lectivo, activo)
                                 VALUES
-                                (@id_materia, @id_profesor, @dia, @horario, @horario_fin, @division, @grupo, @anio_lectivo)";
+                                (@id_materia, @id_profesor, @dia, @horario, @horario_fin, @division, @grupo, @anio_lectivo, @activo)";
 
                 var cmd = new MySqlCommand(sql, cn);
 
@@ -129,6 +228,8 @@ string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
                     dictado.Division.HasValue ? (object)dictado.Division.Value : System.DBNull.Value);
                 cmd.Parameters.AddWithValue("@grupo", dictado.Grupo);
                 cmd.Parameters.AddWithValue("@anio_lectivo", dictado.AnioLectivo);
+                // Todo lo creado desde el escritorio nace activo.
+                cmd.Parameters.AddWithValue("@activo", 1);
 
                 return cmd.ExecuteNonQuery() > 0;
             }
@@ -182,11 +283,55 @@ string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
                 cn.Open();
 
                 string sql = @"UPDATE dictado
-                               SET activo = 0
-                               WHERE id_dictado = @id";
+                                SET activo = 0
+                                WHERE id_dictado = @id";
 
                 var cmd = new MySqlCommand(sql, cn);
 
+                cmd.Parameters.AddWithValue("@id", idDictado);
+
+                return cmd.ExecuteNonQuery() > 0;
+            }
+        }
+
+        /// <summary>
+        /// Da de alta a un dictado (activo = 1). Reverso de la baja logica.
+        /// </summary>
+        public bool DarDeAlta(int idDictado)
+        {
+            using (MySqlConnection cn = conexionBD.ObtenerConexion())
+            {
+                cn.Open();
+
+                string sql = @"UPDATE dictado
+                                SET activo = 1
+                                WHERE id_dictado = @id";
+
+                var cmd = new MySqlCommand(sql, cn);
+
+                cmd.Parameters.AddWithValue("@id", idDictado);
+
+                return cmd.ExecuteNonQuery() > 0;
+            }
+        }
+
+        /// <summary>
+        /// Asigna un preceptor al dictado (NULL = quitar la asignacion).
+        /// </summary>
+        public bool AsignarPreceptor(int idDictado, int? idPreceptor)
+        {
+            using (MySqlConnection cn = conexionBD.ObtenerConexion())
+            {
+                cn.Open();
+
+                string sql = @"UPDATE dictado
+                                SET id_preceptor = @preceptor
+                                WHERE id_dictado = @id";
+
+                var cmd = new MySqlCommand(sql, cn);
+
+                cmd.Parameters.AddWithValue("@preceptor",
+                    idPreceptor.HasValue ? (object)idPreceptor.Value : System.DBNull.Value);
                 cmd.Parameters.AddWithValue("@id", idDictado);
 
                 return cmd.ExecuteNonQuery() > 0;

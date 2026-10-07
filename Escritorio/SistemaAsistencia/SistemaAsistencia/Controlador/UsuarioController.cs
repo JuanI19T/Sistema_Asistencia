@@ -71,15 +71,24 @@ namespace SistemaAsistencia.Controlador
 
         /// <summary>
         /// Realiza una eliminación lógica del usuario.
+        /// Solo Administrador y Directivo.
         /// </summary>
         public bool EliminarUsuario(int idUsuario)
         {
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede dar de baja.");
             return Ejecutor.Ejecutar("Usuario.EliminarUsuario",
                 () => usuarioDAO.Eliminar(idUsuario));
         }
 
+        /// <summary>
+        /// Reactiva un usuario dado de baja.
+        /// Solo Administrador y Directivo.
+        /// </summary>
         public bool ActivarUsuario(int idUsuario)
         {
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede dar de alta.");
             return Ejecutor.Ejecutar("Usuario.ActivarUsuario",
                 () => usuarioDAO.Activar(idUsuario));
         }

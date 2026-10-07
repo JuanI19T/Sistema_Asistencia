@@ -29,6 +29,16 @@ namespace SistemaAsistencia.Utilidades
             return basico ? 7 : 6;
         }
 
+        /// <summary>
+        /// División fija de una especialidad de ciclo superior (NULL = libre:
+        /// Ciclo Básico o tecnicatura sin mapeo).
+        /// </summary>
+        public static int? DivisionDeEspecialidad(Especialidad esp)
+        {
+            if (esp == null || EsCicloBasico(esp.NombreEspecialidad)) return null;
+            return esp.Division;
+        }
+
         public static string NombreEspecialidadDe(ComboBox combo)
         {
             var esp = combo.SelectedItem as Especialidad;

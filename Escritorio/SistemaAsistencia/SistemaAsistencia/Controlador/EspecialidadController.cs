@@ -30,6 +30,15 @@ namespace SistemaAsistencia.Controlador
                 () => especialidadDAO.ObtenerTodas());
         }
 
+        /// <summary>
+        /// Obtiene todas las especialidades, incluyendo inactivas (solo ABM).
+        /// </summary>
+        public List<Especialidad> ObtenerEspecialidadesIncluyendoInactivos()
+        {
+            return Ejecutor.Ejecutar("Especialidad.ObtenerEspecialidadesIncluyendoInactivos",
+                () => especialidadDAO.ObtenerTodasIncluyendoInactivos());
+        }
+
         // Catálogo fijo (Ciclo Básico + 5 tecnicaturas): no se crea ni se renombra a mano.
         // El ABM existe por normalización pero opera en solo-lectura.
         private static void BloquearEdicion()
@@ -57,6 +66,18 @@ namespace SistemaAsistencia.Controlador
         }
 
         /// <summary>
+        /// Cambia la división fija de una especialidad (única edición
+        /// permitida sobre el catálogo fijo). NULL = libre.
+        /// </summary>
+        public bool ModificarDivision(int idEspecialidad, int? division)
+        {
+            if (division.HasValue && (division.Value < 1 || division.Value > 6))
+                throw new DatosException("La división debe estar entre 1 y 6 (o libre).");
+            return Ejecutor.Ejecutar("Especialidad.ModificarDivision",
+                () => especialidadDAO.ModificarDivision(idEspecialidad, division));
+        }
+
+        /// <summary>
         /// Devuelve los registros vinculados a la especialidad (para informar
         /// antes de una eliminación definitiva).
         /// </summary>
@@ -68,11 +89,27 @@ namespace SistemaAsistencia.Controlador
 
         /// <summary>
         /// Da de baja lógica a una especialidad (conserva su histórico).
+        /// Solo Administrador y Directivo. Crear y renombrar siguen
+        /// bloqueados por BloquearEdicion (catalogo fijo).
         /// </summary>
         public bool DarDeBaja(int idEspecialidad)
         {
-            BloquearEdicion();
-            return false;
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede dar de baja.");
+            return Ejecutor.Ejecutar("Especialidad.DarDeBaja",
+                () => especialidadDAO.DarDeBaja(idEspecialidad));
+        }
+
+        /// <summary>
+        /// Da de alta a una especialidad (reverso de la baja logica).
+        /// Solo Administrador y Directivo.
+        /// </summary>
+        public bool DarDeAlta(int idEspecialidad)
+        {
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede dar de alta.");
+            return Ejecutor.Ejecutar("Especialidad.DarDeAlta",
+                () => especialidadDAO.DarDeAlta(idEspecialidad));
         }
 
         /// <summary>

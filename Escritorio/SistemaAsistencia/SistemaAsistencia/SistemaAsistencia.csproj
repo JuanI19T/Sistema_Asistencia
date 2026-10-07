@@ -218,6 +218,8 @@
     <Compile Include="Utilidades\TelefonoHelper.cs" />
     <Compile Include="Utilidades\CicloHelper.cs" />
     <Compile Include="Utilidades\CargaVista.cs" />
+    <Compile Include="Utilidades\SeguridadAcceso.cs" />
+    <Compile Include="Utilidades\EstadoActivoHelper.cs" />
     <Compile Include="Vista\Comun\CtrlTelefono.cs">
       <SubType>UserControl</SubType>
     </Compile>

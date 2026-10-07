@@ -31,12 +31,13 @@ namespace SistemaAsistencia.Controlador
                 () => profesorDAO.ObtenerTodos());
         }
 
-        private static bool SoloDigitos(string s)
+        /// <summary>
+        /// Obtiene todos los profesores, incluyendo inactivos (solo ABM).
+        /// </summary>
+        public List<Profesor> ObtenerProfesoresIncluyendoInactivos()
         {
-            if (string.IsNullOrEmpty(s)) return false;
-            foreach (char c in s)
-                if (!char.IsDigit(c)) return false;
-            return true;
+            return Ejecutor.Ejecutar("Profesor.ObtenerProfesoresIncluyendoInactivos",
+                () => profesorDAO.ObtenerTodosIncluyendoInactivos());
         }
 
         private static void Validar(Profesor profesor)
@@ -47,11 +48,7 @@ namespace SistemaAsistencia.Controlador
                 throw new DatosException("Ingrese el nombre del profesor.");
             if (string.IsNullOrWhiteSpace(profesor.ApellidoProfesor) || profesor.ApellidoProfesor.Trim().Length < 2)
                 throw new DatosException("Ingrese el apellido del profesor.");
-            string dni = (profesor.DniProfesor ?? string.Empty).Trim();
-            if (dni.Length == 0)
-                throw new DatosException("Ingrese el DNI del profesor.");
-            if (!SoloDigitos(dni) || dni.Length < 7 || dni.Length > 8)
-                throw new DatosException("El DNI debe tener 7 u 8 dígitos numéricos.");
+            string dni = SeguridadAcceso.ValidarDni(profesor.DniProfesor);
             profesor.DniProfesor = dni;
             // Regla EEST: el legajo del personal se autocompleta con el DNI.
             profesor.LegajoProfesor = dni;
@@ -111,11 +108,26 @@ namespace SistemaAsistencia.Controlador
 
         /// <summary>
         /// Da de baja lógica a un profesor (conserva su histórico).
+        /// Solo Administrador y Directivo.
         /// </summary>
         public bool DarDeBaja(int idProfesor)
         {
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede dar de baja.");
             return Ejecutor.Ejecutar("Profesor.DarDeBaja",
                 () => profesorDAO.DarDeBaja(idProfesor));
+        }
+
+        /// <summary>
+        /// Da de alta a un profesor (reverso de la baja logica).
+        /// Solo Administrador y Directivo.
+        /// </summary>
+        public bool DarDeAlta(int idProfesor)
+        {
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede dar de alta.");
+            return Ejecutor.Ejecutar("Profesor.DarDeAlta",
+                () => profesorDAO.DarDeAlta(idProfesor));
         }
 
         /// <summary>

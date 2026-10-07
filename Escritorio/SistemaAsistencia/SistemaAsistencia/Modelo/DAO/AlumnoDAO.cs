@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using SistemaAsistencia.Modelo.Conexion;
 using SistemaAsistencia.Modelo.Entidades;
+using SistemaAsistencia.Utilidades;
 
 namespace SistemaAsistencia.Modelo.DAO
 {
@@ -69,7 +70,38 @@ namespace SistemaAsistencia.Modelo.DAO
         }
 
         /// <summary>
+        /// Obtiene todos los alumnos registrados, incluyendo inactivos.
+        /// Solo para los ABM (el toggle Activar necesita ver los inactivos).
+        /// </summary>
+        public List<Alumno> ObtenerTodosIncluyendoInactivos()
+        {
+            List<Alumno> lista = new List<Alumno>();
+
+            using (MySqlConnection cn = conexionBD.ObtenerConexion())
+            {
+                cn.Open();
+
+                string sql = @"SELECT *
+                                 FROM alumno
+                                 ORDER BY apellido_alumno, nombre_alumno";
+
+                var cmd = new MySqlCommand(sql, cn);
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        lista.Add(MapearAlumno(dr));
+                    }
+                }
+            }
+            return lista;
+        }
+
+        /// <summary>
         /// Agrega un nuevo alumno a la base de datos.
+        /// La contraseña inicial es el DNI (hash bcrypt, compatible con
+        /// el login de la API). Al modificar se conserva la existente.
         /// </summary>
         public bool Agregar(Alumno alumno)
         {
@@ -78,11 +110,13 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"INSERT INTO alumno
-                                (nombre_alumno, apellido_alumno, dni, legajo_alumno,
-                                 correo_alumno, telefono_alumno)
-                                VALUES
-                                (@nombre, @apellido, @dni, @legajo,
-                                 @correo, @telefono)";
+                            (nombre_alumno, apellido_alumno, dni, legajo_alumno,
+                             correo_alumno, telefono_alumno, contrasena, activo)
+                            VALUES
+                            (@nombre, @apellido, @dni, @legajo,
+                             @correo, @telefono, @contrasena, @activo)";
+
+
 
                 var cmd = new MySqlCommand(sql, cn);
 
@@ -92,6 +126,9 @@ namespace SistemaAsistencia.Modelo.DAO
                 cmd.Parameters.AddWithValue("@legajo", alumno.LegajoAlumno);
                 cmd.Parameters.AddWithValue("@correo", alumno.CorreoAlumno);
                 cmd.Parameters.AddWithValue("@telefono", alumno.TelefonoAlumno);
+                cmd.Parameters.AddWithValue("@activo", 1);
+                cmd.Parameters.AddWithValue("@contrasena",
+                    SeguridadAcceso.HashClaveInicial(alumno.DniAlumno.Trim()));
 
                 return cmd.ExecuteNonQuery() > 0;
             }
@@ -141,6 +178,27 @@ namespace SistemaAsistencia.Modelo.DAO
                 string sql = @"UPDATE alumno
                                SET activo = 0
                                WHERE id_alumno = @id";
+
+                var cmd = new MySqlCommand(sql, cn);
+
+                cmd.Parameters.AddWithValue("@id", idAlumno);
+
+                return cmd.ExecuteNonQuery() > 0;
+            }
+        }
+
+        /// <summary>
+        /// Da de alta a un alumno (activo = 1). Reverso de la baja logica.
+        /// </summary>
+        public bool DarDeAlta(int idAlumno)
+        {
+            using (MySqlConnection cn = conexionBD.ObtenerConexion())
+            {
+                cn.Open();
+
+                string sql = @"UPDATE alumno
+                                SET activo = 1
+                                WHERE id_alumno = @id";
 
                 var cmd = new MySqlCommand(sql, cn);
 

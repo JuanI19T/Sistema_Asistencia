@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using SistemaAsistencia.Modelo.Conexion;
 using SistemaAsistencia.Modelo.Entidades;
+using SistemaAsistencia.Utilidades;
 
 namespace SistemaAsistencia.Modelo.DAO
 {
@@ -82,7 +83,39 @@ namespace SistemaAsistencia.Modelo.DAO
         }
 
         /// <summary>
+        /// Obtiene todos los profesores, incluyendo inactivos.
+        /// Solo para los ABM (el toggle Activar necesita ver los inactivos).
+        /// </summary>
+        public List<Profesor> ObtenerTodosIncluyendoInactivos()
+        {
+            List<Profesor> lista = new List<Profesor>();
+
+            using (MySqlConnection cn = conexionBD.ObtenerConexion())
+            {
+                cn.Open();
+
+                string sql = @"SELECT *
+                                 FROM profesor
+                                 ORDER BY apellido_profesor, nombre_profesor";
+
+                var cmd = new MySqlCommand(sql, cn);
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        lista.Add(MapearProfesor(dr));
+                    }
+                }
+            }
+
+            return lista;
+        }
+
+        /// <summary>
         /// Agrega un nuevo profesor a la base de datos.
+        /// La contraseña inicial es el DNI (hash bcrypt, compatible con
+        /// el login de la API). Al modificar se conserva la existente.
         /// </summary>
         public bool Agregar(Profesor profesor)
         {
@@ -94,19 +127,25 @@ namespace SistemaAsistencia.Modelo.DAO
                 // es anterior, avisame el error "Unknown column 'dni'" y te paso el ALTER).
                 string sql = @"INSERT INTO profesor
                                 (nombre_profesor, apellido_profesor, dni, legajo_profesor,
-                                 correo_profesor, telefono_profesor)
+                                 correo_profesor, telefono_profesor, contrasena, activo)
                                 VALUES
-                                (@nombre, @apellido, @dni, @legajo, @correo, @telefono)";
+                                (@nombre, @apellido, @dni, @legajo, @correo, @telefono, @contrasena, @activo)";
 
                 var cmd = new MySqlCommand(sql, cn);
+
+                string dni = (profesor.DniProfesor ?? string.Empty).Trim();
 
                 cmd.Parameters.AddWithValue("@nombre", profesor.NombreProfesor);
                 cmd.Parameters.AddWithValue("@apellido", profesor.ApellidoProfesor);
                 cmd.Parameters.AddWithValue("@dni",
-                    string.IsNullOrWhiteSpace(profesor.DniProfesor) ? (object)System.DBNull.Value : profesor.DniProfesor.Trim());
+                    dni.Length == 0 ? (object)System.DBNull.Value : dni);
                 cmd.Parameters.AddWithValue("@legajo", profesor.LegajoProfesor);
                 cmd.Parameters.AddWithValue("@correo", profesor.CorreoProfesor);
                 cmd.Parameters.AddWithValue("@telefono", profesor.TelefonoProfesor);
+                cmd.Parameters.AddWithValue("@contrasena",
+                    dni.Length == 0 ? (object)System.DBNull.Value : SeguridadAcceso.HashClaveInicial(dni));
+                // Todo lo creado desde el escritorio nace activo.
+                cmd.Parameters.AddWithValue("@activo", 1);
 
                 return cmd.ExecuteNonQuery() > 0;
             }
@@ -155,8 +194,29 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"UPDATE profesor
-                               SET activo = 0
-                               WHERE id_profesor = @id";
+                                SET activo = 0
+                                WHERE id_profesor = @id";
+
+                var cmd = new MySqlCommand(sql, cn);
+
+                cmd.Parameters.AddWithValue("@id", idProfesor);
+
+                return cmd.ExecuteNonQuery() > 0;
+            }
+        }
+
+        /// <summary>
+        /// Da de alta a un profesor (activo = 1). Reverso de la baja logica.
+        /// </summary>
+        public bool DarDeAlta(int idProfesor)
+        {
+            using (MySqlConnection cn = conexionBD.ObtenerConexion())
+            {
+                cn.Open();
+
+                string sql = @"UPDATE profesor
+                                SET activo = 1
+                                WHERE id_profesor = @id";
 
                 var cmd = new MySqlCommand(sql, cn);
 
