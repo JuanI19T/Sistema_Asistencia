@@ -32,6 +32,8 @@ namespace SistemaAsistencia.Vista.Usuarios
             // La fuente del selector la unifica FrmBaseHijo.
             // El evento Load se concentra exclusivamente en los datos dinámicos.
             CargaVista.IntentarCarga(CargarUsuarios, "usuarios");
+            EstadoActivoHelper.AplicarPermiso(btnToggleActivo);
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
         }
 
         private void InicializarRolesEstaticos()
@@ -189,6 +191,36 @@ namespace SistemaAsistencia.Vista.Usuarios
             txtEditPassword.Clear();
             CargaVista.ReiniciarCombo(cmbEditRol);
             chkEditActivo.Checked = false;
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
+        }
+
+        private void btnToggleActivo_Click(object sender, EventArgs e)
+        {
+            if (idUsuarioSeleccionado == null)
+            {
+                MessageBox.Show(
+                    "Busque y seleccione un usuario primero.",
+                    "Usuarios",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            Usuario usuario = cacheUsuarios.Find(u => u.IdUsuario == idUsuarioSeleccionado.Value);
+            if (usuario == null) return;
+
+            bool ok = EstadoActivoHelper.EjecutarToggle(
+                idUsuarioSeleccionado.Value,
+                usuario.Activo,
+                usuarioController.EliminarUsuario,
+                usuarioController.ActivarUsuario,
+                "Usuarios");
+
+            if (ok)
+            {
+                CargarUsuarios();
+                LimpiarEdicion();
+            }
         }
 
         // ---------------- 2. Buscar y modificar ----------------
@@ -238,6 +270,7 @@ namespace SistemaAsistencia.Vista.Usuarios
                 txtEditPassword.Clear();
                 SeleccionarRol(cmbEditRol, usuario.Rol);
                 chkEditActivo.Checked = usuario.Activo;
+                EstadoActivoHelper.ActualizarTexto(btnToggleActivo, usuario.Activo);
             });
         }
 

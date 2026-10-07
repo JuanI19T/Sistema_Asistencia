@@ -28,11 +28,13 @@ namespace SistemaAsistencia.Vista.Alumnos
         private void FrmAlumnos_Load(object sender, EventArgs e)
         {
             CargaVista.IntentarCarga(CargarAlumnos, "alumnos");
+            EstadoActivoHelper.AplicarPermiso(btnToggleActivo);
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
         }
 
         private void CargarAlumnos()
         {
-            cacheAlumnos = CargaVista.ObtenerLista(() => alumnoController.ObtenerAlumnos());
+            cacheAlumnos = CargaVista.ObtenerLista(() => alumnoController.ObtenerAlumnosIncluyendoInactivos());
             MostrarEnGrilla(cacheAlumnos);
         }
 
@@ -237,6 +239,7 @@ namespace SistemaAsistencia.Vista.Alumnos
                 txtEditLegajo.Text = alumno.LegajoAlumno;
                 txtEditCorreo.Text = alumno.CorreoAlumno;
                 ctrlTelEdit.Telefono = alumno.TelefonoAlumno;
+                EstadoActivoHelper.ActualizarTexto(btnToggleActivo, alumno.Activo);
             });
         }
 
@@ -394,6 +397,36 @@ namespace SistemaAsistencia.Vista.Alumnos
             txtEditLegajo.Clear();
             txtEditCorreo.Clear();
             ctrlTelEdit.Limpiar();
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
+        }
+
+        private void btnToggleActivo_Click(object sender, EventArgs e)
+        {
+            if (idAlumnoSeleccionado == 0)
+            {
+                MessageBox.Show(
+                    "Busque y seleccione un alumno primero.",
+                    "Alumnos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            Alumno alumno = cacheAlumnos.Find(a => a.IdAlumno == idAlumnoSeleccionado);
+            if (alumno == null) return;
+
+            bool ok = EstadoActivoHelper.EjecutarToggle(
+                idAlumnoSeleccionado,
+                alumno.Activo,
+                alumnoController.DarDeBaja,
+                alumnoController.DarDeAlta,
+                "Alumnos");
+
+            if (ok)
+            {
+                CargarAlumnos();
+                LimpiarEdicion();
+            }
         }
 
         private void materialTabSelector1_Click(object sender, EventArgs e)

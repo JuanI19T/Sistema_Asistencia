@@ -49,7 +49,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.btnLimpiarEditar = new MaterialSkin.Controls.MaterialButton();
             this.lblEditando = new MaterialSkin.Controls.MaterialLabel();
             this.txtBuscar = new MaterialSkin.Controls.MaterialTextBox();
-            this.btnBuscar = new MaterialSkin.Controls.MaterialButton();
+            this.btnToggleActivo = new MaterialSkin.Controls.MaterialButton();
             this.dgvAlumnos = new System.Windows.Forms.DataGridView();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -569,27 +569,26 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.txtBuscar.TrailingIcon = null;
             this.txtBuscar.TextChanged += new System.EventHandler(this.txtBuscar_TextChanged);
             // 
-            // btnBuscar
+            // btnToggleActivo
             // 
-            this.btnBuscar.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnBuscar.AutoSize = false;
-            this.btnBuscar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnBuscar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btnBuscar.Depth = 0;
-            this.btnBuscar.HighEmphasis = true;
-            this.btnBuscar.Icon = null;
-            this.btnBuscar.Location = new System.Drawing.Point(310, 7);
-            this.btnBuscar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnBuscar.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnBuscar.Size = new System.Drawing.Size(90, 34);
-            this.btnBuscar.TabIndex = 1;
-            this.btnBuscar.Text = "Buscar";
-            this.btnBuscar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btnBuscar.UseAccentColor = false;
-            this.btnBuscar.UseVisualStyleBackColor = true;
-            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
+            this.btnToggleActivo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnToggleActivo.AutoSize = false;
+            this.btnToggleActivo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnToggleActivo.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnToggleActivo.Depth = 0;
+            this.btnToggleActivo.HighEmphasis = true;
+            this.btnToggleActivo.Icon = null;
+            this.btnToggleActivo.Location = new System.Drawing.Point(310, 7);
+            this.btnToggleActivo.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnToggleActivo.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnToggleActivo.Name = "btnToggleActivo";
+            this.btnToggleActivo.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnToggleActivo.Size = new System.Drawing.Size(90, 34);
+            this.btnToggleActivo.TabIndex = 1;
+            this.btnToggleActivo.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnToggleActivo.UseAccentColor = false;
+            this.btnToggleActivo.UseVisualStyleBackColor = true;
+            this.btnToggleActivo.Click += new System.EventHandler(this.btnToggleActivo_Click);
             // 
             // dgvAlumnos
             // 
@@ -798,7 +797,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel4.Controls.Add(this.txtBuscar, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.btnBuscar, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.btnToggleActivo, 1, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -878,7 +877,7 @@ namespace SistemaAsistencia.Vista.Alumnos
         private MaterialSkin.Controls.MaterialButton btnLimpiarEditar;
         private MaterialSkin.Controls.MaterialLabel lblEditando;
         private MaterialSkin.Controls.MaterialTextBox txtBuscar;
-        private MaterialSkin.Controls.MaterialButton btnBuscar;
+        private MaterialSkin.Controls.MaterialButton btnToggleActivo;
         private System.Windows.Forms.DataGridView dgvAlumnos;
         private MaterialSkin.Controls.MaterialTabControl materialTabControl1;
         private System.Windows.Forms.TabPage tabPage1;

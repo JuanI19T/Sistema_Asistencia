@@ -36,12 +36,14 @@ namespace SistemaAsistencia.Vista.Profesores
         private void FrmProfesores_Load(object sender, EventArgs e)
         {
             CargaVista.IntentarCarga(CargarProfesores, "profesores");
+            EstadoActivoHelper.AplicarPermiso(btnToggleActivo);
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
         }
 
         private void CargarProfesores()
         {
             cacheProfesores =
-                CargaVista.ObtenerLista(() => profesorController.ObtenerProfesores());
+                CargaVista.ObtenerLista(() => profesorController.ObtenerProfesoresIncluyendoInactivos());
             MostrarEnGrilla(cacheProfesores);
         }
 
@@ -238,6 +240,7 @@ namespace SistemaAsistencia.Vista.Profesores
                 txtEditLegajo.Text = profesor.LegajoProfesor;
                 txtEditCorreo.Text = profesor.CorreoProfesor;
                 ctrlTelEdit.Telefono = profesor.TelefonoProfesor;
+                EstadoActivoHelper.ActualizarTexto(btnToggleActivo, profesor.Activo);
             });
         }
 
@@ -395,6 +398,36 @@ namespace SistemaAsistencia.Vista.Profesores
             txtEditLegajo.Clear();
             txtEditCorreo.Clear();
             ctrlTelEdit.Limpiar();
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
+        }
+
+        private void btnToggleActivo_Click(object sender, EventArgs e)
+        {
+            if (idProfesorSeleccionado == 0)
+            {
+                MessageBox.Show(
+                    "Busque y seleccione un profesor primero.",
+                    "Profesores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            Profesor profesor = cacheProfesores.Find(p => p.IdProfesor == idProfesorSeleccionado);
+            if (profesor == null) return;
+
+            bool ok = EstadoActivoHelper.EjecutarToggle(
+                idProfesorSeleccionado,
+                profesor.Activo,
+                profesorController.DarDeBaja,
+                profesorController.DarDeAlta,
+                "Profesores");
+
+            if (ok)
+            {
+                CargarProfesores();
+                LimpiarEdicion();
+            }
         }
     }
 }

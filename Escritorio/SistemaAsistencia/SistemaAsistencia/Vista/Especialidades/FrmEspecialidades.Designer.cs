@@ -34,9 +34,9 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.btnLimpiarCrear = new MaterialSkin.Controls.MaterialButton();
             this.lblEditando = new MaterialSkin.Controls.MaterialLabel();
             this.txtEditNombre = new MaterialSkin.Controls.MaterialTextBox2();
-            this.btnLimpiarEditar = new MaterialSkin.Controls.MaterialButton();
+            this.lblEditDivision = new MaterialSkin.Controls.MaterialLabel();
             this.txtBuscar = new MaterialSkin.Controls.MaterialTextBox();
-            this.btnBuscar = new MaterialSkin.Controls.MaterialButton();
+            this.btnToggleActivo = new MaterialSkin.Controls.MaterialButton();
             this.dgvEspecialidades = new System.Windows.Forms.DataGridView();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -44,6 +44,9 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnLimpiarEditar = new MaterialSkin.Controls.MaterialButton();
+            this.nudEditDivision = new System.Windows.Forms.NumericUpDown();
+            this.btnGuardarDivision = new MaterialSkin.Controls.MaterialButton();
             this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEspecialidades)).BeginInit();
             this.materialTabControl1.SuspendLayout();
@@ -52,6 +55,7 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.tabPage2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEditDivision)).BeginInit();
             this.SuspendLayout();
             // 
             // lblAvisoCrear
@@ -63,7 +67,7 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.lblAvisoCrear.Location = new System.Drawing.Point(211, 0);
             this.lblAvisoCrear.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblAvisoCrear.Name = "lblAvisoCrear";
-            this.lblAvisoCrear.Size = new System.Drawing.Size(411, 203);
+            this.lblAvisoCrear.Size = new System.Drawing.Size(411, 19);
             this.lblAvisoCrear.TabIndex = 0;
             this.lblAvisoCrear.Text = "Catálogo fijo: no se crean especialidades a mano.";
             this.lblAvisoCrear.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -79,7 +83,7 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.txtNombre.HideSelection = true;
             this.txtNombre.Hint = "Nombre";
             this.txtNombre.LeadingIcon = null;
-            this.txtNombre.Location = new System.Drawing.Point(291, 242);
+            this.txtNombre.Location = new System.Drawing.Point(291, 22);
             this.txtNombre.MaxLength = 32767;
             this.txtNombre.MouseState = MaterialSkin.MouseState.OUT;
             this.txtNombre.Name = "txtNombre";
@@ -106,7 +110,7 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.btnGuardar.Depth = 0;
             this.btnGuardar.HighEmphasis = true;
             this.btnGuardar.Icon = null;
-            this.btnGuardar.Location = new System.Drawing.Point(4, 336);
+            this.btnGuardar.Location = new System.Drawing.Point(4, 79);
             this.btnGuardar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnGuardar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnGuardar.Name = "btnGuardar";
@@ -128,7 +132,7 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.btnLimpiarCrear.Depth = 0;
             this.btnLimpiarCrear.HighEmphasis = true;
             this.btnLimpiarCrear.Icon = null;
-            this.btnLimpiarCrear.Location = new System.Drawing.Point(212, 336);
+            this.btnLimpiarCrear.Location = new System.Drawing.Point(212, 79);
             this.btnLimpiarCrear.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnLimpiarCrear.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLimpiarCrear.Name = "btnLimpiarCrear";
@@ -154,6 +158,7 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.lblEditando.Size = new System.Drawing.Size(229, 19);
             this.lblEditando.TabIndex = 3;
             this.lblEditando.Text = "Editando: (seleccione de la lista)";
+            this.lblEditando.Visible = false;
             // 
             // txtEditNombre
             // 
@@ -183,28 +188,21 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.txtEditNombre.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.txtEditNombre.TrailingIcon = null;
             this.txtEditNombre.UseSystemPasswordChar = false;
+            this.txtEditNombre.Visible = false;
             // 
-            // btnLimpiarEditar
+            // lblEditDivision
             // 
-            this.btnLimpiarEditar.AutoSize = false;
-            this.btnLimpiarEditar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnLimpiarEditar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btnLimpiarEditar.Depth = 0;
-            this.btnLimpiarEditar.HighEmphasis = true;
-            this.btnLimpiarEditar.Icon = null;
-            this.btnLimpiarEditar.Location = new System.Drawing.Point(20, 110);
-
-            this.btnLimpiarEditar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnLimpiarEditar.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnLimpiarEditar.Name = "btnLimpiarEditar";
-            this.btnLimpiarEditar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnLimpiarEditar.Size = new System.Drawing.Size(100, 36);
-            this.btnLimpiarEditar.TabIndex = 3;
-            this.btnLimpiarEditar.Text = "Limpiar";
-            this.btnLimpiarEditar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
-            this.btnLimpiarEditar.UseAccentColor = false;
-            this.btnLimpiarEditar.UseVisualStyleBackColor = true;
-            this.btnLimpiarEditar.Click += new System.EventHandler(this.btnLimpiarEditar_Click);
+            this.lblEditDivision.AutoSize = true;
+            this.lblEditDivision.BackColor = System.Drawing.Color.White;
+            this.lblEditDivision.Depth = 0;
+            this.lblEditDivision.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.lblEditDivision.Location = new System.Drawing.Point(20, 160);
+            this.lblEditDivision.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lblEditDivision.Name = "lblEditDivision";
+            this.lblEditDivision.Size = new System.Drawing.Size(129, 19);
+            this.lblEditDivision.TabIndex = 5;
+            this.lblEditDivision.Text = "División (0 = libre)";
+            this.lblEditDivision.Visible = false;
             // 
             // txtBuscar
             // 
@@ -226,27 +224,26 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.txtBuscar.TrailingIcon = null;
             this.txtBuscar.TextChanged += new System.EventHandler(this.txtBuscar_TextChanged);
             // 
-            // btnBuscar
+            // btnToggleActivo
             // 
-            this.btnBuscar.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnBuscar.AutoSize = false;
-            this.btnBuscar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnBuscar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btnBuscar.Depth = 0;
-            this.btnBuscar.HighEmphasis = true;
-            this.btnBuscar.Icon = null;
-            this.btnBuscar.Location = new System.Drawing.Point(364, 10);
-            this.btnBuscar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnBuscar.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnBuscar.Size = new System.Drawing.Size(90, 34);
-            this.btnBuscar.TabIndex = 1;
-            this.btnBuscar.Text = "Buscar";
-            this.btnBuscar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btnBuscar.UseAccentColor = false;
-            this.btnBuscar.UseVisualStyleBackColor = true;
-            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
+            this.btnToggleActivo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnToggleActivo.AutoSize = false;
+            this.btnToggleActivo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnToggleActivo.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnToggleActivo.Depth = 0;
+            this.btnToggleActivo.HighEmphasis = true;
+            this.btnToggleActivo.Icon = null;
+            this.btnToggleActivo.Location = new System.Drawing.Point(364, 10);
+            this.btnToggleActivo.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnToggleActivo.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnToggleActivo.Name = "btnToggleActivo";
+            this.btnToggleActivo.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnToggleActivo.Size = new System.Drawing.Size(90, 34);
+            this.btnToggleActivo.TabIndex = 1;
+            this.btnToggleActivo.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnToggleActivo.UseAccentColor = false;
+            this.btnToggleActivo.UseVisualStyleBackColor = true;
+            this.btnToggleActivo.Click += new System.EventHandler(this.btnToggleActivo_Click);
             // 
             // dgvEspecialidades
             // 
@@ -277,19 +274,20 @@ namespace SistemaAsistencia.Vista.Especialidades
             // 
             // tabPage1
             // 
+            this.tabPage1.AutoScroll = true;
             this.tabPage1.BackColor = System.Drawing.Color.White;
             this.tabPage1.Controls.Add(this.tableLayoutPanel1);
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            // Scroll de seguridad para monitores chicos (igual que tabPage2).
-            this.tabPage1.AutoScroll = true;
             this.tabPage1.Size = new System.Drawing.Size(840, 514);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Crear una Especialidad";
             // 
             // tableLayoutPanel1
             // 
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -298,35 +296,30 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.tableLayoutPanel1.Controls.Add(this.btnLimpiarCrear, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.lblAvisoCrear, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.txtNombre, 1, 1);
-            // La tabla se autoajusta al contenido y va arriba: si los campos
-            // re-escalados crecen, la pestaña scrollea en vez de recortar
-            // la botonera de la última fila (antes: Dock.Fill la comprimía).
-            this.tableLayoutPanel1.AutoSize = true;
-            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.AutoSize));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(834, 508);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(834, 117);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tabPage2
             // 
+            this.tabPage2.AutoScroll = true;
             this.tabPage2.BackColor = System.Drawing.Color.White;
             this.tabPage2.Controls.Add(this.tableLayoutPanel3);
             this.tabPage2.Controls.Add(this.lblEditando);
             this.tabPage2.Controls.Add(this.txtEditNombre);
             this.tabPage2.Controls.Add(this.btnLimpiarEditar);
+            this.tabPage2.Controls.Add(this.lblEditDivision);
+            this.tabPage2.Controls.Add(this.nudEditDivision);
+            this.tabPage2.Controls.Add(this.btnGuardarDivision);
             this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            // Scroll de seguridad para monitores chicos: si los campos
-            // re-escalados desbordan, aparecen scrollbars en vez de
-            // recortar los botones de abajo.
-            this.tabPage2.AutoScroll = true;
             this.tabPage2.Size = new System.Drawing.Size(840, 514);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Consultar Especialidades";
@@ -353,7 +346,7 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel4.Controls.Add(this.txtBuscar, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.btnBuscar, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.btnToggleActivo, 1, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -361,6 +354,62 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(459, 54);
             this.tableLayoutPanel4.TabIndex = 0;
+            // 
+            // btnLimpiarEditar
+            // 
+            this.btnLimpiarEditar.AutoSize = false;
+            this.btnLimpiarEditar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnLimpiarEditar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnLimpiarEditar.Depth = 0;
+            this.btnLimpiarEditar.HighEmphasis = true;
+            this.btnLimpiarEditar.Icon = null;
+            this.btnLimpiarEditar.Location = new System.Drawing.Point(23, 210);
+            this.btnLimpiarEditar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnLimpiarEditar.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnLimpiarEditar.Name = "btnLimpiarEditar";
+            this.btnLimpiarEditar.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnLimpiarEditar.Size = new System.Drawing.Size(100, 36);
+            this.btnLimpiarEditar.TabIndex = 3;
+            this.btnLimpiarEditar.Text = "Limpiar";
+            this.btnLimpiarEditar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
+            this.btnLimpiarEditar.UseAccentColor = false;
+            this.btnLimpiarEditar.UseVisualStyleBackColor = true;
+            this.btnLimpiarEditar.Visible = false;
+            this.btnLimpiarEditar.Click += new System.EventHandler(this.btnLimpiarEditar_Click);
+            // 
+            // nudEditDivision
+            // 
+            this.nudEditDivision.Location = new System.Drawing.Point(155, 157);
+            this.nudEditDivision.Maximum = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.nudEditDivision.Name = "nudEditDivision";
+            this.nudEditDivision.Size = new System.Drawing.Size(180, 25);
+            this.nudEditDivision.TabIndex = 6;
+            this.nudEditDivision.Visible = false;
+            // 
+            // btnGuardarDivision
+            // 
+            this.btnGuardarDivision.AutoSize = false;
+            this.btnGuardarDivision.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnGuardarDivision.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnGuardarDivision.Depth = 0;
+            this.btnGuardarDivision.HighEmphasis = true;
+            this.btnGuardarDivision.Icon = null;
+            this.btnGuardarDivision.Location = new System.Drawing.Point(155, 210);
+            this.btnGuardarDivision.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnGuardarDivision.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnGuardarDivision.Name = "btnGuardarDivision";
+            this.btnGuardarDivision.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnGuardarDivision.Size = new System.Drawing.Size(180, 36);
+            this.btnGuardarDivision.TabIndex = 7;
+            this.btnGuardarDivision.Text = "Guardar división";
+            this.btnGuardarDivision.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnGuardarDivision.UseAccentColor = false;
+            this.btnGuardarDivision.UseVisualStyleBackColor = true;
+            this.btnGuardarDivision.Visible = false;
             // 
             // materialTabSelector1
             // 
@@ -392,12 +441,14 @@ namespace SistemaAsistencia.Vista.Especialidades
             ((System.ComponentModel.ISupportInitialize)(this.dgvEspecialidades)).EndInit();
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nudEditDivision)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -410,9 +461,9 @@ namespace SistemaAsistencia.Vista.Especialidades
         private MaterialSkin.Controls.MaterialButton btnLimpiarCrear;
         private MaterialSkin.Controls.MaterialLabel lblEditando;
         private MaterialSkin.Controls.MaterialTextBox2 txtEditNombre;
-        private MaterialSkin.Controls.MaterialButton btnLimpiarEditar;
+        private MaterialSkin.Controls.MaterialLabel lblEditDivision;
         private MaterialSkin.Controls.MaterialTextBox txtBuscar;
-        private MaterialSkin.Controls.MaterialButton btnBuscar;
+        private MaterialSkin.Controls.MaterialButton btnToggleActivo;
         private System.Windows.Forms.DataGridView dgvEspecialidades;
         private MaterialSkin.Controls.MaterialTabControl materialTabControl1;
         private System.Windows.Forms.TabPage tabPage1;
@@ -421,5 +472,8 @@ namespace SistemaAsistencia.Vista.Especialidades
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private MaterialSkin.Controls.MaterialTabSelector materialTabSelector1;
+        private MaterialSkin.Controls.MaterialButton btnLimpiarEditar;
+        private System.Windows.Forms.NumericUpDown nudEditDivision;
+        private MaterialSkin.Controls.MaterialButton btnGuardarDivision;
     }
 }

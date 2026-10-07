@@ -56,6 +56,8 @@ namespace SistemaAsistencia.Vista.Materias
                 CargarEspecialidades();
                 CargarMaterias();
             }, "materias");
+            EstadoActivoHelper.AplicarPermiso(btnToggleActivo);
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
         }
 
         private void CargarEspecialidades()
@@ -69,7 +71,7 @@ namespace SistemaAsistencia.Vista.Materias
 
         private void CargarMaterias()
         {
-            cacheMaterias = CargaVista.ObtenerLista(() => materiaController.ObtenerMaterias());
+            cacheMaterias = CargaVista.ObtenerLista(() => materiaController.ObtenerMateriasIncluyendoInactivos());
             MostrarEnGrilla(cacheMaterias);
         }
 
@@ -98,6 +100,11 @@ namespace SistemaAsistencia.Vista.Materias
                 dgv.Columns["AnioMateria"].HeaderText = "Año";
             if (dgv.Columns.Contains("Ciclo"))
                 dgv.Columns["Ciclo"].HeaderText = "Ciclo";
+            if (dgv.Columns.Contains("Activo"))
+            {
+                dgv.Columns["Activo"].HeaderText = "Activo";
+                dgv.Columns["Activo"].ReadOnly = true;
+            }
         }
 
         // Regla EEST: años 1-3 van con "Ciclo Básico"; años 4-7 con su tecnicatura.
@@ -264,6 +271,7 @@ namespace SistemaAsistencia.Vista.Materias
                 SeleccionarEspecialidad(cmbEditEspecialidad, materia.IdEspecialidad);
                 nudEditCarga.Value = Limitar(nudEditCarga, materia.CargaHoraria);
                 nudEditAnio.Value = Limitar(nudEditAnio, materia.AnioMateria);
+                EstadoActivoHelper.ActualizarTexto(btnToggleActivo, materia.Activo);
             });
         }
 
@@ -443,6 +451,36 @@ namespace SistemaAsistencia.Vista.Materias
             CargaVista.ReiniciarCombo(cmbEditEspecialidad);
             nudEditCarga.Value = 0;
             nudEditAnio.Value = nudEditAnio.Minimum;
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
+        }
+
+        private void btnToggleActivo_Click(object sender, EventArgs e)
+        {
+            if (idMateriaSeleccionada == 0)
+            {
+                MessageBox.Show(
+                    "Busque y seleccione una materia primero.",
+                    "Materias",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            Materia materia = cacheMaterias.Find(m => m.IdMateria == idMateriaSeleccionada);
+            if (materia == null) return;
+
+            bool ok = EstadoActivoHelper.EjecutarToggle(
+                idMateriaSeleccionada,
+                materia.Activo,
+                materiaController.DarDeBaja,
+                materiaController.DarDeAlta,
+                "Materias");
+
+            if (ok)
+            {
+                CargarMaterias();
+                LimpiarEdicion();
+            }
         }
     }
 }

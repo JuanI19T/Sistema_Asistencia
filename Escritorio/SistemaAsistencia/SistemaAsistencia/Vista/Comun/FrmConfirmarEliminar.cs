@@ -206,7 +206,9 @@ namespace SistemaAsistencia.Vista.Comun
             Controls.Add(layout);
 
             // El botón de eliminación definitiva solo para el Administrador.
+            // Dar de baja solo para Administrador y Directivo.
             btnEliminarDefinitiva.Visible = Sesion.UsuarioActualRolAdministrador();
+            btnDarDeBaja.Visible = Sesion.PuedeGestionarActivo();
 
             AcceptButton = btnDarDeBaja;
             CancelButton = btnCancelar;

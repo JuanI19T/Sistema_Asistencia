@@ -35,7 +35,7 @@
             this.cmbRol = new MaterialSkin.Controls.MaterialComboBox();
             this.btnModificar = new MaterialSkin.Controls.MaterialButton();
             this.txtBuscar = new MaterialSkin.Controls.MaterialTextBox();
-            this.btnBuscar = new MaterialSkin.Controls.MaterialButton();
+            this.btnToggleActivo = new MaterialSkin.Controls.MaterialButton();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -241,27 +241,26 @@
             this.txtBuscar.TrailingIcon = null;
             this.txtBuscar.TextChanged += new System.EventHandler(this.txtBuscar_TextChanged);
             // 
-            // btnBuscar
+            // btnToggleActivo
             // 
-            this.btnBuscar.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.btnBuscar.AutoSize = false;
-            this.btnBuscar.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnBuscar.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btnBuscar.Depth = 0;
-            this.btnBuscar.HighEmphasis = true;
-            this.btnBuscar.Icon = null;
-            this.btnBuscar.Location = new System.Drawing.Point(265, 9);
-            this.btnBuscar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnBuscar.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnBuscar.Name = "btnBuscar";
-            this.btnBuscar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnBuscar.Size = new System.Drawing.Size(76, 38);
-            this.btnBuscar.TabIndex = 1;
-            this.btnBuscar.Text = "Buscar";
-            this.btnBuscar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btnBuscar.UseAccentColor = false;
-            this.btnBuscar.UseVisualStyleBackColor = true;
-            this.btnBuscar.Click += new System.EventHandler(this.btnBuscar_Click);
+            this.btnToggleActivo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnToggleActivo.AutoSize = false;
+            this.btnToggleActivo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnToggleActivo.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnToggleActivo.Depth = 0;
+            this.btnToggleActivo.HighEmphasis = true;
+            this.btnToggleActivo.Icon = null;
+            this.btnToggleActivo.Location = new System.Drawing.Point(265, 9);
+            this.btnToggleActivo.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnToggleActivo.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnToggleActivo.Name = "btnToggleActivo";
+            this.btnToggleActivo.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnToggleActivo.Size = new System.Drawing.Size(76, 38);
+            this.btnToggleActivo.TabIndex = 1;
+            this.btnToggleActivo.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnToggleActivo.UseAccentColor = false;
+            this.btnToggleActivo.UseVisualStyleBackColor = true;
+            this.btnToggleActivo.Click += new System.EventHandler(this.btnToggleActivo_Click);
             // 
             // materialTabControl1
             // 
@@ -583,7 +582,7 @@
             this.tableLayoutPanel4.ColumnCount = 2;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Controls.Add(this.btnBuscar, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.btnToggleActivo, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.txtBuscar, 0, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 3);
@@ -680,7 +679,7 @@
         private MaterialSkin.Controls.MaterialButton btnLimpiarCrear;
         private MaterialSkin.Controls.MaterialButton btnModificar;
         private MaterialSkin.Controls.MaterialTextBox txtBuscar;
-        private MaterialSkin.Controls.MaterialButton btnBuscar;
+        private MaterialSkin.Controls.MaterialButton btnToggleActivo;
         private MaterialSkin.Controls.MaterialTextBox2 txtUsuario;
         private MaterialSkin.Controls.MaterialTextBox2 txtPassword;
         private MaterialSkin.Controls.MaterialTabControl materialTabControl1;
