@@ -25,35 +25,27 @@ namespace SistemaAsistencia.Vista.Especialidades
             Tema.EstilizarGrilla(dgvEspecialidades);
 
             // Catálogo fijo (Ciclo Básico + 5 tecnicaturas): solo consulta.
-            // La pestaña Crear queda bloqueada (aviso + campo deshabilitado)
-            // y en Modificar no se edita a mano (el ABM existe por
-            // normalización pero las filas no se tocan).
-            btnGuardar.Visible = false;
-            btnLimpiarCrear.Visible = false;
-            txtNombre.ReadOnly = true;
-            txtNombre.TabStop = false;
-            txtEditNombre.ReadOnly = true;
-            // Solo consulta: se esconde la pestaña Crear.
+            // La división se muestra pero no se edita (evita corromper dictados).
+            dgvEspecialidades.CellFormatting += DgvEspecialidades_CellFormatting;
+
+            // tabPage1 se conserva en el Designer para uso futuro;
+            // solo se oculta en runtime.
             materialTabControl1.TabPages.Remove(tabPage1);
-            var aviso = new Label
-            {
-                AutoSize = true,
-                Location = new System.Drawing.Point(20, 170),
-                Text = "Catálogo fijo: Ciclo Básico + 5 tecnicaturas (se eligen desde Materias).",
-                ForeColor = System.Drawing.Color.Gray
-            };
-            tabPage2.Controls.Add(aviso);
+            materialTabControl1.SelectedIndex = 0;
+            materialTabSelector1.Refresh();
         }
 
         private void FrmEspecialidades_Load(object sender, EventArgs e)
         {
             CargaVista.IntentarCarga(CargarEspecialidades, "especialidades");
+            EstadoActivoHelper.AplicarPermiso(btnToggleActivo);
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
         }
 
         private void CargarEspecialidades()
         {
             cacheEspecialidades =
-                CargaVista.ObtenerLista(() => especialidadController.ObtenerEspecialidades());
+                CargaVista.ObtenerLista(() => especialidadController.ObtenerEspecialidadesIncluyendoInactivos());
             MostrarEnGrilla(cacheEspecialidades);
         }
 
@@ -69,7 +61,34 @@ namespace SistemaAsistencia.Vista.Especialidades
             if (dgv.Columns.Contains("IdEspecialidad"))
                 dgv.Columns["IdEspecialidad"].Visible = false;
             if (dgv.Columns.Contains("NombreEspecialidad"))
+            {
                 dgv.Columns["NombreEspecialidad"].HeaderText = "Especialidad";
+                dgv.Columns["NombreEspecialidad"].DisplayIndex = 0;
+                dgv.Columns["NombreEspecialidad"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            }
+            if (dgv.Columns.Contains("Division"))
+            {
+                dgv.Columns["Division"].HeaderText = "División";
+                dgv.Columns["Division"].DisplayIndex = 1;
+                dgv.Columns["Division"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            }
+            if (dgv.Columns.Contains("Activo"))
+            {
+                dgv.Columns["Activo"].HeaderText = "Activo";
+                dgv.Columns["Activo"].DisplayIndex = 2;
+                dgv.Columns["Activo"].ReadOnly = true;
+            }
+        }
+
+        // NULL (sin división fija) se muestra como "Libre".
+        private void DgvEspecialidades_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvEspecialidades.Columns[e.ColumnIndex].Name == "Division" && e.Value == null)
+            {
+                e.Value = "Libre";
+                e.FormattingApplied = true;
+            }
         }
 
         // ---------------- 1. Crear ----------------
@@ -183,8 +202,11 @@ namespace SistemaAsistencia.Vista.Especialidades
                 idEspecialidadSeleccionada = especialidad.IdEspecialidad;
                 lblEditando.Text = "Editando: " + especialidad.NombreEspecialidad;
                 txtEditNombre.Text = especialidad.NombreEspecialidad;
+                EstadoActivoHelper.ActualizarTexto(btnToggleActivo, especialidad.Activo);
             });
         }
+
+        
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
@@ -339,6 +361,37 @@ namespace SistemaAsistencia.Vista.Especialidades
             idEspecialidadSeleccionada = 0;
             lblEditando.Text = "Editando: (seleccione de la lista)";
             txtEditNombre.Clear();
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
+        }
+
+        private void btnToggleActivo_Click(object sender, EventArgs e)
+        {
+            if (idEspecialidadSeleccionada == 0)
+            {
+                MessageBox.Show(
+                    "Busque y seleccione una especialidad primero.",
+                    "Especialidades",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            Especialidad especialidad =
+                cacheEspecialidades.Find(es => es.IdEspecialidad == idEspecialidadSeleccionada);
+            if (especialidad == null) return;
+
+            bool ok = EstadoActivoHelper.EjecutarToggle(
+                idEspecialidadSeleccionada,
+                especialidad.Activo,
+                especialidadController.DarDeBaja,
+                especialidadController.DarDeAlta,
+                "Especialidades");
+
+            if (ok)
+            {
+                CargarEspecialidades();
+                LimpiarEdicion();
+            }
         }
 
         private void materialTabSelector1_Click(object sender, EventArgs e)

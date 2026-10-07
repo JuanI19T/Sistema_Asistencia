@@ -31,12 +31,13 @@ namespace SistemaAsistencia.Controlador
                 () => alumnoDAO.ObtenerTodos());
         }
 
-        private static bool SoloDigitos(string s)
+        /// <summary>
+        /// Obtiene todos los alumnos, incluyendo inactivos (solo ABM).
+        /// </summary>
+        public List<Alumno> ObtenerAlumnosIncluyendoInactivos()
         {
-            if (string.IsNullOrEmpty(s)) return false;
-            foreach (char c in s)
-                if (!char.IsDigit(c)) return false;
-            return true;
+            return Ejecutor.Ejecutar("Alumno.ObtenerAlumnosIncluyendoInactivos",
+                () => alumnoDAO.ObtenerTodosIncluyendoInactivos());
         }
 
         private static void Validar(Alumno alumno)
@@ -47,16 +48,11 @@ namespace SistemaAsistencia.Controlador
                 throw new DatosException("Ingrese el nombre del alumno.");
             if (string.IsNullOrWhiteSpace(alumno.ApellidoAlumno) || alumno.ApellidoAlumno.Trim().Length < 2)
                 throw new DatosException("Ingrese el apellido del alumno.");
-            string dni = (alumno.DniAlumno ?? string.Empty).Trim();
-            if (dni.Length == 0)
-                throw new DatosException("Ingrese el DNI del alumno.");
-            if (!SoloDigitos(dni) || dni.Length < 7 || dni.Length > 8)
-                throw new DatosException("El DNI debe tener 7 u 8 dígitos numéricos.");
-            alumno.DniAlumno = dni;
+            alumno.DniAlumno = SeguridadAcceso.ValidarDni(alumno.DniAlumno);
             string legajo = (alumno.LegajoAlumno ?? string.Empty).Trim();
             if (legajo.Length == 0)
                 throw new DatosException("Ingrese el legajo del alumno.");
-            if (!SoloDigitos(legajo) || legajo.Length > 10)
+            if (!SeguridadAcceso.SoloDigitos(legajo) || legajo.Length > 10)
                 throw new DatosException("El legajo debe ser numérico de hasta 10 dígitos (lo escriben ustedes).");
             alumno.LegajoAlumno = legajo;
             string correo = (alumno.CorreoAlumno ?? string.Empty).Trim();
@@ -115,11 +111,26 @@ namespace SistemaAsistencia.Controlador
 
         /// <summary>
         /// Da de baja lógica a un alumno (conserva su histórico).
+        /// Solo Administrador y Directivo.
         /// </summary>
         public bool DarDeBaja(int idAlumno)
         {
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede dar de baja.");
             return Ejecutor.Ejecutar("Alumno.DarDeBaja",
                 () => alumnoDAO.DarDeBaja(idAlumno));
+        }
+
+        /// <summary>
+        /// Da de alta a un alumno (reverso de la baja logica).
+        /// Solo Administrador y Directivo.
+        /// </summary>
+        public bool DarDeAlta(int idAlumno)
+        {
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede dar de alta.");
+            return Ejecutor.Ejecutar("Alumno.DarDeAlta",
+                () => alumnoDAO.DarDeAlta(idAlumno));
         }
 
         /// <summary>

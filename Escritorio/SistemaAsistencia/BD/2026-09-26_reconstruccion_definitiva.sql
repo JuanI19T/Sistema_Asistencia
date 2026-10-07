@@ -19,36 +19,19 @@
 --  d) MATERIA.anio_materia: 1-7 (EEST: 1-3 Ciclo Básico, 4-7 Superior).
 --  e) Teléfono único por persona (se eliminan telefono_emergencia/
 --     telefono_padre/telefono_madre de ALUMNO: la app ya no los usa).
---  f) DICTADO.division: nueva columna. Junto con `grupo` define a quién
---     va el dictado, y ambos admiten NULL para los dictados de curso
---     completo. NO se agregó una tabla `curso`: el alumno no pertenece a
---     un curso, solo cursa materias de un año, así que división y grupo
---     son etiquetas del DICTADO y no del alumno.
+--  f) DICTADO.division: obligatoria (NOT NULL). Junto con `grupo`
+--     define a quién va el dictado.
 --
---     Alcance de un dictado (sin flags: los NULL ya lo describen):
---       division NULL | grupo NULL -> todo el curso del año
+--     Alcance de un dictado:
 --       division  X   | grupo NULL -> toda la división X
 --       division  X   | grupo Y    -> división X, grupo Y
---
---     Rangos reales por ciclo (EEST): Ciclo Básico (años 1-3) división
---     1-7; Tecnicaturas (años 4-7) división 1-6. Grupo 1-2 en todos
---     los casos (0/NULL = ambos grupos).
---     Los CHECK de abajo solo acotan el rango máximo global: un CHECK no
---     puede leer `materia.anio_materia` de otra tabla, así que la regla
---     fina por ciclo se valida en la app (FrmDictados), igual que la
---     franja horaria y el ciclo de la materia.
+--  g) Ningún profesor toma dos dictados superpuestos: mismo día,
+--     mismo año lectivo, ambos activos (triggers TRG_DICTADO_SIN_SOLAPE_*).
+--     Pegados (fin == inicio ajeno) sí se permiten.
 --
 -- Requiere MySQL 8.0.16+ (CHECK + REGEXP).
 -- Ejecutar como SCRIPT COMPLETO (todo el archivo de una vez), con
 -- "stop on error" activado: si se corta en el medio queda la base a medias.
---
--- OJO con DBeaver: como el script borra y recrea la base desde la misma
--- sesión, DBeaver conserva el árbol de metadatos cacheado de la base vieja
--- y la columna nueva no aparece. Hay que RECONECTAR la conexión (F2, o
--- click derecho -> Reconnect), no alcanza con recargar el schema.
---
--- Reemplaza al script v6.2 (la semilla de datos también viene incluida:
--- Api/scripts/seed.js fue retirado).
 -- ============================================================
 
 DROP DATABASE IF EXISTS gestion_asistencia_eest;
@@ -66,17 +49,21 @@ CREATE TABLE `especialidad` (
   `id_especialidad` int NOT NULL AUTO_INCREMENT,
   `nombre_especialidad` varchar(100) COLLATE utf8mb4_spanish_ci NOT NULL,
   `activo` tinyint(1) NOT NULL DEFAULT '1',
+  `division` int DEFAULT NULL,
   PRIMARY KEY (`id_especialidad`),
-  UNIQUE KEY `UQ_ESPECIALIDAD_NOMBRE` (`nombre_especialidad`)
+  UNIQUE KEY `UQ_ESPECIALIDAD_NOMBRE` (`nombre_especialidad`),
+  CONSTRAINT `CHK_ESPECIALIDAD_DIVISION` CHECK (`division` IS NULL OR (`division` BETWEEN 1 AND 6)),
+  UNIQUE KEY `UQ_ESPECIALIDAD_DIVISION` (`division`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+  
 
-INSERT INTO `especialidad` (`nombre_especialidad`, `activo`) VALUES
-  ('Ciclo Básico', 1),
-  ('Programación', 1),
-  ('Química', 1),
-  ('Electrónica', 1),
-  ('Electromecánica', 1),
-  ('Electricidad', 1);
+INSERT INTO `especialidad` (`nombre_especialidad`, `division`, `activo`) VALUES
+  ('Ciclo Básico', NULL, 1),
+  ('Programación', 6, 1),
+  ('Química', 1, 1),
+  ('Electrónica', 3, 1),
+  ('Electromecánica', 2, 1),
+  ('Electricidad', 5, 1);
 
 -- ------------------------------------------------------------
 -- materia
@@ -157,7 +144,7 @@ CREATE TABLE `alumno` (
 
 -- ------------------------------------------------------------
 -- dictado
---   division/grupo NULL = todo el curso (ver encabezado, regla f)
+--   division es NOT NULL (mínimo 1). grupo NULL = toda la división.
 -- ------------------------------------------------------------
 CREATE TABLE `dictado` (
   `id_dictado` int NOT NULL AUTO_INCREMENT,
@@ -167,7 +154,7 @@ CREATE TABLE `dictado` (
   `dia` varchar(15) COLLATE utf8mb4_spanish_ci NOT NULL,
   `horario` time NOT NULL,
   `horario_fin` time DEFAULT NULL,
-  `division` int DEFAULT NULL,
+  `division` int NOT NULL,
   `grupo` int DEFAULT NULL,
   `anio_lectivo` int NOT NULL,
   `activo` tinyint(1) NOT NULL DEFAULT '1',
@@ -180,9 +167,60 @@ CREATE TABLE `dictado` (
   CONSTRAINT `FK_DICTADO_PRECEPTOR` FOREIGN KEY (`id_preceptor`) REFERENCES `preceptor` (`id_preceptor`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `FK_DICTADO_PROFESOR` FOREIGN KEY (`id_profesor`) REFERENCES `profesor` (`id_profesor`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `CHK_DICTADO_GRUPO` CHECK (`grupo` IS NULL OR `grupo` BETWEEN 1 AND 2),
-  CONSTRAINT `CHK_DICTADO_DIVISION` CHECK (`division` IS NULL OR `division` BETWEEN 1 AND 7),
+  CONSTRAINT `CHK_DICTADO_DIVISION` CHECK (`division` BETWEEN 1 AND 7),
   CONSTRAINT `CHK_DICTADO_HORARIO` CHECK (`horario_fin` IS NULL OR `horario_fin` > `horario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+-- ------------------------------------------------------------
+-- Sin solapamiento de horarios por profesor: mismo día, mismo
+-- año lectivo, ambos activos. Pegados (fin == inicio ajeno) sí
+-- se permiten. El escritorio también lo valida (DictadoController);
+-- el trigger cubre altas directas por SQL u otros clientes.
+-- ------------------------------------------------------------
+DELIMITER $$
+
+CREATE TRIGGER `TRG_DICTADO_SIN_SOLAPE_INS`
+BEFORE INSERT ON `dictado`
+FOR EACH ROW
+BEGIN
+    IF NEW.activo = 1 AND NEW.horario_fin IS NOT NULL THEN
+        IF EXISTS (
+            SELECT 1 FROM `dictado` d
+            WHERE d.id_profesor = NEW.id_profesor
+              AND d.dia = NEW.dia
+              AND d.anio_lectivo = NEW.anio_lectivo
+              AND d.activo = 1
+              AND TIME(d.horario) < TIME(NEW.horario_fin)
+              AND TIME(d.horario_fin) > TIME(NEW.horario)
+        ) THEN
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'El profesor ya tiene un dictado que se superpone en ese día y horario.';
+        END IF;
+    END IF;
+END$$
+
+CREATE TRIGGER `TRG_DICTADO_SIN_SOLAPE_UPD`
+BEFORE UPDATE ON `dictado`
+FOR EACH ROW
+BEGIN
+    IF NEW.activo = 1 AND NEW.horario_fin IS NOT NULL THEN
+        IF EXISTS (
+            SELECT 1 FROM `dictado` d
+            WHERE d.id_profesor = NEW.id_profesor
+              AND d.dia = NEW.dia
+              AND d.anio_lectivo = NEW.anio_lectivo
+              AND d.activo = 1
+              AND d.id_dictado <> NEW.id_dictado
+              AND TIME(d.horario) < TIME(NEW.horario_fin)
+              AND TIME(d.horario_fin) > TIME(NEW.horario)
+        ) THEN
+            SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'El profesor ya tiene un dictado que se superpone en ese día y horario.';
+        END IF;
+    END IF;
+END$$
+
+DELIMITER ;
 
 -- ------------------------------------------------------------
 -- inscribe (alumno <-> dictado)
@@ -204,8 +242,6 @@ CREATE TABLE `inscribe` (
 
 -- ------------------------------------------------------------
 -- clase (1 fila = 1 sesión real del dictado en una fecha)
--- estado: programada | en_curso | cerrada
--- token: token QR de la sesión (se rota; vence en token_valido_hasta)
 -- ------------------------------------------------------------
 CREATE TABLE `clase` (
   `id_clase` int NOT NULL AUTO_INCREMENT,
@@ -224,7 +260,6 @@ CREATE TABLE `clase` (
 
 -- ------------------------------------------------------------
 -- asistencia (detalle: qué hizo cada alumno en la clase)
--- presente: marcado por QR (o manual) · verificada: preceptor confirma en persona
 -- ------------------------------------------------------------
 CREATE TABLE `asistencia` (
   `id_asistencia` int NOT NULL AUTO_INCREMENT,
@@ -240,7 +275,7 @@ CREATE TABLE `asistencia` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 -- ------------------------------------------------------------
--- usuario (tabla administrativa que ya existía en la base)
+-- usuario (tabla administrativa)
 -- ------------------------------------------------------------
 CREATE TABLE `usuario` (
   `id_usuario` int NOT NULL AUTO_INCREMENT,
@@ -254,12 +289,6 @@ CREATE TABLE `usuario` (
 
 -- ============================================================
 -- Datos básicos de prueba (respetan todas las reglas)
--- IDs predecibles porque la base nace vacía:
---   especialidad 1=Ciclo Básico, 2=Programación, 3=Química, ...
---   materia 1-2=Ciclo Básico (años 1-2), 3-4=tecnicaturas (año 4)
---   profesor 1-2, preceptor 1, alumno 1-3, dictado 1-3
--- Contraseñas = DNI con bcrypt cost 10 (formato del portal),
--- así el portal loguea con DNI desde el día uno.
 -- ============================================================
 
 INSERT INTO `materia` (`id_especialidad`, `nombre_materia`, `carga_horaria`, `anio_materia`) VALUES
@@ -298,16 +327,13 @@ INSERT INTO `alumno`
    'luis.diaz@escuela.edu.ar', '54 115 5550021',
    '$2b$10$RAu0I.Iz4nb.dQ2DE06PRun9BaWLG3gAj8x3QrZFLsONrl0XAL5au');
 
--- Los 3 dictados cubren los tres alcances posibles:
---   1) división + grupo -> clase de una división y un grupo
---   2) división + grupo -> ídem en Ciclo Básico
---   3) NULL + NULL      -> materia que se da a TODO EL CURSO
+-- Dictados de prueba (todos tienen una división asignada >= 1):
 INSERT INTO `dictado`
   (`id_materia`, `id_profesor`, `id_preceptor`, `dia`, `horario`, `horario_fin`,
    `division`, `grupo`, `anio_lectivo`) VALUES
   (3, 1, 1, 'LUNES',    '08:00:00', '10:00:00', 1, 2, 2026),
   (1, 2, 1, 'MARTES',   '10:00:00', '12:00:00', 3, 1, 2026),
-  (2, 1, 1, 'MIÉRCOLES','09:00:00', '11:00:00', NULL, NULL, 2026);
+  (2, 1, 1, 'MIÉRCOLES','09:00:00', '11:00:00', 1, NULL, 2026);
 
 INSERT INTO `inscribe` (`id_alumno`, `id_dictado`, `anio_inicio`) VALUES
   (1, 1, 2026),
@@ -325,11 +351,3 @@ INSERT INTO `asistencia` (`id_clase`, `id_alumno`, `presente`, `verificada`) VAL
   (1, 1, 0, 0),
   (1, 2, 0, 0),
   (1, 3, 0, 0);
-
--- ============================================================
--- Listo. Las tablas ya traen datos (seed.js retirado).
--- El primer admin de WinForms se crea con FrmPrimerUsuario.
--- Credenciales de prueba (contraseña = DNI):
---   Profesor  Carlos Gutierrez  30111222 / Preceptor Laura Martínez 34555666
---   Alumno    Juan Pérez        45222001 (Ana 45222002, Luis 45222003)
--- ============================================================

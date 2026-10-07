@@ -28,11 +28,13 @@ namespace SistemaAsistencia.Vista.Alumnos
         private void FrmAlumnos_Load(object sender, EventArgs e)
         {
             CargaVista.IntentarCarga(CargarAlumnos, "alumnos");
+            EstadoActivoHelper.AplicarPermiso(btnToggleActivo);
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
         }
 
         private void CargarAlumnos()
         {
-            cacheAlumnos = CargaVista.ObtenerLista(() => alumnoController.ObtenerAlumnos());
+            cacheAlumnos = CargaVista.ObtenerLista(() => alumnoController.ObtenerAlumnosIncluyendoInactivos());
             MostrarEnGrilla(cacheAlumnos);
         }
 
@@ -43,49 +45,56 @@ namespace SistemaAsistencia.Vista.Alumnos
 
         private void ConfigurarColumnasAlumnos(DataGridView dgv)
         {
-                // Solo campos relevantes: Nombre, Apellido, DNI, Legajo, Correo, Teléfono, Activo.
-                // Los teléfonos extra siguen en BD pero no se muestran (UI limpia).
-                string[] soloRelevantes = { "NombreAlumno", "ApellidoAlumno", "DniAlumno", "LegajoAlumno", "CorreoAlumno", "TelefonoAlumno", "Activo" };
-                foreach (DataGridViewColumn col in dgvAlumnos.Columns)
-                    col.Visible = System.Array.IndexOf(soloRelevantes, col.Name) >= 0;
-
             if (dgv.Columns.Count == 0) return;
+
+            // Solo campos relevantes: Nombre, Apellido, DNI, Legajo, Correo, Teléfono, Activo.
+            string[] soloRelevantes = { "NombreAlumno", "ApellidoAlumno", "DniAlumno", "LegajoAlumno", "CorreoAlumno", "TelefonoAlumno", "Activo" };
+            foreach (DataGridViewColumn col in dgv.Columns)
+                col.Visible = System.Array.IndexOf(soloRelevantes, col.Name) >= 0;
 
             if (dgv.Columns.Contains("NombreAlumno"))
             {
                 dgv.Columns["NombreAlumno"].HeaderText = "Nombre";
                 dgv.Columns["NombreAlumno"].DisplayIndex = 0;
+                dgv.Columns["NombreAlumno"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
             if (dgv.Columns.Contains("ApellidoAlumno"))
             {
                 dgv.Columns["ApellidoAlumno"].HeaderText = "Apellido";
                 dgv.Columns["ApellidoAlumno"].DisplayIndex = 1;
+                dgv.Columns["ApellidoAlumno"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
             if (dgv.Columns.Contains("DniAlumno"))
             {
                 dgv.Columns["DniAlumno"].HeaderText = "DNI";
                 dgv.Columns["DniAlumno"].DisplayIndex = 2;
+                dgv.Columns["DniAlumno"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
             if (dgv.Columns.Contains("LegajoAlumno"))
             {
                 dgv.Columns["LegajoAlumno"].HeaderText = "Legajo";
                 dgv.Columns["LegajoAlumno"].DisplayIndex = 3;
+                dgv.Columns["LegajoAlumno"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
             if (dgv.Columns.Contains("CorreoAlumno"))
             {
                 dgv.Columns["CorreoAlumno"].HeaderText = "Correo";
                 dgv.Columns["CorreoAlumno"].DisplayIndex = 4;
+                // Esta columna absorbe todo el espacio restante de la grilla
+                dgv.Columns["CorreoAlumno"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
             if (dgv.Columns.Contains("TelefonoAlumno"))
             {
                 dgv.Columns["TelefonoAlumno"].HeaderText = "Teléfono";
                 dgv.Columns["TelefonoAlumno"].DisplayIndex = 5;
+                dgv.Columns["TelefonoAlumno"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
             if (dgv.Columns.Contains("Activo"))
             {
                 dgv.Columns["Activo"].HeaderText = "Activo";
                 dgv.Columns["Activo"].DisplayIndex = 6;
                 dgv.Columns["Activo"].ReadOnly = true;
+                dgv.Columns["Activo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
         }
 
@@ -230,6 +239,7 @@ namespace SistemaAsistencia.Vista.Alumnos
                 txtEditLegajo.Text = alumno.LegajoAlumno;
                 txtEditCorreo.Text = alumno.CorreoAlumno;
                 ctrlTelEdit.Telefono = alumno.TelefonoAlumno;
+                EstadoActivoHelper.ActualizarTexto(btnToggleActivo, alumno.Activo);
             });
         }
 
@@ -387,6 +397,41 @@ namespace SistemaAsistencia.Vista.Alumnos
             txtEditLegajo.Clear();
             txtEditCorreo.Clear();
             ctrlTelEdit.Limpiar();
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
+        }
+
+        private void btnToggleActivo_Click(object sender, EventArgs e)
+        {
+            if (idAlumnoSeleccionado == 0)
+            {
+                MessageBox.Show(
+                    "Busque y seleccione un alumno primero.",
+                    "Alumnos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            Alumno alumno = cacheAlumnos.Find(a => a.IdAlumno == idAlumnoSeleccionado);
+            if (alumno == null) return;
+
+            bool ok = EstadoActivoHelper.EjecutarToggle(
+                idAlumnoSeleccionado,
+                alumno.Activo,
+                alumnoController.DarDeBaja,
+                alumnoController.DarDeAlta,
+                "Alumnos");
+
+            if (ok)
+            {
+                CargarAlumnos();
+                LimpiarEdicion();
+            }
+        }
+
+        private void materialTabSelector1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

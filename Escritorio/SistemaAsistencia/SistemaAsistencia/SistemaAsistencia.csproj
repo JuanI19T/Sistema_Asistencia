@@ -218,6 +218,8 @@
     <Compile Include="Utilidades\TelefonoHelper.cs" />
     <Compile Include="Utilidades\CicloHelper.cs" />
     <Compile Include="Utilidades\CargaVista.cs" />
+    <Compile Include="Utilidades\SeguridadAcceso.cs" />
+    <Compile Include="Utilidades\EstadoActivoHelper.cs" />
     <Compile Include="Vista\Comun\CtrlTelefono.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -315,6 +317,9 @@
     <EmbeddedResource Include="Vista\Especialidades\FrmEspecialidades.resx">
       <DependentUpon>FrmEspecialidades.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Vista\Inscripcion\FrmInscripcion.resx">
+      <DependentUpon>FrmInscripcion.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Vista\Login\FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>
     </EmbeddedResource>
@@ -358,7 +363,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Modelo\Servicios\" />
-    <Folder Include="Vista\Asistencias\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Logo_Escuela.jpg" />

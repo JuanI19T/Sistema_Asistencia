@@ -32,6 +32,8 @@ namespace SistemaAsistencia.Vista.Usuarios
             // La fuente del selector la unifica FrmBaseHijo.
             // El evento Load se concentra exclusivamente en los datos dinámicos.
             CargaVista.IntentarCarga(CargarUsuarios, "usuarios");
+            EstadoActivoHelper.AplicarPermiso(btnToggleActivo);
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
         }
 
         private void InicializarRolesEstaticos()
@@ -57,14 +59,37 @@ namespace SistemaAsistencia.Vista.Usuarios
         {
             if (dgv.Columns.Count == 0) return;
 
+            // Ocultar las columnas que no se deben mostrar
             if (dgv.Columns.Contains("IdUsuario"))
                 dgv.Columns["IdUsuario"].Visible = false;
+
             if (dgv.Columns.Contains("Contrasena"))
                 dgv.Columns["Contrasena"].Visible = false;
+
+            // Configurar NombreUsuario con Fill
             if (dgv.Columns.Contains("NombreUsuario"))
+            {
                 dgv.Columns["NombreUsuario"].HeaderText = "Usuario";
+                dgv.Columns["NombreUsuario"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgv.Columns["NombreUsuario"].FillWeight = 40; // Ocupará el 40% del espacio
+            }
+
+            // Configurar Rol con Fill
+            if (dgv.Columns.Contains("Rol"))
+            {
+                dgv.Columns["Rol"].HeaderText = "Rol";
+                dgv.Columns["Rol"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgv.Columns["Rol"].FillWeight = 35; // Ocupará el 35% del espacio
+            }
+
+            // Configurar Activo con Fill
             if (dgv.Columns.Contains("Activo"))
+            {
+                dgv.Columns["Activo"].HeaderText = "Activo";
                 dgv.Columns["Activo"].ReadOnly = true;
+                dgv.Columns["Activo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgv.Columns["Activo"].FillWeight = 25; // Ocupará el 25% del espacio
+            }
         }
 
         // ---------------- 1. Crear ----------------
@@ -166,6 +191,36 @@ namespace SistemaAsistencia.Vista.Usuarios
             txtEditPassword.Clear();
             CargaVista.ReiniciarCombo(cmbEditRol);
             chkEditActivo.Checked = false;
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
+        }
+
+        private void btnToggleActivo_Click(object sender, EventArgs e)
+        {
+            if (idUsuarioSeleccionado == null)
+            {
+                MessageBox.Show(
+                    "Busque y seleccione un usuario primero.",
+                    "Usuarios",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            Usuario usuario = cacheUsuarios.Find(u => u.IdUsuario == idUsuarioSeleccionado.Value);
+            if (usuario == null) return;
+
+            bool ok = EstadoActivoHelper.EjecutarToggle(
+                idUsuarioSeleccionado.Value,
+                usuario.Activo,
+                usuarioController.EliminarUsuario,
+                usuarioController.ActivarUsuario,
+                "Usuarios");
+
+            if (ok)
+            {
+                CargarUsuarios();
+                LimpiarEdicion();
+            }
         }
 
         // ---------------- 2. Buscar y modificar ----------------
@@ -215,6 +270,7 @@ namespace SistemaAsistencia.Vista.Usuarios
                 txtEditPassword.Clear();
                 SeleccionarRol(cmbEditRol, usuario.Rol);
                 chkEditActivo.Checked = usuario.Activo;
+                EstadoActivoHelper.ActualizarTexto(btnToggleActivo, usuario.Activo);
             });
         }
 

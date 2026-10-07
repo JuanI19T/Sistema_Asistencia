@@ -36,6 +36,20 @@ namespace SistemaAsistencia.Utilidades
                     StringComparison.OrdinalIgnoreCase);
         }
 
+        /// <summary>
+        /// Indica si el usuario autenticado puede dar de alta o de baja
+        /// registros (roles Administrador y Directivo). El resto de roles
+        /// no ve el boton de activar/desactivar.
+        /// </summary>
+        public static bool PuedeGestionarActivo()
+        {
+            if (UsuarioActual == null || string.IsNullOrWhiteSpace(UsuarioActual.Rol))
+                return false;
+            string rol = UsuarioActual.Rol.Trim();
+            return string.Equals(rol, "Administrador", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(rol, "Directivo", StringComparison.OrdinalIgnoreCase);
+        }
+
 
         /// <summary>
         /// Cierra la sesión del usuario actual y limpia los catálogos en memoria.

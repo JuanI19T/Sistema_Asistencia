@@ -23,7 +23,16 @@ namespace SistemaAsistencia.Modelo.Entidades
         public int? Grupo { get; set; }
 
         public int AnioLectivo { get; set; }
+        /// <summary>
+        /// Preceptor asignado al dictado. NULL = sin asignar.
+        /// </summary>
+        public int? IdPreceptor { get; set; }
+        /// <summary>
+        /// Año curricular de la materia (1-7). Solo lectura para la vista.
+        /// </summary>
+        public int AnioMateria { get; set; }
         public string NombreMateria { get; set; }
+        public string NombreEspecialidad { get; set; }
         public string ApellidoProfesor { get; set; }
         public bool Activo { get; set; }
 
@@ -47,5 +56,27 @@ namespace SistemaAsistencia.Modelo.Entidades
             string.IsNullOrWhiteSpace(HorarioFin)
                 ? $"{NombreMateria} - {Alcance} - {ApellidoProfesor} ({Dia} {Horario} / {AnioLectivo})"
                 : $"{NombreMateria} - {Alcance} - {ApellidoProfesor} ({Dia} {Horario}–{HorarioFin} / {AnioLectivo})";
+
+        /// <summary>
+        /// Horario de inicio y fin en un solo campo, solo horas y minutos:
+        /// "08:00–10:00". Sin fin muestra solo el inicio. Solo lectura.
+        /// </summary>
+        public string HorarioCompleto
+        {
+            get
+            {
+                string inicio = HoraCorta(Horario);
+                if (string.IsNullOrWhiteSpace(HorarioFin))
+                    return inicio;
+                return inicio + "–" + HoraCorta(HorarioFin);
+            }
+        }
+
+        private static string HoraCorta(string texto)
+        {
+            if (System.TimeSpan.TryParse(texto, out System.TimeSpan ts))
+                return ts.ToString(@"hh\:mm");
+            return texto ?? string.Empty;
+        }
     }
 }

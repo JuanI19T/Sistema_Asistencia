@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using SistemaAsistencia.Controlador;
 using SistemaAsistencia.Modelo.DAO;
@@ -37,12 +36,14 @@ namespace SistemaAsistencia.Vista.Preceptores
         private void FrmPreceptores_Load(object sender, EventArgs e)
         {
             CargaVista.IntentarCarga(CargarPreceptores, "preceptores");
+            EstadoActivoHelper.AplicarPermiso(btnToggleActivo);
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
         }
 
         private void CargarPreceptores()
         {
             cachePreceptores =
-                CargaVista.ObtenerLista(() => preceptorController.ObtenerPreceptores());
+                CargaVista.ObtenerLista(() => preceptorController.ObtenerPreceptoresIncluyendoInactivos());
             MostrarEnGrilla(cachePreceptores);
         }
 
@@ -83,6 +84,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             {
                 dgv.Columns["CorreoPreceptor"].HeaderText = "Correo";
                 dgv.Columns["CorreoPreceptor"].DisplayIndex = 4;
+                dgv.Columns["CorreoPreceptor"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
             if (dgv.Columns.Contains("TelefonoPreceptor"))
             {
@@ -122,17 +124,6 @@ namespace SistemaAsistencia.Vista.Preceptores
             if (!TelefonoValidoSimple(ctrlTelCrear))
                 return;
 
-            if (!DniValido(txtDni.Text))
-            {
-                MessageBox.Show(
-                    "El DNI debe contener solo números.",
-                    "Preceptores",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                txtDni.Focus();
-                return;
-            }
-
             EjecutarConLayout(() =>
             {
                 try
@@ -145,7 +136,7 @@ namespace SistemaAsistencia.Vista.Preceptores
                         Dni = txtDni.Text.Trim(),
                         CorreoPreceptor = txtCorreo.Text,
                         TelefonoPreceptor = ctrlTelCrear.Telefono,
-                        Contrasena = txtContrasena.Text
+                        Contrasena = txtDni.Text.Trim()
                     };
 
                     if (preceptorController.AgregarPreceptor(preceptor))
@@ -192,15 +183,7 @@ namespace SistemaAsistencia.Vista.Preceptores
             txtDni.Clear();
             txtCorreo.Clear();
             ctrlTelCrear.Limpiar();
-            txtContrasena.Clear();
             txtNombre.Focus();
-        }
-
-        // El DNI es obligatorio y numérico para poder loguearse en la app móvil.
-        private static bool DniValido(string dni)
-        {
-            return !string.IsNullOrWhiteSpace(dni) &&
-                dni.Trim().All(char.IsDigit);
         }
 
         // ---------------- 2. Buscar y modificar ----------------
@@ -260,7 +243,7 @@ namespace SistemaAsistencia.Vista.Preceptores
                 txtEditDni.Text = preceptor.Dni;
                 txtEditCorreo.Text = preceptor.CorreoPreceptor;
                 ctrlTelEdit.Telefono = preceptor.TelefonoPreceptor;
-                txtEditContrasena.Clear();
+                EstadoActivoHelper.ActualizarTexto(btnToggleActivo, preceptor.Activo);
             });
         }
 
@@ -279,17 +262,6 @@ namespace SistemaAsistencia.Vista.Preceptores
             if (!TelefonoValidoSimple(ctrlTelEdit))
                 return;
 
-            if (!DniValido(txtEditDni.Text))
-            {
-                MessageBox.Show(
-                    "El DNI debe contener solo números.",
-                    "Preceptores",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                txtEditDni.Focus();
-                return;
-            }
-
             EjecutarConLayout(() =>
             {
                 try
@@ -303,7 +275,6 @@ namespace SistemaAsistencia.Vista.Preceptores
                         Dni = txtEditDni.Text.Trim(),
                         CorreoPreceptor = txtEditCorreo.Text,
                         TelefonoPreceptor = ctrlTelEdit.Telefono,
-                        Contrasena = txtEditContrasena.Text
                     };
 
                     if (preceptorController.ModificarPreceptor(preceptor))
@@ -430,7 +401,36 @@ namespace SistemaAsistencia.Vista.Preceptores
             txtEditDni.Clear();
             txtEditCorreo.Clear();
             ctrlTelEdit.Limpiar();
-            txtEditContrasena.Clear();
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
+        }
+
+        private void btnToggleActivo_Click(object sender, EventArgs e)
+        {
+            if (idPreceptorSeleccionado == 0)
+            {
+                MessageBox.Show(
+                    "Busque y seleccione un preceptor primero.",
+                    "Preceptores",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            Preceptor preceptor = cachePreceptores.Find(p => p.IdPreceptor == idPreceptorSeleccionado);
+            if (preceptor == null) return;
+
+            bool ok = EstadoActivoHelper.EjecutarToggle(
+                idPreceptorSeleccionado,
+                preceptor.Activo,
+                preceptorController.DarDeBaja,
+                preceptorController.DarDeAlta,
+                "Preceptores");
+
+            if (ok)
+            {
+                CargarPreceptores();
+                LimpiarEdicion();
+            }
         }
     }
 }

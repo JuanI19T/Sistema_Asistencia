@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using CryptSharp;
 using MySql.Data.MySqlClient;
 using SistemaAsistencia.Modelo.Conexion;
 using SistemaAsistencia.Modelo.Entidades;
@@ -25,6 +24,13 @@ namespace SistemaAsistencia.Modelo.DAO
         /// <returns>Objeto Preceptor.</returns>
         private Preceptor MapearPreceptor(MySqlDataReader dr)
         {
+            bool activo = true;
+            try
+            {
+                int o = dr.GetOrdinal("activo");
+                if (!dr.IsDBNull(o)) activo = Convert.ToBoolean(dr["activo"]);
+            }
+            catch (IndexOutOfRangeException) { }
             return new Preceptor
             {
                 IdPreceptor = Convert.ToInt32(dr["id_preceptor"]),
@@ -33,7 +39,8 @@ namespace SistemaAsistencia.Modelo.DAO
                 LegajoPreceptor = Convert.ToString(dr["legajo_preceptor"]),
                 Dni = Convert.ToString(dr["dni"]),
                 CorreoPreceptor = Convert.ToString(dr["correo_preceptor"]),
-                TelefonoPreceptor = Convert.ToString(dr["telefono_preceptor"])
+                TelefonoPreceptor = Convert.ToString(dr["telefono_preceptor"]),
+                Activo = activo
             };
         }
 
@@ -68,6 +75,36 @@ namespace SistemaAsistencia.Modelo.DAO
         }
 
         /// <summary>
+        /// Obtiene todos los preceptores, incluyendo inactivos.
+        /// Solo para los ABM (el toggle Activar necesita ver los inactivos).
+        /// </summary>
+        public List<Preceptor> ObtenerTodosIncluyendoInactivos()
+        {
+            List<Preceptor> lista = new List<Preceptor>();
+
+            using (MySqlConnection cn = conexionBD.ObtenerConexion())
+            {
+                cn.Open();
+
+                string sql = @"SELECT *
+                                 FROM preceptor
+                                 ORDER BY apellido_preceptor, nombre_preceptor";
+
+                var cmd = new MySqlCommand(sql, cn);
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        lista.Add(MapearPreceptor(dr));
+                    }
+                }
+            }
+
+            return lista;
+        }
+
+        /// <summary>
         /// Agrega un nuevo preceptor a la base de datos.
         /// La contraseña se guarda con hash bcrypt (formato compatible con
         /// el login de la API). Si no se indica contraseña, se usa el DNI.
@@ -83,15 +120,17 @@ namespace SistemaAsistencia.Modelo.DAO
                 ? preceptor.Dni
                 : preceptor.Contrasena;
 
+            string hash = SeguridadAcceso.HashClaveInicial(plana);
+
             using (MySqlConnection cn = conexionBD.ObtenerConexion())
             {
                 cn.Open();
 
                 string sql = @"INSERT INTO preceptor
-                               (nombre_preceptor, apellido_preceptor, legajo_preceptor,
-                                dni, correo_preceptor, telefono_preceptor, contrasena)
-                               VALUES
-                               (@nombre, @apellido, @legajo, @dni, @correo, @telefono, @contrasena)";
+                                (nombre_preceptor, apellido_preceptor, legajo_preceptor,
+                                 dni, correo_preceptor, telefono_preceptor, contrasena, activo)
+                                VALUES
+                                (@nombre, @apellido, @legajo, @dni, @correo, @telefono, @contrasena, @activo)";
 
                 var cmd = new MySqlCommand(sql, cn);
 
@@ -101,8 +140,9 @@ namespace SistemaAsistencia.Modelo.DAO
                 cmd.Parameters.AddWithValue("@dni", preceptor.Dni);
                 cmd.Parameters.AddWithValue("@correo", preceptor.CorreoPreceptor);
                 cmd.Parameters.AddWithValue("@telefono", preceptor.TelefonoPreceptor);
-                cmd.Parameters.AddWithValue("@contrasena",
-                    Crypter.Blowfish.Crypt(plana, Crypter.Blowfish.GenerateSalt(10)));
+                cmd.Parameters.AddWithValue("@contrasena", hash);
+                // Todo lo creado desde el escritorio nace activo.
+                cmd.Parameters.AddWithValue("@activo", 1);
 
                 try
                 {
@@ -129,7 +169,7 @@ namespace SistemaAsistencia.Modelo.DAO
 
             string nuevoHash = string.IsNullOrEmpty(preceptor.Contrasena)
                 ? null
-                : Crypter.Blowfish.Crypt(preceptor.Contrasena, Crypter.Blowfish.GenerateSalt(10));
+                : SeguridadAcceso.HashClaveInicial(preceptor.Contrasena);
 
             using (MySqlConnection cn = conexionBD.ObtenerConexion())
             {
@@ -177,8 +217,29 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"UPDATE preceptor
-                               SET activo = 0
-                               WHERE id_preceptor = @id";
+                                SET activo = 0
+                                WHERE id_preceptor = @id";
+
+                var cmd = new MySqlCommand(sql, cn);
+
+                cmd.Parameters.AddWithValue("@id", idPreceptor);
+
+                return cmd.ExecuteNonQuery() > 0;
+            }
+        }
+
+        /// <summary>
+        /// Da de alta a un preceptor (activo = 1). Reverso de la baja logica.
+        /// </summary>
+        public bool DarDeAlta(int idPreceptor)
+        {
+            using (MySqlConnection cn = conexionBD.ObtenerConexion())
+            {
+                cn.Open();
+
+                string sql = @"UPDATE preceptor
+                                SET activo = 1
+                                WHERE id_preceptor = @id";
 
                 var cmd = new MySqlCommand(sql, cn);
 

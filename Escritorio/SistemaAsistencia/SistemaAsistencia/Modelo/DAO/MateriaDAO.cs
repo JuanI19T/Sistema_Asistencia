@@ -23,6 +23,13 @@ namespace SistemaAsistencia.Modelo.DAO
         /// <returns>Objeto Materia.</returns>
         private Materia MapearMateria(MySqlDataReader dr)
         {
+            bool activo = true;
+            try
+            {
+                int o = dr.GetOrdinal("activo");
+                if (!dr.IsDBNull(o)) activo = Convert.ToBoolean(dr["activo"]);
+            }
+            catch (IndexOutOfRangeException) { }
             return new Materia
             {
                 IdMateria = Convert.ToInt32(dr["id_materia"]),
@@ -30,7 +37,8 @@ namespace SistemaAsistencia.Modelo.DAO
                 NombreMateria = Convert.ToString(dr["nombre_materia"]),
                 CargaHoraria = Convert.ToInt32(dr["carga_horaria"]),
                 AnioMateria = Convert.ToInt32(dr["anio_materia"]),
-                NombreEspecialidad = Convert.ToString(dr["nombre_especialidad"])
+                NombreEspecialidad = Convert.ToString(dr["nombre_especialidad"]),
+                Activo = activo
             };
         }
 
@@ -46,12 +54,46 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"SELECT M.id_materia, M.id_especialidad, M.nombre_materia,
-                                      M.carga_horaria, M.anio_materia,
+                                      M.carga_horaria, M.anio_materia, M.activo,
                                       E.nombre_especialidad
                                 FROM materia M
                                 INNER JOIN especialidad E
                                     ON E.id_especialidad = M.id_especialidad
                                 WHERE M.activo = 1
+                                ORDER BY M.nombre_materia";
+
+                var cmd = new MySqlCommand(sql, cn);
+
+                using (MySqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        lista.Add(MapearMateria(dr));
+                    }
+                }
+            }
+
+            return lista;
+        }
+
+        /// <summary>
+        /// Obtiene todas las materias, incluyendo inactivas.
+        /// Solo para los ABM (el toggle Activar necesita ver las inactivas).
+        /// </summary>
+        public List<Materia> ObtenerTodosIncluyendoInactivos()
+        {
+            List<Materia> lista = new List<Materia>();
+
+            using (MySqlConnection cn = conexionBD.ObtenerConexion())
+            {
+                cn.Open();
+
+                string sql = @"SELECT M.id_materia, M.id_especialidad, M.nombre_materia,
+                                      M.carga_horaria, M.anio_materia, M.activo,
+                                      E.nombre_especialidad
+                                FROM materia M
+                                INNER JOIN especialidad E
+                                    ON E.id_especialidad = M.id_especialidad
                                 ORDER BY M.nombre_materia";
 
                 var cmd = new MySqlCommand(sql, cn);
@@ -78,9 +120,9 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"INSERT INTO materia
-                               (id_especialidad, nombre_materia, carga_horaria, anio_materia)
-                               VALUES
-                               (@id_especialidad, @nombre, @carga_horaria, @anio)";
+                                (id_especialidad, nombre_materia, carga_horaria, anio_materia, activo)
+                                VALUES
+                                (@id_especialidad, @nombre, @carga_horaria, @anio, @activo)";
 
                 var cmd = new MySqlCommand(sql, cn);
 
@@ -88,6 +130,8 @@ namespace SistemaAsistencia.Modelo.DAO
                 cmd.Parameters.AddWithValue("@nombre", materia.NombreMateria);
                 cmd.Parameters.AddWithValue("@carga_horaria", materia.CargaHoraria);
                 cmd.Parameters.AddWithValue("@anio", materia.AnioMateria);
+                // Todo lo creado desde el escritorio nace activo.
+                cmd.Parameters.AddWithValue("@activo", 1);
 
                 return cmd.ExecuteNonQuery() > 0;
             }
@@ -131,8 +175,29 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"UPDATE materia
-                               SET activo = 0
-                               WHERE id_materia = @id";
+                                SET activo = 0
+                                WHERE id_materia = @id";
+
+                var cmd = new MySqlCommand(sql, cn);
+
+                cmd.Parameters.AddWithValue("@id", idMateria);
+
+                return cmd.ExecuteNonQuery() > 0;
+            }
+        }
+
+        /// <summary>
+        /// Da de alta a una materia (activo = 1). Reverso de la baja logica.
+        /// </summary>
+        public bool DarDeAlta(int idMateria)
+        {
+            using (MySqlConnection cn = conexionBD.ObtenerConexion())
+            {
+                cn.Open();
+
+                string sql = @"UPDATE materia
+                                SET activo = 1
+                                WHERE id_materia = @id";
 
                 var cmd = new MySqlCommand(sql, cn);
 

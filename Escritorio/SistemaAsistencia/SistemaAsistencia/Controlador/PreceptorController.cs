@@ -31,12 +31,22 @@ namespace SistemaAsistencia.Controlador
                 () => preceptorDAO.ObtenerTodos());
         }
 
+        /// <summary>
+        /// Obtiene todos los preceptores, incluyendo inactivos (solo ABM).
+        /// </summary>
+        public List<Preceptor> ObtenerPreceptoresIncluyendoInactivos()
+        {
+            return Ejecutor.Ejecutar("Preceptor.ObtenerPreceptoresIncluyendoInactivos",
+                () => preceptorDAO.ObtenerTodosIncluyendoInactivos());
+        }
+
         // Regla EEST: el legajo del personal se autocompleta con el DNI.
+        // El DNI se valida acá (como en Alumno y Profesor), no en la vista.
         private static void NormalizarLegajo(Preceptor preceptor)
         {
             if (preceptor == null)
                 throw new DatosException("Datos de preceptor inválidos.");
-            preceptor.Dni = (preceptor.Dni ?? string.Empty).Trim();
+            preceptor.Dni = SeguridadAcceso.ValidarDni(preceptor.Dni);
             preceptor.LegajoPreceptor = preceptor.Dni;
         }
 
@@ -72,11 +82,26 @@ namespace SistemaAsistencia.Controlador
 
         /// <summary>
         /// Da de baja lógica a un preceptor (conserva su histórico).
+        /// Solo Administrador y Directivo.
         /// </summary>
         public bool DarDeBaja(int idPreceptor)
         {
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede dar de baja.");
             return Ejecutor.Ejecutar("Preceptor.DarDeBaja",
                 () => preceptorDAO.DarDeBaja(idPreceptor));
+        }
+
+        /// <summary>
+        /// Da de alta a un preceptor (reverso de la baja logica).
+        /// Solo Administrador y Directivo.
+        /// </summary>
+        public bool DarDeAlta(int idPreceptor)
+        {
+            if (!Sesion.PuedeGestionarActivo())
+                throw new DatosException("Solo el administrador o directivo puede dar de alta.");
+            return Ejecutor.Ejecutar("Preceptor.DarDeAlta",
+                () => preceptorDAO.DarDeAlta(idPreceptor));
         }
 
         /// <summary>
