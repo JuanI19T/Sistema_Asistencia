@@ -17,6 +17,7 @@ namespace SistemaAsistencia.Vista.Dictados
         private readonly EspecialidadController especialidadController;
         private List<Dictado> cacheDictados = new List<Dictado>();
         private List<Materia> cacheMaterias = new List<Materia>();
+        private List<Especialidad> cacheEspecialidades = new List<Especialidad>();
         private int idDictadoSeleccionado = 0;
         private int idMateriaCrear = 0;
         private int idMateriaEditar = 0;
@@ -76,16 +77,18 @@ namespace SistemaAsistencia.Vista.Dictados
                 CargarProfesores();
                 CargarDictados();
             }, "dictados");
+            EstadoActivoHelper.AplicarPermiso(btnToggleActivo);
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
         }
 
         private void CargarFiltrosEspecialidad()
         {
-            List<Especialidad> lista = CargaVista.ObtenerLista(
+            cacheEspecialidades = CargaVista.ObtenerLista(
                 () => especialidadController.ObtenerEspecialidades());
 
             // Sin "Todas": la cascada exige elegir especialidad (paso 1).
-            CargaVista.CargarCombo(cmbFiltroEspecialidad, lista, "NombreEspecialidad", "IdEspecialidad");
-            CargaVista.CargarCombo(cmbEditFiltroEspecialidad, lista, "NombreEspecialidad", "IdEspecialidad");
+            CargaVista.CargarCombo(cmbFiltroEspecialidad, cacheEspecialidades, "NombreEspecialidad", "IdEspecialidad");
+            CargaVista.CargarCombo(cmbEditFiltroEspecialidad, cacheEspecialidades, "NombreEspecialidad", "IdEspecialidad");
         }
 
         private void CargarMaterias()
@@ -111,9 +114,23 @@ namespace SistemaAsistencia.Vista.Dictados
 
         // ---- Cascada por pasos (Crear): Especialidad -> Año -> División ----
 
+        // División fija de la especialidad elegida (NULL = libre).
+        private int? DivisionFijaCrear()
+        {
+            return CicloHelper.DivisionDeEspecialidad(
+                cmbFiltroEspecialidad.SelectedItem as Especialidad);
+        }
+
+        private int? DivisionFijaEditar()
+        {
+            return CicloHelper.DivisionDeEspecialidad(
+                cmbEditFiltroEspecialidad.SelectedItem as Especialidad);
+        }
+
         private void EspecialidadCrear_Cambiada()
         {
             bool hayEsp = cmbFiltroEspecialidad.SelectedIndex >= 0;
+            int? divFija = hayEsp ? DivisionFijaCrear() : (int?)null;
 
             _bloqueo++;
             try
@@ -126,7 +143,7 @@ namespace SistemaAsistencia.Vista.Dictados
                     nudAnioMateria.Minimum = 1;
                 }
                 nudAnioMateria.Value = nudAnioMateria.Minimum;
-                nudDivision.Value = 1;
+                nudDivision.Value = divFija ?? 1;
                 nudGrupo.Value = 0;
                 idMateriaCrear = 0;
                 dgvMateriaSel.DataSource = null;
@@ -136,7 +153,7 @@ namespace SistemaAsistencia.Vista.Dictados
             finally { _bloqueo--; }
 
             nudAnioMateria.Enabled = hayEsp;
-            nudDivision.Enabled = false;
+            nudDivision.Enabled = hayEsp && !divFija.HasValue;
             nudGrupo.Enabled = false;
             if (hayEsp) FiltrarMateriasCrear();
         }
@@ -146,18 +163,20 @@ namespace SistemaAsistencia.Vista.Dictados
             FiltrarMateriasCrear();
             if (Programando) return;
 
-            // El usuario eligió Año: se resetea lo dependiente y se abre División.
+            // El usuario eligió Año: se resetea lo dependiente y se abre División,
+            // salvo división fija (sigue bloqueada con su valor).
+            int? divFija = DivisionFijaCrear();
             idMateriaCrear = 0;
             dtpHorario.Enabled = false;
             dtpHorarioFin.Enabled = false;
             _bloqueo++;
             try
             {
-                nudDivision.Value = 1;
+                nudDivision.Value = divFija ?? 1;
                 nudGrupo.Value = 0;
             }
             finally { _bloqueo--; }
-            nudDivision.Enabled = true;
+            nudDivision.Enabled = !divFija.HasValue;
             nudGrupo.Enabled = false;
         }
 
@@ -173,6 +192,7 @@ namespace SistemaAsistencia.Vista.Dictados
         private void EspecialidadEditar_Cambiada()
         {
             bool hayEsp = cmbEditFiltroEspecialidad.SelectedIndex >= 0;
+            int? divFija = hayEsp ? DivisionFijaEditar() : (int?)null;
 
             _bloqueo++;
             try
@@ -185,7 +205,7 @@ namespace SistemaAsistencia.Vista.Dictados
                     nudEditAnioMateria.Minimum = 1;
                 }
                 nudEditAnioMateria.Value = nudEditAnioMateria.Minimum;
-                nudEditDivision.Value = 0;
+                nudEditDivision.Value = divFija ?? 0;
                 nudEditGrupo.Value = 0;
                 idMateriaEditar = 0;
                 dgvEditMateriaSel.DataSource = null;
@@ -195,7 +215,7 @@ namespace SistemaAsistencia.Vista.Dictados
             finally { _bloqueo--; }
 
             nudEditAnioMateria.Enabled = hayEsp;
-            nudEditDivision.Enabled = false;
+            nudEditDivision.Enabled = hayEsp && !divFija.HasValue;
             nudEditGrupo.Enabled = false;
             if (hayEsp) FiltrarMateriasEditar();
         }
@@ -205,17 +225,18 @@ namespace SistemaAsistencia.Vista.Dictados
             FiltrarMateriasEditar();
             if (Programando) return;
 
+            int? divFija = DivisionFijaEditar();
             idMateriaEditar = 0;
             dtpEditHorario.Enabled = false;
             dtpEditHorarioFin.Enabled = false;
             _bloqueo++;
             try
             {
-                nudEditDivision.Value = 0;
+                nudEditDivision.Value = divFija ?? 0;
                 nudEditGrupo.Value = 0;
             }
             finally { _bloqueo--; }
-            nudEditDivision.Enabled = true;
+            nudEditDivision.Enabled = !divFija.HasValue;
             nudEditGrupo.Enabled = false;
         }
 
@@ -242,6 +263,15 @@ namespace SistemaAsistencia.Vista.Dictados
             if (esp != null && !string.IsNullOrWhiteSpace(esp.NombreEspecialidad))
                 return esp.NombreEspecialidad;
             return combo.Text;
+        }
+
+        private static int IdEspecialidadDe(ComboBox combo)
+        {
+            var esp = combo.SelectedItem as Especialidad;
+            if (esp != null && esp.IdEspecialidad > 0)
+                return esp.IdEspecialidad;
+            try { return Convert.ToInt32(combo.SelectedValue); }
+            catch { return 0; }
         }
 
         private static void AplicarRangoAnio(NumericUpDown nud, string nombreEspecialidad)
@@ -273,9 +303,10 @@ namespace SistemaAsistencia.Vista.Dictados
             }
 
             int anio = Convert.ToInt32(nudAnio.Value);
-            int idEsp = 0;
-            try { idEsp = Convert.ToInt32(cmbFiltroEsp.SelectedValue); }
-            catch { idEsp = 0; }
+            // SelectedValue del MaterialComboBox puede llegar con lag al
+            // dispararse SelectedIndexChanged: se lee primero el SelectedItem
+            // (igual que NombreEspecialidadDe) y solo de fallback el Value.
+            int idEsp = IdEspecialidadDe(cmbFiltroEsp);
 
             List<Materia> filtradas = cacheMaterias.FindAll(m =>
                 m.AnioMateria == anio && (idEsp == 0 || m.IdEspecialidad == idEsp));
@@ -298,22 +329,26 @@ namespace SistemaAsistencia.Vista.Dictados
             if (dgv.Columns.Contains("NombreMateria"))
             {
                 dgv.Columns["NombreMateria"].HeaderText = "Materia";
-                dgv.Columns["NombreMateria"].DisplayIndex = 0;
+                dgv.Columns["NombreMateria"].DisplayIndex = 2;
+                dgv.Columns["NombreMateria"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
             if (dgv.Columns.Contains("NombreEspecialidad"))
             {
                 dgv.Columns["NombreEspecialidad"].HeaderText = "Especialidad";
-                dgv.Columns["NombreEspecialidad"].DisplayIndex = 1;
+                dgv.Columns["NombreEspecialidad"].DisplayIndex = 0;
+                dgv.Columns["NombreEspecialidad"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
             if (dgv.Columns.Contains("AnioMateria"))
             {
                 dgv.Columns["AnioMateria"].HeaderText = "Año";
-                dgv.Columns["AnioMateria"].DisplayIndex = 2;
+                dgv.Columns["AnioMateria"].DisplayIndex = 1;
+                dgv.Columns["AnioMateria"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
             if (dgv.Columns.Contains("Ciclo"))
             {
                 dgv.Columns["Ciclo"].HeaderText = "Ciclo";
                 dgv.Columns["Ciclo"].DisplayIndex = 3;
+                dgv.Columns["Ciclo"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
             dgv.ClearSelection();
         }
@@ -373,46 +408,58 @@ namespace SistemaAsistencia.Vista.Dictados
 
         private void CargarDictados()
         {
-            cacheDictados = CargaVista.ObtenerLista(() => dictadoController.ObtenerDictados());
+            cacheDictados = CargaVista.ObtenerLista(() => dictadoController.ObtenerDictadosIncluyendoInactivos());
             MostrarEnGrilla(cacheDictados);
         }
 
         private void MostrarEnGrilla(List<Dictado> lista)
         {
-            CargaVista.MostrarEnGrilla(dgvDictados, lista, ConfigurarColumnasDictados);
+            // 1. Desactivar autogeneración ANTES de asignar los datos
+            dgvDictados.AutoGenerateColumns = false;
+
+            // 2. Configurar y limpiar columnas
+            ConfigurarColumnasDictados(dgvDictados);
+
+            // 3. Asignar el origen de datos
+            dgvDictados.DataSource = null;
+            dgvDictados.DataSource = lista;
         }
 
         private void ConfigurarColumnasDictados(DataGridView dgv)
         {
-            if (dgv.Columns.Count == 0) return;
+            dgv.AutoGenerateColumns = false;
+            dgv.AllowUserToOrderColumns = false;
 
-            if (dgv.Columns.Contains("IdDictado"))
-                dgv.Columns["IdDictado"].Visible = false;
-            if (dgv.Columns.Contains("IdMateria"))
-                dgv.Columns["IdMateria"].Visible = false;
-            if (dgv.Columns.Contains("IdProfesor"))
-                dgv.Columns["IdProfesor"].Visible = false;
-            // Se muestra el alcance ya resuelto ("Todo el curso",
-            // "Div. 3 - Grupo 1") en vez de los dos números crudos.
-            if (dgv.Columns.Contains("Division"))
-                dgv.Columns["Division"].Visible = false;
-            if (dgv.Columns.Contains("Grupo"))
-                dgv.Columns["Grupo"].Visible = false;
-            if (dgv.Columns.Contains("Activo"))
-                dgv.Columns["Activo"].Visible = false;
-            if (dgv.Columns.Contains("Descripcion"))
-                dgv.Columns["Descripcion"].Visible = false;
-            if (dgv.Columns.Contains("Alcance"))
+            // Limpiar cualquier columna creada previamente
+            dgv.Columns.Clear();
+
+            // Agregar exactamente las 8 columnas en orden
+            dgv.Columns.Add(NuevaColumnaTexto("NombreEspecialidad", "Especialidad"));
+            dgv.Columns.Add(NuevaColumnaTexto("AnioMateria", "Año"));
+            dgv.Columns.Add(NuevaColumnaTexto("Alcance", "Alcance"));
+            dgv.Columns.Add(NuevaColumnaTexto("NombreMateria", "Materia"));
+            dgv.Columns.Add(NuevaColumnaTexto("Dia", "Día"));
+            dgv.Columns.Add(NuevaColumnaTexto("HorarioCompleto", "Horario"));
+            dgv.Columns.Add(NuevaColumnaTexto("ApellidoProfesor", "Profesor"));
+
+            var colActivo = new DataGridViewCheckBoxColumn
             {
-                dgv.Columns["Alcance"].HeaderText = "Alcance";
-                dgv.Columns["Alcance"].DisplayIndex = 1;
-            }
-            if (dgv.Columns.Contains("NombreMateria"))
-                dgv.Columns["NombreMateria"].HeaderText = "Materia";
-            if (dgv.Columns.Contains("ApellidoProfesor"))
-                dgv.Columns["ApellidoProfesor"].HeaderText = "Profesor";
-            if (dgv.Columns.Contains("AnioLectivo"))
-                dgv.Columns["AnioLectivo"].HeaderText = "Año";
+                Name = "Activo",
+                HeaderText = "Activo",
+                DataPropertyName = "Activo",
+                ReadOnly = true
+            };
+            dgv.Columns.Add(colActivo);
+        }
+
+        private static DataGridViewTextBoxColumn NuevaColumnaTexto(string propiedad, string encabezado)
+        {
+            var col = new DataGridViewTextBoxColumn();
+            col.Name = propiedad;
+            col.HeaderText = encabezado;
+            col.DataPropertyName = propiedad;
+            col.ReadOnly = true;
+            return col;
         }
 
         // ---------------- 1. Crear ----------------
@@ -586,8 +633,14 @@ namespace SistemaAsistencia.Vista.Dictados
                     idMateriaEditar = IdMateriaDeFila(dgvEditMateriaSel);
                     nudEditDivision.Enabled = true;
 
-                    // Carga de división y grupo en los controles
-                    nudEditDivision.Value = LimitarAlcance(nudEditDivision, dictado.Division);
+                    // Si la materia tiene división fija, se impone y bloquea;
+                    // si no, se carga la del dictado y queda libre.
+                    int? divFijaEdit = mat != null
+                        ? CicloHelper.DivisionDeEspecialidad(cacheEspecialidades.Find(e => e.IdEspecialidad == mat.IdEspecialidad))
+                        : (int?)null;
+                    nudEditDivision.Value = divFijaEdit ?? LimitarAlcance(nudEditDivision, dictado.Division);
+                    nudEditDivision.Enabled = !divFijaEdit.HasValue;
+
                     nudEditGrupo.Value = LimitarAlcance(nudEditGrupo, dictado.Grupo);
                     nudEditGrupo.Enabled = nudEditDivision.Value > 0;
 
@@ -603,6 +656,7 @@ namespace SistemaAsistencia.Vista.Dictados
 
                     AplicarFranjaPorMateria(idMateriaEditar, dtpEditHorario, dtpEditHorarioFin);
                     nudEditAnio.Value = LimitarAnio(nudEditAnio, dictado.AnioLectivo);
+                    EstadoActivoHelper.ActualizarTexto(btnToggleActivo, dictado.Activo);
                 }
                 catch (Exception ex)
                 {
@@ -828,6 +882,36 @@ namespace SistemaAsistencia.Vista.Dictados
             nudEditGrupo.Enabled = false;
             dtpEditHorario.Enabled = false;
             dtpEditHorarioFin.Enabled = false;
+            EstadoActivoHelper.ActualizarTexto(btnToggleActivo, null);
+        }
+
+        private void btnToggleActivo_Click(object sender, EventArgs e)
+        {
+            if (idDictadoSeleccionado == 0)
+            {
+                MessageBox.Show(
+                    "Busque y seleccione un dictado primero.",
+                    "Dictados",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            Dictado dictado = cacheDictados.Find(d => d.IdDictado == idDictadoSeleccionado);
+            if (dictado == null) return;
+
+            bool ok = EstadoActivoHelper.EjecutarToggle(
+                idDictadoSeleccionado,
+                dictado.Activo,
+                dictadoController.DarDeBaja,
+                dictadoController.DarDeAlta,
+                "Dictados");
+
+            if (ok)
+            {
+                CargarDictados();
+                LimpiarEdicion();
+            }
         }
 
         private bool ValidarCampos(
@@ -963,6 +1047,21 @@ namespace SistemaAsistencia.Vista.Dictados
 
             int division = Convert.ToInt32(nudDivision.Value);
             int grupo = Convert.ToInt32(nudGrupo.Value);
+
+            // División fija por especialidad (ciclo superior): debe ser
+            // exactamente la mapeada; el control ya viene bloqueado.
+            Especialidad espMat = cacheEspecialidades.Find(e => e.IdEspecialidad == mat.IdEspecialidad);
+            int? divFija = CicloHelper.DivisionDeEspecialidad(espMat);
+            if (divFija.HasValue && division != divFija.Value)
+            {
+                MessageBox.Show(
+                    $"Esa especialidad corresponde a la división {divFija.Value}.",
+                    "Dictados",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                nudDivision.Focus();
+                return false;
+            }
 
             // Validación: división es obligatoria (no se permite 0)
             if (division <= 0)
