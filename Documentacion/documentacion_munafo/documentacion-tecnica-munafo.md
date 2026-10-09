@@ -36,6 +36,7 @@
 | 13 | [Plan de pruebas](#s13) | Estrategia progresiva de validación: datos ficticios, aula, curso real y carga institucional |
 | 14 | [Diagramas del sistema](#s14) | Diagrama de contexto, diagrama de procesos principales y modelo entidad-relación |
 | 15 | [Manual de instalación](#s15) | Requisitos, puesta en marcha por módulo y diferencias con la entrega definitiva |
+| 16 | [Conclusiones y mejoras futuras](#s16) | Balance del proyecto y mejoras posibles sin rediseñar el sistema |
 
 ---
 
@@ -1572,6 +1573,63 @@ desarrollo, y será distinta cuando esté lista para entregarse:
 
 En ambos casos se mantiene una regla fija: las credenciales reales de conexión nunca van versionadas
 en el repositorio, solo plantillas (`.example`) con placeholders.
+
+---
+
+<a id="s16"></a>
+
+## 16. Conclusiones y mejoras futuras
+
+### 16.1 Conclusión
+
+A lo largo de esta documentación se analizó un problema real de la institución: el registro de la
+asistencia se realizaba en papel, con demoras, errores de carga y riesgo de pérdida de información. A
+partir de ese relevamiento se diseñó y documentó un sistema integral que cubre el circuito completo de
+la información: la carga institucional (alumnos, profesores, preceptores, especialidades, materias,
+dictados e inscripciones), la apertura de clases, el registro de asistencia en el aula y su consulta
+posterior.
+
+El sistema está compuesto por tres módulos que se complementan: el aplicativo de escritorio, que
+administra los datos institucionales y los usuarios; la API REST, que expone los datos y difunde los
+eventos en tiempo real; y la aplicación móvil, desde donde profesores, preceptores y alumnos participan
+del registro de asistencia con QR y código corto. La arquitectura en capas del escritorio, la única
+fuente de verdad compartida (MySQL) y la gestión de usuarios en MongoDB permiten que los módulos
+trabajen sobre los mismos datos sin pisarse entre sí.
+
+Durante el proceso se relevaron las reglas de negocio reales de la escuela, se definieron los perfiles
+y permisos por rol, se planificó un esquema de pruebas progresivo y se cuidó la seguridad de las
+credenciales, manteniéndolas siempre fuera del repositorio. Los objetivos planteados —digitalizar el
+control de asistencia, reducir errores, mejorar la disponibilidad de la información y facilitar la
+consulta y los reportes— encuentran en esta propuesta una solución viable, escalable y extensible.
+Queda pendiente, como parte natural del cierre, completar el desarrollo y validarlo con el plan de
+pruebas en condiciones reales de uso.
+
+### 16.2 Mejoras futuras
+
+Si el proyecto continúa, existen varias mejoras que podrían implementarse aprovechando la arquitectura
+actual (API REST, base relacional y aplicación móvil), sin necesidad de rediseñar el sistema:
+
+1. **Notificaciones automáticas por correo electrónico y la app móvil:** integrar el envío de
+   notificaciones automáticas, por ejemplo para comunicar a los alumnos y sus familias la confirmación
+   de la asistencia o las ausencias registradas en el día, aprovechando los eventos que ya emite la API
+   en tiempo real.
+2. **Ampliación de la aplicación móvil:** incorporar a la app existente nuevas funcionalidades sobre
+   los servicios de la API REST, como la consulta del historial de asistencias, notificaciones push y
+   el acceso para las familias.
+3. **Sistema de notas, boletines y promedios:** implementar un módulo para cargar las notas de los
+   alumnos en la aplicación, de manera que puedan consultarlas fácilmente desde la app y que el sistema
+   genere los boletines y calcule los promedios en forma automática. Esto ahorraría mucho trabajo
+   administrativo y errores de cálculo, y facilitaría a los alumnos el seguimiento de su rendimiento.
+4. **Legajos digitales:** crear una extensión que permita guardar todos los datos que contienen los
+   legajos de un alumno. De esta forma, los datos se completarían únicamente de forma digital y solo se
+   actualizarían cuando sea necesario, sin tener que realizar múltiples copias en papel y eliminando la
+   posibilidad de que se pierdan documentos relevantes del legajo.
+5. **Reportes y estadísticas para el equipo directivo:** generar reportes automáticos de asistencia,
+   índices de ausentismo por cursada y evolución a lo largo del ciclo lectivo, para apoyar la toma de
+   decisiones de la institución.
+6. **Copias de seguridad automáticas:** programar respaldos periódicos de las bases de datos (MySQL y
+   MongoDB) y un procedimiento de restauración, para garantizar la permanencia de la información ante
+   cualquier eventualidad.
 
 ---
 
