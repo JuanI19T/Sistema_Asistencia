@@ -37,6 +37,7 @@
 | 14 | [Diagramas del sistema](#s14) | Diagrama de contexto, diagrama de procesos principales y modelo entidad-relación |
 | 15 | [Manual de instalación](#s15) | Requisitos, puesta en marcha por módulo y diferencias con la entrega definitiva |
 | 16 | [Conclusiones y mejoras futuras](#s16) | Balance del proyecto y mejoras posibles sin rediseñar el sistema |
+| 17 | [Bibliografía](#s17) | Fuentes y referencias consultadas durante el desarrollo (normas APA) |
 
 ---
 
@@ -1630,6 +1631,34 @@ actual (API REST, base relacional y aplicación móvil), sin necesidad de redise
 6. **Copias de seguridad automáticas:** programar respaldos periódicos de las bases de datos (MySQL y
    MongoDB) y un procedimiento de restauración, para garantizar la permanencia de la información ante
    cualquier eventualidad.
+
+---
+
+<a id="s17"></a>
+
+## 17. Bibliografía
+
+Las siguientes referencias fueron consultadas durante el desarrollo del proyecto y se presentan según las
+normas APA:
+
+- Expo. (s.f.). *Documentación oficial de Expo para aplicaciones React Native*. Recuperado el 28 de
+  septiembre de 2026. https://docs.expo.dev/
+- Expo. (s.f.). *Documentación de Expo Camera: escaneo de códigos QR (SDK 57)*. Recuperado el 28 de
+  septiembre de 2026. https://docs.expo.dev/versions/v57.0.0/sdk/camera/
+- Expo. (s.f.). *Referencia del SDK 57 de Expo: paquetes y compatibilidad con React Native*. Recuperado
+  el 28 de septiembre de 2026. https://docs.expo.dev/versions/v57.0.0/
+- Git. (s.f.). *Documentación oficial del sistema de control de versiones Git*. Recuperado el 28 de
+  septiembre de 2026. https://git-scm.com/doc
+- GitHub. (s.f.). *Documentación de GitHub: repositorios, ramas y flujo de trabajo con pull requests*.
+  Recuperado el 28 de septiembre de 2026. https://docs.github.com/es
+- GitHub, Leocb. (s.f.). *[Leo Bottaro] MaterialSkin 2: tema de Material Design para aplicaciones de
+  Windows Forms*. Recuperado el 28 de septiembre de 2026. https://github.com/leocb/MaterialSkin/
+- Microsoft. (s.f.). *Descarga de .NET Framework 4.7.2 para Windows*. Recuperado el 28 de septiembre de
+  2026. https://dotnet.microsoft.com/es-es/download/dotnet-framework/net472
+- Microsoft Ignite. (s.f.). *Documentación oficial C#: guía del lenguaje de programación*. Recuperado el
+  28 de septiembre de 2026. https://learn.microsoft.com/es-es/dotnet/csharp/
+- Microsoft. (s.f.). *Visual Studio: IDE para el desarrollo de aplicaciones de escritorio*. Recuperado el
+  28 de septiembre de 2026. https://visualstudio.microsoft.com/es/
 
 ---
 
