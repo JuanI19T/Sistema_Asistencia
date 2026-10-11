@@ -1708,8 +1708,6 @@ normas APA:
 
 <div align="center">
 
-*Documento en construcción. Los capítulos restantes se incorporarán en versiones posteriores.*
-
 Sistema Integral de Asistencia Escolar · EACP 2026
 
 </div>
