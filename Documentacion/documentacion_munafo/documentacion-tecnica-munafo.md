@@ -1659,6 +1659,18 @@ normas APA:
   28 de septiembre de 2026. https://learn.microsoft.com/es-es/dotnet/csharp/
 - Microsoft. (s.f.). *Visual Studio: IDE para el desarrollo de aplicaciones de escritorio*. Recuperado el
   28 de septiembre de 2026. https://visualstudio.microsoft.com/es/
+- Microsoft Ignite. (s.f.). *Descripción general de Windows Forms: documentación oficial para interfaces
+  gráficas en .NET*. Recuperado el 28 de septiembre de 2026.
+  https://learn.microsoft.com/es-es/dotnet/desktop/winforms/overview/?view=netframeworkdesktop-4.8
+- MongoDB. (s.f.). *Documentación de MongoDB Atlas: servicio de base de datos multi-nube*. Recuperado el
+  28 de septiembre de 2026. https://www.mongodb.com/docs/atlas/
+- MongoDB, Inc. (s.f.). *Documentación de MongoDB: base de datos documental*. Recuperado el 28 de
+  septiembre de 2026. https://www.mongodb.com/docs/
+- GitHub, dotenv. (s.f.). *[motdotla, Scott Motte]. dotenv: carga de variables de entorno para proyectos
+  Node.js*. Recuperado el 28 de septiembre de 2026. https://github.com/motdotla/dotenv
+- MSN. (s.f.). *Recursos para desarrolladores, por desarrolladores: Documentando CSS, HTML y JavaScript
+  desde 2005; referencia general de lenguajes de programación y desarrollo web*. Recuperado el 28 de
+  septiembre de 2026. https://developer.mozilla.org/es/
 
 ---
 
