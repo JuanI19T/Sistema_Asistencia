@@ -1668,9 +1668,31 @@ normas APA:
   septiembre de 2026. https://www.mongodb.com/docs/
 - GitHub, dotenv. (s.f.). *[motdotla, Scott Motte]. dotenv: carga de variables de entorno para proyectos
   Node.js*. Recuperado el 28 de septiembre de 2026. https://github.com/motdotla/dotenv
-- MSN. (s.f.). *Recursos para desarrolladores, por desarrolladores: Documentando CSS, HTML y JavaScript
+- MDN. (s.f.). *Recursos para desarrolladores, por desarrolladores: Documentando CSS, HTML y JavaScript
   desde 2005; referencia general de lenguajes de programación y desarrollo web*. Recuperado el 28 de
   septiembre de 2026. https://developer.mozilla.org/es/
+- Node.js. (s.f.). *Documentación oficial de Node.js v26.11.1*. Recuperado el 28 de septiembre de 2026.
+  https://nodejs.org/en/docs
+- Npm Docs. (s.f.). *npm Docs, Documentation for the npm registry, website, and command-line interface*.
+  Recuperado el 28 de septiembre de 2026. https://docs.npmjs.com/
+- Espress. (s.f.). *Fast, unopinionated, minimalist web framework for Node.js*. Recuperado el 28 de
+  septiembre de 2026. https://expressjs.com/
+- Express. (s.f.). *API Reference; Referencia de la API de Express 5.x*. Recuperado el 28 de septiembre
+  de 2026. https://expressjs.com/en/5x/api/
+- Github, cors. (s.f.). *[Vansh1811, Vansh Sharma] Repositorio de cors: middleware HTTP para Express*.
+  Recuperado el 28 de septiembre de 2026. https://github.com/expressjs/cors
+- MySQL. (2026, septiembre 11). *Documentación de MySQL Workbench*. Recuperado el 28 de septiembre de
+  2026. https://dev.mysql.com/doc/workbench/en/
+- MySQL. (2026, julio 08). *MySQL 8.0 Reference Manual; Including MySQL NDB Cluster 8.0*. Recuperado el
+  28 de septiembre de 2026. https://dev.mysql.com/doc/refman/8.0/en/
+- Railway. (s.f.). *Railway Documentation: plataforma de despliegue en la nube*. Recuperado el 28 de
+  septiembre de 2026. https://docs.railway.com/
+- React. (s.f.). *React, The library for web and native user interfaces*. Recuperado el 28 de septiembre
+  de 2026. https://react.dev/
+- React Native. (2026, Agosto 12). *React Native, Learn once, write anywhere: introduction to framework*.
+  Recuperado el 28 de septiembre de 2026. https://reactnative.dev/docs/getting-started
+- MySQL2. (s.f.). *MySQL2 for Node.js: MySQL client for Node.js with focus on performance*. Recuperado el
+  28 de septiembre de 2026. https://sidorares.github.io/node-mysql2/docs
 
 ---
 
