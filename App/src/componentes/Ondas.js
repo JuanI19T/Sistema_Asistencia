@@ -48,7 +48,8 @@ const SUPERIORES = INFERIORES
   .map((capa) => ({
     fill: capa.fill,
     d: espejoHorizontal(capa.d)
-  }));
+  }))
+  .reverse();
 
 export default function Ondas({ ancho, alto, posicion }) {
   const capas = posicion === 'superior' ? SUPERIORES : INFERIORES;
