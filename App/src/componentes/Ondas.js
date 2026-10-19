@@ -46,10 +46,12 @@ const espejoVertical = (d) => {
     .join(' ');
 };
 
-const SUPERIORES = INFERIORES.map((capa) => ({
-  fill: capa.fill,
-  d: espejoVertical(capa.d)
-}));
+const SUPERIORES = INFERIORES
+  .filter((capa) => capa.d !== 'M 0,0 H 1024 V 300 H 0 Z')
+  .map((capa) => ({
+    fill: capa.fill,
+    d: espejoVertical(capa.d)
+  }));
 
 export default function Ondas({ ancho, alto, posicion }) {
   const capas = posicion === 'superior' ? SUPERIORES : INFERIORES;
