@@ -138,7 +138,7 @@ function LoginScreen({
   const { width, height } = useWindowDimensions();
   const margenLateral = Math.max(16, width * 0.11);
   const anchoFormulario = Math.min(width - margenLateral * 2, 520);
-  const altoOndaSuperior = Math.min(Math.max((anchoOndas / 1024) * 300, 110), 300);
+  const altoOndaSuperior = Math.min(Math.max(height * 0.192, 150), 295);
   const altoOndaInferior = Math.min(Math.max(height * 0.18, 170), 276);
   const anchoOndas = width;
 
