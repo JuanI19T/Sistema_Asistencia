@@ -138,8 +138,8 @@ function LoginScreen({
   const { width, height } = useWindowDimensions();
   const margenLateral = Math.max(16, width * 0.11);
   const anchoFormulario = Math.min(width - margenLateral * 2, 520);
-  const altoOndaSuperior = Math.min(height * 0.19, 220);
-  const altoOndaInferior = Math.min(height * 0.18, 210);
+  const altoOndaSuperior = Math.min(height * 0.22, 260);
+  const altoOndaInferior = Math.min(height * 0.22, 260);
   const anchoOndas = width;
 
   const enviar = () => {
@@ -259,25 +259,25 @@ const styles = StyleSheet.create({
   tituloInstitucion: {
     fontFamily: Platform.select({ ios: 'Georgia', android: 'serif', default: 'serif' }),
     fontWeight: 'bold',
-    fontSize: 40,
+    fontSize: 54,
     color: colores.navy,
     textAlign: 'center'
   },
   lineaAmarilla: {
-    width: 90,
-    height: 3.5,
+    width: 120,
+    height: 4,
     borderRadius: 3,
     backgroundColor: colores.amarillo,
-    marginTop: 12,
-    marginBottom: 16
+    marginTop: 14,
+    marginBottom: 18
   },
   subtitulo: {
-    fontSize: 15,
+    fontSize: 19,
     fontWeight: '600',
-    letterSpacing: 3,
+    letterSpacing: 4,
     color: colores.textoOscuro,
     textAlign: 'center',
-    lineHeight: 22
+    lineHeight: 28
   },
   campo: {
     width: '100%',
