@@ -24,24 +24,21 @@ const INFERIORES = [
   }
 ];
 
-const espejoVertical = (d) => {
+const espejoHorizontal = (d) => {
   const tokens = d.match(/[A-Za-z]|-?\d*\.?\d+/g);
   let ejeX = true;
   return tokens
     .map((t) => {
       if (/[A-Za-z]/.test(t)) {
-        if (t === 'H') ejeX = true;
-        else if (t === 'V') ejeX = false;
-        else ejeX = true;
+        ejeX = t !== 'V';
         return t;
       }
-      const n = Number(t);
       if (ejeX) {
         ejeX = false;
-        return t;
+        return String(1024 - Number(t));
       }
       ejeX = true;
-      return String(300 - n);
+      return t;
     })
     .join(' ');
 };
@@ -50,7 +47,7 @@ const SUPERIORES = INFERIORES
   .filter((capa) => capa.d !== 'M 0,0 H 1024 V 300 H 0 Z')
   .map((capa) => ({
     fill: capa.fill,
-    d: espejoVertical(capa.d)
+    d: espejoHorizontal(capa.d)
   }));
 
 export default function Ondas({ ancho, alto, posicion }) {
