@@ -259,9 +259,10 @@ const styles = StyleSheet.create({
   tituloInstitucion: {
     fontFamily: Platform.select({ ios: 'Georgia', android: 'serif', default: 'serif' }),
     fontWeight: 'bold',
-    fontSize: 54,
+    fontSize: 70,
     color: colores.navy,
-    textAlign: 'center'
+    textAlign: 'center',
+    alignSelf: 'stretch'
   },
   lineaAmarilla: {
     width: 120,
@@ -272,12 +273,12 @@ const styles = StyleSheet.create({
     marginBottom: 18
   },
   subtitulo: {
-    fontSize: 19,
+    fontSize: 24,
     fontWeight: '600',
     letterSpacing: 4,
     color: colores.textoOscuro,
     textAlign: 'center',
-    lineHeight: 28
+    lineHeight: 34
   },
   campo: {
     width: '100%',
