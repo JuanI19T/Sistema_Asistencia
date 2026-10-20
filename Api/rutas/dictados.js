@@ -6,6 +6,9 @@ const router = Router();
 
 const DIAS = ['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
 
+// Offset fijo de Argentina respecto de UTC (sin horario de verano).
+const OFFSET_ARGENTINA_MINUTOS = -180;
+
 function sinAcentos(texto) {
   return (texto || '')
     .normalize('NFD')
@@ -14,11 +17,17 @@ function sinAcentos(texto) {
     .trim();
 }
 
+// Devuelve la fecha/hora en Argentina calculada a partir del instante UTC,
+// sin depender de la zona horaria configurada en el servidor.
+function ahoraEnArgentina() {
+  return new Date(Date.now() + OFFSET_ARGENTINA_MINUTOS * 60 * 1000);
+}
+
 function fechaDeHoy() {
-  const ahora = new Date();
-  const mes = String(ahora.getMonth() + 1).padStart(2, '0');
-  const dia = String(ahora.getDate()).padStart(2, '0');
-  return `${ahora.getFullYear()}-${mes}-${dia}`;
+  const ahora = ahoraEnArgentina();
+  const mes = String(ahora.getUTCMonth() + 1).padStart(2, '0');
+  const dia = String(ahora.getUTCDate()).padStart(2, '0');
+  return `${ahora.getUTCFullYear()}-${mes}-${dia}`;
 }
 
 function minutosDeHora(hora) {
@@ -29,8 +38,12 @@ function minutosDeHora(hora) {
 }
 
 function minutosAhora() {
-  const ahora = new Date();
-  return ahora.getHours() * 60 + ahora.getMinutes();
+  const ahora = ahoraEnArgentina();
+  return ahora.getUTCHours() * 60 + ahora.getUTCMinutes();
+}
+
+function diaDeHoy() {
+  return DIAS[ahoraEnArgentina().getUTCDay()];
 }
 
 // Calcula el estado de la clase de hoy para el alumno.
@@ -78,7 +91,7 @@ router.get('/alumno/hoy', requiereRol(['alumno']), async (req, res) => {
 
   try {
     const hoy = fechaDeHoy();
-    const diaHoy = DIAS[new Date().getDay()];
+    const diaHoy = diaDeHoy();
     const minutosActual = minutosAhora();
 
     const [filas] = await pool.query(
