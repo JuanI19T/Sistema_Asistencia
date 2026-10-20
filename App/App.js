@@ -148,10 +148,15 @@ function LoginScreen({
   return (
     <View style={styles.pantalla}>
       <View style={styles.franjaInstitucional}>
-        <Text style={styles.franjaTitulo}>E.E.S.T. N1 - Ara. General Belgrano</Text>
-        <Text style={styles.franjaSubtitulo}>Tecnicatura en Programación</Text>
-        <Text style={styles.franjaIntegrantes}>Isabella Carrete Vecco - Juan Torres Troschasky</Text>
+        <Text style={styles.franjaLinea}>
+          E.E.S.T. N1 - Ara. General Belgrano    Tecnicatura en Programación
+        </Text>
+        <Text style={styles.franjaLinea}>
+          Isabella Carrete Vecco - Juan Torres Troschasky
+        </Text>
       </View>
+      <View style={styles.lineaAmarillaFranja} />
+      <View style={styles.lineaAzulFranja} />
 
       <KeyboardAvoidingView
         style={styles.pantalla}
@@ -236,36 +241,26 @@ const styles = StyleSheet.create({
   },
   franjaInstitucional: {
     backgroundColor: colores.navy,
-    paddingTop: 52,
-    paddingBottom: 24,
-    paddingHorizontal: 16,
+    paddingTop: 34,
+    paddingBottom: 22,
+    paddingHorizontal: 12,
     alignItems: 'center'
   },
-  franjaTitulo: {
+  franjaLinea: {
     color: colores.blanco,
-    fontSize: 24,
-    fontWeight: '600',
-    letterSpacing: 4,
+    fontFamily: Platform.select({ ios: 'Georgia', android: 'serif', default: 'serif' }),
+    fontSize: 18,
+    letterSpacing: 1,
     textAlign: 'center',
-    lineHeight: 34
+    lineHeight: 24
   },
-  franjaSubtitulo: {
-    color: colores.blanco,
-    fontSize: 24,
-    fontWeight: '600',
-    letterSpacing: 4,
-    textAlign: 'center',
-    lineHeight: 34,
-    marginTop: 4
+  lineaAmarillaFranja: {
+    height: 12,
+    backgroundColor: colores.amarillo
   },
-  franjaIntegrantes: {
-    color: colores.blanco,
-    fontSize: 24,
-    fontWeight: '600',
-    letterSpacing: 4,
-    textAlign: 'center',
-    lineHeight: 34,
-    marginTop: 12
+  lineaAzulFranja: {
+    height: 8,
+    backgroundColor: colores.azulReal
   },
   scrollLogin: {
     flexGrow: 1,
@@ -287,7 +282,7 @@ const styles = StyleSheet.create({
   formulario: {
     alignItems: 'center',
     zIndex: 2,
-    marginTop: 8,
+    marginTop: -50,
     marginBottom: 40
   },
   tituloInstitucion: {
