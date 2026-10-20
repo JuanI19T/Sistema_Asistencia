@@ -138,7 +138,6 @@ function LoginScreen({
   const { width, height } = useWindowDimensions();
   const margenLateral = Math.max(16, width * 0.11);
   const anchoFormulario = Math.min(width - margenLateral * 2, 520);
-  const altoOndaSuperior = Math.min(Math.max(height * 0.18, 170), 276);
   const altoOndaInferior = Math.min(Math.max(height * 0.18, 170), 276);
   const anchoOndas = width;
 
@@ -148,8 +147,10 @@ function LoginScreen({
 
   return (
     <View style={styles.pantalla}>
-      <View style={[styles.ondas, styles.ondasSuperior]}>
-        <Ondas ancho={anchoOndas} alto={altoOndaSuperior} posicion="superior" />
+      <View style={styles.franjaInstitucional}>
+        <Text style={styles.franjaTitulo}>E.E.S.T. N1 - Ara. General Belgrano</Text>
+        <Text style={styles.franjaSubtitulo}>Tecnicatura en Programación</Text>
+        <Text style={styles.franjaIntegrantes}>Isabella Carrete Vecco - Juan Torres Troschasky</Text>
       </View>
 
       <KeyboardAvoidingView
@@ -232,6 +233,32 @@ const styles = StyleSheet.create({
   pantalla: {
     flex: 1,
     backgroundColor: colores.crema
+  },
+  franjaInstitucional: {
+    backgroundColor: colores.navy,
+    paddingTop: 52,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    alignItems: 'center'
+  },
+  franjaTitulo: {
+    color: colores.blanco,
+    fontSize: 15,
+    fontWeight: '700',
+    textAlign: 'center'
+  },
+  franjaSubtitulo: {
+    color: colores.blanco,
+    fontSize: 13,
+    textAlign: 'center',
+    marginTop: 4
+  },
+  franjaIntegrantes: {
+    color: colores.blanco,
+    fontSize: 11,
+    textAlign: 'center',
+    marginTop: 8,
+    opacity: 0.85
   },
   scrollLogin: {
     flexGrow: 1,
