@@ -138,7 +138,6 @@ function LoginScreen({
   const { width, height } = useWindowDimensions();
   const margenLateral = Math.max(16, width * 0.11);
   const anchoFormulario = Math.min(width - margenLateral * 2, 520);
-  const altoOndaSuperior = Math.min(Math.max(height * 0.18, 170), 276);
   const altoOndaInferior = Math.min(Math.max(height * 0.18, 170), 276);
   const anchoOndas = width;
 
@@ -148,9 +147,16 @@ function LoginScreen({
 
   return (
     <View style={styles.pantalla}>
-      <View style={[styles.ondas, styles.ondasSuperior]}>
-        <Ondas ancho={anchoOndas} alto={altoOndaSuperior} posicion="superior" />
+      <View style={styles.franjaInstitucional}>
+        <Text style={styles.franjaLinea}>
+          E.E.S.T. N1 - Ara. General Belgrano    Tecnicatura en Programación
+        </Text>
+        <Text style={styles.franjaLinea}>
+          Isabella Carrete Vecco - Juan Torres Troschasky
+        </Text>
       </View>
+      <View style={styles.lineaAmarillaFranja} />
+      <View style={styles.lineaAzulFranja} />
 
       <KeyboardAvoidingView
         style={styles.pantalla}
@@ -233,6 +239,29 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colores.crema
   },
+  franjaInstitucional: {
+    backgroundColor: colores.navy,
+    paddingTop: 34,
+    paddingBottom: 22,
+    paddingHorizontal: 12,
+    alignItems: 'center'
+  },
+  franjaLinea: {
+    color: colores.blanco,
+    fontFamily: Platform.select({ ios: 'Georgia', android: 'serif', default: 'serif' }),
+    fontSize: 18,
+    letterSpacing: 1,
+    textAlign: 'center',
+    lineHeight: 24
+  },
+  lineaAmarillaFranja: {
+    height: 12,
+    backgroundColor: colores.amarillo
+  },
+  lineaAzulFranja: {
+    height: 8,
+    backgroundColor: colores.azulReal
+  },
   scrollLogin: {
     flexGrow: 1,
     justifyContent: 'center',
@@ -253,15 +282,16 @@ const styles = StyleSheet.create({
   formulario: {
     alignItems: 'center',
     zIndex: 2,
-    marginTop: 40,
+    marginTop: -50,
     marginBottom: 40
   },
   tituloInstitucion: {
     fontFamily: Platform.select({ ios: 'Georgia', android: 'serif', default: 'serif' }),
     fontWeight: 'bold',
-    fontSize: 54,
+    fontSize: 70,
     color: colores.navy,
-    textAlign: 'center'
+    textAlign: 'center',
+    alignSelf: 'stretch'
   },
   lineaAmarilla: {
     width: 120,
@@ -272,12 +302,12 @@ const styles = StyleSheet.create({
     marginBottom: 18
   },
   subtitulo: {
-    fontSize: 19,
+    fontSize: 24,
     fontWeight: '600',
     letterSpacing: 4,
     color: colores.textoOscuro,
     textAlign: 'center',
-    lineHeight: 28
+    lineHeight: 34
   },
   campo: {
     width: '100%',
