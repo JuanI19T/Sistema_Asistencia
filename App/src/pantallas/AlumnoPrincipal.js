@@ -80,23 +80,23 @@ export default function AlumnoPrincipal({ sesion, evento, eventosConectados }) {
     setCargando(true);
     setMensaje(null);
     try {
-      const resp = await obtenerClasesAlumnoHoy();
+      const resp = await obtenerClasesAlumnoHoy(sesion.id_alumno);
       setClases(resp.clases || []);
     } catch (error) {
       setMensaje(error.message);
     } finally {
       setCargando(false);
     }
-  }, []);
+  }, [sesion.id_alumno]);
 
   const sincronizar = useCallback(async () => {
     try {
-      const resp = await obtenerClasesAlumnoHoy();
+      const resp = await obtenerClasesAlumnoHoy(sesion.id_alumno);
       setClases(resp.clases || []);
     } catch (error) {
       if (!eventosConectados) setMensaje(error.message);
     }
-  }, [eventosConectados]);
+  }, [eventosConectados, sesion.id_alumno]);
 
   useEffect(() => {
     cargarClases();
