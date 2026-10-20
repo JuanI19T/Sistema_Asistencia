@@ -6,6 +6,14 @@ const router = Router();
 
 const DIAS = ['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
 
+function sinAcentos(texto) {
+  return (texto || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toUpperCase()
+    .trim();
+}
+
 function fechaDeHoy() {
   const ahora = new Date();
   const mes = String(ahora.getMonth() + 1).padStart(2, '0');
@@ -84,23 +92,25 @@ router.get('/alumno/hoy', requiereRol(['alumno']), async (req, res) => {
        LEFT JOIN profesor p ON p.id_profesor = d.id_profesor
        LEFT JOIN clase c ON c.id_dictado = d.id_dictado AND c.fecha_clase = ?
        LEFT JOIN asistencia a ON a.id_clase = c.id_clase AND a.id_alumno = ?
-       WHERE i.id_alumno = ? AND d.dia = ?
+       WHERE i.id_alumno = ?
        ORDER BY d.horario`,
-      [hoy, idAlumno, idAlumno, diaHoy]
+      [hoy, idAlumno, idAlumno]
     );
 
-    const clases = filas.map((fila) => ({
-      id_dictado: fila.id_dictado,
-      id_clase: fila.id_clase,
-      dia: fila.dia,
-      horario: fila.horario,
-      horario_fin: fila.horario_fin,
-      grupo: fila.grupo,
-      anio_lectivo: fila.anio_lectivo,
-      nombre_materia: fila.nombre_materia,
-      apellido_profesor: fila.apellido_profesor,
-      estado: calcularEstado(fila, minutosActual)
-    }));
+    const clases = filas
+      .filter((fila) => sinAcentos(fila.dia) === diaHoy)
+      .map((fila) => ({
+        id_dictado: fila.id_dictado,
+        id_clase: fila.id_clase,
+        dia: fila.dia,
+        horario: fila.horario,
+        horario_fin: fila.horario_fin,
+        grupo: fila.grupo,
+        anio_lectivo: fila.anio_lectivo,
+        nombre_materia: fila.nombre_materia,
+        apellido_profesor: fila.apellido_profesor,
+        estado: calcularEstado(fila, minutosActual)
+      }));
 
     res.json({ fecha: hoy, dia: diaHoy, clases });
   } catch (error) {
