@@ -133,6 +133,10 @@ export async function obtenerDictadosAlumno(idAlumno) {
   return pedir(`${API_URL}/api/dictados/alumno/${idAlumno}`);
 }
 
+export async function obtenerClasesAlumnoHoy() {
+  return pedir(`${API_URL}/api/dictados/alumno/hoy`);
+}
+
 export async function obtenerAlumnosDictado(idDictado) {
   return pedir(`${API_URL}/api/dictados/${idDictado}/alumnos`);
 }

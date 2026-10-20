@@ -14,7 +14,7 @@ import { StatusBar } from 'expo-status-bar';
 import { conectarEventos, iniciarSesion, limpiarToken } from './src/api';
 import { colores } from './src/tema';
 import Ondas from './src/componentes/Ondas';
-import { IconoCandado, IconoFlecha, IconoOjo, IconoUsuario } from './src/componentes/Iconos';
+import { IconoCandado, IconoFlecha, IconoOjo, IconoSalir, IconoUsuario } from './src/componentes/Iconos';
 import ProfesorPrincipal from './src/pantallas/ProfesorPrincipal';
 import PreceptorPrincipal from './src/pantallas/PreceptorPrincipal';
 import AlumnoPrincipal from './src/pantallas/AlumnoPrincipal';
@@ -85,20 +85,30 @@ export default function App() {
               <Text style={styles.textoPrincipal}>
                 {sesion.rol} - {sesion.apellido}, {sesion.nombre}
               </Text>
-              <Text style={styles.textoSecundario}>DNI {sesion.dni}</Text>
-              <Text
-                style={[
-                  styles.estadoConexion,
-                  !eventosConectados && styles.estadoConexionRespaldo
-                ]}
-              >
-                {eventosConectados ? 'Sincronización en tiempo real' : 'Usando polling de respaldo'}
-              </Text>
+              <Text style={styles.textoSecundario}>DNI: {sesion.dni}</Text>
+              <View style={styles.filaConexion}>
+                <View
+                  style={[
+                    styles.puntoConexion,
+                    !eventosConectados && styles.puntoConexionRespaldo
+                  ]}
+                />
+                <Text
+                  style={[
+                    styles.estadoConexion,
+                    !eventosConectados && styles.estadoConexionRespaldo
+                  ]}
+                >
+                  {eventosConectados ? 'Sincronización en tiempo real' : 'Usando polling de respaldo'}
+                </Text>
+              </View>
             </View>
             <TouchableOpacity style={styles.botonCerrar} onPress={cerrarSesion}>
+              <IconoSalir tamano={18} color={colores.navy} />
               <Text style={styles.textoBoton}>Cerrar sesión</Text>
             </TouchableOpacity>
           </View>
+          <View style={styles.lineaAmarillaTop} />
 
           {sesion.rol === 'profesor' ? (
             <ProfesorPrincipal
@@ -381,42 +391,62 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderColor: '#eaeef2',
-    backgroundColor: '#ffffff'
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    backgroundColor: colores.navy
   },
   filaTexto: {
     flex: 1,
     marginRight: 8
   },
   textoPrincipal: {
-    fontSize: 16,
-    color: '#24292f'
+    fontSize: 17,
+    fontWeight: '700',
+    color: colores.blanco
   },
   textoSecundario: {
     fontSize: 13,
-    color: '#57606a'
+    color: colores.blanco,
+    marginTop: 2
+  },
+  filaConexion: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4
+  },
+  puntoConexion: {
+    width: 9,
+    height: 9,
+    borderRadius: 5,
+    backgroundColor: '#3DDC84',
+    marginRight: 6
+  },
+  puntoConexionRespaldo: {
+    backgroundColor: '#FFE45E'
   },
   estadoConexion: {
     fontSize: 12,
-    color: '#2da44e',
-    marginTop: 2
+    color: '#3DDC84'
   },
   estadoConexionRespaldo: {
-    color: '#bf8700'
+    color: '#FFE45E'
   },
   botonCerrar: {
-    backgroundColor: '#6e7781',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    alignItems: 'center'
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colores.amarillo,
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 10
   },
   textoBoton: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600'
+    color: colores.navy,
+    fontSize: 14,
+    fontWeight: '700',
+    marginLeft: 6
+  },
+  lineaAmarillaTop: {
+    height: 7,
+    backgroundColor: colores.amarillo
   }
 });
