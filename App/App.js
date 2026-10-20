@@ -237,28 +237,35 @@ const styles = StyleSheet.create({
   franjaInstitucional: {
     backgroundColor: colores.navy,
     paddingTop: 52,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
+    paddingBottom: 24,
+    paddingHorizontal: 16,
     alignItems: 'center'
   },
   franjaTitulo: {
     color: colores.blanco,
-    fontSize: 15,
-    fontWeight: '700',
-    textAlign: 'center'
+    fontSize: 24,
+    fontWeight: '600',
+    letterSpacing: 4,
+    textAlign: 'center',
+    lineHeight: 34
   },
   franjaSubtitulo: {
     color: colores.blanco,
-    fontSize: 13,
+    fontSize: 24,
+    fontWeight: '600',
+    letterSpacing: 4,
     textAlign: 'center',
+    lineHeight: 34,
     marginTop: 4
   },
   franjaIntegrantes: {
     color: colores.blanco,
-    fontSize: 11,
+    fontSize: 24,
+    fontWeight: '600',
+    letterSpacing: 4,
     textAlign: 'center',
-    marginTop: 8,
-    opacity: 0.85
+    lineHeight: 34,
+    marginTop: 12
   },
   scrollLogin: {
     flexGrow: 1,
@@ -280,7 +287,7 @@ const styles = StyleSheet.create({
   formulario: {
     alignItems: 'center',
     zIndex: 2,
-    marginTop: 40,
+    marginTop: 8,
     marginBottom: 40
   },
   tituloInstitucion: {
