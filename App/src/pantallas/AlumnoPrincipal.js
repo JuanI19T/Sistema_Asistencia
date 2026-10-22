@@ -2,12 +2,14 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   AppState,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
+  useWindowDimensions
 } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { escanearClase, ingresarConCodigo, obtenerClasesAlumnoHoy } from '../api';
@@ -68,6 +70,8 @@ function recortarHora(horario) {
 }
 
 export default function AlumnoPrincipal({ sesion, evento, eventosConectados }) {
+  const { width } = useWindowDimensions();
+  const esPantallaAngosta = width < 520;
   const [clases, setClases] = useState([]);
   const [escaneando, setEscaneando] = useState(false);
   const [codigo, setCodigo] = useState('');
@@ -178,7 +182,7 @@ export default function AlumnoPrincipal({ sesion, evento, eventosConectados }) {
           return (
             <View
               key={`${clase.id_dictado}-${clase.id_clase || 'x'}`}
-              style={[styles.tarjeta, { borderColor: estado.borde }]}
+              style={[styles.tarjeta, esPantallaAngosta && styles.tarjetaAngosta, { borderColor: estado.borde }]}
             >
               <View style={[styles.panelHorario, { backgroundColor: estado.fondoHorario }]}>
                 <Text style={styles.hora}>{recortarHora(clase.horario)}</Text>
@@ -190,10 +194,19 @@ export default function AlumnoPrincipal({ sesion, evento, eventosConectados }) {
                 <Text style={styles.materia}>{clase.nombre_materia}</Text>
                 <Text style={styles.docente}>
                   {clase.apellido_profesor ? `Prof. ${clase.apellido_profesor}` : 'Sin docente'}
+                  {` - ${recortarHora(clase.horario)} - ${recortarHora(clase.horario_fin)}`}
                 </Text>
-                <View style={[styles.etiqueta, { backgroundColor: estado.fondoEtiqueta }]}>
+              </View>
+
+              <View
+                style={[
+                  styles.panelEstado,
+                  esPantallaAngosta && styles.panelEstadoAngosto
+                ]}
+              >
+                <View style={[styles.etiqueta, { backgroundColor: estado.fondoEtiqueta, marginTop: 0 }]}>
                   <Icono tamano={14} color={estado.texto} />
-                  <Text style={[styles.textoEtiqueta, { color: estado.texto }]}>
+                  <Text style={[styles.textoEtiqueta, { color: estado.texto }]}> 
                     {estado.etiqueta}
                   </Text>
                 </View>
@@ -304,8 +317,8 @@ const styles = StyleSheet.create({
   },
   tarjeta: {
     flexDirection: 'row',
-    borderWidth: 1.5,
-    borderRadius: 20,
+    borderWidth: 2,
+    borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#FFFDF7',
     marginBottom: 32,
@@ -315,6 +328,9 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 2
   },
+  tarjetaAngosta: {
+    flexWrap: 'wrap'
+  },
   panelHorario: {
     width: '23%',
     paddingVertical: 18,
@@ -323,9 +339,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   hora: {
-    fontFamily: 'Georgia',
-    fontWeight: 'bold',
-    fontSize: 22,
+    fontFamily: Platform.select({ ios: 'Avenir Next', android: 'sans-serif', default: 'Arial' }),
+    fontWeight: '600',
+    fontSize: 24,
     color: colores.navy
   },
   lineaHorario: {
@@ -345,24 +361,39 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 18,
     paddingHorizontal: 16,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+  },
+  panelEstado: {
+    width: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    marginLeft: 12
+  },
+  panelEstadoAngosto: {
+    width: '100%',
+    paddingVertical: 10,
+    marginLeft: 0
   },
   materia: {
     fontFamily: 'Georgia',
     fontWeight: 'bold',
     fontSize: 21,
-    color: colores.navy
+    color: colores.navy,
+    textAlign: 'left'
   },
   docente: {
     fontSize: 14,
     color: '#66758B',
-    marginTop: 4
+    marginTop: 4,
+    textAlign: 'left'
   },
   etiqueta: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'flex-start',
-    borderRadius: 999,
+    alignSelf: 'center',
+    borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 6,
     marginTop: 12
@@ -389,7 +420,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colores.navy,
-    borderRadius: 28,
+    borderRadius: 10,
     paddingVertical: 20,
     paddingHorizontal: 20,
     shadowColor: '#000000',
@@ -406,7 +437,7 @@ const styles = StyleSheet.create({
   },
   camaraContenedor: {
     marginTop: 16,
-    borderRadius: 16,
+    borderRadius: 10,
     overflow: 'hidden'
   },
   camara: {
@@ -433,7 +464,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1.5,
     borderColor: colores.borde,
-    borderRadius: 24,
+    borderRadius: 10,
     backgroundColor: '#FFFDF7',
     paddingHorizontal: 16,
     minHeight: 58
@@ -447,7 +478,7 @@ const styles = StyleSheet.create({
   },
   botonRegistrar: {
     backgroundColor: colores.amarillo,
-    borderRadius: 24,
+    borderRadius: 10,
     paddingHorizontal: 22,
     justifyContent: 'center',
     alignItems: 'center',
@@ -473,6 +504,8 @@ const styles = StyleSheet.create({
   },
   pie: {
     backgroundColor: colores.navy,
+    width: '100%',
+    marginTop: 'auto',
     paddingVertical: 26,
     paddingHorizontal: 20,
     alignItems: 'center',

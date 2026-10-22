@@ -83,7 +83,7 @@ export default function App() {
           <View style={styles.tope}>
             <View style={styles.filaTexto}>
               <Text style={styles.textoPrincipal}>
-                {sesion.rol} - {sesion.apellido}, {sesion.nombre}
+                {sesion.rol.charAt(0).toUpperCase() + sesion.rol.slice(1)} - {sesion.apellido}, {sesion.nombre}
               </Text>
               <Text style={styles.textoSecundario}>DNI: {sesion.dni}</Text>
               <View style={styles.filaConexion}>
@@ -109,6 +109,7 @@ export default function App() {
             </TouchableOpacity>
           </View>
           <View style={styles.lineaAmarillaTop} />
+          <View style={styles.lineaAzulTop} />
 
           {sesion.rol === 'profesor' ? (
             <ProfesorPrincipal
@@ -251,6 +252,7 @@ const styles = StyleSheet.create({
   },
   franjaInstitucional: {
     backgroundColor: colores.navy,
+    height: 104,
     paddingTop: 34,
     paddingBottom: 22,
     paddingHorizontal: 12,
@@ -391,6 +393,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    height: 104,
     paddingHorizontal: 16,
     paddingVertical: 14,
     backgroundColor: colores.navy
@@ -400,8 +403,9 @@ const styles = StyleSheet.create({
     marginRight: 8
   },
   textoPrincipal: {
-    fontSize: 17,
-    fontWeight: '700',
+    fontFamily: Platform.select({ ios: 'Georgia', android: 'serif', default: 'serif' }),
+    fontSize: 19,
+    fontWeight: '400',
     color: colores.blanco
   },
   textoSecundario: {
@@ -435,7 +439,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colores.amarillo,
-    borderRadius: 16,
+    borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 10
   },
@@ -446,7 +450,11 @@ const styles = StyleSheet.create({
     marginLeft: 6
   },
   lineaAmarillaTop: {
-    height: 7,
+    height: 12,
     backgroundColor: colores.amarillo
+  },
+  lineaAzulTop: {
+    height: 8,
+    backgroundColor: colores.azulReal
   }
 });
