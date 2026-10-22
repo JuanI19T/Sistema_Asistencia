@@ -151,6 +151,7 @@ function LoginScreen({
   const anchoFormulario = Math.min(width - margenLateral * 2, 520);
   const altoOndaInferior = Math.min(Math.max(height * 0.18, 170), 276);
   const anchoOndas = width;
+  const esPantallaAngosta = width < 700;
 
   const enviar = () => {
     if (!cargando) void onIngresar();
@@ -158,11 +159,14 @@ function LoginScreen({
 
   return (
     <View style={styles.pantalla}>
-      <View style={styles.franjaInstitucional}>
-        <Text style={styles.franjaLinea}>
-          E.E.S.T. N1 - Ara. General Belgrano    Tecnicatura en Programación
-        </Text>
-        <Text style={styles.franjaLinea}>
+      <View style={[styles.franjaInstitucional, esPantallaAngosta && styles.franjaInstitucionalAngosta]}>
+        <Text
+          style={[styles.franjaLinea, esPantallaAngosta && styles.franjaLineaAngosta]}
+          numberOfLines={2}
+          adjustsFontSizeToFit
+          minimumFontScale={0.6}
+        >
+          E.E.S.T. N1 Ara. General Belgrano - Tecnicatura en Programación{'\n'}
           Isabella Carrete Vecco - Juan Torres Troschasky
         </Text>
       </View>
@@ -178,7 +182,14 @@ function LoginScreen({
           keyboardShouldPersistTaps="handled"
         >
           <View style={[styles.formulario, { width: anchoFormulario }]}>
-            <Text style={styles.tituloInstitucion}>E.E.S.T. N1</Text>
+            <Text
+              style={styles.tituloInstitucion}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.6}
+            >
+              E.E.S.T. N1
+            </Text>
             <View style={styles.lineaAmarilla} />
             <Text style={styles.subtitulo}>SISTEMA INTEGRAL</Text>
             <Text style={styles.subtitulo}>DE ASISTENCIA</Text>
@@ -258,13 +269,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     alignItems: 'center'
   },
+  franjaInstitucionalAngosta: {
+    height: 'auto',
+    paddingTop: 16,
+    paddingBottom: 16
+  },
   franjaLinea: {
+    width: '100%',
     color: colores.blanco,
     fontFamily: Platform.select({ ios: 'Georgia', android: 'serif', default: 'serif' }),
     fontSize: 18,
     letterSpacing: 1,
     textAlign: 'center',
     lineHeight: 24
+  },
+  franjaLineaAngosta: {
+    flex: 0,
+    fontSize: 14,
+    lineHeight: 20,
+    letterSpacing: 0.4
   },
   lineaAmarillaFranja: {
     height: 12,
