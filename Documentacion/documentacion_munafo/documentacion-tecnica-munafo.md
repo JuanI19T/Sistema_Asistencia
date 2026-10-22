@@ -36,6 +36,8 @@
 | 13 | [Plan de pruebas](#s13) | Estrategia progresiva de validación: datos ficticios, aula, curso real y carga institucional |
 | 14 | [Diagramas del sistema](#s14) | Diagrama de contexto, diagrama de procesos principales y modelo entidad-relación |
 | 15 | [Manual de instalación](#s15) | Requisitos, puesta en marcha por módulo y diferencias con la entrega definitiva |
+| 16 | [Conclusiones y mejoras futuras](#s16) | Balance del proyecto y mejoras posibles sin rediseñar el sistema |
+| 17 | [Bibliografía](#s17) | Fuentes y referencias consultadas durante el desarrollo (normas APA) |
 
 ---
 
@@ -1575,6 +1577,125 @@ en el repositorio, solo plantillas (`.example`) con placeholders.
 
 ---
 
+<a id="s16"></a>
+
+## 16. Conclusiones y mejoras futuras
+
+### 16.1 Conclusión
+
+A lo largo de esta documentación se analizó un problema real de la institución: el registro de la
+asistencia se realizaba en papel, con demoras, errores de carga y riesgo de pérdida de información. A
+partir de ese relevamiento se diseñó y documentó un sistema integral que cubre el circuito completo de
+la información: la carga institucional (alumnos, profesores, preceptores, especialidades, materias,
+dictados e inscripciones), la apertura de clases, el registro de asistencia en el aula y su consulta
+posterior.
+
+El sistema está compuesto por tres módulos que se complementan: el aplicativo de escritorio, que
+administra los datos institucionales y los usuarios; la API REST, que expone los datos y difunde los
+eventos en tiempo real; y la aplicación móvil, desde donde profesores, preceptores y alumnos participan
+del registro de asistencia con QR y código corto. La arquitectura en capas del escritorio, la única
+fuente de verdad compartida (MySQL) y la gestión de usuarios en MongoDB permiten que los módulos
+trabajen sobre los mismos datos sin pisarse entre sí.
+
+Durante el proceso se relevaron las reglas de negocio reales de la escuela, se definieron los perfiles
+y permisos por rol, se planificó un esquema de pruebas progresivo y se cuidó la seguridad de las
+credenciales, manteniéndolas siempre fuera del repositorio. Los objetivos planteados —digitalizar el
+control de asistencia, reducir errores, mejorar la disponibilidad de la información y facilitar la
+consulta y los reportes— encuentran en esta propuesta una solución viable, escalable y extensible.
+Queda pendiente, como parte natural del cierre, completar el desarrollo y validarlo con el plan de
+pruebas en condiciones reales de uso.
+
+### 16.2 Mejoras futuras
+
+Si el proyecto continúa, existen varias mejoras que podrían implementarse aprovechando la arquitectura
+actual (API REST, base relacional y aplicación móvil), sin necesidad de rediseñar el sistema:
+
+1. **Notificaciones automáticas por correo electrónico y la app móvil:** integrar el envío de
+   notificaciones automáticas, por ejemplo para comunicar a los alumnos y sus familias la confirmación
+   de la asistencia o las ausencias registradas en el día, aprovechando los eventos que ya emite la API
+   en tiempo real.
+2. **Ampliación de la aplicación móvil:** incorporar a la app existente nuevas funcionalidades sobre
+   los servicios de la API REST, como la consulta del historial de asistencias, notificaciones push y
+   el acceso para las familias.
+3. **Sistema de notas, boletines y promedios:** implementar un módulo para cargar las notas de los
+   alumnos en la aplicación, de manera que puedan consultarlas fácilmente desde la app y que el sistema
+   genere los boletines y calcule los promedios en forma automática. Esto ahorraría mucho trabajo
+   administrativo y errores de cálculo, y facilitaría a los alumnos el seguimiento de su rendimiento.
+4. **Legajos digitales:** crear una extensión que permita guardar todos los datos que contienen los
+   legajos de un alumno. De esta forma, los datos se completarían únicamente de forma digital y solo se
+   actualizarían cuando sea necesario, sin tener que realizar múltiples copias en papel y eliminando la
+   posibilidad de que se pierdan documentos relevantes del legajo.
+5. **Reportes y estadísticas para el equipo directivo:** generar reportes automáticos de asistencia,
+   índices de ausentismo por cursada y evolución a lo largo del ciclo lectivo, para apoyar la toma de
+   decisiones de la institución.
+6. **Copias de seguridad automáticas:** programar respaldos periódicos de las bases de datos (MySQL y
+   MongoDB) y un procedimiento de restauración, para garantizar la permanencia de la información ante
+   cualquier eventualidad.
+
+---
+
+<a id="s17"></a>
+
+## 17. Bibliografía
+
+Las siguientes referencias fueron consultadas durante el desarrollo del proyecto y se presentan según las
+normas APA:
+
+- Expo. (s.f.). *Documentación oficial de Expo para aplicaciones React Native*. Recuperado el 28 de
+  septiembre de 2026. https://docs.expo.dev/
+- Expo. (s.f.). *Documentación de Expo Camera: escaneo de códigos QR (SDK 57)*. Recuperado el 28 de
+  septiembre de 2026. https://docs.expo.dev/versions/v57.0.0/sdk/camera/
+- Expo. (s.f.). *Referencia del SDK 57 de Expo: paquetes y compatibilidad con React Native*. Recuperado
+  el 28 de septiembre de 2026. https://docs.expo.dev/versions/v57.0.0/
+- Git. (s.f.). *Documentación oficial del sistema de control de versiones Git*. Recuperado el 28 de
+  septiembre de 2026. https://git-scm.com/doc
+- GitHub. (s.f.). *Documentación de GitHub: repositorios, ramas y flujo de trabajo con pull requests*.
+  Recuperado el 28 de septiembre de 2026. https://docs.github.com/es
+- GitHub, Leocb. (s.f.). *[Leo Bottaro] MaterialSkin 2: tema de Material Design para aplicaciones de
+  Windows Forms*. Recuperado el 28 de septiembre de 2026. https://github.com/leocb/MaterialSkin/
+- Microsoft. (s.f.). *Descarga de .NET Framework 4.7.2 para Windows*. Recuperado el 28 de septiembre de
+  2026. https://dotnet.microsoft.com/es-es/download/dotnet-framework/net472
+- Microsoft Ignite. (s.f.). *Documentación oficial C#: guía del lenguaje de programación*. Recuperado el
+  28 de septiembre de 2026. https://learn.microsoft.com/es-es/dotnet/csharp/
+- Microsoft. (s.f.). *Visual Studio: IDE para el desarrollo de aplicaciones de escritorio*. Recuperado el
+  28 de septiembre de 2026. https://visualstudio.microsoft.com/es/
+- Microsoft Ignite. (s.f.). *Descripción general de Windows Forms: documentación oficial para interfaces
+  gráficas en .NET*. Recuperado el 28 de septiembre de 2026.
+  https://learn.microsoft.com/es-es/dotnet/desktop/winforms/overview/?view=netframeworkdesktop-4.8
+- MongoDB. (s.f.). *Documentación de MongoDB Atlas: servicio de base de datos multi-nube*. Recuperado el
+  28 de septiembre de 2026. https://www.mongodb.com/docs/atlas/
+- MongoDB, Inc. (s.f.). *Documentación de MongoDB: base de datos documental*. Recuperado el 28 de
+  septiembre de 2026. https://www.mongodb.com/docs/
+- GitHub, dotenv. (s.f.). *[motdotla, Scott Motte]. dotenv: carga de variables de entorno para proyectos
+  Node.js*. Recuperado el 28 de septiembre de 2026. https://github.com/motdotla/dotenv
+- MDN. (s.f.). *Recursos para desarrolladores, por desarrolladores: Documentando CSS, HTML y JavaScript
+  desde 2005; referencia general de lenguajes de programación y desarrollo web*. Recuperado el 28 de
+  septiembre de 2026. https://developer.mozilla.org/es/
+- Node.js. (s.f.). *Documentación oficial de Node.js v26.11.1*. Recuperado el 28 de septiembre de 2026.
+  https://nodejs.org/en/docs
+- Npm Docs. (s.f.). *npm Docs, Documentation for the npm registry, website, and command-line interface*.
+  Recuperado el 28 de septiembre de 2026. https://docs.npmjs.com/
+- Espress. (s.f.). *Fast, unopinionated, minimalist web framework for Node.js*. Recuperado el 28 de
+  septiembre de 2026. https://expressjs.com/
+- Express. (s.f.). *API Reference; Referencia de la API de Express 5.x*. Recuperado el 28 de septiembre
+  de 2026. https://expressjs.com/en/5x/api/
+- Github, cors. (s.f.). *[Vansh1811, Vansh Sharma] Repositorio de cors: middleware HTTP para Express*.
+  Recuperado el 28 de septiembre de 2026. https://github.com/expressjs/cors
+- MySQL. (2026, septiembre 11). *Documentación de MySQL Workbench*. Recuperado el 28 de septiembre de
+  2026. https://dev.mysql.com/doc/workbench/en/
+- MySQL. (2026, julio 08). *MySQL 8.0 Reference Manual; Including MySQL NDB Cluster 8.0*. Recuperado el
+  28 de septiembre de 2026. https://dev.mysql.com/doc/refman/8.0/en/
+- Railway. (s.f.). *Railway Documentation: plataforma de despliegue en la nube*. Recuperado el 28 de
+  septiembre de 2026. https://docs.railway.com/
+- React. (s.f.). *React, The library for web and native user interfaces*. Recuperado el 28 de septiembre
+  de 2026. https://react.dev/
+- React Native. (2026, Agosto 12). *React Native, Learn once, write anywhere: introduction to framework*.
+  Recuperado el 28 de septiembre de 2026. https://reactnative.dev/docs/getting-started
+- MySQL2. (s.f.). *MySQL2 for Node.js: MySQL client for Node.js with focus on performance*. Recuperado el
+  28 de septiembre de 2026. https://sidorares.github.io/node-mysql2/docs
+
+---
+
 ## Documentos relacionados
 
 | Documento | Contenido |
@@ -1586,8 +1707,6 @@ en el repositorio, solo plantillas (`.example`) con placeholders.
 ---
 
 <div align="center">
-
-*Documento en construcción. Los capítulos restantes se incorporarán en versiones posteriores.*
 
 Sistema Integral de Asistencia Escolar · EACP 2026
 

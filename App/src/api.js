@@ -133,6 +133,58 @@ export async function obtenerDictadosAlumno(idAlumno) {
   return pedir(`${API_URL}/api/dictados/alumno/${idAlumno}`);
 }
 
+const DIAS = ['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
+
+function sinAcentos(texto) {
+  return (texto || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toUpperCase()
+    .trim();
+}
+
+function minutosDeHora(hora) {
+  if (!hora || typeof hora !== 'string') return null;
+  const [h, m] = hora.split(':').map(Number);
+  if (Number.isNaN(h) || Number.isNaN(m)) return null;
+  return h * 60 + m;
+}
+
+function calcularEstadoLocal(dictado, minutosActual) {
+  const inicio = minutosDeHora(dictado.horario);
+  const fin = minutosDeHora(dictado.horario_fin);
+  if (inicio !== null && minutosActual < inicio) return 'pendiente';
+  if (fin !== null && minutosActual >= fin) return 'vencida';
+  if (inicio !== null && minutosActual >= inicio) return 'en_curso';
+  return 'pendiente';
+}
+
+export async function obtenerClasesAlumnoHoy(idAlumno) {
+  try {
+    const resp = await pedir(`${API_URL}/api/dictados/alumno/hoy`);
+    if (resp && Array.isArray(resp.clases)) return { ...resp, derivado: false };
+  } catch {
+    // La API desplegada puede no tener el endpoint de hoy: usamos el fallback.
+  }
+
+  const dictados = await obtenerDictadosAlumno(idAlumno);
+  const ahora = new Date();
+  const diaHoy = DIAS[ahora.getDay()];
+  const hoy = fechaDeHoy();
+  const minutosActual = ahora.getHours() * 60 + ahora.getMinutes();
+
+  const clases = dictados
+    .filter((dictado) => sinAcentos(dictado.dia) === diaHoy)
+    .sort((a, b) => minutosDeHora(a.horario) - minutosDeHora(b.horario))
+    .map((dictado) => ({
+      ...dictado,
+      id_clase: null,
+      estado: calcularEstadoLocal(dictado, minutosActual)
+    }));
+
+  return { fecha: hoy, dia: diaHoy, clases, derivado: true };
+}
+
 export async function obtenerAlumnosDictado(idDictado) {
   return pedir(`${API_URL}/api/dictados/${idDictado}/alumnos`);
 }
