@@ -129,6 +129,31 @@ export async function obtenerDictados() {
   return pedir(`${API_URL}/api/dictados`);
 }
 
+export async function obtenerClasesProfesorHoy(idProfesor) {
+  try {
+    return await pedir(`${API_URL}/api/dictados/profesor/hoy`);
+  } catch {
+    // Respaldo para despliegues que todavía no tienen el endpoint nuevo.
+    const dictados = await obtenerDictados();
+    const ahora = new Date();
+    const diaHoy = DIAS[ahora.getDay()];
+    const minutosActual = ahora.getHours() * 60 + ahora.getMinutes();
+
+    const clases = dictados
+      .filter((dictado) => (
+        dictado.id_profesor === idProfesor && sinAcentos(dictado.dia) === diaHoy
+      ))
+      .sort((a, b) => minutosDeHora(a.horario) - minutosDeHora(b.horario))
+      .map((dictado) => ({
+        ...dictado,
+        id_clase: null,
+        estado: calcularEstadoLocal(dictado, minutosActual)
+      }));
+
+    return { fecha: fechaDeHoy(), dia: diaHoy, clases, derivado: true };
+  }
+}
+
 export async function obtenerDictadosAlumno(idAlumno) {
   return pedir(`${API_URL}/api/dictados/alumno/${idAlumno}`);
 }

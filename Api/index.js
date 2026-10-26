@@ -39,6 +39,7 @@ app.get('/', (req, res) => {
       <li><a href="/api/dictados">/api/dictados</a> (lista)</li>
       <li>GET /api/dictados/:id/alumnos (inscriptos)</li>
       <li>GET /api/dictados/alumno/:idAlumno (dictados de un alumno)</li>
+      <li>GET /api/dictados/profesor/hoy (clases de hoy del profesor)</li>
       <li>GET /api/eventos (SSE autenticado)</li>
       <li>GET /api/clases?fecha= (lista de clases)</li>
       <li>POST /api/clases (abrir/crear clase)</li>

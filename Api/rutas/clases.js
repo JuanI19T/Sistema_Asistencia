@@ -7,6 +7,38 @@ const { publicarEvento } = require('../utilidades/eventos');
 const router = Router();
 
 const VIGENCIA_TOKEN_MS = 60 * 1000;
+const DIAS = ['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
+const OFFSET_ARGENTINA_MINUTOS = -180;
+
+function ahoraEnArgentina() {
+  return new Date(Date.now() + OFFSET_ARGENTINA_MINUTOS * 60 * 1000);
+}
+
+function minutosDeHora(hora) {
+  if (!hora || typeof hora !== 'string') return null;
+  const [h, m] = hora.split(':').map(Number);
+  return Number.isNaN(h) || Number.isNaN(m) ? null : h * 60 + m;
+}
+
+function diaActualArgentina() {
+  return DIAS[ahoraEnArgentina().getUTCDay()];
+}
+
+function fechaActualArgentina() {
+  const ahora = ahoraEnArgentina();
+  const mes = String(ahora.getUTCMonth() + 1).padStart(2, '0');
+  const dia = String(ahora.getUTCDate()).padStart(2, '0');
+  return `${ahora.getUTCFullYear()}-${mes}-${dia}`;
+}
+
+function minutosActualesArgentina() {
+  const ahora = ahoraEnArgentina();
+  return ahora.getUTCHours() * 60 + ahora.getUTCMinutes();
+}
+
+function sinAcentos(texto) {
+  return (texto || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().trim();
+}
 
 function generarToken() {
   return {
@@ -146,13 +178,22 @@ router.post('/', requiereRol(['profesor']), async (req, res) => {
 
   try {
     const [[dictado]] = await pool.query(
-      'SELECT id_profesor FROM dictado WHERE id_dictado = ?',
+      'SELECT id_profesor, dia, horario, horario_fin FROM dictado WHERE id_dictado = ?',
       [id_dictado]
     );
 
     if (!dictado) return res.status(404).json({ error: 'El dictado no existe.' });
     if (dictado.id_profesor !== req.usuario.id_profesor) {
       return res.status(403).json({ error: 'El dictado no pertenece a tu usuario.' });
+    }
+
+    const inicio = minutosDeHora(dictado.horario);
+    const fin = minutosDeHora(dictado.horario_fin);
+    const minutosActuales = minutosActualesArgentina();
+    if (fecha !== fechaActualArgentina() ||
+        sinAcentos(dictado.dia) !== diaActualArgentina() ||
+        inicio === null || fin === null || minutosActuales < inicio || minutosActuales >= fin) {
+      return res.status(409).json({ error: 'La clase solo puede abrirse durante su horario programado.' });
     }
 
     const abiertaPor = req.usuario.id_profesor;
