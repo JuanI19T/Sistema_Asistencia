@@ -46,7 +46,7 @@ router.get('/', async (req, res) => {
     }
 
     const [filas] = await pool.query(
-      `SELECT a.id_asistencia, a.presente, a.verificada,
+      `SELECT a.id_asistencia, a.presente, a.verificada, a.metodo_registro, a.registrado_en,
               al.id_alumno, al.apellido_alumno, al.nombre_alumno, al.legajo_alumno,
               c.id_clase, c.fecha_clase, c.estado,
               d.id_dictado, m.nombre_materia, d.grupo, d.dia, d.horario, d.horario_fin,
@@ -168,15 +168,15 @@ async function registrarAsistencia({ id_clase, id_alumno, presente, verificada }
 
   if (existentes.length > 0) {
     await pool.query(
-      'UPDATE asistencia SET presente = ?, verificada = ? WHERE id_asistencia = ?',
-      [presente, verificada, existentes[0].id_asistencia]
+      'UPDATE asistencia SET presente = ?, verificada = ?, metodo_registro = ?, registrado_en = CURRENT_TIMESTAMP WHERE id_asistencia = ?',
+      [presente, verificada, 'manual', existentes[0].id_asistencia]
     );
     return { id_asistencia: existentes[0].id_asistencia, id_alumno, actualizado: true };
   }
 
   const [resultado] = await pool.query(
-    'INSERT INTO asistencia (id_clase, id_alumno, presente, verificada) VALUES (?, ?, ?, ?)',
-    [id_clase, id_alumno, presente, verificada]
+    'INSERT INTO asistencia (id_clase, id_alumno, presente, verificada, metodo_registro, registrado_en) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)',
+    [id_clase, id_alumno, presente, verificada, 'manual']
   );
 
   return { id_asistencia: resultado.insertId, id_alumno, actualizado: false };

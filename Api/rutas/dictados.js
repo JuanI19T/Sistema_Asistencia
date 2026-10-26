@@ -141,7 +141,8 @@ router.get('/profesor/hoy', requiereRol(['profesor']), async (req, res) => {
     const [filas] = await pool.query(
       `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.anio_lectivo,
               m.nombre_materia, p.apellido_profesor,
-              c.id_clase, c.estado AS estado_clase
+              c.id_clase, c.estado AS estado_clase,
+              EXISTS (SELECT 1 FROM asistencia a WHERE a.id_clase = c.id_clase) AS tiene_asistencia
        FROM dictado d
        JOIN materia m ON m.id_materia = d.id_materia
        LEFT JOIN profesor p ON p.id_profesor = d.id_profesor
@@ -158,9 +159,9 @@ router.get('/profesor/hoy', requiereRol(['profesor']), async (req, res) => {
         const fin = minutosDeHora(fila.horario_fin);
         let estado = 'pendiente';
 
-        if (fila.estado_clase === 'en_curso') estado = 'en_curso';
+        if (fila.tiene_asistencia && fin !== null && minutosActual >= fin) estado = 'asistida';
+        else if (inicio !== null && fin !== null && minutosActual >= inicio && minutosActual < fin) estado = 'en_curso';
         else if (fin !== null && minutosActual >= fin) estado = 'vencida';
-        else if (inicio !== null && minutosActual >= inicio) estado = 'en_curso';
 
         return {
           id_dictado: fila.id_dictado,

@@ -19,10 +19,10 @@ const INTERVALO_RESPALDO = 5000;
 const INTERVALO_RECONCILIACION = 30000;
 
 const ESTADOS = {
-  asistida: { etiqueta: 'Asistida', fondo: '#DFF1E1', texto: '#176C3B', Icono: IconoTilde },
-  en_curso: { etiqueta: 'En curso', fondo: '#F8DCDD', texto: '#B4232C', Icono: IconoReloj },
-  pendiente: { etiqueta: 'Pendiente', fondo: '#DCE9FA', texto: '#17307A', Icono: IconoReloj },
-  vencida: { etiqueta: 'Vencida', fondo: '#E2E2E2', texto: '#333333', Icono: IconoAviso }
+  asistida: { etiqueta: 'Asistida', borde: '#76BC91', fondoHorario: '#E6F3E7', fondo: '#DFF1E1', texto: '#176C3B', Icono: IconoTilde },
+  en_curso: { etiqueta: 'En curso', borde: '#D96B70', fondoHorario: '#FBE7E7', fondo: '#F8DCDD', texto: '#B4232C', Icono: IconoReloj },
+  pendiente: { etiqueta: 'Pendiente', borde: '#B8CCE8', fondoHorario: '#E8F0FA', fondo: '#DCE9FA', texto: '#17307A', Icono: IconoReloj },
+  vencida: { etiqueta: 'Vencida', borde: '#525252', fondoHorario: '#E8E8E8', fondo: '#E2E2E2', texto: '#333333', Icono: IconoAviso }
 };
 
 function recortarHora(horario) {
@@ -118,12 +118,16 @@ export default function ProfesorPrincipal({ sesion, evento, eventosConectados })
     }
   };
 
-  const estadoActivo = claseActiva ? 'en_curso' : claseSeleccionada?.estado;
   const enCurso = claseActiva?.estado === 'en_curso';
-  const configuracionActiva = ESTADOS[estadoActivo] || ESTADOS.pendiente;
   const codigoQR = enCurso && claseActiva.token
     ? JSON.stringify({ id_clase: claseActiva.id_clase, token: claseActiva.token })
     : '';
+  const puedeAbrir = claseSeleccionada?.estado === 'en_curso';
+
+  const seleccionarClase = (clase) => {
+    setMensaje(null);
+    setClaseSeleccionada(clase);
+  };
 
   return (
     <ScrollView style={styles.pantalla} contentContainerStyle={styles.contenido}>
@@ -133,15 +137,14 @@ export default function ProfesorPrincipal({ sesion, evento, eventosConectados })
         {clases.map((clase) => {
           const estado = ESTADOS[clase.estado] || ESTADOS.pendiente;
           const { Icono } = estado;
-          const seleccionada = claseSeleccionada?.id_dictado === clase.id_dictado;
           return (
             <TouchableOpacity
               key={clase.id_dictado}
               activeOpacity={0.85}
-              onPress={() => setClaseSeleccionada(clase)}
-              style={[styles.tarjeta, esPantallaAngosta && styles.tarjetaAngosta, seleccionada && styles.tarjetaSeleccionada, { borderColor: estado.borde }]}
+              onPress={() => seleccionarClase(clase)}
+              style={[styles.tarjeta, esPantallaAngosta && styles.tarjetaAngosta, { borderColor: estado.borde }]}
             >
-              <View style={[styles.panelHorario, esPantallaAngosta && styles.panelHorarioAngosto, { backgroundColor: estado.fondoHorario || '#E8F0FA' }]}>
+              <View style={[styles.panelHorario, esPantallaAngosta && styles.panelHorarioAngosto, { backgroundColor: estado.fondoHorario }]}>
                 <Text style={styles.hora}>{recortarHora(clase.horario)}</Text>
                 <View style={[styles.lineaHorario, { backgroundColor: estado.borde || colores.azulReal }]} />
                 <Text style={styles.dia}>{clase.dia}</Text>
@@ -169,7 +172,7 @@ export default function ProfesorPrincipal({ sesion, evento, eventosConectados })
         <Text style={styles.titulo}>Abrir Clase</Text>
         <Text style={styles.instruccion}>Seleccioná una clase y abrila únicamente durante su horario.</Text>
         <TouchableOpacity
-          style={[styles.botonAbrir, cargando && styles.botonDeshabilitado]}
+          style={[styles.botonAbrir, !puedeAbrir && styles.botonNoDisponible, cargando && styles.botonDeshabilitado]}
           onPress={abrirSeleccionada}
           disabled={cargando}
         >
@@ -178,7 +181,15 @@ export default function ProfesorPrincipal({ sesion, evento, eventosConectados })
 
         {claseActiva && enCurso ? (
           <View style={styles.panelQR}>
-            <Text style={styles.subtituloQR}>QR de la clase</Text>
+            <Text style={styles.subtituloQR}>Clase abierta</Text>
+            <Text style={styles.datosClaseQR}>{claseActiva.nombre_materia}</Text>
+            <Text style={styles.detalleClaseQR}>
+              {claseActiva.apellido_profesor ? `Prof. ${claseActiva.apellido_profesor}` : 'Sin docente'}
+            </Text>
+            <Text style={styles.detalleClaseQR}>
+              {claseActiva.dia} · {recortarHora(claseActiva.horario)} - {recortarHora(claseActiva.horario_fin)}
+            </Text>
+            <Text style={styles.detalleClaseQR}>Grupo {claseActiva.grupo}</Text>
             <View style={styles.qrContenedor}><QRCode value={codigoQR} size={220} /></View>
             <Text style={styles.textoSecundario}>El QR vence en {restante}s · los alumnos lo escanean para registrarse.</Text>
             {claseActiva.codigo ? <Text style={styles.codigoClase}>{claseActiva.codigo}</Text> : null}
@@ -202,7 +213,6 @@ const styles = StyleSheet.create({
   titulo: { fontFamily: 'Georgia', fontWeight: 'bold', fontSize: 34, color: colores.navy, textAlign: 'center', marginVertical: 14 },
   tarjeta: { flexDirection: 'row', borderWidth: 2, borderRadius: 10, overflow: 'hidden', backgroundColor: '#FFFDF7', marginBottom: 22, shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.08, shadowRadius: 6, elevation: 2 },
   tarjetaAngosta: { flexWrap: 'wrap' },
-  tarjetaSeleccionada: { shadowOpacity: 0.22, elevation: 4 },
   panelHorario: { width: '23%', paddingVertical: 18, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' },
   panelHorarioAngosto: { width: '23%', paddingHorizontal: 4 },
   hora: { fontFamily: Platform.select({ ios: 'Avenir Next', android: 'sans-serif', default: 'Arial' }), fontWeight: '600', fontSize: 24, color: colores.navy },
@@ -221,9 +231,12 @@ const styles = StyleSheet.create({
   botonAbrir: { backgroundColor: colores.navy, borderRadius: 10, minHeight: 58, justifyContent: 'center', alignItems: 'center' },
   botonRotar: { backgroundColor: colores.azulReal, borderRadius: 10, minHeight: 48, justifyContent: 'center', alignItems: 'center', marginTop: 16, paddingHorizontal: 20 },
   botonDeshabilitado: { opacity: 0.6 },
+  botonNoDisponible: { backgroundColor: colores.textoSuave },
   textoBoton: { color: colores.blanco, fontSize: 17, fontWeight: '700' },
   panelQR: { alignItems: 'center', marginTop: 24, padding: 16, borderWidth: 2, borderColor: colores.borde, borderRadius: 10, backgroundColor: '#FFFDF7' },
   subtituloQR: { fontFamily: 'Georgia', fontWeight: 'bold', fontSize: 24, color: colores.navy, marginBottom: 14 },
+  datosClaseQR: { fontFamily: 'Georgia', fontWeight: 'bold', fontSize: 21, color: colores.navy, textAlign: 'center' },
+  detalleClaseQR: { color: '#66758B', fontSize: 14, textAlign: 'center', marginTop: 3 },
   qrContenedor: { backgroundColor: colores.blanco, padding: 16, borderRadius: 10 },
   codigoClase: { fontSize: 28, fontWeight: 'bold', letterSpacing: 5, color: colores.navy, marginTop: 16 },
   textoSecundario: { fontSize: 14, color: '#66758B', textAlign: 'center', marginTop: 12 },
