@@ -486,7 +486,7 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
   return (
     <ScrollView style={styles.pantalla} contentContainerStyle={styles.contenido}>
       <View style={styles.contenedor}>
-        <Text style={styles.titulo}>Mis Clases</Text>
+        <Text style={styles.titulo}>{seleccionada ? 'Asistencia de Mis Alumnos' : 'Mis Clases'}</Text>
 
         {!seleccionada ? (
           <>
@@ -536,34 +536,34 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
           </>
         ) : (
           <>
-            <View style={[styles.tarjeta, esPantallaAngosta && styles.tarjetaAngosta, { borderColor: estadoSeleccionada.borde }]}>
-              <View style={[styles.panelHorario, esPantallaAngosta && styles.panelHorarioAngosto, { backgroundColor: estadoSeleccionada.fondoHorario }]}>
-                <Text style={styles.hora}>{recortarHora(seleccionada.horario)}</Text>
-                <View style={[styles.lineaHorario, { backgroundColor: estadoSeleccionada.borde }]} />
-                <Text style={styles.dia}>{seleccionada.dia}</Text>
-              </View>
-              <View style={[styles.panelDatos, esPantallaAngosta && styles.panelDatosAngosto]}>
-                <Text style={styles.materia}>{seleccionada.nombre_materia}</Text>
-                <Text style={styles.docente}>
-                  {seleccionada.apellido_profesor ? `Prof. ${seleccionada.apellido_profesor}` : 'Sin docente'}
-                  {` - ${recortarHora(seleccionada.horario)} - ${recortarHora(seleccionada.horario_fin)}`}
-                </Text>
-                <Text style={styles.datosDictado}>{datosDictado(seleccionada)}</Text>
-                <Text style={styles.resumenAsistencia}>{presentes}/{alumnos.length} presentes · {verificados}/{alumnos.length} verificados</Text>
-              </View>
-              <View style={[styles.panelEstado, esPantallaAngosta && styles.panelEstadoAngosto]}>
-                <View style={[styles.etiqueta, { backgroundColor: estadoSeleccionada.fondo }]}>
-                  <estadoSeleccionada.Icono tamano={14} color={estadoSeleccionada.texto} />
-                  <Text style={[styles.textoEtiqueta, { color: estadoSeleccionada.texto }]}>
-                    {estadoSeleccionada.etiqueta}
-                  </Text>
+            <TouchableOpacity style={styles.botonVolver} onPress={volver}>
+              <Text style={styles.textoBotonVolver}>&lt;-- Volver</Text>
+            </TouchableOpacity>
+
+            <View style={styles.resumenClase}>
+              <Text style={styles.resumenMateria}>{seleccionada.nombre_materia}</Text>
+              <Text style={styles.resumenDato}>
+                {seleccionada.apellido_profesor ? `Profesor: ${seleccionada.apellido_profesor}` : 'Profesor: Sin docente'}
+              </Text>
+              <Text style={styles.resumenDato}>
+                Horario: {recortarHora(seleccionada.horario)} - {recortarHora(seleccionada.horario_fin)}
+              </Text>
+              <Text style={styles.resumenDato}>{datosDictado(seleccionada)}</Text>
+              <View style={styles.metricasClase}>
+                <View style={styles.metrica}>
+                  <Text style={styles.valorMetrica}>{formatearFechaHora(seleccionada.abierta_en)}</Text>
+                  <Text style={styles.etiquetaMetrica}>Apertura</Text>
+                </View>
+                <View style={styles.metrica}>
+                  <Text style={styles.valorMetrica}>{presentes}/{alumnos.length}</Text>
+                  <Text style={styles.etiquetaMetrica}>Presentes</Text>
+                </View>
+                <View style={styles.metrica}>
+                  <Text style={styles.valorMetrica}>{verificados}/{alumnos.length}</Text>
+                  <Text style={styles.etiquetaMetrica}>Verificados</Text>
                 </View>
               </View>
             </View>
-
-            <TouchableOpacity style={styles.botonVolver} onPress={volver}>
-              <Text style={styles.textoBotonVolver}>Volver a Mis Clases</Text>
-            </TouchableOpacity>
 
             <Text style={styles.subtituloAlumnos}>Asistencia de alumnos</Text>
 
@@ -571,13 +571,13 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
               <ActivityIndicator size="large" color="#1f6feb" style={styles.cargando} />
             ) : null}
 
-            {alumnos.map((alumno) => (
-              <View key={alumno.id_alumno} style={styles.filaAlumno}>
+            {alumnos.map((alumno, index) => (
+              <View key={alumno.id_alumno} style={[styles.filaAlumno, index % 2 === 1 && styles.filaAlumnoAlterna]}>
                 <View style={styles.filaTexto}>
                   <Text style={styles.nombreAlumno}>
                     {alumno.apellido_alumno}, {alumno.nombre_alumno}
                   </Text>
-                  <Text style={styles.datoAlumno}>Legajo: {alumno.legajo_alumno}</Text>
+                    <Text style={styles.datoAlumno}>Legajo: {alumno.legajo_alumno} · DNI: {alumno.dni}</Text>
                   <Text style={styles.datoAlumno}>
                     Registro: {formatearFechaHora(estados[alumno.id_alumno]?.registrado_en)}
                     {' · '}{etiquetaMetodo(estados[alumno.id_alumno]?.metodo_registro)}
@@ -800,12 +800,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderWidth: 1,
-    borderColor: colores.borde,
-    borderRadius: 10,
     backgroundColor: '#FFFDF7',
     padding: 14,
-    marginBottom: 10
+    marginBottom: 1
+  },
+
+  filaAlumnoAlterna: {
+    backgroundColor: '#F0F0EC'
   },
 
   filaTexto: {
@@ -878,17 +879,67 @@ const styles = StyleSheet.create({
   botonVolver: {
     backgroundColor: colores.amarillo,
     borderRadius: 8,
-    minHeight: 52,
+    minHeight: 36,
+    alignSelf: 'flex-start',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 14,
-    marginBottom: 8
+    paddingHorizontal: 12,
+    marginBottom: 14
   },
 
   textoBotonVolver: {
     color: colores.navy,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '700'
+  },
+
+  resumenClase: {
+    backgroundColor: '#FFFDF7',
+    borderRadius: 10,
+    padding: 18,
+    marginBottom: 20
+  },
+
+  resumenMateria: {
+    fontFamily: 'Georgia',
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colores.navy,
+    marginBottom: 8
+  },
+
+  resumenDato: {
+    color: '#66758B',
+    fontSize: 14,
+    marginTop: 4
+  },
+
+  metricasClase: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 18,
+    paddingTop: 14,
+    borderTopWidth: 1,
+    borderTopColor: '#D2CEC5'
+  },
+
+  metrica: {
+    flex: 1,
+    alignItems: 'center'
+  },
+
+  valorMetrica: {
+    color: colores.navy,
+    fontSize: 17,
+    fontWeight: '700',
+    textAlign: 'center'
+  },
+
+  etiquetaMetrica: {
+    color: '#66758B',
+    fontSize: 12,
+    marginTop: 4,
+    textAlign: 'center'
   },
 
   textoBoton: {

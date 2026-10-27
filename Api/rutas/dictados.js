@@ -141,7 +141,7 @@ router.get('/profesor/hoy', requiereRol(['profesor']), async (req, res) => {
     const [filas] = await pool.query(
       `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
               m.nombre_materia, p.apellido_profesor,
-              c.id_clase, c.estado AS estado_clase,
+               c.id_clase, c.estado AS estado_clase, c.abierta_en,
               EXISTS (SELECT 1 FROM asistencia a WHERE a.id_clase = c.id_clase) AS tiene_asistencia
        FROM dictado d
        JOIN materia m ON m.id_materia = d.id_materia
@@ -167,6 +167,7 @@ router.get('/profesor/hoy', requiereRol(['profesor']), async (req, res) => {
         return {
           id_dictado: fila.id_dictado,
           id_clase: fila.id_clase,
+          abierta_en: fila.abierta_en,
           dia: fila.dia,
           horario: fila.horario,
           horario_fin: fila.horario_fin,
@@ -194,7 +195,7 @@ router.get('/preceptor/hoy', requiereRol(['preceptor']), async (req, res) => {
     const [filas] = await pool.query(
        `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
                  m.nombre_materia, m.anio_materia, p.apellido_profesor,
-              c.id_clase, c.estado AS estado_clase,
+               c.id_clase, c.estado AS estado_clase, c.abierta_en,
               COUNT(DISTINCT i.id_alumno) AS total_alumnos,
               COUNT(DISTINCT CASE WHEN a.verificada = 1 THEN a.id_alumno END) AS total_verificados
        FROM dictado d
@@ -206,7 +207,7 @@ router.get('/preceptor/hoy', requiereRol(['preceptor']), async (req, res) => {
        LEFT JOIN asistencia a ON a.id_clase = c.id_clase AND a.id_alumno = i.id_alumno
        WHERE d.id_preceptor = ?
        GROUP BY d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
-                  m.nombre_materia, m.anio_materia, p.apellido_profesor, c.id_clase, c.estado
+                   m.nombre_materia, m.anio_materia, p.apellido_profesor, c.id_clase, c.estado, c.abierta_en
        ORDER BY d.horario`,
       [hoy, req.usuario.id_preceptor]
     );
@@ -230,6 +231,7 @@ router.get('/preceptor/hoy', requiereRol(['preceptor']), async (req, res) => {
         return {
           id_dictado: fila.id_dictado,
           id_clase: fila.id_clase,
+          abierta_en: fila.abierta_en,
           dia: fila.dia,
           horario: fila.horario,
           horario_fin: fila.horario_fin,
