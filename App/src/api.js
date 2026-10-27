@@ -154,6 +154,28 @@ export async function obtenerClasesProfesorHoy(idProfesor) {
   }
 }
 
+export async function obtenerClasesPreceptorHoy(idPreceptor) {
+  try {
+    return await pedir(`${API_URL}/api/dictados/preceptor/hoy`);
+  } catch {
+    const clases = await obtenerClases(fechaDeHoy());
+    return {
+      fecha: fechaDeHoy(),
+      clases: clases
+        .filter((clase) => clase.id_preceptor === idPreceptor)
+        .map((clase) => ({
+          ...clase,
+          total_alumnos: 0,
+          total_verificados: 0,
+          estado: clase.estado === 'en_curso'
+            ? 'en_curso'
+            : calcularEstadoLocal(clase, new Date().getHours() * 60 + new Date().getMinutes())
+        })),
+      derivado: true
+    };
+  }
+}
+
 export async function obtenerDictadosAlumno(idAlumno) {
   return pedir(`${API_URL}/api/dictados/alumno/${idAlumno}`);
 }

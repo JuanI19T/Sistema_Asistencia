@@ -119,7 +119,7 @@ export default function App() {
             />
           ) : null}
           {sesion.rol === 'preceptor' ? (
-            <PreceptorPrincipal evento={evento} eventosConectados={eventosConectados} />
+            <PreceptorPrincipal sesion={sesion} evento={evento} eventosConectados={eventosConectados} />
           ) : null}
           {sesion.rol === 'alumno' ? (
             <AlumnoPrincipal
