@@ -67,8 +67,8 @@ function calcularEstado(fila, minutosActual) {
 router.get('/', async (req, res) => {
   try {
     const [filas] = await pool.query(
-      `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.anio_lectivo,
-              m.id_materia, m.nombre_materia,
+      `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
+               m.id_materia, m.nombre_materia, m.anio_materia,
               p.id_profesor, p.apellido_profesor, p.nombre_profesor
        FROM dictado d
        JOIN materia m ON m.id_materia = d.id_materia
@@ -95,7 +95,7 @@ router.get('/alumno/hoy', requiereRol(['alumno']), async (req, res) => {
     const minutosActual = minutosAhora();
 
     const [filas] = await pool.query(
-      `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.anio_lectivo,
+       `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
               m.nombre_materia, p.apellido_profesor,
               c.id_clase, c.fecha_clase, c.estado AS estado_clase,
               a.id_asistencia, a.presente, a.verificada
@@ -139,12 +139,13 @@ router.get('/profesor/hoy', requiereRol(['profesor']), async (req, res) => {
     const minutosActual = minutosAhora();
 
     const [filas] = await pool.query(
-      `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.anio_lectivo,
+      `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
               m.nombre_materia, p.apellido_profesor,
               c.id_clase, c.estado AS estado_clase,
               EXISTS (SELECT 1 FROM asistencia a WHERE a.id_clase = c.id_clase) AS tiene_asistencia
        FROM dictado d
        JOIN materia m ON m.id_materia = d.id_materia
+       JOIN especialidad e ON e.id_especialidad = m.id_especialidad
        LEFT JOIN profesor p ON p.id_profesor = d.id_profesor
        LEFT JOIN clase c ON c.id_dictado = d.id_dictado AND c.fecha_clase = ?
        WHERE d.id_profesor = ?
@@ -191,20 +192,21 @@ router.get('/preceptor/hoy', requiereRol(['preceptor']), async (req, res) => {
     const minutosActual = minutosAhora();
 
     const [filas] = await pool.query(
-      `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.anio_lectivo,
-              m.nombre_materia, p.apellido_profesor,
+       `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
+                 m.nombre_materia, m.anio_materia, p.apellido_profesor,
               c.id_clase, c.estado AS estado_clase,
               COUNT(DISTINCT i.id_alumno) AS total_alumnos,
               COUNT(DISTINCT CASE WHEN a.verificada = 1 THEN a.id_alumno END) AS total_verificados
        FROM dictado d
        JOIN materia m ON m.id_materia = d.id_materia
+       JOIN especialidad e ON e.id_especialidad = m.id_especialidad
        LEFT JOIN profesor p ON p.id_profesor = d.id_profesor
        LEFT JOIN inscribe i ON i.id_dictado = d.id_dictado
        LEFT JOIN clase c ON c.id_dictado = d.id_dictado AND c.fecha_clase = ?
        LEFT JOIN asistencia a ON a.id_clase = c.id_clase AND a.id_alumno = i.id_alumno
        WHERE d.id_preceptor = ?
-       GROUP BY d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.anio_lectivo,
-                m.nombre_materia, p.apellido_profesor, c.id_clase, c.estado
+       GROUP BY d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
+                  m.nombre_materia, m.anio_materia, p.apellido_profesor, c.id_clase, c.estado
        ORDER BY d.horario`,
       [hoy, req.usuario.id_preceptor]
     );
@@ -232,6 +234,8 @@ router.get('/preceptor/hoy', requiereRol(['preceptor']), async (req, res) => {
           horario: fila.horario,
           horario_fin: fila.horario_fin,
           grupo: fila.grupo,
+          division: fila.division,
+          anio_materia: fila.anio_materia,
           anio_lectivo: fila.anio_lectivo,
           nombre_materia: fila.nombre_materia,
           apellido_profesor: fila.apellido_profesor,

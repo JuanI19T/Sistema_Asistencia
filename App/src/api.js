@@ -177,6 +177,8 @@ export async function obtenerClasesPreceptorHoy(idPreceptor) {
           horario: dictado.horario,
           horario_fin: dictado.horario_fin,
           grupo: dictado.grupo,
+          division: dictado.division,
+          anio_materia: dictado.anio_materia,
           anio_lectivo: dictado.anio_lectivo,
           nombre_materia: dictado.nombre_materia,
           apellido_profesor: dictado.apellido_profesor,
