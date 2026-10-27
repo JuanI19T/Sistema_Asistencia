@@ -8,6 +8,7 @@ import {
   Switch,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View
 } from 'react-native';
 import {
@@ -64,18 +65,54 @@ function recortarHora(horario) {
   return horario && typeof horario === 'string' ? horario.slice(0, 5) : '';
 }
 
+function formatearFechaHora(valor) {
+  if (!valor) return 'Sin registro';
+  const texto = String(valor).replace('T', ' ');
+  return texto.length >= 16 ? texto.slice(11, 16) : texto;
+}
+
+function etiquetaMetodo(metodo) {
+  if (metodo === 'qr') return 'QR';
+  if (metodo === 'codigo') return 'Código';
+  if (metodo === 'manual') return 'Manual';
+  return 'Sin registro';
+}
+
+function datosDictado(clase) {
+  const ordinales = {
+    1: '1ro',
+    2: '2do',
+    3: '3ro',
+    4: '4to',
+    5: '5to',
+    6: '6to',
+    7: '7mo'
+  };
+  const anio = ordinales[Number(clase?.anio_materia)] || 'Año sin dato';
+  const division = clase?.division ? `División ${clase.division}` : 'División sin dato';
+  const grupo = clase?.grupo ? `Grupo ${clase.grupo}` : 'Grupo completo';
+  return `${anio} · ${division} · ${grupo}`;
+}
+
 function combinarEstados(alumnos, asistencia) {
   const estados = {};
 
   alumnos.forEach((alumno) => {
-    estados[alumno.id_alumno] = { presente: 0, verificada: 0 };
+    estados[alumno.id_alumno] = {
+      presente: 0,
+      verificada: 0,
+      metodo_registro: null,
+      registrado_en: null
+    };
   });
 
   asistencia.forEach((item) => {
     if (estados[item.id_alumno]) {
       estados[item.id_alumno] = {
         presente: item.presente,
-        verificada: item.verificada
+        verificada: item.verificada,
+        metodo_registro: item.metodo_registro,
+        registrado_en: item.registrado_en
       };
     }
   });
@@ -84,6 +121,8 @@ function combinarEstados(alumnos, asistencia) {
 }
 
 export default function PreceptorPrincipal({ sesion, evento, eventosConectados }) {
+  const { width } = useWindowDimensions();
+  const esPantallaAngosta = width < 520;
   const [clases, setClases] = useState([]);
   const [seleccionada, setSeleccionada] = useState(null);
   const [alumnos, setAlumnos] = useState([]);
@@ -202,7 +241,9 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
 
           const estado = {
             presente: item.presente,
-            verificada: item.verificada
+            verificada: item.verificada,
+            metodo_registro: item.metodo_registro,
+            registrado_en: item.registrado_en
           };
           if (
             siguientes[item.id_alumno].presente !== estado.presente ||
@@ -438,9 +479,12 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
   const verificados = alumnos.filter(
     (alumno) => estados[alumno.id_alumno]?.verificada === 1
   ).length;
+  const estadoSeleccionada = seleccionada
+    ? (ESTADOS[seleccionada.estado] || ESTADOS.pendiente)
+    : ESTADOS.pendiente;
 
   return (
-    <ScrollView style={styles.pantalla}>
+    <ScrollView style={styles.pantalla} contentContainerStyle={styles.contenido}>
       <View style={styles.contenedor}>
         <Text style={styles.titulo}>Mis Clases</Text>
 
@@ -456,26 +500,27 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
               return (
                 <TouchableOpacity
                   key={clase.id_dictado}
-                  style={[styles.tarjeta, { borderColor: estado.borde }]}
+                  style={[styles.tarjeta, esPantallaAngosta && styles.tarjetaAngosta, { borderColor: estado.borde }]}
                   onPress={() => elegirClase(clase)}
                   activeOpacity={0.85}
                 >
-                  <View style={[styles.panelHorario, { backgroundColor: estado.fondoHorario }]}>
+                  <View style={[styles.panelHorario, esPantallaAngosta && styles.panelHorarioAngosto, { backgroundColor: estado.fondoHorario }]}>
                     <Text style={styles.hora}>{recortarHora(clase.horario)}</Text>
                     <View style={[styles.lineaHorario, { backgroundColor: estado.borde }]} />
                     <Text style={styles.dia}>{clase.dia}</Text>
                   </View>
-                  <View style={styles.panelDatos}>
+                  <View style={[styles.panelDatos, esPantallaAngosta && styles.panelDatosAngosto]}>
                     <Text style={styles.materia}>{clase.nombre_materia}</Text>
                     <Text style={styles.docente}>
                       {clase.apellido_profesor ? `Prof. ${clase.apellido_profesor}` : 'Sin docente'}
                       {` - ${recortarHora(clase.horario)} - ${recortarHora(clase.horario_fin)}`}
                     </Text>
+                    <Text style={styles.datosDictado}>{datosDictado(clase)}</Text>
                     <Text style={styles.resumenAsistencia}>
                       {clase.total_verificados}/{clase.total_alumnos} verificados
                     </Text>
                   </View>
-                  <View style={styles.panelEstado}>
+                  <View style={[styles.panelEstado, esPantallaAngosta && styles.panelEstadoAngosto]}>
                     <View style={[styles.etiqueta, { backgroundColor: estado.fondo }]}>
                       <Icono tamano={14} color={estado.texto} />
                       <Text style={[styles.textoEtiqueta, { color: estado.texto }]}>{estado.etiqueta}</Text>
@@ -491,34 +536,55 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
           </>
         ) : (
           <>
-            <View style={styles.fila}>
-              <TouchableOpacity style={styles.botonVolver} onPress={volver}>
-                <Text style={styles.textoBoton}>Volver</Text>
-              </TouchableOpacity>
-              <View style={styles.filaTexto}>
-                <Text style={styles.textoPrincipal}>
-                  {seleccionada.nombre_materia} - {seleccionada.grupo}
+            <View style={[styles.tarjeta, esPantallaAngosta && styles.tarjetaAngosta, { borderColor: estadoSeleccionada.borde }]}>
+              <View style={[styles.panelHorario, esPantallaAngosta && styles.panelHorarioAngosto, { backgroundColor: estadoSeleccionada.fondoHorario }]}>
+                <Text style={styles.hora}>{recortarHora(seleccionada.horario)}</Text>
+                <View style={[styles.lineaHorario, { backgroundColor: estadoSeleccionada.borde }]} />
+                <Text style={styles.dia}>{seleccionada.dia}</Text>
+              </View>
+              <View style={[styles.panelDatos, esPantallaAngosta && styles.panelDatosAngosto]}>
+                <Text style={styles.materia}>{seleccionada.nombre_materia}</Text>
+                <Text style={styles.docente}>
+                  {seleccionada.apellido_profesor ? `Prof. ${seleccionada.apellido_profesor}` : 'Sin docente'}
+                  {` - ${recortarHora(seleccionada.horario)} - ${recortarHora(seleccionada.horario_fin)}`}
                 </Text>
-                <Text style={styles.textoSecundario}>
-                  {seleccionada.estado} · {presentes} presentes, {verificados} verificados
-                </Text>
+                <Text style={styles.datosDictado}>{datosDictado(seleccionada)}</Text>
+                <Text style={styles.resumenAsistencia}>{presentes}/{alumnos.length} presentes · {verificados}/{alumnos.length} verificados</Text>
+              </View>
+              <View style={[styles.panelEstado, esPantallaAngosta && styles.panelEstadoAngosto]}>
+                <View style={[styles.etiqueta, { backgroundColor: estadoSeleccionada.fondo }]}>
+                  <estadoSeleccionada.Icono tamano={14} color={estadoSeleccionada.texto} />
+                  <Text style={[styles.textoEtiqueta, { color: estadoSeleccionada.texto }]}>
+                    {estadoSeleccionada.etiqueta}
+                  </Text>
+                </View>
               </View>
             </View>
+
+            <TouchableOpacity style={styles.botonVolver} onPress={volver}>
+              <Text style={styles.textoBotonVolver}>Volver a Mis Clases</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.subtituloAlumnos}>Asistencia de alumnos</Text>
 
             {cargando ? (
               <ActivityIndicator size="large" color="#1f6feb" style={styles.cargando} />
             ) : null}
 
             {alumnos.map((alumno) => (
-              <View key={alumno.id_alumno} style={styles.fila}>
+              <View key={alumno.id_alumno} style={styles.filaAlumno}>
                 <View style={styles.filaTexto}>
-                  <Text style={styles.textoPrincipal}>
+                  <Text style={styles.nombreAlumno}>
                     {alumno.apellido_alumno}, {alumno.nombre_alumno}
                   </Text>
-                  <Text style={styles.textoSecundario}>{alumno.legajo_alumno}</Text>
+                  <Text style={styles.datoAlumno}>Legajo: {alumno.legajo_alumno}</Text>
+                  <Text style={styles.datoAlumno}>
+                    Registro: {formatearFechaHora(estados[alumno.id_alumno]?.registrado_en)}
+                    {' · '}{etiquetaMetodo(estados[alumno.id_alumno]?.metodo_registro)}
+                  </Text>
                 </View>
                 <View style={styles.filaEstado}>
-                  <Text style={styles.textoSecundario}>
+                  <Text style={styles.estadoAlumno}>
                     {estados[alumno.id_alumno]?.presente === 1 ? 'Presente' : 'Ausente'}
                   </Text>
                   <Switch
@@ -528,7 +594,7 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
                   />
                   {seleccionada.estado === 'en_curso' ? (
                     <>
-                      <Text style={styles.textoSecundario}>
+                      <Text style={styles.estadoAlumno}>
                         {estados[alumno.id_alumno]?.verificada === 1
                           ? 'Verificado en persona'
                           : 'No verificado'}
@@ -568,6 +634,9 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
 
         {mensaje ? <Text style={styles.mensaje}>{mensaje}</Text> : null}
       </View>
+      <View style={styles.pie}>
+        <Text style={styles.textoPie}>Sistema Integral de Asistencia (SIA)</Text>
+      </View>
     </ScrollView>
   );
 }
@@ -579,9 +648,15 @@ const styles = StyleSheet.create({
     backgroundColor: colores.crema
   },
 
+  contenido: {
+    flexGrow: 1
+  },
+
   contenedor: {
-    padding: 20,
-    maxWidth: 640,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 28,
+    maxWidth: 720,
     width: '100%',
     alignSelf: 'center'
   },
@@ -607,6 +682,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 6,
     elevation: 2
+  },
+
+  tarjetaAngosta: {
+    flexDirection: 'column'
   },
 
   panelHorario: {
@@ -651,6 +730,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start'
   },
 
+  panelDatosAngosto: {
+    width: '100%',
+    paddingVertical: 14
+  },
+
   materia: {
     fontFamily: 'Georgia',
     fontWeight: 'bold',
@@ -677,6 +761,12 @@ const styles = StyleSheet.create({
     marginLeft: 12
   },
 
+  panelEstadoAngosto: {
+    width: '100%',
+    paddingVertical: 12,
+    marginLeft: 0
+  },
+
   etiqueta: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -700,6 +790,24 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
 
+  datosDictado: {
+    fontSize: 13,
+    color: '#66758B',
+    marginTop: 6
+  },
+
+  filaAlumno: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: colores.borde,
+    borderRadius: 10,
+    backgroundColor: '#FFFDF7',
+    padding: 14,
+    marginBottom: 10
+  },
+
   filaTexto: {
     flex: 1,
     marginRight: 8
@@ -717,6 +825,34 @@ const styles = StyleSheet.create({
   textoSecundario: {
     fontSize: 13,
     color: '#57606a'
+  },
+
+  subtituloAlumnos: {
+    fontFamily: 'Georgia',
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colores.navy,
+    marginTop: 24,
+    marginBottom: 12
+  },
+
+  nombreAlumno: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colores.navy
+  },
+
+  datoAlumno: {
+    fontSize: 13,
+    color: '#66758B',
+    marginTop: 4
+  },
+
+  estadoAlumno: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: colores.navy,
+    marginBottom: 3
   },
 
   boton: {
@@ -740,11 +876,19 @@ const styles = StyleSheet.create({
   },
 
   botonVolver: {
-    backgroundColor: '#6e7781',
+    backgroundColor: colores.amarillo,
     borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    marginRight: 8
+    minHeight: 52,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 14,
+    marginBottom: 8
+  },
+
+  textoBotonVolver: {
+    color: colores.navy,
+    fontSize: 16,
+    fontWeight: '700'
   },
 
   textoBoton: {
@@ -761,6 +905,29 @@ const styles = StyleSheet.create({
     marginTop: 16,
     color: '#cf222e',
     fontSize: 14
+  },
+
+  pie: {
+    backgroundColor: colores.navy,
+    width: '100%',
+    marginTop: 'auto',
+    paddingVertical: 26,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  panelHorarioAngosto: {
+    width: '100%',
+    flexDirection: 'row',
+    paddingVertical: 12,
+    gap: 12
+  },
+
+  textoPie: {
+    color: colores.blanco,
+    fontSize: 15,
+    textAlign: 'center'
   }
 
 });
