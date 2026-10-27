@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   AppState,
+  Platform,
   ScrollView,
   StyleSheet,
   Switch,
@@ -11,15 +12,27 @@ import {
 } from 'react-native';
 import {
   cambiarEstadoClase,
-  fechaDeHoy,
   guardarAsistencia,
   obtenerAlumnosDictado,
   obtenerAsistencia,
-  obtenerClases
+  obtenerClasesPreceptorHoy
 } from '../api';
+import { colores } from '../tema';
+import { IconoAviso, IconoReloj, IconoTilde } from '../componentes/Iconos';
 
 const INTERVALO_ASISTENCIA = 2000;
 const INTERVALO_RECONCILIACION = 30000;
+
+const ESTADOS = {
+  asistida: { etiqueta: 'Asistida', borde: '#76BC91', fondoHorario: '#E6F3E7', fondo: '#DFF1E1', texto: '#176C3B', Icono: IconoTilde },
+  en_curso: { etiqueta: 'En curso', borde: '#D96B70', fondoHorario: '#FBE7E7', fondo: '#F8DCDD', texto: '#B4232C', Icono: IconoReloj },
+  pendiente: { etiqueta: 'Pendiente', borde: '#B8CCE8', fondoHorario: '#E8F0FA', fondo: '#DCE9FA', texto: '#17307A', Icono: IconoReloj },
+  vencida: { etiqueta: 'Vencida', borde: '#525252', fondoHorario: '#E8E8E8', fondo: '#E2E2E2', texto: '#333333', Icono: IconoAviso }
+};
+
+function recortarHora(horario) {
+  return horario && typeof horario === 'string' ? horario.slice(0, 5) : '';
+}
 
 function combinarEstados(alumnos, asistencia) {
   const estados = {};
@@ -40,7 +53,7 @@ function combinarEstados(alumnos, asistencia) {
   return estados;
 }
 
-export default function PreceptorPrincipal({ evento, eventosConectados }) {
+export default function PreceptorPrincipal({ sesion, evento, eventosConectados }) {
   const [clases, setClases] = useState([]);
   const [seleccionada, setSeleccionada] = useState(null);
   const [alumnos, setAlumnos] = useState([]);
@@ -58,7 +71,8 @@ export default function PreceptorPrincipal({ evento, eventosConectados }) {
     setCargando(true);
     setMensaje(null);
     try {
-      setClases(await obtenerClases(fechaDeHoy()));
+      const respuesta = await obtenerClasesPreceptorHoy(sesion.id_preceptor);
+      setClases(respuesta.clases || []);
     } catch (error) {
       setMensaje(error.message);
     } finally {
@@ -68,7 +82,8 @@ export default function PreceptorPrincipal({ evento, eventosConectados }) {
 
   const sincronizarClases = useCallback(async () => {
     try {
-      const lista = await obtenerClases(fechaDeHoy());
+      const respuesta = await obtenerClasesPreceptorHoy(sesion.id_preceptor);
+      const lista = respuesta.clases || [];
       setClases(lista);
       setSeleccionada((actual) => {
         if (!actual) return actual;
@@ -90,6 +105,13 @@ export default function PreceptorPrincipal({ evento, eventosConectados }) {
   }, []);
 
   const elegirClase = async (clase) => {
+    if (!clase.id_clase) {
+      setMensaje(clase.estado === 'en_curso'
+        ? 'La clase todavía no fue abierta por el profesor.'
+        : 'La asistencia solo puede verificarse durante la clase.');
+      return;
+    }
+
     const idCarga = ++cargaClaseRef.current;
     claseSeleccionadaRef.current = clase;
     setSeleccionada(clase);
@@ -390,7 +412,7 @@ export default function PreceptorPrincipal({ evento, eventosConectados }) {
   return (
     <ScrollView style={styles.pantalla}>
       <View style={styles.contenedor}>
-        <Text style={styles.titulo}>Clases de hoy</Text>
+        <Text style={styles.titulo}>Mis Clases</Text>
 
         {!seleccionada ? (
           <>
@@ -398,20 +420,40 @@ export default function PreceptorPrincipal({ evento, eventosConectados }) {
               <ActivityIndicator size="large" color="#1f6feb" style={styles.cargando} />
             ) : null}
 
-            {clases.map((clase) => (
-              <TouchableOpacity
-                key={clase.id_clase}
-                style={styles.tarjeta}
-                onPress={() => elegirClase(clase)}
-              >
-                <Text style={styles.textoPrincipal}>
-                  {clase.nombre_materia} - {clase.grupo}
-                </Text>
-                <Text style={styles.textoSecundario}>
-                  {clase.fecha_clase} · {clase.apellido_profesor} · {clase.estado}
-                </Text>
-              </TouchableOpacity>
-            ))}
+            {clases.map((clase) => {
+              const estado = ESTADOS[clase.estado] || ESTADOS.pendiente;
+              const { Icono } = estado;
+              return (
+                <TouchableOpacity
+                  key={clase.id_dictado}
+                  style={[styles.tarjeta, { borderColor: estado.borde }]}
+                  onPress={() => elegirClase(clase)}
+                  activeOpacity={0.85}
+                >
+                  <View style={[styles.panelHorario, { backgroundColor: estado.fondoHorario }]}>
+                    <Text style={styles.hora}>{recortarHora(clase.horario)}</Text>
+                    <View style={[styles.lineaHorario, { backgroundColor: estado.borde }]} />
+                    <Text style={styles.dia}>{clase.dia}</Text>
+                  </View>
+                  <View style={styles.panelDatos}>
+                    <Text style={styles.materia}>{clase.nombre_materia}</Text>
+                    <Text style={styles.docente}>
+                      {clase.apellido_profesor ? `Prof. ${clase.apellido_profesor}` : 'Sin docente'}
+                      {` - ${recortarHora(clase.horario)} - ${recortarHora(clase.horario_fin)}`}
+                    </Text>
+                    <Text style={styles.resumenAsistencia}>
+                      {clase.total_verificados}/{clase.total_alumnos} verificados
+                    </Text>
+                  </View>
+                  <View style={styles.panelEstado}>
+                    <View style={[styles.etiqueta, { backgroundColor: estado.fondo }]}>
+                      <Icono tamano={14} color={estado.texto} />
+                      <Text style={[styles.textoEtiqueta, { color: estado.texto }]}>{estado.etiqueta}</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
 
             {clases.length === 0 && !cargando ? (
               <Text style={styles.mensaje}>No hay clases para hoy.</Text>
@@ -503,7 +545,7 @@ export default function PreceptorPrincipal({ evento, eventosConectados }) {
 const styles = StyleSheet.create({
   pantalla: {
     flex: 1,
-    backgroundColor: '#f6f8fa'
+    backgroundColor: colores.crema
   },
   contenedor: {
     padding: 20,
@@ -512,18 +554,92 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   titulo: {
-    fontSize: 26,
+    fontFamily: 'Georgia',
+    fontSize: 34,
     fontWeight: 'bold',
-    color: '#24292f',
-    marginBottom: 16
+    color: colores.navy,
+    textAlign: 'center',
+    marginVertical: 14
   },
   tarjeta: {
-    borderWidth: 1,
-    borderColor: '#d0d7de',
+    flexDirection: 'row',
+    borderWidth: 2,
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginBottom: 22,
+    backgroundColor: '#FFFDF7',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 2
+  },
+  panelHorario: {
+    width: '23%',
+    paddingVertical: 18,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  hora: {
+    fontFamily: Platform.select({ ios: 'Avenir Next', android: 'sans-serif', default: 'Arial' }),
+    fontWeight: '600',
+    fontSize: 24,
+    color: colores.navy
+  },
+  lineaHorario: {
+    width: 44,
+    height: 2,
+    marginVertical: 10
+  },
+  dia: {
+    fontSize: 12,
+    letterSpacing: 1,
+    fontWeight: '600',
+    color: '#66758B',
+    textAlign: 'center'
+  },
+  panelDatos: {
+    flex: 1,
+    minWidth: 0,
+    paddingVertical: 18,
+    paddingHorizontal: 16,
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+  },
+  materia: {
+    fontFamily: 'Georgia',
+    fontWeight: 'bold',
+    fontSize: 21,
+    color: colores.navy
+  },
+  docente: {
+    fontSize: 14,
+    color: '#66758B',
+    marginTop: 4
+  },
+  resumenAsistencia: {
+    fontSize: 12,
+    color: '#66758B',
+    marginTop: 8
+  },
+  panelEstado: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    marginLeft: 12
+  },
+  etiqueta: {
+    flexDirection: 'row',
+    alignItems: 'center',
     borderRadius: 8,
-    padding: 12,
-    marginTop: 8,
-    backgroundColor: '#ffffff'
+    paddingHorizontal: 12,
+    paddingVertical: 6
+  },
+  textoEtiqueta: {
+    fontSize: 13,
+    fontWeight: '700',
+    marginLeft: 6
   },
   fila: {
     flexDirection: 'row',

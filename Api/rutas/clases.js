@@ -66,7 +66,7 @@ const SELECT_BASE = `
   SELECT c.id_clase, c.id_dictado, c.fecha_clase, c.estado,
          NULL AS token, NULL AS token_valido_hasta, c.abierta_por,
          m.nombre_materia, p.apellido_profesor,
-         d.grupo, d.dia, d.horario, d.horario_fin, d.anio_lectivo
+          d.grupo, d.dia, d.horario, d.horario_fin, d.anio_lectivo, d.id_preceptor
   FROM clase c
   JOIN dictado d ON d.id_dictado = c.id_dictado
   JOIN materia m ON m.id_materia = d.id_materia
