@@ -26,6 +26,7 @@ const INTERVALO_RESPALDO = 5000;
 const INTERVALO_RECONCILIACION = 30000;
 
 const ESTADOS = {
+  
   asistida: {
     etiqueta: 'Asistida',
     detalle: 'Presencia registrada',
@@ -35,6 +36,7 @@ const ESTADOS = {
     texto: '#176C3B',
     Icono: IconoTilde
   },
+
   en_curso: {
     etiqueta: 'En curso',
     detalle: 'Horario actual',
@@ -44,6 +46,7 @@ const ESTADOS = {
     texto: '#B4232C',
     Icono: IconoReloj
   },
+
   pendiente: {
     etiqueta: 'Pendiente',
     detalle: 'Clase futura',
@@ -53,6 +56,7 @@ const ESTADOS = {
     texto: '#17307A',
     Icono: IconoReloj
   },
+
   vencida: {
     etiqueta: 'Vencida',
     detalle: 'Clase finalizada',
@@ -62,6 +66,7 @@ const ESTADOS = {
     texto: '#333333',
     Icono: IconoAviso
   }
+
 };
 
 function recortarHora(horario) {
@@ -292,13 +297,16 @@ export default function AlumnoPrincipal({ sesion, evento, eventosConectados }) {
 }
 
 const styles = StyleSheet.create({
+
   pantalla: {
     flex: 1,
     backgroundColor: colores.crema
   },
+
   contenido: {
     flexGrow: 1
   },
+
   centrado: {
     paddingHorizontal: 20,
     paddingTop: 20,
@@ -307,6 +315,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignSelf: 'center'
   },
+
   titulo: {
     fontFamily: 'Georgia',
     fontWeight: 'bold',
@@ -315,6 +324,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 14
   },
+
   tarjeta: {
     flexDirection: 'row',
     borderWidth: 2,
@@ -328,9 +338,11 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 2
   },
+
   tarjetaAngosta: {
     flexWrap: 'wrap'
   },
+
   panelHorario: {
     width: '23%',
     paddingVertical: 18,
@@ -338,18 +350,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+
   hora: {
-    fontFamily: Platform.select({ ios: 'Avenir Next', android: 'sans-serif', default: 'Arial' }),
+    fontFamily: Platform.select({ 
+      ios: 'Avenir Next', 
+      android: 'sans-serif', 
+      default: 'Arial' 
+      }),
     fontWeight: '600',
     fontSize: 24,
     color: colores.navy
   },
+
   lineaHorario: {
     width: 44,
     height: 2,
     borderRadius: 1,
     marginVertical: 10
   },
+
   dia: {
     fontSize: 12,
     letterSpacing: 1,
@@ -357,6 +376,7 @@ const styles = StyleSheet.create({
     color: '#66758B',
     textAlign: 'center'
   },
+
   panelDatos: {
     flex: 1,
     paddingVertical: 18,
@@ -371,11 +391,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     marginLeft: 12
   },
+
   panelEstadoAngosto: {
     width: '100%',
     paddingVertical: 10,
     marginLeft: 0
   },
+
   materia: {
     fontFamily: 'Georgia',
     fontWeight: 'bold',
@@ -383,12 +405,14 @@ const styles = StyleSheet.create({
     color: colores.navy,
     textAlign: 'left'
   },
+
   docente: {
     fontSize: 14,
     color: '#66758B',
     marginTop: 4,
     textAlign: 'left'
   },
+
   etiqueta: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -398,11 +422,13 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     marginTop: 12
   },
+
   textoEtiqueta: {
     fontSize: 13,
     fontWeight: '700',
     marginLeft: 6
   },
+
   vacio: {
     textAlign: 'center',
     color: '#66758B',
@@ -410,11 +436,13 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 16
   },
+
   separador: {
     height: 1.5,
     backgroundColor: colores.borde,
     marginVertical: 24
   },
+
   botonEscanear: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -429,35 +457,42 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 3
   },
+
   textoEscanear: {
     color: colores.blanco,
     fontSize: 20,
     fontWeight: '700',
     marginLeft: 12
   },
+
   camaraContenedor: {
     marginTop: 16,
     borderRadius: 10,
     overflow: 'hidden'
   },
+
   camara: {
     height: 320
   },
+
   botonCancelar: {
     backgroundColor: colores.textoSuave,
     paddingVertical: 14,
     alignItems: 'center'
   },
+
   textoCancelar: {
     color: colores.blanco,
     fontSize: 16,
     fontWeight: '600'
   },
+
   filaRegistro: {
     flexDirection: 'row',
     alignItems: 'stretch',
     marginTop: 16
   },
+
   campoCodigo: {
     flex: 1,
     flexDirection: 'row',
@@ -469,6 +504,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     minHeight: 58
   },
+
   entradaCodigo: {
     flex: 1,
     fontSize: 16,
@@ -476,6 +512,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     paddingVertical: 12
   },
+
   botonRegistrar: {
     backgroundColor: colores.amarillo,
     borderRadius: 10,
@@ -485,23 +522,28 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     minWidth: 120
   },
+
   botonDeshabilitado: {
     opacity: 0.6
   },
+
   textoRegistrar: {
     color: colores.navy,
     fontSize: 17,
     fontWeight: '700'
   },
+
   cargando: {
     marginTop: 20
   },
+
   mensaje: {
     marginTop: 16,
     color: '#B4232C',
     fontSize: 14,
     textAlign: 'center'
   },
+
   pie: {
     backgroundColor: colores.navy,
     width: '100%',
@@ -511,9 +553,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+
   textoPie: {
     color: colores.blanco,
     fontSize: 15,
     textAlign: 'center'
   }
+
 });

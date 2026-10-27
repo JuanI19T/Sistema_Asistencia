@@ -19,10 +19,39 @@ const INTERVALO_RESPALDO = 5000;
 const INTERVALO_RECONCILIACION = 30000;
 
 const ESTADOS = {
-  asistida: { etiqueta: 'Asistida', borde: '#76BC91', fondoHorario: '#E6F3E7', fondo: '#DFF1E1', texto: '#176C3B', Icono: IconoTilde },
-  en_curso: { etiqueta: 'En curso', borde: '#D96B70', fondoHorario: '#FBE7E7', fondo: '#F8DCDD', texto: '#B4232C', Icono: IconoReloj },
-  pendiente: { etiqueta: 'Pendiente', borde: '#B8CCE8', fondoHorario: '#E8F0FA', fondo: '#DCE9FA', texto: '#17307A', Icono: IconoReloj },
-  vencida: { etiqueta: 'Vencida', borde: '#525252', fondoHorario: '#E8E8E8', fondo: '#E2E2E2', texto: '#333333', Icono: IconoAviso }
+
+  asistida: { 
+    etiqueta: 'Asistida', 
+    borde: '#76BC91', 
+    fondoHorario: '#E6F3E7', 
+    fondo: '#DFF1E1', 
+    texto: '#176C3B', 
+    Icono: IconoTilde },
+
+  en_curso: { 
+    etiqueta: 'En curso', 
+    borde: '#D96B70', 
+    fondoHorario: '#FBE7E7', 
+    fondo: '#F8DCDD', 
+    texto: '#B4232C', 
+    Icono: IconoReloj },
+
+  pendiente: { 
+    etiqueta: 'Pendiente', 
+    borde: '#B8CCE8', 
+    fondoHorario: '#E8F0FA', 
+    fondo: '#DCE9FA', 
+    texto: '#17307A', 
+    Icono: IconoReloj },
+
+  vencida: { 
+    etiqueta: 'Vencida', 
+    borde: '#525252', 
+    fondoHorario: '#E8E8E8', 
+    fondo: '#E2E2E2', 
+    texto: '#333333', 
+    Icono: IconoAviso }
+
 };
 
 function recortarHora(horario) {
@@ -207,41 +236,276 @@ export default function ProfesorPrincipal({ sesion, evento, eventosConectados })
 }
 
 const styles = StyleSheet.create({
-  pantalla: { flex: 1, backgroundColor: colores.crema },
-  contenido: { flexGrow: 1 },
-  centrado: { paddingHorizontal: 20, paddingTop: 20, paddingBottom: 28, maxWidth: 720, width: '100%', alignSelf: 'center' },
-  titulo: { fontFamily: 'Georgia', fontWeight: 'bold', fontSize: 34, color: colores.navy, textAlign: 'center', marginVertical: 14 },
-  tarjeta: { flexDirection: 'row', borderWidth: 2, borderRadius: 10, overflow: 'hidden', backgroundColor: '#FFFDF7', marginBottom: 22, shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.08, shadowRadius: 6, elevation: 2 },
-  tarjetaAngosta: { flexWrap: 'wrap' },
-  panelHorario: { width: '23%', paddingVertical: 18, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' },
-  panelHorarioAngosto: { width: '23%', paddingHorizontal: 4 },
-  hora: { fontFamily: Platform.select({ ios: 'Avenir Next', android: 'sans-serif', default: 'Arial' }), fontWeight: '600', fontSize: 24, color: colores.navy },
-  lineaHorario: { width: 44, height: 2, borderRadius: 1, marginVertical: 10 },
-  dia: { fontSize: 12, letterSpacing: 1, fontWeight: '600', color: '#66758B', textAlign: 'center' },
-  panelDatos: { flex: 1, minWidth: 0, paddingVertical: 18, paddingHorizontal: 16, justifyContent: 'center', alignItems: 'flex-start' },
-  materia: { fontFamily: 'Georgia', fontWeight: 'bold', fontSize: 21, color: colores.navy, textAlign: 'left' },
-  docente: { fontSize: 14, color: '#66758B', marginTop: 4, textAlign: 'left' },
-  panelEstado: { width: 'auto', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 8, marginLeft: 12 },
-  panelEstadoAngosto: { width: '100%', paddingVertical: 10, marginLeft: 0 },
-  etiqueta: { flexDirection: 'row', alignItems: 'center', alignSelf: 'center', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 6 },
-  textoEtiqueta: { fontSize: 13, fontWeight: '700', marginLeft: 6 },
-  vacio: { textAlign: 'center', color: '#66758B', fontSize: 15, marginTop: 8, marginBottom: 16 },
-  separador: { height: 1.5, backgroundColor: colores.borde, marginVertical: 24 },
-  instruccion: { textAlign: 'center', color: '#66758B', fontSize: 14, marginBottom: 12 },
-  botonAbrir: { backgroundColor: colores.navy, borderRadius: 10, minHeight: 58, justifyContent: 'center', alignItems: 'center' },
-  botonRotar: { backgroundColor: colores.azulReal, borderRadius: 10, minHeight: 48, justifyContent: 'center', alignItems: 'center', marginTop: 16, paddingHorizontal: 20 },
-  botonDeshabilitado: { opacity: 0.6 },
-  botonNoDisponible: { backgroundColor: colores.textoSuave },
-  textoBoton: { color: colores.blanco, fontSize: 17, fontWeight: '700' },
-  panelQR: { alignItems: 'center', marginTop: 24, padding: 16, borderWidth: 2, borderColor: colores.borde, borderRadius: 10, backgroundColor: '#FFFDF7' },
-  subtituloQR: { fontFamily: 'Georgia', fontWeight: 'bold', fontSize: 24, color: colores.navy, marginBottom: 14 },
-  datosClaseQR: { fontFamily: 'Georgia', fontWeight: 'bold', fontSize: 21, color: colores.navy, textAlign: 'center' },
-  detalleClaseQR: { color: '#66758B', fontSize: 14, textAlign: 'center', marginTop: 3 },
-  qrContenedor: { backgroundColor: colores.blanco, padding: 16, borderRadius: 10 },
-  codigoClase: { fontSize: 28, fontWeight: 'bold', letterSpacing: 5, color: colores.navy, marginTop: 16 },
-  textoSecundario: { fontSize: 14, color: '#66758B', textAlign: 'center', marginTop: 12 },
-  cargando: { marginTop: 20 },
-  mensaje: { marginTop: 16, color: '#B4232C', fontSize: 14, textAlign: 'center' },
-  pie: { backgroundColor: colores.navy, width: '100%', marginTop: 'auto', paddingVertical: 26, paddingHorizontal: 20, alignItems: 'center', justifyContent: 'center' },
-  textoPie: { color: colores.blanco, fontSize: 15, textAlign: 'center' }
+
+  pantalla: { 
+    flex: 1, 
+    backgroundColor: colores.crema 
+  },
+
+  contenido: { 
+    flexGrow: 1 
+  },
+
+  centrado: { 
+    paddingHorizontal: 20, 
+    paddingTop: 20, 
+    paddingBottom: 28, 
+    maxWidth: 720, 
+    width: '100%', 
+    alignSelf: 'center' 
+  },
+
+  titulo: { 
+    fontFamily: 'Georgia', 
+    fontWeight: 'bold', 
+    fontSize: 34, 
+    color: colores.navy, 
+    textAlign: 'center', 
+    marginVertical: 14 
+  },
+
+  tarjeta: { 
+    flexDirection: 'row', 
+    borderWidth: 2, 
+    borderRadius: 10, 
+    overflow: 'hidden', 
+    backgroundColor: '#FFFDF7', 
+    marginBottom: 22, 
+    shadowColor: '#000', 
+    shadowOffset: { 
+      width: 0, 
+      height: 3 
+      }, 
+    shadowOpacity: 0.08, 
+    shadowRadius: 6, 
+    elevation: 2 
+    },
+    
+  tarjetaAngosta: { 
+    flexWrap: 'wrap' 
+  },
+
+  panelHorario: { 
+    width: '23%', 
+    paddingVertical: 18, 
+    paddingHorizontal: 10, 
+    alignItems: 'center', 
+    justifyContent: 'center' 
+  },
+
+  panelHorarioAngosto: { 
+    width: '23%', 
+    paddingHorizontal: 4 
+  },
+
+  hora: { 
+    fontFamily: Platform.select({ 
+      ios: 'Avenir Next', 
+      android: 'sans-serif', 
+      default: 'Arial' 
+      }), 
+    fontWeight: '600', 
+    fontSize: 24, color: colores.navy 
+    },
+
+  lineaHorario: { 
+    width: 44, 
+    height: 2, 
+    borderRadius: 1, 
+    marginVertical: 10 
+  },
+
+  dia: { 
+    fontSize: 12, 
+    letterSpacing: 1, 
+    fontWeight: '600', 
+    color: '#66758B', 
+    textAlign: 'center' 
+  },
+
+  panelDatos: { 
+    flex: 1, 
+    minWidth: 0, 
+    paddingVertical: 18, 
+    paddingHorizontal: 16, 
+    justifyContent: 'center', 
+    alignItems: 'flex-start' 
+  },
+
+  materia: { 
+    fontFamily: 'Georgia', 
+    fontWeight: 'bold', 
+    fontSize: 21, 
+    color: colores.navy, 
+    textAlign: 'left' 
+  },
+
+  docente: { 
+    fontSize: 14, 
+    color: '#66758B', 
+    marginTop: 4, 
+    textAlign: 'left' 
+  },
+
+  panelEstado: { 
+    width: 'auto', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    paddingHorizontal: 8, 
+    marginLeft: 12 
+  },
+
+  panelEstadoAngosto: { 
+    width: '100%', 
+    paddingVertical: 10, 
+    marginLeft: 0 
+  },
+
+  etiqueta: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    alignSelf: 'center', 
+    borderRadius: 8, 
+    paddingHorizontal: 12, 
+    paddingVertical: 6 
+  },
+
+  textoEtiqueta: { 
+    fontSize: 13, 
+    fontWeight: '700', 
+    marginLeft: 6 
+  },
+
+  vacio: { 
+    textAlign: 'center', 
+    color: '#66758B', 
+    fontSize: 15, 
+    marginTop: 8, 
+    marginBottom: 16 
+  },
+
+  separador: { 
+    height: 1.5, 
+    backgroundColor: colores.borde, 
+    marginVertical: 24 
+  },
+
+  instruccion: { 
+    textAlign: 'center', 
+    color: '#66758B', 
+    fontSize: 14, 
+    marginBottom: 12 
+  },
+
+  botonAbrir: { 
+    backgroundColor: colores.navy, 
+    borderRadius: 10, 
+    minHeight: 58, 
+    justifyContent: 'center', 
+    alignItems: 'center' 
+  },
+
+  botonRotar: { 
+    backgroundColor: colores.azulReal, 
+    borderRadius: 10, minHeight: 48, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginTop: 16, 
+    paddingHorizontal: 20 
+  },
+
+  botonDeshabilitado: { 
+    opacity: 0.6 
+  },
+
+  botonNoDisponible: { 
+    backgroundColor: colores.textoSuave 
+  },
+
+  textoBoton: { 
+    color: colores.blanco, 
+    fontSize: 17, 
+    fontWeight: '700' 
+  },
+
+  panelQR: { 
+    alignItems: 'center', 
+    marginTop: 24, 
+    padding: 16, 
+    borderWidth: 2, 
+    borderColor: colores.borde, 
+    borderRadius: 10, 
+    backgroundColor: '#FFFDF7' 
+  },
+
+  subtituloQR: { 
+    fontFamily: 'Georgia', 
+    fontWeight: 'bold', 
+    fontSize: 24, 
+    color: colores.navy, 
+    marginBottom: 14 
+  },
+
+  datosClaseQR: { 
+    fontFamily: 'Georgia', 
+    fontWeight: 'bold', 
+    fontSize: 21, 
+    color: colores.navy, 
+    textAlign: 'center' 
+  },
+
+  detalleClaseQR: { 
+    color: '#66758B', 
+    fontSize: 14, 
+    textAlign: 'center', 
+    marginTop: 3 
+  },
+
+  qrContenedor: { 
+    backgroundColor: colores.blanco, 
+    padding: 16, 
+    borderRadius: 10 
+  },
+
+  codigoClase: { 
+    fontSize: 28, 
+    fontWeight: 'bold', 
+    letterSpacing: 5, 
+    color: colores.navy, 
+    marginTop: 16 
+  },
+
+  textoSecundario: { 
+    fontSize: 14, 
+    color: '#66758B', 
+    textAlign: 'center', 
+    marginTop: 12 
+  },
+
+  cargando: { 
+    marginTop: 20 
+  },
+
+  mensaje: { 
+    marginTop: 16, 
+    color: '#B4232C', 
+    fontSize: 14, 
+    textAlign: 'center' 
+  },
+
+  pie: { 
+    backgroundColor: colores.navy, 
+    width: '100%', marginTop: 'auto', 
+    paddingVertical: 26, 
+    paddingHorizontal: 20, 
+    alignItems: 'center', 
+    justifyContent: 'center' 
+  },
+
+  textoPie: { 
+    color: colores.blanco, 
+    fontSize: 15, 
+    textAlign: 'center' 
+  }
+  
 });

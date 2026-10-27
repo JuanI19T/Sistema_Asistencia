@@ -24,10 +24,40 @@ const INTERVALO_ASISTENCIA = 2000;
 const INTERVALO_RECONCILIACION = 30000;
 
 const ESTADOS = {
-  asistida: { etiqueta: 'Asistida', borde: '#76BC91', fondoHorario: '#E6F3E7', fondo: '#DFF1E1', texto: '#176C3B', Icono: IconoTilde },
-  en_curso: { etiqueta: 'En curso', borde: '#D96B70', fondoHorario: '#FBE7E7', fondo: '#F8DCDD', texto: '#B4232C', Icono: IconoReloj },
-  pendiente: { etiqueta: 'Pendiente', borde: '#B8CCE8', fondoHorario: '#E8F0FA', fondo: '#DCE9FA', texto: '#17307A', Icono: IconoReloj },
-  vencida: { etiqueta: 'Vencida', borde: '#525252', fondoHorario: '#E8E8E8', fondo: '#E2E2E2', texto: '#333333', Icono: IconoAviso }
+
+  asistida: { 
+    etiqueta: 'Asistida', 
+    borde: '#76BC91', 
+    fondoHorario: '#E6F3E7', 
+    fondo: '#DFF1E1', 
+    texto: '#176C3B', 
+    Icono: IconoTilde 
+  },
+
+  en_curso: { 
+    etiqueta: 'En curso', 
+    borde: '#D96B70', 
+    fondoHorario: '#FBE7E7', 
+    fondo: '#F8DCDD', 
+    texto: '#B4232C', 
+    Icono: IconoReloj },
+
+  pendiente: { 
+    etiqueta: 'Pendiente', 
+    borde: '#B8CCE8', 
+    fondoHorario: '#E8F0FA', 
+    fondo: '#DCE9FA', 
+    texto: '#17307A', 
+    Icono: IconoReloj },
+
+  vencida: { 
+    etiqueta: 'Vencida', 
+    borde: '#525252', 
+    fondoHorario: '#E8E8E8', 
+    fondo: '#E2E2E2', 
+    texto: '#333333', 
+    Icono: IconoAviso }
+
 };
 
 function recortarHora(horario) {
@@ -543,16 +573,19 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
 }
 
 const styles = StyleSheet.create({
+
   pantalla: {
     flex: 1,
     backgroundColor: colores.crema
   },
+
   contenedor: {
     padding: 20,
     maxWidth: 640,
     width: '100%',
     alignSelf: 'center'
   },
+
   titulo: {
     fontFamily: 'Georgia',
     fontSize: 34,
@@ -561,6 +594,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 14
   },
+
   tarjeta: {
     flexDirection: 'row',
     borderWidth: 2,
@@ -574,6 +608,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 2
   },
+
   panelHorario: {
     width: '23%',
     paddingVertical: 18,
@@ -581,17 +616,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+
   hora: {
-    fontFamily: Platform.select({ ios: 'Avenir Next', android: 'sans-serif', default: 'Arial' }),
+    fontFamily: Platform.select({ 
+      ios: 'Avenir Next', 
+      android: 'sans-serif', 
+      default: 'Arial' 
+      }),
     fontWeight: '600',
     fontSize: 24,
     color: colores.navy
   },
+
   lineaHorario: {
     width: 44,
     height: 2,
     marginVertical: 10
   },
+
   dia: {
     fontSize: 12,
     letterSpacing: 1,
@@ -599,6 +641,7 @@ const styles = StyleSheet.create({
     color: '#66758B',
     textAlign: 'center'
   },
+
   panelDatos: {
     flex: 1,
     minWidth: 0,
@@ -607,28 +650,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start'
   },
+
   materia: {
     fontFamily: 'Georgia',
     fontWeight: 'bold',
     fontSize: 21,
     color: colores.navy
   },
+
   docente: {
     fontSize: 14,
     color: '#66758B',
     marginTop: 4
   },
+
   resumenAsistencia: {
     fontSize: 12,
     color: '#66758B',
     marginTop: 8
   },
+
   panelEstado: {
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 8,
     marginLeft: 12
   },
+
   etiqueta: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -636,11 +684,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6
   },
+
   textoEtiqueta: {
     fontSize: 13,
     fontWeight: '700',
     marginLeft: 6
   },
+  
   fila: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -649,21 +699,26 @@ const styles = StyleSheet.create({
     borderColor: '#eaeef2',
     paddingVertical: 10
   },
+
   filaTexto: {
     flex: 1,
     marginRight: 8
   },
+
   filaEstado: {
     alignItems: 'flex-end'
   },
+
   textoPrincipal: {
     fontSize: 16,
     color: '#24292f'
   },
+
   textoSecundario: {
     fontSize: 13,
     color: '#57606a'
   },
+
   boton: {
     backgroundColor: '#1f6feb',
     borderRadius: 8,
@@ -671,15 +726,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 16
   },
+
   botonGuardar: {
     backgroundColor: '#2da44e'
   },
+
   botonCerrar: {
     backgroundColor: '#cf222e'
   },
+
   botonDeshabilitado: {
     opacity: 0.6
   },
+
   botonVolver: {
     backgroundColor: '#6e7781',
     borderRadius: 8,
@@ -687,17 +746,21 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginRight: 8
   },
+
   textoBoton: {
     color: '#ffffff',
     fontSize: 16,
     fontWeight: '600'
   },
+
   cargando: {
     marginTop: 20
   },
+
   mensaje: {
     marginTop: 16,
     color: '#cf222e',
     fontSize: 14
   }
+
 });
