@@ -46,11 +46,13 @@ router.get('/', async (req, res) => {
     }
 
     const [filas] = await pool.query(
-      `SELECT a.id_asistencia, a.presente, a.verificada, a.metodo_registro, a.registrado_en,
+      `SELECT a.id_asistencia, a.presente, a.verificada, a.metodo_registro,
+              DATE_FORMAT(a.registrado_en, '%H:%i') AS hora_registro,
               al.id_alumno, al.apellido_alumno, al.nombre_alumno, al.legajo_alumno, al.dni,
-              c.id_clase, c.fecha_clase, c.estado, c.abierta_en,
+              c.id_clase, c.fecha_clase, c.estado,
+              DATE_FORMAT(c.abierta_en, '%H:%i') AS hora_apertura,
               d.id_dictado, m.nombre_materia, d.division, m.anio_materia, d.grupo, d.dia, d.horario, d.horario_fin,
-              p.apellido_profesor
+              p.nombre_profesor, p.apellido_profesor
        FROM asistencia a
        JOIN alumno al ON al.id_alumno = a.id_alumno
        JOIN clase c ON c.id_clase = a.id_clase

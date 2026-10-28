@@ -181,6 +181,7 @@ export async function obtenerClasesPreceptorHoy(idPreceptor) {
           anio_materia: dictado.anio_materia,
           anio_lectivo: dictado.anio_lectivo,
           nombre_materia: dictado.nombre_materia,
+          nombre_profesor: dictado.nombre_profesor,
           apellido_profesor: dictado.apellido_profesor,
           total_alumnos: 0,
           total_verificados: 0,
