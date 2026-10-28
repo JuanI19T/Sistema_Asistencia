@@ -77,7 +77,10 @@ function formatearFechaHora(valor) {
 }
 
 function nombreProfesor(clase) {
-  return [clase?.nombre_profesor, clase?.apellido_profesor].filter(Boolean).join(' ') || 'Sin docente';
+  const nombre = clase?.nombre_profesor || '';
+  const apellido = clase?.apellido_profesor || '';
+  if (apellido && nombre) return `${apellido}, ${nombre}`;
+  return apellido || nombre || 'Sin docente';
 }
 
 function etiquetaMetodo(metodo) {
@@ -103,6 +106,33 @@ function datosDictado(clase) {
   return `${anio} · ${division} · ${grupo}`;
 }
 
+function Interruptor({ value, onValueChange, disabled }) {
+  if (Platform.OS !== 'web') {
+    return (
+      <Switch
+        value={value}
+        onValueChange={onValueChange}
+        disabled={disabled}
+        trackColor={{ false: '#B9B9B9', true: colores.amarillo }}
+        thumbColor="#FFFFFF"
+        ios_backgroundColor="#B9B9B9"
+      />
+    );
+  }
+
+  return (
+    <TouchableOpacity
+      style={[styles.interruptorWeb, value && styles.interruptorWebActivo, disabled && styles.interruptorWebDeshabilitado]}
+      onPress={() => !disabled && onValueChange(!value)}
+      activeOpacity={0.8}
+      accessibilityRole="switch"
+      accessibilityState={{ checked: value, disabled }}
+    >
+      <View style={styles.circuloInterruptorWeb} />
+    </TouchableOpacity>
+  );
+}
+
 function combinarEstados(alumnos, asistencia) {
   const estados = {};
 
@@ -123,7 +153,7 @@ function combinarEstados(alumnos, asistencia) {
         verificada: item.verificada,
         metodo_registro: item.metodo_registro,
         registrado_en: item.hora_registro || item.registrado_en,
-        dni: item.dni
+        dni: item.dni || estados[item.id_alumno]?.dni
       };
     }
   });
@@ -552,7 +582,7 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
         ) : (
           <>
             <TouchableOpacity style={styles.botonVolver} onPress={volver}>
-              <Text style={styles.textoBotonVolver}>&lt;-- Volver</Text>
+              <Text style={styles.textoBotonVolver}>← Volver</Text>
             </TouchableOpacity>
 
             <View style={styles.resumenClase}>
@@ -580,7 +610,7 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
               </View>
             </View>
 
-            <Text style={styles.subtituloAlumnos}>Asistencia de alumnos</Text>
+            <Text style={styles.subtituloAlumnos}>Asistencia de Alumnos</Text>
 
             {cargando ? (
               <ActivityIndicator size="large" color="#1f6feb" style={styles.cargando} />
@@ -604,7 +634,7 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
                   <Text style={styles.estadoAlumno}>
                     {estados[alumno.id_alumno]?.presente === 1 ? 'Presente' : 'Ausente'}
                   </Text>
-                  <Switch
+                  <Interruptor
                     value={estados[alumno.id_alumno]?.presente === 1}
                     onValueChange={(valor) => cambiar(alumno.id_alumno, 'presente', valor)}
                     disabled={cargando || !editable}
@@ -613,10 +643,10 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
                     <>
                       <Text style={styles.estadoAlumno}>
                         {estados[alumno.id_alumno]?.verificada === 1
-                          ? 'Verificado en persona'
-                          : 'No verificado'}
+                          ? 'Verificado'
+                          : 'No Verificado'}
                       </Text>
-                      <Switch
+                      <Interruptor
                         value={estados[alumno.id_alumno]?.verificada === 1}
                         onValueChange={(valor) => cambiar(alumno.id_alumno, 'verificada', valor)}
                         disabled={cargando || !editable}
@@ -628,23 +658,22 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
             ))}
 
             {editable ? (
-              <TouchableOpacity
-                style={[styles.boton, styles.botonGuardar, cargando && styles.botonDeshabilitado]}
-                onPress={cargando ? undefined : guardar}
-                accessibilityState={{ disabled: cargando }}
-              >
-                <Text style={styles.textoBoton}>Guardar asistencia</Text>
-              </TouchableOpacity>
-            ) : null}
-
-            {editable ? (
-              <TouchableOpacity
-                style={[styles.boton, styles.botonCerrar, cargando && styles.botonDeshabilitado]}
-                onPress={cargando ? undefined : cerrar}
-                accessibilityState={{ disabled: cargando }}
-              >
-                <Text style={styles.textoBoton}>Cerrar clase</Text>
-              </TouchableOpacity>
+              <View style={[styles.filaBotonesAccion, esPantallaAngosta && styles.filaBotonesAccionVertical]}>
+                <TouchableOpacity
+                  style={[styles.botonAccion, styles.botonGuardar, cargando && styles.botonDeshabilitado]}
+                  onPress={cargando ? undefined : guardar}
+                  accessibilityState={{ disabled: cargando }}
+                >
+                  <Text style={styles.textoBotonAccion}>Guardar Asistencia</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.botonAccion, styles.botonCerrar, cargando && styles.botonDeshabilitado]}
+                  onPress={cargando ? undefined : cerrar}
+                  accessibilityState={{ disabled: cargando }}
+                >
+                  <Text style={styles.textoBotonAccionCerrar}>Cerrar Clase</Text>
+                </TouchableOpacity>
+              </View>
             ) : null}
           </>
         )}
@@ -818,7 +847,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#FFFDF7',
-    padding: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
     marginBottom: 1
   },
 
@@ -873,6 +903,40 @@ const styles = StyleSheet.create({
     marginBottom: 3
   },
 
+  interruptorWeb: {
+    width: 38,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: '#B9B9B9',
+    padding: 0,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    marginBottom: 2
+  },
+
+  interruptorWebActivo: {
+    backgroundColor: colores.amarillo,
+    alignItems: 'flex-end'
+  },
+
+  circuloInterruptorWeb: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: colores.blanco,
+    borderWidth: 1,
+    borderColor: '#D2CEC5',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.18,
+    shadowRadius: 2,
+    elevation: 2
+  },
+
+  interruptorWebDeshabilitado: {
+    opacity: 0.65
+  },
+
   boton: {
     backgroundColor: '#1f6feb',
     borderRadius: 8,
@@ -882,15 +946,45 @@ const styles = StyleSheet.create({
   },
 
   botonGuardar: {
-    backgroundColor: '#2da44e'
+    backgroundColor: colores.navy
   },
 
   botonCerrar: {
-    backgroundColor: '#cf222e'
+    backgroundColor: colores.amarillo
   },
 
   botonDeshabilitado: {
     opacity: 0.6
+  },
+
+  filaBotonesAccion: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 20
+  },
+
+  filaBotonesAccionVertical: {
+    flexDirection: 'column'
+  },
+
+  botonAccion: {
+    flex: 1,
+    minHeight: 54,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  textoBotonAccion: {
+    color: colores.blanco,
+    fontSize: 16,
+    fontWeight: '700'
+  },
+
+  textoBotonAccionCerrar: {
+    color: colores.navy,
+    fontSize: 16,
+    fontWeight: '700'
   },
 
   botonVolver: {
@@ -906,7 +1000,7 @@ const styles = StyleSheet.create({
 
   textoBotonVolver: {
     color: colores.navy,
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '700'
   },
 
