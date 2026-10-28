@@ -211,14 +211,15 @@ router.post('/', requiereRol(['profesor']), async (req, res) => {
       await pool.query(
         `UPDATE clase
           SET estado = 'en_curso', token = ?, token_valido_hasta = ?,
-              codigo = ?, abierta_por = ?, abierta_en = CURRENT_TIMESTAMP
+              codigo = ?, abierta_por = ?,
+              abierta_en = IF(abierta_en IS NULL, CURRENT_TIMESTAMP, abierta_en)
          WHERE id_clase = ?`,
         [tokenNuevo.token, tokenNuevo.token_valido_hasta, codigoNuevo, abiertaPor, idClase]
       );
     } else {
       const [resultado] = await pool.query(
          `INSERT INTO clase (id_dictado, fecha_clase, estado, token, token_valido_hasta, codigo, abierta_por, abierta_en)
-          VALUES (?, ?, 'en_curso', ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
+           VALUES (?, ?, 'en_curso', ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
         [id_dictado, fecha, tokenNuevo.token, tokenNuevo.token_valido_hasta, codigoNuevo, abiertaPor]
       );
       idClase = resultado.insertId;
@@ -362,7 +363,7 @@ async function registrarPresencia(idClase, idDictado, idAlumno, metodoRegistro) 
     }
 
     await pool.query(
-      'UPDATE asistencia SET presente = 1, verificada = 0, metodo_registro = ?, registrado_en = CURRENT_TIMESTAMP WHERE id_asistencia = ?',
+      'UPDATE asistencia SET presente = 1, verificada = 0, metodo_registro = ?, registrado_en = DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 3 HOUR) WHERE id_asistencia = ?',
       [metodoRegistro, existentes[0].id_asistencia]
     );
     publicarEvento({
@@ -381,7 +382,7 @@ async function registrarPresencia(idClase, idDictado, idAlumno, metodoRegistro) 
   }
 
   const [resultado] = await pool.query(
-    'INSERT INTO asistencia (id_clase, id_alumno, presente, verificada, metodo_registro, registrado_en) VALUES (?, ?, 1, 0, ?, CURRENT_TIMESTAMP)',
+    'INSERT INTO asistencia (id_clase, id_alumno, presente, verificada, metodo_registro, registrado_en) VALUES (?, ?, 1, 0, ?, DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 3 HOUR))',
     [idClase, idAlumno, metodoRegistro]
   );
 

@@ -47,10 +47,10 @@ router.get('/', async (req, res) => {
 
     const [filas] = await pool.query(
       `SELECT a.id_asistencia, a.presente, a.verificada, a.metodo_registro,
-              DATE_FORMAT(a.registrado_en, '%H:%i') AS hora_registro,
+              DATE_FORMAT(DATE_SUB(a.registrado_en, INTERVAL 3 HOUR), '%H:%i') AS hora_registro,
               al.id_alumno, al.apellido_alumno, al.nombre_alumno, al.legajo_alumno, al.dni,
               c.id_clase, c.fecha_clase, c.estado,
-              DATE_FORMAT(c.abierta_en, '%H:%i') AS hora_apertura,
+              DATE_FORMAT(DATE_SUB(c.abierta_en, INTERVAL 3 HOUR), '%H:%i') AS hora_apertura,
               d.id_dictado, m.nombre_materia, d.division, m.anio_materia, d.grupo, d.dia, d.horario, d.horario_fin,
               p.nombre_profesor, p.apellido_profesor
        FROM asistencia a

@@ -142,7 +142,7 @@ router.get('/profesor/hoy', requiereRol(['profesor']), async (req, res) => {
       `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
               m.nombre_materia, p.apellido_profesor,
                c.id_clase, c.estado AS estado_clase,
-               DATE_FORMAT(c.abierta_en, '%H:%i') AS hora_apertura,
+               DATE_FORMAT(DATE_SUB(c.abierta_en, INTERVAL 3 HOUR), '%H:%i') AS hora_apertura,
               EXISTS (SELECT 1 FROM asistencia a WHERE a.id_clase = c.id_clase) AS tiene_asistencia
        FROM dictado d
        JOIN materia m ON m.id_materia = d.id_materia
@@ -197,7 +197,7 @@ router.get('/preceptor/hoy', requiereRol(['preceptor']), async (req, res) => {
        `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
                   m.nombre_materia, m.anio_materia, p.nombre_profesor, p.apellido_profesor,
                c.id_clase, c.estado AS estado_clase,
-               DATE_FORMAT(c.abierta_en, '%H:%i') AS hora_apertura,
+                DATE_FORMAT(DATE_SUB(c.abierta_en, INTERVAL 3 HOUR), '%H:%i') AS hora_apertura,
               COUNT(DISTINCT i.id_alumno) AS total_alumnos,
               COUNT(DISTINCT CASE WHEN a.verificada = 1 THEN a.id_alumno END) AS total_verificados
        FROM dictado d
@@ -292,7 +292,7 @@ router.get('/:id/alumnos', async (req, res) => {
     }
 
     const [filas] = await pool.query(
-      `SELECT al.id_alumno, al.nombre_alumno, al.apellido_alumno, al.legajo_alumno
+      `SELECT al.id_alumno, al.nombre_alumno, al.apellido_alumno, al.legajo_alumno, al.dni
        FROM inscribe i
        JOIN alumno al ON al.id_alumno = i.id_alumno
        WHERE i.id_dictado = ?
