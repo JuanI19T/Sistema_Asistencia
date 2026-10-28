@@ -67,8 +67,17 @@ function recortarHora(horario) {
 
 function formatearFechaHora(valor) {
   if (!valor) return 'Sin registro';
+  if (valor instanceof Date) {
+    const horas = String(valor.getHours()).padStart(2, '0');
+    const minutos = String(valor.getMinutes()).padStart(2, '0');
+    return `${horas}:${minutos}`;
+  }
   const texto = String(valor).replace('T', ' ');
   return texto.length >= 16 ? texto.slice(11, 16) : texto;
+}
+
+function nombreProfesor(clase) {
+  return [clase?.nombre_profesor, clase?.apellido_profesor].filter(Boolean).join(' ') || 'Sin docente';
 }
 
 function etiquetaMetodo(metodo) {
@@ -101,8 +110,9 @@ function combinarEstados(alumnos, asistencia) {
     estados[alumno.id_alumno] = {
       presente: 0,
       verificada: 0,
-      metodo_registro: null,
-      registrado_en: null
+        metodo_registro: null,
+      registrado_en: null,
+      dni: alumno.dni
     };
   });
 
@@ -112,7 +122,8 @@ function combinarEstados(alumnos, asistencia) {
         presente: item.presente,
         verificada: item.verificada,
         metodo_registro: item.metodo_registro,
-        registrado_en: item.registrado_en
+        registrado_en: item.hora_registro || item.registrado_en,
+        dni: item.dni
       };
     }
   });
@@ -243,11 +254,15 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
             presente: item.presente,
             verificada: item.verificada,
             metodo_registro: item.metodo_registro,
-            registrado_en: item.registrado_en
+            registrado_en: item.hora_registro || item.registrado_en,
+            dni: item.dni || siguientes[item.id_alumno].dni
           };
           if (
             siguientes[item.id_alumno].presente !== estado.presente ||
-            siguientes[item.id_alumno].verificada !== estado.verificada
+            siguientes[item.id_alumno].verificada !== estado.verificada ||
+            siguientes[item.id_alumno].metodo_registro !== estado.metodo_registro ||
+            siguientes[item.id_alumno].registrado_en !== estado.registrado_en ||
+            siguientes[item.id_alumno].dni !== estado.dni
           ) {
             siguientes[item.id_alumno] = estado;
             cambio = true;
@@ -543,7 +558,7 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
             <View style={styles.resumenClase}>
               <Text style={styles.resumenMateria}>{seleccionada.nombre_materia}</Text>
               <Text style={styles.resumenDato}>
-                {seleccionada.apellido_profesor ? `Profesor: ${seleccionada.apellido_profesor}` : 'Profesor: Sin docente'}
+                Profesor: {nombreProfesor(seleccionada)}
               </Text>
               <Text style={styles.resumenDato}>
                 Horario: {recortarHora(seleccionada.horario)} - {recortarHora(seleccionada.horario_fin)}
@@ -577,10 +592,12 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
                   <Text style={styles.nombreAlumno}>
                     {alumno.apellido_alumno}, {alumno.nombre_alumno}
                   </Text>
-                    <Text style={styles.datoAlumno}>Legajo: {alumno.legajo_alumno} · DNI: {alumno.dni}</Text>
+                    <Text style={styles.datoAlumno}>
+                      Legajo: {alumno.legajo_alumno} · DNI: {alumno.dni || estados[alumno.id_alumno]?.dni || 'Sin dato'}
+                    </Text>
                   <Text style={styles.datoAlumno}>
                     Registro: {formatearFechaHora(estados[alumno.id_alumno]?.registrado_en)}
-                    {' · '}{etiquetaMetodo(estados[alumno.id_alumno]?.metodo_registro)}
+                    {' · Método: '}{etiquetaMetodo(estados[alumno.id_alumno]?.metodo_registro)}
                   </Text>
                 </View>
                 <View style={styles.filaEstado}>
