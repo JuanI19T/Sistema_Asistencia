@@ -46,6 +46,18 @@ function diaDeHoy() {
   return DIAS[ahoraEnArgentina().getUTCDay()];
 }
 
+async function cerrarClasesVencidas() {
+  await pool.query(
+    `UPDATE clase c
+     JOIN dictado d ON d.id_dictado = c.id_dictado
+     SET c.estado = 'cerrada'
+     WHERE c.fecha_clase = ? AND c.estado = 'en_curso'
+       AND d.horario_fin IS NOT NULL
+       AND TIME_TO_SEC(d.horario_fin) / 60 <= ?`,
+    [fechaDeHoy(), minutosAhora()]
+  );
+}
+
 // Calcula el estado de la clase de hoy para el alumno.
 // Prioridad: asistencia registrada > clase en curso > vencida > pendiente.
 function calcularEstado(fila, minutosActual) {
@@ -189,6 +201,7 @@ router.get('/profesor/hoy', requiereRol(['profesor']), async (req, res) => {
 // GET /api/dictados/preceptor/hoy - clases del preceptor con estado de asistencia
 router.get('/preceptor/hoy', requiereRol(['preceptor']), async (req, res) => {
   try {
+    await cerrarClasesVencidas();
     const hoy = fechaDeHoy();
     const diaHoy = diaDeHoy();
     const minutosActual = minutosAhora();

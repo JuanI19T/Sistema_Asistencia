@@ -7,13 +7,16 @@ import {
   StyleSheet,
   Switch,
   Text,
+  TextInput,
   TouchableOpacity,
   useWindowDimensions,
   View
 } from 'react-native';
 import {
   cambiarEstadoClase,
+  fechaDeHoy,
   guardarAsistencia,
+  abrirClasePreceptor,
   obtenerAlumnosDictado,
   obtenerAsistencia,
   obtenerClasesPreceptorHoy
@@ -26,8 +29,8 @@ const INTERVALO_RECONCILIACION = 30000;
 
 const ESTADOS = {
 
-  asistida: { 
-    etiqueta: 'Asistida', 
+  asistida: {
+    etiqueta: 'Verificada', 
     borde: '#76BC91', 
     fondoHorario: '#E6F3E7', 
     fondo: '#DFF1E1', 
@@ -52,7 +55,7 @@ const ESTADOS = {
     Icono: IconoReloj },
 
   vencida: { 
-    etiqueta: 'Vencida', 
+    etiqueta: 'No Verificada', 
     borde: '#525252', 
     fondoHorario: '#E8E8E8', 
     fondo: '#E2E2E2', 
@@ -68,12 +71,22 @@ function recortarHora(horario) {
 function formatearFechaHora(valor) {
   if (!valor) return 'Sin registro';
   if (valor instanceof Date) {
-    const horas = String(valor.getHours()).padStart(2, '0');
-    const minutos = String(valor.getMinutes()).padStart(2, '0');
-    return `${horas}:${minutos}`;
+    return formatearMinutos(valor.getUTCHours() * 60 + valor.getUTCMinutes() - 180);
   }
-  const texto = String(valor).replace('T', ' ');
-  return texto.length >= 16 ? texto.slice(11, 16) : texto;
+  const texto = String(valor);
+  if (/^\d{2}:\d{2}$/.test(texto)) return texto;
+  const partes = texto.match(/^\d{4}-\d{2}-\d{2}[T ](\d{2}):(\d{2})/);
+  if (partes) {
+    return formatearMinutos(Number(partes[1]) * 60 + Number(partes[2]) - 180);
+  }
+  return texto;
+}
+
+function formatearMinutos(total) {
+  const normalizado = (total + 1440) % 1440;
+  const horas = String(Math.floor(normalizado / 60)).padStart(2, '0');
+  const minutos = String(normalizado % 60).padStart(2, '0');
+  return `${horas}:${minutos}`;
 }
 
 function nombreProfesor(clase) {
@@ -171,6 +184,10 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
   const [datosClaseCargados, setDatosClaseCargados] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [mensaje, setMensaje] = useState(null);
+  const [claseParaAbrir, setClaseParaAbrir] = useState(null);
+  const [motivoApertura, setMotivoApertura] = useState('profesor_retrasado');
+  const [detalleMotivo, setDetalleMotivo] = useState('');
+  const [profesorLlegoEn, setProfesorLlegoEn] = useState('');
   const claseSeleccionadaRef = useRef(null);
   const cargaClaseRef = useRef(0);
   const peticionAsistenciaRef = useRef(false);
@@ -216,9 +233,13 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
 
   const elegirClase = async (clase) => {
     if (!clase.id_clase) {
-      setMensaje(clase.estado === 'en_curso'
-        ? 'La clase todavía no fue abierta por el profesor.'
-        : 'La asistencia solo puede verificarse durante la clase.');
+      if (clase.estado === 'en_curso') {
+        setClaseParaAbrir(clase);
+        setSeleccionada(clase);
+        setMensaje(null);
+      } else {
+        setMensaje('La asistencia solo puede verificarse durante la clase.');
+      }
       return;
     }
 
@@ -247,11 +268,40 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
 
       setAlumnos(lista);
       setEstados(combinarEstados(lista, asistencia));
+      const estadoAsistencia = asistencia.find((item) => item.estado)?.estado;
+      if (estadoAsistencia) {
+        setSeleccionada((actual) => (
+          actual?.id_clase === clase.id_clase
+            ? { ...actual, estado: estadoAsistencia }
+            : actual
+        ));
+      }
       setDatosClaseCargados(true);
     } catch (error) {
       if (idCarga === cargaClaseRef.current) setMensaje(error.message);
     } finally {
       if (idCarga === cargaClaseRef.current) setCargando(false);
+    }
+  };
+
+  const abrirManual = async () => {
+    if (!claseParaAbrir || cargando) return;
+    setCargando(true);
+    setMensaje(null);
+    try {
+      const fecha = fechaDeHoy();
+      const clase = await abrirClasePreceptor(claseParaAbrir.id_dictado, fecha, {
+        motivo_apertura: motivoApertura,
+        detalle_motivo: detalleMotivo,
+        profesor_llego_en: profesorLlegoEn || null
+      });
+      setClaseParaAbrir(null);
+      await cargarClases();
+      await elegirClase({ ...claseParaAbrir, ...clase, estado: 'en_curso' });
+    } catch (error) {
+      setMensaje(error.message);
+    } finally {
+      setCargando(false);
     }
   };
 
@@ -549,12 +599,12 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
                   onPress={() => elegirClase(clase)}
                   activeOpacity={0.85}
                 >
-                  <View style={[styles.panelHorario, esPantallaAngosta && styles.panelHorarioAngosto, { backgroundColor: estado.fondoHorario }]}>
+                  <View style={[styles.panelHorario, { backgroundColor: estado.fondoHorario }]}> 
                     <Text style={styles.hora}>{recortarHora(clase.horario)}</Text>
                     <View style={[styles.lineaHorario, { backgroundColor: estado.borde }]} />
                     <Text style={styles.dia}>{clase.dia}</Text>
                   </View>
-                  <View style={[styles.panelDatos, esPantallaAngosta && styles.panelDatosAngosto]}>
+                  <View style={styles.panelDatos}>
                     <Text style={styles.materia}>{clase.nombre_materia}</Text>
                     <Text style={styles.docente}>
                       {clase.apellido_profesor ? `Prof. ${clase.apellido_profesor}` : 'Sin docente'}
@@ -594,7 +644,7 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
                 Horario: {recortarHora(seleccionada.horario)} - {recortarHora(seleccionada.horario_fin)}
               </Text>
               <Text style={styles.resumenDato}>{datosDictado(seleccionada)}</Text>
-              <View style={styles.metricasClase}>
+              {seleccionada.id_clase ? <View style={styles.metricasClase}>
                 <View style={styles.metrica}>
                   <Text style={styles.valorMetrica}>{formatearFechaHora(seleccionada.abierta_en)}</Text>
                   <Text style={styles.etiquetaMetrica}>Apertura</Text>
@@ -607,10 +657,56 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
                   <Text style={styles.valorMetrica}>{verificados}/{alumnos.length}</Text>
                   <Text style={styles.etiquetaMetrica}>Verificados</Text>
                 </View>
-              </View>
+              </View> : null}
             </View>
 
-            <Text style={styles.subtituloAlumnos}>Asistencia de Alumnos</Text>
+            {!seleccionada.id_clase ? (
+              <View style={styles.formularioApertura}>
+                <Text style={styles.subtituloFormulario}>Abrir clase manualmente</Text>
+                <Text style={styles.resumenDato}>
+                  La clase todavía no fue abierta. La apertura del preceptor no generará QR ni código.
+                </Text>
+                <Text style={styles.instruccionFormulario}>
+                  La asistencia se tomará únicamente de forma manual.
+                </Text>
+                {[
+                  ['profesor_retrasado', 'El profesor está retrasado y necesitamos tomar asistencia.'],
+                  ['profesor_sin_acceso', 'El profesor no tiene forma de abrir la clase desde su cuenta.'],
+                  ['profesor_sin_app', 'El profesor todavía no tiene la app para abrir la clase.'],
+                  ['otro', 'Otro motivo']
+                ].map(([valor, texto]) => (
+                  <TouchableOpacity
+                    key={valor}
+                    style={[styles.opcionMotivo, motivoApertura === valor && styles.opcionMotivoActiva]}
+                    onPress={() => setMotivoApertura(valor)}
+                  >
+                    <Text style={styles.textoOpcionMotivo}>{texto}</Text>
+                  </TouchableOpacity>
+                ))}
+                {motivoApertura === 'otro' ? (
+                  <TextInput
+                    style={styles.inputMotivo}
+                    value={detalleMotivo}
+                    onChangeText={setDetalleMotivo}
+                    placeholder="Escribí el motivo"
+                    multiline
+                  />
+                ) : null}
+                <TextInput
+                  style={styles.inputMotivo}
+                  value={profesorLlegoEn}
+                  onChangeText={setProfesorLlegoEn}
+                  placeholder="Hora de llegada del profesor (opcional, HH:mm)"
+                />
+                <TouchableOpacity style={styles.botonAbrirManual} onPress={abrirManual} disabled={cargando}>
+                  <Text style={styles.textoBotonAccion}>Abrir y tomar asistencia manual</Text>
+                </TouchableOpacity>
+              </View>
+            ) : null}
+
+            {seleccionada.id_clase ? (
+              <>
+                <Text style={styles.subtituloAlumnos}>Asistencia de Alumnos</Text>
 
             {cargando ? (
               <ActivityIndicator size="large" color="#1f6feb" style={styles.cargando} />
@@ -639,20 +735,18 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
                     onValueChange={(valor) => cambiar(alumno.id_alumno, 'presente', valor)}
                     disabled={cargando || !editable}
                   />
-                  {seleccionada.estado === 'en_curso' ? (
-                    <>
-                      <Text style={styles.estadoAlumno}>
-                        {estados[alumno.id_alumno]?.verificada === 1
-                          ? 'Verificado'
-                          : 'No Verificado'}
-                      </Text>
-                      <Interruptor
-                        value={estados[alumno.id_alumno]?.verificada === 1}
-                        onValueChange={(valor) => cambiar(alumno.id_alumno, 'verificada', valor)}
-                        disabled={cargando || !editable}
-                      />
-                    </>
-                  ) : null}
+                  <>
+                    <Text style={styles.estadoAlumno}>
+                      {estados[alumno.id_alumno]?.verificada === 1
+                        ? 'Verificado'
+                        : 'No Verificado'}
+                    </Text>
+                    <Interruptor
+                      value={estados[alumno.id_alumno]?.verificada === 1}
+                      onValueChange={(valor) => cambiar(alumno.id_alumno, 'verificada', valor)}
+                      disabled={cargando || !editable}
+                    />
+                  </>
                 </View>
               </View>
             ))}
@@ -674,6 +768,8 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
                   <Text style={styles.textoBotonAccionCerrar}>Cerrar Clase</Text>
                 </TouchableOpacity>
               </View>
+            ) : null}
+              </>
             ) : null}
           </>
         )}
@@ -721,7 +817,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
     overflow: 'hidden',
-    marginBottom: 22,
+    marginBottom: 32,
     backgroundColor: '#FFFDF7',
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 3 },
@@ -731,7 +827,7 @@ const styles = StyleSheet.create({
   },
 
   tarjetaAngosta: {
-    flexDirection: 'column'
+    flexWrap: 'wrap'
   },
 
   panelHorario: {
@@ -1009,6 +1105,64 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 18,
     marginBottom: 20
+  },
+
+  formularioApertura: {
+    backgroundColor: '#FFFDF7',
+    borderRadius: 10,
+    padding: 18,
+    marginBottom: 20
+  },
+
+  subtituloFormulario: {
+    fontFamily: 'Georgia',
+    fontSize: 21,
+    fontWeight: 'bold',
+    color: colores.navy,
+    marginBottom: 8
+  },
+
+  instruccionFormulario: {
+    color: '#66758B',
+    fontSize: 13,
+    marginVertical: 10
+  },
+
+  opcionMotivo: {
+    padding: 10,
+    marginTop: 5,
+    borderRadius: 7,
+    backgroundColor: '#F0F0EC'
+  },
+
+  opcionMotivoActiva: {
+    backgroundColor: '#FFF3A6'
+  },
+
+  textoOpcionMotivo: {
+    color: colores.navy,
+    fontSize: 13
+  },
+
+  inputMotivo: {
+    borderWidth: 1,
+    borderColor: colores.borde,
+    borderRadius: 7,
+    minHeight: 42,
+    padding: 10,
+    marginTop: 10,
+    color: colores.textoOscuro,
+    backgroundColor: colores.blanco
+  },
+
+  botonAbrirManual: {
+    backgroundColor: colores.navy,
+    borderRadius: 9,
+    minHeight: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 14,
+    paddingHorizontal: 12
   },
 
   resumenMateria: {

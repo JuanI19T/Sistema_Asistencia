@@ -9,6 +9,12 @@ const router = Router();
 const VIGENCIA_TOKEN_MS = 60 * 1000;
 const DIAS = ['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
 const OFFSET_ARGENTINA_MINUTOS = -180;
+const MOTIVOS_APERTURA_PRECEPTOR = new Set([
+  'profesor_retrasado',
+  'profesor_sin_acceso',
+  'profesor_sin_app',
+  'otro'
+]);
 
 function ahoraEnArgentina() {
   return new Date(Date.now() + OFFSET_ARGENTINA_MINUTOS * 60 * 1000);
@@ -34,6 +40,18 @@ function fechaActualArgentina() {
 function minutosActualesArgentina() {
   const ahora = ahoraEnArgentina();
   return ahora.getUTCHours() * 60 + ahora.getUTCMinutes();
+}
+
+async function cerrarClasesVencidas() {
+  await pool.query(
+    `UPDATE clase c
+     JOIN dictado d ON d.id_dictado = c.id_dictado
+     SET c.estado = 'cerrada'
+     WHERE c.fecha_clase = ? AND c.estado = 'en_curso'
+       AND d.horario_fin IS NOT NULL
+       AND TIME_TO_SEC(d.horario_fin) / 60 <= ?`,
+    [fechaActualArgentina(), minutosActualesArgentina()]
+  );
 }
 
 function sinAcentos(texto) {
@@ -65,6 +83,7 @@ async function generarCodigoUnico() {
 const SELECT_BASE = `
   SELECT c.id_clase, c.id_dictado, c.fecha_clase, c.estado,
          NULL AS token, NULL AS token_valido_hasta, c.abierta_por,
+         c.abierta_por_rol, c.motivo_apertura, c.profesor_llego_en,
          m.nombre_materia, p.apellido_profesor,
           d.grupo, d.dia, d.horario, d.horario_fin, d.anio_lectivo, d.id_preceptor
   FROM clase c
@@ -79,7 +98,8 @@ async function claseCompleta(idClase, conToken) {
   const [filas] = await pool.query(
     `SELECT c.id_clase, c.id_dictado, c.fecha_clase, c.estado,
             ${columnas}
-            c.abierta_por, c.abierta_en,
+            c.abierta_por, c.abierta_por_rol, c.motivo_apertura,
+            c.profesor_llego_en, c.abierta_en,
             m.nombre_materia, p.apellido_profesor,
             d.grupo, d.dia, d.horario, d.horario_fin, d.anio_lectivo
      FROM clase c
@@ -95,6 +115,7 @@ async function claseCompleta(idClase, conToken) {
 // GET /api/clases?fecha=YYYY-MM-DD  (lista; opcional filtro por fecha)
 router.get('/', async (req, res) => {
   try {
+    await cerrarClasesVencidas();
     const condiciones = [];
     const parametros = [];
 
@@ -131,6 +152,7 @@ router.get('/:id', requiereRol(['profesor', 'preceptor', 'alumno']), async (req,
   }
 
   try {
+    await cerrarClasesVencidas();
     const [[info]] = await pool.query(
       `SELECT c.id_clase, c.id_dictado, d.id_profesor, d.id_preceptor
        FROM clase c
@@ -236,6 +258,75 @@ router.post('/', requiereRol(['profesor']), async (req, res) => {
     res.status(existentes.length > 0 ? 200 : 201).json(claseActualizada);
   } catch (error) {
     res.status(500).json({ error: 'Error abriendo la clase', detalle: error.message });
+  }
+});
+
+// POST /api/clases/preceptor - apertura manual sin QR ni código.
+router.post('/preceptor', requiereRol(['preceptor']), async (req, res) => {
+  const { id_dictado, fecha, motivo_apertura, detalle_motivo, profesor_llego_en } = req.body || {};
+
+  if (!Number.isInteger(id_dictado) || id_dictado <= 0 || typeof fecha !== 'string') {
+    return res.status(400).json({ error: 'Dictado y fecha son obligatorios.' });
+  }
+  if (!MOTIVOS_APERTURA_PRECEPTOR.has(motivo_apertura)) {
+    return res.status(400).json({ error: 'Motivo de apertura inválido.' });
+  }
+  if (motivo_apertura === 'otro' && (!detalle_motivo || !String(detalle_motivo).trim())) {
+    return res.status(400).json({ error: 'Debés indicar el motivo de apertura.' });
+  }
+
+  try {
+    const [[dictado]] = await pool.query(
+      `SELECT id_dictado, id_preceptor, dia, horario, horario_fin
+       FROM dictado WHERE id_dictado = ?`,
+      [id_dictado]
+    );
+    if (!dictado) return res.status(404).json({ error: 'El dictado no existe.' });
+    if (dictado.id_preceptor !== req.usuario.id_preceptor) {
+      return res.status(403).json({ error: 'No estás asignado a este dictado.' });
+    }
+    if (fecha !== fechaActualArgentina() || sinAcentos(dictado.dia) !== diaActualArgentina()) {
+      return res.status(409).json({ error: 'Solo podés abrir la clase correspondiente al día actual.' });
+    }
+
+    const [existentes] = await pool.query(
+      'SELECT id_clase FROM clase WHERE id_dictado = ? AND fecha_clase = ?',
+      [id_dictado, fecha]
+    );
+    let idClase;
+    const motivo = motivo_apertura === 'otro'
+      ? String(detalle_motivo).trim()
+      : motivo_apertura;
+    const llegadaProfesor = profesor_llego_en && /^\d{2}:\d{2}$/.test(String(profesor_llego_en))
+      ? `${fecha} ${profesor_llego_en}:00`
+      : (profesor_llego_en || null);
+
+    if (existentes.length > 0) {
+      idClase = existentes[0].id_clase;
+      await pool.query(
+        `UPDATE clase
+         SET estado = 'en_curso', token = NULL, token_valido_hasta = NULL,
+             codigo = NULL, abierta_por = ?, abierta_por_rol = 'preceptor',
+             motivo_apertura = ?, profesor_llego_en = ?,
+             abierta_en = IF(abierta_en IS NULL, CURRENT_TIMESTAMP, abierta_en)
+         WHERE id_clase = ?`,
+        [req.usuario.id_preceptor, motivo, llegadaProfesor, idClase]
+      );
+    } else {
+      const [resultado] = await pool.query(
+        `INSERT INTO clase
+          (id_dictado, fecha_clase, estado, abierta_por, abierta_por_rol,
+           motivo_apertura, profesor_llego_en, abierta_en)
+         VALUES (?, ?, 'en_curso', ?, 'preceptor', ?, ?, CURRENT_TIMESTAMP)`,
+        [id_dictado, fecha, req.usuario.id_preceptor, motivo, llegadaProfesor]
+      );
+      idClase = resultado.insertId;
+    }
+
+    publicarEvento({ tipo: 'clase.abierta', roles: ['profesor', 'preceptor', 'alumno'], id_clase: idClase, id_dictado });
+    res.status(existentes.length > 0 ? 200 : 201).json(await claseCompleta(idClase, false));
+  } catch (error) {
+    res.status(500).json({ error: 'Error abriendo manualmente la clase', detalle: error.message });
   }
 });
 

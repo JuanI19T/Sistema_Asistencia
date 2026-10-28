@@ -284,6 +284,14 @@ export async function abrirClase(idDictado, fecha) {
   return post(`${API_URL}/api/clases`, { id_dictado: idDictado, fecha });
 }
 
+export async function abrirClasePreceptor(idDictado, fecha, datos) {
+  return post(`${API_URL}/api/clases/preceptor`, {
+    id_dictado: idDictado,
+    fecha,
+    ...datos
+  });
+}
+
 export async function rotarToken(claseId) {
   return post(`${API_URL}/api/clases/${claseId}/token`, {});
 }
