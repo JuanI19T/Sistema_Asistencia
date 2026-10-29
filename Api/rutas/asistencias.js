@@ -6,6 +6,25 @@ const { publicarEvento } = require('../utilidades/eventos');
 
 const router = Router();
 
+const OFFSET_ARGENTINA_MINUTOS = -180;
+
+function minutosAhoraArgentina() {
+  const ahora = new Date(Date.now() + OFFSET_ARGENTINA_MINUTOS * 60 * 1000);
+  return ahora.getUTCHours() * 60 + ahora.getUTCMinutes();
+}
+
+async function cerrarClaseVencida(idClase) {
+  await pool.query(
+    `UPDATE clase c
+     JOIN dictado d ON d.id_dictado = c.id_dictado
+     SET c.estado = 'cerrada'
+     WHERE c.id_clase = ? AND c.estado = 'en_curso'
+       AND d.horario_fin IS NOT NULL
+       AND TIME_TO_SEC(d.horario_fin) / 60 <= ?`,
+    [idClase, minutosAhoraArgentina()]
+  );
+}
+
 async function errorAccesoPreceptor(idClase, idPreceptor) {
   const [[clase]] = await pool.query(
     `SELECT c.id_clase, c.estado, d.id_preceptor
@@ -45,12 +64,16 @@ router.get('/', async (req, res) => {
       return res.status(400).json({ error: 'Se requiere id_clase válido.' });
     }
 
+    await cerrarClaseVencida(idClase);
+
     const [filas] = await pool.query(
-      `SELECT a.id_asistencia, a.presente, a.verificada,
-              al.id_alumno, al.apellido_alumno, al.nombre_alumno, al.legajo_alumno,
+      `SELECT a.id_asistencia, a.presente, a.verificada, a.metodo_registro,
+              DATE_FORMAT(DATE_SUB(a.registrado_en, INTERVAL 3 HOUR), '%H:%i') AS hora_registro,
+              al.id_alumno, al.apellido_alumno, al.nombre_alumno, al.legajo_alumno, al.dni,
               c.id_clase, c.fecha_clase, c.estado,
-              d.id_dictado, m.nombre_materia, d.grupo, d.dia, d.horario, d.horario_fin,
-              p.apellido_profesor
+              DATE_FORMAT(DATE_SUB(c.abierta_en, INTERVAL 3 HOUR), '%H:%i') AS hora_apertura,
+              d.id_dictado, m.nombre_materia, d.division, m.anio_materia, d.grupo, d.dia, d.horario, d.horario_fin,
+              p.nombre_profesor, p.apellido_profesor
        FROM asistencia a
        JOIN alumno al ON al.id_alumno = a.id_alumno
        JOIN clase c ON c.id_clase = a.id_clase
@@ -168,15 +191,15 @@ async function registrarAsistencia({ id_clase, id_alumno, presente, verificada }
 
   if (existentes.length > 0) {
     await pool.query(
-      'UPDATE asistencia SET presente = ?, verificada = ? WHERE id_asistencia = ?',
-      [presente, verificada, existentes[0].id_asistencia]
+      'UPDATE asistencia SET presente = ?, verificada = ?, metodo_registro = ?, registrado_en = CURRENT_TIMESTAMP WHERE id_asistencia = ?',
+      [presente, verificada, 'manual', existentes[0].id_asistencia]
     );
     return { id_asistencia: existentes[0].id_asistencia, id_alumno, actualizado: true };
   }
 
   const [resultado] = await pool.query(
-    'INSERT INTO asistencia (id_clase, id_alumno, presente, verificada) VALUES (?, ?, ?, ?)',
-    [id_clase, id_alumno, presente, verificada]
+    'INSERT INTO asistencia (id_clase, id_alumno, presente, verificada, metodo_registro, registrado_en) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)',
+    [id_clase, id_alumno, presente, verificada, 'manual']
   );
 
   return { id_asistencia: resultado.insertId, id_alumno, actualizado: false };

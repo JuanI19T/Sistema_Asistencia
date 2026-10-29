@@ -7,6 +7,56 @@ const { publicarEvento } = require('../utilidades/eventos');
 const router = Router();
 
 const VIGENCIA_TOKEN_MS = 60 * 1000;
+const DIAS = ['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
+const OFFSET_ARGENTINA_MINUTOS = -180;
+const MOTIVOS_APERTURA_PRECEPTOR = new Set([
+  'profesor_retrasado',
+  'profesor_sin_acceso',
+  'profesor_sin_app',
+  'otro'
+]);
+
+function ahoraEnArgentina() {
+  return new Date(Date.now() + OFFSET_ARGENTINA_MINUTOS * 60 * 1000);
+}
+
+function minutosDeHora(hora) {
+  if (!hora || typeof hora !== 'string') return null;
+  const [h, m] = hora.split(':').map(Number);
+  return Number.isNaN(h) || Number.isNaN(m) ? null : h * 60 + m;
+}
+
+function diaActualArgentina() {
+  return DIAS[ahoraEnArgentina().getUTCDay()];
+}
+
+function fechaActualArgentina() {
+  const ahora = ahoraEnArgentina();
+  const mes = String(ahora.getUTCMonth() + 1).padStart(2, '0');
+  const dia = String(ahora.getUTCDate()).padStart(2, '0');
+  return `${ahora.getUTCFullYear()}-${mes}-${dia}`;
+}
+
+function minutosActualesArgentina() {
+  const ahora = ahoraEnArgentina();
+  return ahora.getUTCHours() * 60 + ahora.getUTCMinutes();
+}
+
+async function cerrarClasesVencidas() {
+  await pool.query(
+    `UPDATE clase c
+     JOIN dictado d ON d.id_dictado = c.id_dictado
+     SET c.estado = 'cerrada'
+     WHERE c.fecha_clase = ? AND c.estado = 'en_curso'
+       AND d.horario_fin IS NOT NULL
+       AND TIME_TO_SEC(d.horario_fin) / 60 <= ?`,
+    [fechaActualArgentina(), minutosActualesArgentina()]
+  );
+}
+
+function sinAcentos(texto) {
+  return (texto || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().trim();
+}
 
 function generarToken() {
   return {
@@ -33,8 +83,9 @@ async function generarCodigoUnico() {
 const SELECT_BASE = `
   SELECT c.id_clase, c.id_dictado, c.fecha_clase, c.estado,
          NULL AS token, NULL AS token_valido_hasta, c.abierta_por,
+         c.abierta_por_rol, c.motivo_apertura, c.profesor_llego_en,
          m.nombre_materia, p.apellido_profesor,
-         d.grupo, d.dia, d.horario, d.horario_fin, d.anio_lectivo
+          d.grupo, d.dia, d.horario, d.horario_fin, d.anio_lectivo, d.id_preceptor
   FROM clase c
   JOIN dictado d ON d.id_dictado = c.id_dictado
   JOIN materia m ON m.id_materia = d.id_materia
@@ -47,7 +98,8 @@ async function claseCompleta(idClase, conToken) {
   const [filas] = await pool.query(
     `SELECT c.id_clase, c.id_dictado, c.fecha_clase, c.estado,
             ${columnas}
-            c.abierta_por,
+            c.abierta_por, c.abierta_por_rol, c.motivo_apertura,
+            c.profesor_llego_en, c.abierta_en,
             m.nombre_materia, p.apellido_profesor,
             d.grupo, d.dia, d.horario, d.horario_fin, d.anio_lectivo
      FROM clase c
@@ -63,6 +115,7 @@ async function claseCompleta(idClase, conToken) {
 // GET /api/clases?fecha=YYYY-MM-DD  (lista; opcional filtro por fecha)
 router.get('/', async (req, res) => {
   try {
+    await cerrarClasesVencidas();
     const condiciones = [];
     const parametros = [];
 
@@ -99,6 +152,7 @@ router.get('/:id', requiereRol(['profesor', 'preceptor', 'alumno']), async (req,
   }
 
   try {
+    await cerrarClasesVencidas();
     const [[info]] = await pool.query(
       `SELECT c.id_clase, c.id_dictado, d.id_profesor, d.id_preceptor
        FROM clase c
@@ -146,13 +200,22 @@ router.post('/', requiereRol(['profesor']), async (req, res) => {
 
   try {
     const [[dictado]] = await pool.query(
-      'SELECT id_profesor FROM dictado WHERE id_dictado = ?',
+      'SELECT id_profesor, dia, horario, horario_fin FROM dictado WHERE id_dictado = ?',
       [id_dictado]
     );
 
     if (!dictado) return res.status(404).json({ error: 'El dictado no existe.' });
     if (dictado.id_profesor !== req.usuario.id_profesor) {
       return res.status(403).json({ error: 'El dictado no pertenece a tu usuario.' });
+    }
+
+    const inicio = minutosDeHora(dictado.horario);
+    const fin = minutosDeHora(dictado.horario_fin);
+    const minutosActuales = minutosActualesArgentina();
+    if (fecha !== fechaActualArgentina() ||
+        sinAcentos(dictado.dia) !== diaActualArgentina() ||
+        inicio === null || fin === null || minutosActuales < inicio || minutosActuales >= fin) {
+      return res.status(409).json({ error: 'La clase solo puede abrirse durante su horario programado.' });
     }
 
     const abiertaPor = req.usuario.id_profesor;
@@ -169,15 +232,16 @@ router.post('/', requiereRol(['profesor']), async (req, res) => {
       idClase = existentes[0].id_clase;
       await pool.query(
         `UPDATE clase
-         SET estado = 'en_curso', token = ?, token_valido_hasta = ?,
-             codigo = ?, abierta_por = ?
+          SET estado = 'en_curso', token = ?, token_valido_hasta = ?,
+              codigo = ?, abierta_por = ?,
+              abierta_en = IF(abierta_en IS NULL, CURRENT_TIMESTAMP, abierta_en)
          WHERE id_clase = ?`,
         [tokenNuevo.token, tokenNuevo.token_valido_hasta, codigoNuevo, abiertaPor, idClase]
       );
     } else {
       const [resultado] = await pool.query(
-        `INSERT INTO clase (id_dictado, fecha_clase, estado, token, token_valido_hasta, codigo, abierta_por)
-         VALUES (?, ?, 'en_curso', ?, ?, ?, ?)`,
+         `INSERT INTO clase (id_dictado, fecha_clase, estado, token, token_valido_hasta, codigo, abierta_por, abierta_en)
+           VALUES (?, ?, 'en_curso', ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
         [id_dictado, fecha, tokenNuevo.token, tokenNuevo.token_valido_hasta, codigoNuevo, abiertaPor]
       );
       idClase = resultado.insertId;
@@ -194,6 +258,75 @@ router.post('/', requiereRol(['profesor']), async (req, res) => {
     res.status(existentes.length > 0 ? 200 : 201).json(claseActualizada);
   } catch (error) {
     res.status(500).json({ error: 'Error abriendo la clase', detalle: error.message });
+  }
+});
+
+// POST /api/clases/preceptor - apertura manual sin QR ni código.
+router.post('/preceptor', requiereRol(['preceptor']), async (req, res) => {
+  const { id_dictado, fecha, motivo_apertura, detalle_motivo, profesor_llego_en } = req.body || {};
+
+  if (!Number.isInteger(id_dictado) || id_dictado <= 0 || typeof fecha !== 'string') {
+    return res.status(400).json({ error: 'Dictado y fecha son obligatorios.' });
+  }
+  if (!MOTIVOS_APERTURA_PRECEPTOR.has(motivo_apertura)) {
+    return res.status(400).json({ error: 'Motivo de apertura inválido.' });
+  }
+  if (motivo_apertura === 'otro' && (!detalle_motivo || !String(detalle_motivo).trim())) {
+    return res.status(400).json({ error: 'Debés indicar el motivo de apertura.' });
+  }
+
+  try {
+    const [[dictado]] = await pool.query(
+      `SELECT id_dictado, id_preceptor, dia, horario, horario_fin
+       FROM dictado WHERE id_dictado = ?`,
+      [id_dictado]
+    );
+    if (!dictado) return res.status(404).json({ error: 'El dictado no existe.' });
+    if (dictado.id_preceptor !== req.usuario.id_preceptor) {
+      return res.status(403).json({ error: 'No estás asignado a este dictado.' });
+    }
+    if (fecha !== fechaActualArgentina() || sinAcentos(dictado.dia) !== diaActualArgentina()) {
+      return res.status(409).json({ error: 'Solo podés abrir la clase correspondiente al día actual.' });
+    }
+
+    const [existentes] = await pool.query(
+      'SELECT id_clase FROM clase WHERE id_dictado = ? AND fecha_clase = ?',
+      [id_dictado, fecha]
+    );
+    let idClase;
+    const motivo = motivo_apertura === 'otro'
+      ? String(detalle_motivo).trim()
+      : motivo_apertura;
+    const llegadaProfesor = profesor_llego_en && /^\d{2}:\d{2}$/.test(String(profesor_llego_en))
+      ? `${fecha} ${profesor_llego_en}:00`
+      : (profesor_llego_en || null);
+
+    if (existentes.length > 0) {
+      idClase = existentes[0].id_clase;
+      await pool.query(
+        `UPDATE clase
+         SET estado = 'en_curso', token = NULL, token_valido_hasta = NULL,
+             codigo = NULL, abierta_por = ?, abierta_por_rol = 'preceptor',
+             motivo_apertura = ?, profesor_llego_en = ?,
+             abierta_en = IF(abierta_en IS NULL, CURRENT_TIMESTAMP, abierta_en)
+         WHERE id_clase = ?`,
+        [req.usuario.id_preceptor, motivo, llegadaProfesor, idClase]
+      );
+    } else {
+      const [resultado] = await pool.query(
+        `INSERT INTO clase
+          (id_dictado, fecha_clase, estado, abierta_por, abierta_por_rol,
+           motivo_apertura, profesor_llego_en, abierta_en)
+         VALUES (?, ?, 'en_curso', ?, 'preceptor', ?, ?, CURRENT_TIMESTAMP)`,
+        [id_dictado, fecha, req.usuario.id_preceptor, motivo, llegadaProfesor]
+      );
+      idClase = resultado.insertId;
+    }
+
+    publicarEvento({ tipo: 'clase.abierta', roles: ['profesor', 'preceptor', 'alumno'], id_clase: idClase, id_dictado });
+    res.status(existentes.length > 0 ? 200 : 201).json(await claseCompleta(idClase, false));
+  } catch (error) {
+    res.status(500).json({ error: 'Error abriendo manualmente la clase', detalle: error.message });
   }
 });
 
@@ -294,7 +427,7 @@ router.post('/:id/token', requiereRol(['profesor']), async (req, res) => {
 
 // Núcleo compartido: marca presente al alumno en la clase.
 // Lo usan tanto el escaneo QR como el ingreso con código corto.
-async function registrarPresencia(idClase, idDictado, idAlumno) {
+async function registrarPresencia(idClase, idDictado, idAlumno, metodoRegistro) {
   const [[inscripto]] = await pool.query(
     'SELECT 1 AS ok FROM inscribe WHERE id_alumno = ? AND id_dictado = ? LIMIT 1',
     [idAlumno, idDictado]
@@ -307,7 +440,7 @@ async function registrarPresencia(idClase, idDictado, idAlumno) {
   }
 
   const [existentes] = await pool.query(
-    'SELECT id_asistencia, presente FROM asistencia WHERE id_clase = ? AND id_alumno = ?',
+      'SELECT id_asistencia, presente FROM asistencia WHERE id_clase = ? AND id_alumno = ?',
     [idClase, idAlumno]
   );
 
@@ -321,8 +454,8 @@ async function registrarPresencia(idClase, idDictado, idAlumno) {
     }
 
     await pool.query(
-      'UPDATE asistencia SET presente = 1, verificada = 0 WHERE id_asistencia = ?',
-      [existentes[0].id_asistencia]
+      'UPDATE asistencia SET presente = 1, verificada = 0, metodo_registro = ?, registrado_en = DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 3 HOUR) WHERE id_asistencia = ?',
+      [metodoRegistro, existentes[0].id_asistencia]
     );
     publicarEvento({
       tipo: 'asistencia.registrada',
@@ -340,8 +473,8 @@ async function registrarPresencia(idClase, idDictado, idAlumno) {
   }
 
   const [resultado] = await pool.query(
-    'INSERT INTO asistencia (id_clase, id_alumno, presente, verificada) VALUES (?, ?, 1, 0)',
-    [idClase, idAlumno]
+    'INSERT INTO asistencia (id_clase, id_alumno, presente, verificada, metodo_registro, registrado_en) VALUES (?, ?, 1, 0, ?, DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 3 HOUR))',
+    [idClase, idAlumno, metodoRegistro]
   );
 
   publicarEvento({
@@ -385,7 +518,7 @@ router.post('/ingresar', requiereRol(['alumno']), async (req, res) => {
       return res.status(403).json({ error: 'Código vencido. Pedile al profesor que genere uno nuevo.' });
     }
 
-    res.json(await registrarPresencia(clase.id_clase, clase.id_dictado, idAlumno));
+    res.json(await registrarPresencia(clase.id_clase, clase.id_dictado, idAlumno, 'codigo'));
   } catch (error) {
     if (error.status) return res.status(error.status).json({ error: error.message });
     res.status(500).json({ error: 'Error registrando asistencia', detalle: error.message });
@@ -431,7 +564,7 @@ router.post('/:id/escanear', requiereRol(['alumno']), async (req, res) => {
       return res.status(403).json({ error: 'Token vencido. Rotá el QR y reintentá.' });
     }
 
-    res.json(await registrarPresencia(clase.id_clase, clase.id_dictado, idAlumno));
+    res.json(await registrarPresencia(clase.id_clase, clase.id_dictado, idAlumno, 'qr'));
   } catch (error) {
     if (error.status) return res.status(error.status).json({ error: error.message });
     res.status(500).json({ error: 'Error registrando asistencia', detalle: error.message });
