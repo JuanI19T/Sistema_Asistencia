@@ -11,9 +11,6 @@ namespace SistemaAsistencia.Vista.Comun
         public FrmBaseHijo()
         {
             // Hijo embebido en FrmPrincipal: sin botones de ventana.
-            // ControlBox=false quita la X pero conserva el título propio
-            // (MaterialForm dibuja su header aunque vaya con Border None).
-            // El ciclo de vida lo maneja FrmPrincipal.MostrarForm.
             this.Sizable = false;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -21,14 +18,41 @@ namespace SistemaAsistencia.Vista.Comun
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
 
-            // Red de contención para monitores chicos: si el contenido
-            // interno desborda (ej. tras el re-escalado por fuente/DPI),
-            // el form muestra scrollbars en vez de recortar botones.
-            // El form va Dock.Fill en panelContenido, así que su tamaño
-            // lo manda el panel; esto cubre el desborde interno.
+            // Red de contención
             this.AutoScroll = true;
 
+            // Obliga al hijo a calzar con el panelContenido
+            this.MinimumSize = System.Drawing.Size.Empty;
+            this.MaximumSize = System.Drawing.Size.Empty;
+
             this.Load += FrmBaseHijo_Load;
+        }
+
+        private void FrmBaseHijo_ParentChanged(object sender, EventArgs e)
+        {
+            AjustarAlPadre();
+        }
+
+        private void FrmBaseHijo_SizeChanged(object sender, EventArgs e)
+        {
+            AjustarAlPadre();
+        }
+
+        private void AjustarAlPadre()
+        {
+            if (this.Parent == null) return;
+
+            // Forzamos a que ocupe exactamente el espacio del contenedor
+            this.Dock = DockStyle.Fill;
+            this.MinimumSize = new Size(0, 0);
+            this.MaximumSize = new Size(0, 0);
+            this.AutoSize = false;
+
+            // Aseguramos que tome el ClientSize del panel
+            if (this.Parent is Control contenedor)
+            {
+                this.ClientSize = contenedor.ClientSize;
+            }
         }
 
         /// <summary>

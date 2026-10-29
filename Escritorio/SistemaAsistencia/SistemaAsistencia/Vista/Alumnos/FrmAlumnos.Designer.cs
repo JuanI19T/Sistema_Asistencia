@@ -53,28 +53,28 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.dgvAlumnos = new System.Windows.Forms.DataGridView();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.ConPrincipal = new System.Windows.Forms.TableLayoutPanel();
             this.tableTelCrear = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+            this.ConPrincipal2 = new System.Windows.Forms.TableLayoutPanel();
+            this.ConEditando = new System.Windows.Forms.TableLayoutPanel();
+            this.ConTelefono = new System.Windows.Forms.TableLayoutPanel();
+            this.ConBotones = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAlumnos)).BeginInit();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.ConPrincipal.SuspendLayout();
             this.tableTelCrear.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.tableLayoutPanel8.SuspendLayout();
-            this.tableLayoutPanel5.SuspendLayout();
-            this.tableLayoutPanel6.SuspendLayout();
-            this.tableLayoutPanel7.SuspendLayout();
+            this.ConPrincipal2.SuspendLayout();
+            this.ConEditando.SuspendLayout();
+            this.ConTelefono.SuspendLayout();
+            this.ConBotones.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.SuspendLayout();
@@ -262,7 +262,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.btnGuardar.Depth = 0;
             this.btnGuardar.HighEmphasis = true;
             this.btnGuardar.Icon = null;
-            this.btnGuardar.Location = new System.Drawing.Point(4, 13);
+            this.btnGuardar.Location = new System.Drawing.Point(12, 13);
             this.btnGuardar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnGuardar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnGuardar.Name = "btnGuardar";
@@ -284,7 +284,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.btnLimpiarCrear.Depth = 0;
             this.btnLimpiarCrear.HighEmphasis = true;
             this.btnLimpiarCrear.Icon = null;
-            this.btnLimpiarCrear.Location = new System.Drawing.Point(193, 13);
+            this.btnLimpiarCrear.Location = new System.Drawing.Point(217, 13);
             this.btnLimpiarCrear.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnLimpiarCrear.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLimpiarCrear.Name = "btnLimpiarCrear";
@@ -308,7 +308,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.txtEditNombre.HideSelection = true;
             this.txtEditNombre.Hint = "Nombre";
             this.txtEditNombre.LeadingIcon = null;
-            this.txtEditNombre.Location = new System.Drawing.Point(91, 33);
+            this.txtEditNombre.Location = new System.Drawing.Point(91, 39);
             this.txtEditNombre.MaxLength = 32767;
             this.txtEditNombre.MouseState = MaterialSkin.MouseState.OUT;
             this.txtEditNombre.Name = "txtEditNombre";
@@ -338,7 +338,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.txtEditApellido.HideSelection = true;
             this.txtEditApellido.Hint = "Apellido";
             this.txtEditApellido.LeadingIcon = null;
-            this.txtEditApellido.Location = new System.Drawing.Point(91, 79);
+            this.txtEditApellido.Location = new System.Drawing.Point(91, 105);
             this.txtEditApellido.MaxLength = 32767;
             this.txtEditApellido.MouseState = MaterialSkin.MouseState.OUT;
             this.txtEditApellido.Name = "txtEditApellido";
@@ -368,7 +368,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.txtEditDni.HideSelection = true;
             this.txtEditDni.Hint = "DNI";
             this.txtEditDni.LeadingIcon = null;
-            this.txtEditDni.Location = new System.Drawing.Point(91, 125);
+            this.txtEditDni.Location = new System.Drawing.Point(91, 171);
             this.txtEditDni.MaxLength = 8;
             this.txtEditDni.MouseState = MaterialSkin.MouseState.OUT;
             this.txtEditDni.Name = "txtEditDni";
@@ -398,7 +398,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.txtEditLegajo.HideSelection = true;
             this.txtEditLegajo.Hint = "Legajo";
             this.txtEditLegajo.LeadingIcon = null;
-            this.txtEditLegajo.Location = new System.Drawing.Point(91, 171);
+            this.txtEditLegajo.Location = new System.Drawing.Point(91, 237);
             this.txtEditLegajo.MaxLength = 10;
             this.txtEditLegajo.MouseState = MaterialSkin.MouseState.OUT;
             this.txtEditLegajo.Name = "txtEditLegajo";
@@ -428,7 +428,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.txtEditCorreo.HideSelection = true;
             this.txtEditCorreo.Hint = "Correo";
             this.txtEditCorreo.LeadingIcon = null;
-            this.txtEditCorreo.Location = new System.Drawing.Point(91, 217);
+            this.txtEditCorreo.Location = new System.Drawing.Point(91, 303);
             this.txtEditCorreo.MaxLength = 32767;
             this.txtEditCorreo.MouseState = MaterialSkin.MouseState.OUT;
             this.txtEditCorreo.Name = "txtEditCorreo";
@@ -453,7 +453,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.lblTelEdit.AutoSize = true;
             this.lblTelEdit.Depth = 0;
             this.lblTelEdit.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblTelEdit.Location = new System.Drawing.Point(29, 42);
+            this.lblTelEdit.Location = new System.Drawing.Point(29, 17);
             this.lblTelEdit.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblTelEdit.Name = "lblTelEdit";
             this.lblTelEdit.Size = new System.Drawing.Size(64, 19);
@@ -463,7 +463,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             // ctrlTelEdit
             // 
             this.ctrlTelEdit.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.ctrlTelEdit.Location = new System.Drawing.Point(141, 27);
+            this.ctrlTelEdit.Location = new System.Drawing.Point(141, 3);
             this.ctrlTelEdit.MinimumSize = new System.Drawing.Size(220, 48);
             this.ctrlTelEdit.Name = "ctrlTelEdit";
             this.ctrlTelEdit.Size = new System.Drawing.Size(245, 48);
@@ -479,7 +479,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.btnModificar.Depth = 0;
             this.btnModificar.HighEmphasis = true;
             this.btnModificar.Icon = null;
-            this.btnModificar.Location = new System.Drawing.Point(17, 21);
+            this.btnModificar.Location = new System.Drawing.Point(17, 20);
             this.btnModificar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnModificar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnModificar.Name = "btnModificar";
@@ -501,7 +501,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.btnEliminar.Depth = 0;
             this.btnEliminar.HighEmphasis = true;
             this.btnEliminar.Icon = null;
-            this.btnEliminar.Location = new System.Drawing.Point(152, 21);
+            this.btnEliminar.Location = new System.Drawing.Point(152, 20);
             this.btnEliminar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnEliminar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnEliminar.Name = "btnEliminar";
@@ -523,7 +523,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.btnLimpiarEditar.Depth = 0;
             this.btnLimpiarEditar.HighEmphasis = true;
             this.btnLimpiarEditar.Icon = null;
-            this.btnLimpiarEditar.Location = new System.Drawing.Point(287, 21);
+            this.btnLimpiarEditar.Location = new System.Drawing.Point(287, 20);
             this.btnLimpiarEditar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnLimpiarEditar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLimpiarEditar.Name = "btnLimpiarEditar";
@@ -578,7 +578,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.btnToggleActivo.Depth = 0;
             this.btnToggleActivo.HighEmphasis = true;
             this.btnToggleActivo.Icon = null;
-            this.btnToggleActivo.Location = new System.Drawing.Point(310, 7);
+            this.btnToggleActivo.Location = new System.Drawing.Point(310, 10);
             this.btnToggleActivo.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnToggleActivo.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnToggleActivo.Name = "btnToggleActivo";
@@ -595,9 +595,9 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.dgvAlumnos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvAlumnos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAlumnos.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvAlumnos.Location = new System.Drawing.Point(3, 57);
+            this.dgvAlumnos.Location = new System.Drawing.Point(3, 63);
             this.dgvAlumnos.Name = "dgvAlumnos";
-            this.dgvAlumnos.Size = new System.Drawing.Size(405, 393);
+            this.dgvAlumnos.Size = new System.Drawing.Size(405, 436);
             this.dgvAlumnos.TabIndex = 1;
             this.dgvAlumnos.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAlumnos_CellClick);
             // 
@@ -622,7 +622,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             // 
             this.tabPage1.AutoScroll = true;
             this.tabPage1.BackColor = System.Drawing.Color.White;
-            this.tabPage1.Controls.Add(this.tableLayoutPanel1);
+            this.tabPage1.Controls.Add(this.ConPrincipal);
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -630,34 +630,34 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Crear un Alumno";
             // 
-            // tableLayoutPanel1
+            // ConPrincipal
             // 
-            this.tableLayoutPanel1.AutoSize = true;
-            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.Controls.Add(this.txtNombre, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.txtApellido, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.txtDni, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.txtLegajo, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.txtCorreo, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.tableTelCrear, 1, 5);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 6);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 7;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(834, 410);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.ConPrincipal.AutoSize = true;
+            this.ConPrincipal.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ConPrincipal.ColumnCount = 3;
+            this.ConPrincipal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConPrincipal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.ConPrincipal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConPrincipal.Controls.Add(this.txtNombre, 1, 0);
+            this.ConPrincipal.Controls.Add(this.txtApellido, 1, 1);
+            this.ConPrincipal.Controls.Add(this.txtDni, 1, 2);
+            this.ConPrincipal.Controls.Add(this.txtLegajo, 1, 3);
+            this.ConPrincipal.Controls.Add(this.txtCorreo, 1, 4);
+            this.ConPrincipal.Controls.Add(this.tableTelCrear, 1, 5);
+            this.ConPrincipal.Controls.Add(this.tableLayoutPanel2, 1, 6);
+            this.ConPrincipal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConPrincipal.Location = new System.Drawing.Point(3, 3);
+            this.ConPrincipal.Name = "ConPrincipal";
+            this.ConPrincipal.RowCount = 7;
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.ConPrincipal.Size = new System.Drawing.Size(834, 508);
+            this.ConPrincipal.TabIndex = 0;
             // 
             // tableTelCrear
             // 
@@ -676,24 +676,24 @@ namespace SistemaAsistencia.Vista.Alumnos
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tableLayoutPanel2.ColumnCount = 2;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Controls.Add(this.btnGuardar, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnLimpiarCrear, 1, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(227, 345);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(211, 345);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(378, 62);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(411, 62);
             this.tableLayoutPanel2.TabIndex = 6;
             // 
             // tabPage2
             // 
             this.tabPage2.AutoScroll = true;
             this.tabPage2.BackColor = System.Drawing.Color.White;
-            this.tabPage2.Controls.Add(this.tableLayoutPanel8);
+            this.tabPage2.Controls.Add(this.ConPrincipal2);
             this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -701,79 +701,79 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Modificar un Alumno";
             // 
-            // tableLayoutPanel8
+            // ConPrincipal2
             // 
-            this.tableLayoutPanel8.ColumnCount = 2;
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Controls.Add(this.tableLayoutPanel5, 0, 0);
-            this.tableLayoutPanel8.Controls.Add(this.tableLayoutPanel3, 1, 0);
-            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
-            this.tableLayoutPanel8.RowCount = 1;
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(834, 459);
-            this.tableLayoutPanel8.TabIndex = 15;
+            this.ConPrincipal2.ColumnCount = 2;
+            this.ConPrincipal2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.ConPrincipal2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.ConPrincipal2.Controls.Add(this.ConEditando, 0, 0);
+            this.ConPrincipal2.Controls.Add(this.tableLayoutPanel3, 1, 0);
+            this.ConPrincipal2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConPrincipal2.Location = new System.Drawing.Point(3, 3);
+            this.ConPrincipal2.Name = "ConPrincipal2";
+            this.ConPrincipal2.RowCount = 1;
+            this.ConPrincipal2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.ConPrincipal2.Size = new System.Drawing.Size(834, 508);
+            this.ConPrincipal2.TabIndex = 15;
             // 
-            // tableLayoutPanel5
+            // ConEditando
             // 
-            this.tableLayoutPanel5.ColumnCount = 1;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Controls.Add(this.lblEditando, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.txtEditNombre, 0, 1);
-            this.tableLayoutPanel5.Controls.Add(this.txtEditCorreo, 0, 5);
-            this.tableLayoutPanel5.Controls.Add(this.txtEditLegajo, 0, 4);
-            this.tableLayoutPanel5.Controls.Add(this.txtEditDni, 0, 3);
-            this.tableLayoutPanel5.Controls.Add(this.txtEditApellido, 0, 2);
-            this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel6, 0, 6);
-            this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel7, 0, 7);
-            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 8;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 109F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 83F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(411, 453);
-            this.tableLayoutPanel5.TabIndex = 14;
+            this.ConEditando.ColumnCount = 1;
+            this.ConEditando.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ConEditando.Controls.Add(this.lblEditando, 0, 0);
+            this.ConEditando.Controls.Add(this.txtEditNombre, 0, 1);
+            this.ConEditando.Controls.Add(this.txtEditCorreo, 0, 5);
+            this.ConEditando.Controls.Add(this.txtEditLegajo, 0, 4);
+            this.ConEditando.Controls.Add(this.txtEditDni, 0, 3);
+            this.ConEditando.Controls.Add(this.txtEditApellido, 0, 2);
+            this.ConEditando.Controls.Add(this.ConTelefono, 0, 6);
+            this.ConEditando.Controls.Add(this.ConBotones, 0, 7);
+            this.ConEditando.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConEditando.Location = new System.Drawing.Point(3, 3);
+            this.ConEditando.Name = "ConEditando";
+            this.ConEditando.RowCount = 8;
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.ConEditando.Size = new System.Drawing.Size(411, 502);
+            this.ConEditando.TabIndex = 14;
             // 
-            // tableLayoutPanel6
+            // ConTelefono
             // 
-            this.tableLayoutPanel6.ColumnCount = 2;
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.40936F));
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.59064F));
-            this.tableLayoutPanel6.Controls.Add(this.lblTelEdit, 0, 0);
-            this.tableLayoutPanel6.Controls.Add(this.ctrlTelEdit, 1, 0);
-            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 263);
-            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 1;
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(405, 103);
-            this.tableLayoutPanel6.TabIndex = 13;
+            this.ConTelefono.ColumnCount = 2;
+            this.ConTelefono.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.40936F));
+            this.ConTelefono.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.59064F));
+            this.ConTelefono.Controls.Add(this.lblTelEdit, 0, 0);
+            this.ConTelefono.Controls.Add(this.ctrlTelEdit, 1, 0);
+            this.ConTelefono.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConTelefono.Location = new System.Drawing.Point(3, 363);
+            this.ConTelefono.Name = "ConTelefono";
+            this.ConTelefono.RowCount = 1;
+            this.ConTelefono.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.ConTelefono.Size = new System.Drawing.Size(405, 54);
+            this.ConTelefono.TabIndex = 13;
             // 
-            // tableLayoutPanel7
+            // ConBotones
             // 
-            this.tableLayoutPanel7.ColumnCount = 3;
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel7.Controls.Add(this.btnModificar, 0, 0);
-            this.tableLayoutPanel7.Controls.Add(this.btnEliminar, 1, 0);
-            this.tableLayoutPanel7.Controls.Add(this.btnLimpiarEditar, 2, 0);
-            this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel7.Location = new System.Drawing.Point(3, 372);
-            this.tableLayoutPanel7.Name = "tableLayoutPanel7";
-            this.tableLayoutPanel7.RowCount = 1;
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(405, 78);
-            this.tableLayoutPanel7.TabIndex = 14;
+            this.ConBotones.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.ConBotones.ColumnCount = 3;
+            this.ConBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.ConBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.ConBotones.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.ConBotones.Controls.Add(this.btnModificar, 0, 0);
+            this.ConBotones.Controls.Add(this.btnEliminar, 1, 0);
+            this.ConBotones.Controls.Add(this.btnLimpiarEditar, 2, 0);
+            this.ConBotones.Location = new System.Drawing.Point(3, 423);
+            this.ConBotones.Name = "ConBotones";
+            this.ConBotones.RowCount = 1;
+            this.ConBotones.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ConBotones.Size = new System.Drawing.Size(405, 76);
+            this.ConBotones.TabIndex = 14;
             // 
             // tableLayoutPanel3
             // 
@@ -788,7 +788,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 88F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(411, 453);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(411, 502);
             this.tableLayoutPanel3.TabIndex = 13;
             // 
             // tableLayoutPanel4
@@ -803,7 +803,7 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(405, 48);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(405, 54);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // materialTabSelector1
@@ -829,7 +829,6 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.ClientSize = new System.Drawing.Size(860, 600);
             this.Controls.Add(this.materialTabSelector1);
             this.Controls.Add(this.materialTabControl1);
-            this.MinimumSize = new System.Drawing.Size(860, 600);
             this.Name = "FrmAlumnos";
             this.Text = "Alumnos";
             this.Load += new System.EventHandler(this.FrmAlumnos_Load);
@@ -837,17 +836,17 @@ namespace SistemaAsistencia.Vista.Alumnos
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
+            this.ConPrincipal.ResumeLayout(false);
             this.tableTelCrear.ResumeLayout(false);
             this.tableTelCrear.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.tableLayoutPanel8.ResumeLayout(false);
-            this.tableLayoutPanel5.ResumeLayout(false);
-            this.tableLayoutPanel5.PerformLayout();
-            this.tableLayoutPanel6.ResumeLayout(false);
-            this.tableLayoutPanel6.PerformLayout();
-            this.tableLayoutPanel7.ResumeLayout(false);
+            this.ConPrincipal2.ResumeLayout(false);
+            this.ConEditando.ResumeLayout(false);
+            this.ConEditando.PerformLayout();
+            this.ConTelefono.ResumeLayout(false);
+            this.ConTelefono.PerformLayout();
+            this.ConBotones.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -881,16 +880,16 @@ namespace SistemaAsistencia.Vista.Alumnos
         private System.Windows.Forms.DataGridView dgvAlumnos;
         private MaterialSkin.Controls.MaterialTabControl materialTabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel ConPrincipal;
         private System.Windows.Forms.TableLayoutPanel tableTelCrear;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private MaterialSkin.Controls.MaterialTabSelector materialTabSelector1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+        private System.Windows.Forms.TableLayoutPanel ConEditando;
+        private System.Windows.Forms.TableLayoutPanel ConTelefono;
+        private System.Windows.Forms.TableLayoutPanel ConBotones;
+        private System.Windows.Forms.TableLayoutPanel ConPrincipal2;
     }
 }

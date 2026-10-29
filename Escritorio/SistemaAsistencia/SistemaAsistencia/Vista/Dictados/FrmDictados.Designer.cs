@@ -52,7 +52,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.pnlCrear = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.ConPrincipal = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -60,8 +60,8 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel12 = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.ConPrincipal2 = new System.Windows.Forms.TableLayoutPanel();
+            this.ConEditando = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
             this.nudEditAnio = new System.Windows.Forms.NumericUpDown();
             this.lblEditAnio = new MaterialSkin.Controls.MaterialLabel();
@@ -77,7 +77,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.dgvEditMateriaSel = new System.Windows.Forms.DataGridView();
             this.cmbEditProfesor = new MaterialSkin.Controls.MaterialComboBox();
             this.cmbEditDia = new MaterialSkin.Controls.MaterialComboBox();
-            this.tableLayoutPanel14 = new System.Windows.Forms.TableLayoutPanel();
+            this.ConHora2 = new System.Windows.Forms.TableLayoutPanel();
             this.dtpEditHorarioFin = new System.Windows.Forms.DateTimePicker();
             this.lblEditFin = new MaterialSkin.Controls.MaterialLabel();
             this.dtpEditHorario = new System.Windows.Forms.DateTimePicker();
@@ -98,7 +98,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.pnlCrear.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.ConPrincipal.SuspendLayout();
             this.tableLayoutPanel9.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -106,8 +106,8 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.tableLayoutPanel12.SuspendLayout();
-            this.tableLayoutPanel10.SuspendLayout();
+            this.ConPrincipal2.SuspendLayout();
+            this.ConEditando.SuspendLayout();
             this.tableLayoutPanel15.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEditAnio)).BeginInit();
             this.tableLayoutPanel11.SuspendLayout();
@@ -115,7 +115,7 @@ namespace SistemaAsistencia.Vista.Dictados
             ((System.ComponentModel.ISupportInitialize)(this.nudEditDivision)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEditAnioMateria)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEditMateriaSel)).BeginInit();
-            this.tableLayoutPanel14.SuspendLayout();
+            this.ConHora2.SuspendLayout();
             this.tableLayoutPanel16.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
@@ -137,7 +137,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.cmbFiltroEspecialidad.Hint = "Especialidad";
             this.cmbFiltroEspecialidad.IntegralHeight = false;
             this.cmbFiltroEspecialidad.ItemHeight = 43;
-            this.cmbFiltroEspecialidad.Location = new System.Drawing.Point(90, 12);
+            this.cmbFiltroEspecialidad.Location = new System.Drawing.Point(91, 26);
             this.cmbFiltroEspecialidad.MaxDropDownItems = 4;
             this.cmbFiltroEspecialidad.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbFiltroEspecialidad.Name = "cmbFiltroEspecialidad";
@@ -226,13 +226,13 @@ namespace SistemaAsistencia.Vista.Dictados
             this.dgvMateriaSel.AllowUserToDeleteRows = false;
             this.dgvMateriaSel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvMateriaSel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvMateriaSel.Location = new System.Drawing.Point(3, 295);
+            this.dgvMateriaSel.Location = new System.Drawing.Point(3, 407);
             this.dgvMateriaSel.MultiSelect = false;
             this.dgvMateriaSel.Name = "dgvMateriaSel";
             this.dgvMateriaSel.ReadOnly = true;
             this.dgvMateriaSel.RowHeadersVisible = false;
             this.dgvMateriaSel.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvMateriaSel.Size = new System.Drawing.Size(408, 67);
+            this.dgvMateriaSel.Size = new System.Drawing.Size(411, 96);
             this.dgvMateriaSel.TabIndex = 4;
             // 
             // cmbProfesor
@@ -251,7 +251,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.cmbProfesor.Hint = "Profesor";
             this.cmbProfesor.IntegralHeight = false;
             this.cmbProfesor.ItemHeight = 43;
-            this.cmbProfesor.Location = new System.Drawing.Point(500, 12);
+            this.cmbProfesor.Location = new System.Drawing.Point(505, 26);
             this.cmbProfesor.MaxDropDownItems = 4;
             this.cmbProfesor.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbProfesor.Name = "cmbProfesor";
@@ -282,7 +282,7 @@ namespace SistemaAsistencia.Vista.Dictados
             "MIÉRCOLES",
             "JUEVES",
             "VIERNES"});
-            this.cmbDia.Location = new System.Drawing.Point(500, 85);
+            this.cmbDia.Location = new System.Drawing.Point(505, 127);
             this.cmbDia.MaxDropDownItems = 4;
             this.cmbDia.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbDia.Name = "cmbDia";
@@ -463,7 +463,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.txtBuscar.MouseState = MaterialSkin.MouseState.OUT;
             this.txtBuscar.Multiline = false;
             this.txtBuscar.Name = "txtBuscar";
-            this.txtBuscar.Size = new System.Drawing.Size(377, 50);
+            this.txtBuscar.Size = new System.Drawing.Size(383, 50);
             this.txtBuscar.TabIndex = 0;
             this.txtBuscar.Text = "";
             this.txtBuscar.TrailingIcon = null;
@@ -478,7 +478,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.btnToggleActivo.Depth = 0;
             this.btnToggleActivo.HighEmphasis = true;
             this.btnToggleActivo.Icon = null;
-            this.btnToggleActivo.Location = new System.Drawing.Point(388, 6);
+            this.btnToggleActivo.Location = new System.Drawing.Point(394, 10);
             this.btnToggleActivo.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnToggleActivo.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnToggleActivo.Name = "btnToggleActivo";
@@ -494,9 +494,9 @@ namespace SistemaAsistencia.Vista.Dictados
             // 
             this.dgvDictados.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDictados.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvDictados.Location = new System.Drawing.Point(3, 56);
+            this.dgvDictados.Location = new System.Drawing.Point(3, 63);
             this.dgvDictados.Name = "dgvDictados";
-            this.dgvDictados.Size = new System.Drawing.Size(483, 386);
+            this.dgvDictados.Size = new System.Drawing.Size(489, 434);
             this.dgvDictados.TabIndex = 1;
             this.dgvDictados.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDictados_CellClick);
             // 
@@ -531,38 +531,39 @@ namespace SistemaAsistencia.Vista.Dictados
             // pnlCrear
             // 
             this.pnlCrear.AutoScroll = true;
-            this.pnlCrear.Controls.Add(this.tableLayoutPanel1);
+            this.pnlCrear.Controls.Add(this.ConPrincipal);
             this.pnlCrear.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCrear.Location = new System.Drawing.Point(3, 3);
             this.pnlCrear.Name = "pnlCrear";
             this.pnlCrear.Size = new System.Drawing.Size(834, 506);
             this.pnlCrear.TabIndex = 12;
             // 
-            // tableLayoutPanel1
+            // ConPrincipal
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel9, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel8, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.cmbDia, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.cmbProfesor, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.dgvMateriaSel, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.cmbFiltroEspecialidad, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel7, 1, 2);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(828, 365);
-            this.tableLayoutPanel1.TabIndex = 12;
+            this.ConPrincipal.ColumnCount = 2;
+            this.ConPrincipal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.ConPrincipal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.ConPrincipal.Controls.Add(this.tableLayoutPanel9, 1, 4);
+            this.ConPrincipal.Controls.Add(this.tableLayoutPanel8, 1, 3);
+            this.ConPrincipal.Controls.Add(this.cmbDia, 1, 1);
+            this.ConPrincipal.Controls.Add(this.cmbProfesor, 1, 0);
+            this.ConPrincipal.Controls.Add(this.dgvMateriaSel, 0, 4);
+            this.ConPrincipal.Controls.Add(this.cmbFiltroEspecialidad, 0, 0);
+            this.ConPrincipal.Controls.Add(this.tableLayoutPanel2, 0, 1);
+            this.ConPrincipal.Controls.Add(this.tableLayoutPanel5, 0, 2);
+            this.ConPrincipal.Controls.Add(this.tableLayoutPanel6, 0, 3);
+            this.ConPrincipal.Controls.Add(this.tableLayoutPanel7, 1, 2);
+            this.ConPrincipal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConPrincipal.Location = new System.Drawing.Point(0, 0);
+            this.ConPrincipal.Name = "ConPrincipal";
+            this.ConPrincipal.RowCount = 5;
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.ConPrincipal.Size = new System.Drawing.Size(834, 506);
+            this.ConPrincipal.TabIndex = 12;
             // 
             // tableLayoutPanel9
             // 
@@ -571,7 +572,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel9.Controls.Add(this.btnGuardar, 0, 0);
             this.tableLayoutPanel9.Controls.Add(this.btnLimpiarCrear, 1, 0);
-            this.tableLayoutPanel9.Location = new System.Drawing.Point(417, 295);
+            this.tableLayoutPanel9.Location = new System.Drawing.Point(420, 407);
             this.tableLayoutPanel9.Name = "tableLayoutPanel9";
             this.tableLayoutPanel9.RowCount = 1;
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -585,7 +586,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel8.Controls.Add(this.lblCAnio, 0, 0);
             this.tableLayoutPanel8.Controls.Add(this.nudAnioLectivo, 1, 0);
-            this.tableLayoutPanel8.Location = new System.Drawing.Point(417, 222);
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(420, 306);
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 1;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -600,7 +601,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Controls.Add(this.nudAnioMateria, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.lblCAnioMateria, 0, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(65, 81);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(66, 123);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -615,7 +616,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel5.Controls.Add(this.lblCDivision, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.nudDivision, 1, 0);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(67, 154);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(68, 224);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -630,7 +631,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel6.Controls.Add(this.lblCGrupo, 0, 0);
             this.tableLayoutPanel6.Controls.Add(this.nudGrupo, 1, 0);
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(67, 227);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(68, 325);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -648,7 +649,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tableLayoutPanel7.Controls.Add(this.dtpHorarioFin, 3, 0);
             this.tableLayoutPanel7.Controls.Add(this.lblCFin, 2, 0);
             this.tableLayoutPanel7.Controls.Add(this.dtpHorario, 1, 0);
-            this.tableLayoutPanel7.Location = new System.Drawing.Point(417, 149);
+            this.tableLayoutPanel7.Location = new System.Drawing.Point(420, 205);
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -658,7 +659,7 @@ namespace SistemaAsistencia.Vista.Dictados
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.White;
-            this.tabPage2.Controls.Add(this.tableLayoutPanel12);
+            this.tabPage2.Controls.Add(this.ConPrincipal2);
             this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -666,50 +667,49 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Modificar un Dictado";
             // 
-            // tableLayoutPanel12
+            // ConPrincipal2
             // 
-            this.tableLayoutPanel12.ColumnCount = 2;
-            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40.64748F));
-            this.tableLayoutPanel12.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 59.35252F));
-            this.tableLayoutPanel12.Controls.Add(this.tableLayoutPanel10, 0, 0);
-            this.tableLayoutPanel12.Controls.Add(this.tableLayoutPanel3, 1, 0);
-            this.tableLayoutPanel12.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel12.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel12.Name = "tableLayoutPanel12";
-            this.tableLayoutPanel12.RowCount = 1;
-            this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel12.Size = new System.Drawing.Size(834, 451);
-            this.tableLayoutPanel12.TabIndex = 5;
+            this.ConPrincipal2.ColumnCount = 2;
+            this.ConPrincipal2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.ConPrincipal2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.ConPrincipal2.Controls.Add(this.ConEditando, 0, 0);
+            this.ConPrincipal2.Controls.Add(this.tableLayoutPanel3, 1, 0);
+            this.ConPrincipal2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConPrincipal2.Location = new System.Drawing.Point(3, 3);
+            this.ConPrincipal2.Name = "ConPrincipal2";
+            this.ConPrincipal2.RowCount = 1;
+            this.ConPrincipal2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ConPrincipal2.Size = new System.Drawing.Size(834, 506);
+            this.ConPrincipal2.TabIndex = 5;
             // 
-            // tableLayoutPanel10
+            // ConEditando
             // 
-            this.tableLayoutPanel10.ColumnCount = 1;
-            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel15, 0, 8);
-            this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel11, 0, 2);
-            this.tableLayoutPanel10.Controls.Add(this.lblEditando, 0, 0);
-            this.tableLayoutPanel10.Controls.Add(this.cmbEditFiltroEspecialidad, 0, 1);
-            this.tableLayoutPanel10.Controls.Add(this.dgvEditMateriaSel, 0, 3);
-            this.tableLayoutPanel10.Controls.Add(this.cmbEditProfesor, 0, 4);
-            this.tableLayoutPanel10.Controls.Add(this.cmbEditDia, 0, 6);
-            this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel14, 0, 7);
-            this.tableLayoutPanel10.Controls.Add(this.tableLayoutPanel16, 0, 9);
-            this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel10.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel10.Name = "tableLayoutPanel10";
-            this.tableLayoutPanel10.RowCount = 10;
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 63F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 9F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(333, 445);
-            this.tableLayoutPanel10.TabIndex = 4;
+            this.ConEditando.ColumnCount = 1;
+            this.ConEditando.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ConEditando.Controls.Add(this.tableLayoutPanel11, 0, 2);
+            this.ConEditando.Controls.Add(this.lblEditando, 0, 0);
+            this.ConEditando.Controls.Add(this.cmbEditFiltroEspecialidad, 0, 1);
+            this.ConEditando.Controls.Add(this.dgvEditMateriaSel, 0, 3);
+            this.ConEditando.Controls.Add(this.cmbEditProfesor, 0, 4);
+            this.ConEditando.Controls.Add(this.cmbEditDia, 0, 5);
+            this.ConEditando.Controls.Add(this.ConHora2, 0, 6);
+            this.ConEditando.Controls.Add(this.tableLayoutPanel15, 0, 7);
+            this.ConEditando.Controls.Add(this.tableLayoutPanel16, 0, 8);
+            this.ConEditando.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConEditando.Location = new System.Drawing.Point(3, 3);
+            this.ConEditando.Name = "ConEditando";
+            this.ConEditando.RowCount = 9;
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.ConEditando.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.ConEditando.Size = new System.Drawing.Size(327, 500);
+            this.ConEditando.TabIndex = 4;
             // 
             // tableLayoutPanel15
             // 
@@ -719,17 +719,17 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tableLayoutPanel15.Controls.Add(this.nudEditAnio, 1, 0);
             this.tableLayoutPanel15.Controls.Add(this.lblEditAnio, 0, 0);
             this.tableLayoutPanel15.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel15.Location = new System.Drawing.Point(3, 343);
+            this.tableLayoutPanel15.Location = new System.Drawing.Point(3, 398);
             this.tableLayoutPanel15.Name = "tableLayoutPanel15";
             this.tableLayoutPanel15.RowCount = 1;
             this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel15.Size = new System.Drawing.Size(327, 36);
+            this.tableLayoutPanel15.Size = new System.Drawing.Size(321, 39);
             this.tableLayoutPanel15.TabIndex = 20;
             // 
             // nudEditAnio
             // 
             this.nudEditAnio.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nudEditAnio.Location = new System.Drawing.Point(200, 5);
+            this.nudEditAnio.Location = new System.Drawing.Point(195, 7);
             this.nudEditAnio.Maximum = new decimal(new int[] {
             2100,
             0,
@@ -756,7 +756,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.lblEditAnio.BackColor = System.Drawing.Color.White;
             this.lblEditAnio.Depth = 0;
             this.lblEditAnio.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditAnio.Location = new System.Drawing.Point(42, 8);
+            this.lblEditAnio.Location = new System.Drawing.Point(40, 10);
             this.lblEditAnio.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblEditAnio.Name = "lblEditAnio";
             this.lblEditAnio.Size = new System.Drawing.Size(79, 19);
@@ -779,17 +779,17 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tableLayoutPanel11.Controls.Add(this.lblEditAnioMateria, 0, 0);
             this.tableLayoutPanel11.Controls.Add(this.nudEditAnioMateria, 1, 0);
             this.tableLayoutPanel11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel11.Location = new System.Drawing.Point(3, 89);
+            this.tableLayoutPanel11.Location = new System.Drawing.Point(3, 78);
             this.tableLayoutPanel11.Name = "tableLayoutPanel11";
             this.tableLayoutPanel11.RowCount = 1;
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel11.Size = new System.Drawing.Size(327, 40);
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(321, 39);
             this.tableLayoutPanel11.TabIndex = 16;
             // 
             // nudEditGrupo
             // 
             this.nudEditGrupo.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nudEditGrupo.Location = new System.Drawing.Point(285, 7);
+            this.nudEditGrupo.Location = new System.Drawing.Point(279, 7);
             this.nudEditGrupo.Maximum = new decimal(new int[] {
             2,
             0,
@@ -806,7 +806,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.lblEditGrupo.BackColor = System.Drawing.Color.White;
             this.lblEditGrupo.Depth = 0;
             this.lblEditGrupo.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditGrupo.Location = new System.Drawing.Point(226, 10);
+            this.lblEditGrupo.Location = new System.Drawing.Point(221, 10);
             this.lblEditGrupo.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblEditGrupo.Name = "lblEditGrupo";
             this.lblEditGrupo.Size = new System.Drawing.Size(48, 19);
@@ -816,7 +816,7 @@ namespace SistemaAsistencia.Vista.Dictados
             // nudEditDivision
             // 
             this.nudEditDivision.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nudEditDivision.Location = new System.Drawing.Point(176, 7);
+            this.nudEditDivision.Location = new System.Drawing.Point(172, 7);
             this.nudEditDivision.Maximum = new decimal(new int[] {
             7,
             0,
@@ -833,10 +833,10 @@ namespace SistemaAsistencia.Vista.Dictados
             this.lblEditDivision.BackColor = System.Drawing.Color.White;
             this.lblEditDivision.Depth = 0;
             this.lblEditDivision.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditDivision.Location = new System.Drawing.Point(112, 10);
+            this.lblEditDivision.Location = new System.Drawing.Point(110, 10);
             this.lblEditDivision.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblEditDivision.Name = "lblEditDivision";
-            this.lblEditDivision.Size = new System.Drawing.Size(58, 19);
+            this.lblEditDivision.Size = new System.Drawing.Size(56, 19);
             this.lblEditDivision.TabIndex = 4;
             this.lblEditDivision.Text = "División";
             // 
@@ -847,7 +847,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.lblEditAnioMateria.BackColor = System.Drawing.Color.White;
             this.lblEditAnioMateria.Depth = 0;
             this.lblEditAnioMateria.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditAnioMateria.Location = new System.Drawing.Point(17, 10);
+            this.lblEditAnioMateria.Location = new System.Drawing.Point(16, 10);
             this.lblEditAnioMateria.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblEditAnioMateria.Name = "lblEditAnioMateria";
             this.lblEditAnioMateria.Size = new System.Drawing.Size(29, 19);
@@ -857,7 +857,7 @@ namespace SistemaAsistencia.Vista.Dictados
             // nudEditAnioMateria
             // 
             this.nudEditAnioMateria.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nudEditAnioMateria.Location = new System.Drawing.Point(67, 7);
+            this.nudEditAnioMateria.Location = new System.Drawing.Point(65, 7);
             this.nudEditAnioMateria.Maximum = new decimal(new int[] {
             7,
             0,
@@ -883,7 +883,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.lblEditando.BackColor = System.Drawing.Color.White;
             this.lblEditando.Depth = 0;
             this.lblEditando.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditando.Location = new System.Drawing.Point(67, 6);
+            this.lblEditando.Location = new System.Drawing.Point(64, 5);
             this.lblEditando.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblEditando.Name = "lblEditando";
             this.lblEditando.Size = new System.Drawing.Size(198, 19);
@@ -906,7 +906,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.cmbEditFiltroEspecialidad.Hint = "Especialidad";
             this.cmbEditFiltroEspecialidad.IntegralHeight = false;
             this.cmbEditFiltroEspecialidad.ItemHeight = 43;
-            this.cmbEditFiltroEspecialidad.Location = new System.Drawing.Point(74, 34);
+            this.cmbEditFiltroEspecialidad.Location = new System.Drawing.Point(71, 33);
             this.cmbEditFiltroEspecialidad.MaxDropDownItems = 4;
             this.cmbEditFiltroEspecialidad.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbEditFiltroEspecialidad.Name = "cmbEditFiltroEspecialidad";
@@ -921,13 +921,13 @@ namespace SistemaAsistencia.Vista.Dictados
             this.dgvEditMateriaSel.AllowUserToDeleteRows = false;
             this.dgvEditMateriaSel.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvEditMateriaSel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvEditMateriaSel.Location = new System.Drawing.Point(3, 135);
+            this.dgvEditMateriaSel.Location = new System.Drawing.Point(3, 123);
             this.dgvEditMateriaSel.MultiSelect = false;
             this.dgvEditMateriaSel.Name = "dgvEditMateriaSel";
             this.dgvEditMateriaSel.ReadOnly = true;
             this.dgvEditMateriaSel.RowHeadersVisible = false;
             this.dgvEditMateriaSel.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvEditMateriaSel.Size = new System.Drawing.Size(327, 57);
+            this.dgvEditMateriaSel.Size = new System.Drawing.Size(321, 134);
             this.dgvEditMateriaSel.TabIndex = 6;
             // 
             // cmbEditProfesor
@@ -946,7 +946,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.cmbEditProfesor.Hint = "Profesor";
             this.cmbEditProfesor.IntegralHeight = false;
             this.cmbEditProfesor.ItemHeight = 43;
-            this.cmbEditProfesor.Location = new System.Drawing.Point(90, 198);
+            this.cmbEditProfesor.Location = new System.Drawing.Point(87, 263);
             this.cmbEditProfesor.MaxDropDownItems = 4;
             this.cmbEditProfesor.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbEditProfesor.Name = "cmbEditProfesor";
@@ -977,7 +977,7 @@ namespace SistemaAsistencia.Vista.Dictados
             "MIÉRCOLES",
             "JUEVES",
             "VIERNES"});
-            this.cmbEditDia.Location = new System.Drawing.Point(85, 252);
+            this.cmbEditDia.Location = new System.Drawing.Point(82, 308);
             this.cmbEditDia.MaxDropDownItems = 4;
             this.cmbEditDia.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbEditDia.Name = "cmbEditDia";
@@ -986,31 +986,31 @@ namespace SistemaAsistencia.Vista.Dictados
             this.cmbEditDia.TabIndex = 8;
             this.cmbEditDia.UseAccent = false;
             // 
-            // tableLayoutPanel14
+            // ConHora2
             // 
-            this.tableLayoutPanel14.ColumnCount = 4;
-            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel14.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel14.Controls.Add(this.dtpEditHorarioFin, 3, 0);
-            this.tableLayoutPanel14.Controls.Add(this.lblEditFin, 2, 0);
-            this.tableLayoutPanel14.Controls.Add(this.dtpEditHorario, 1, 0);
-            this.tableLayoutPanel14.Controls.Add(this.lblEditHorario, 0, 0);
-            this.tableLayoutPanel14.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel14.Location = new System.Drawing.Point(3, 303);
-            this.tableLayoutPanel14.Name = "tableLayoutPanel14";
-            this.tableLayoutPanel14.RowCount = 1;
-            this.tableLayoutPanel14.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel14.Size = new System.Drawing.Size(327, 34);
-            this.tableLayoutPanel14.TabIndex = 19;
+            this.ConHora2.ColumnCount = 4;
+            this.ConHora2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConHora2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConHora2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConHora2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConHora2.Controls.Add(this.dtpEditHorarioFin, 3, 0);
+            this.ConHora2.Controls.Add(this.lblEditFin, 2, 0);
+            this.ConHora2.Controls.Add(this.dtpEditHorario, 1, 0);
+            this.ConHora2.Controls.Add(this.lblEditHorario, 0, 0);
+            this.ConHora2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConHora2.Location = new System.Drawing.Point(3, 353);
+            this.ConHora2.Name = "ConHora2";
+            this.ConHora2.RowCount = 1;
+            this.ConHora2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ConHora2.Size = new System.Drawing.Size(321, 39);
+            this.ConHora2.TabIndex = 19;
             // 
             // dtpEditHorarioFin
             // 
             this.dtpEditHorarioFin.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dtpEditHorarioFin.CustomFormat = "HH:mm";
             this.dtpEditHorarioFin.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpEditHorarioFin.Location = new System.Drawing.Point(256, 4);
+            this.dtpEditHorarioFin.Location = new System.Drawing.Point(252, 7);
             this.dtpEditHorarioFin.Name = "dtpEditHorarioFin";
             this.dtpEditHorarioFin.ShowUpDown = true;
             this.dtpEditHorarioFin.Size = new System.Drawing.Size(57, 25);
@@ -1023,7 +1023,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.lblEditFin.BackColor = System.Drawing.Color.White;
             this.lblEditFin.Depth = 0;
             this.lblEditFin.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditFin.Location = new System.Drawing.Point(191, 7);
+            this.lblEditFin.Location = new System.Drawing.Point(188, 10);
             this.lblEditFin.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblEditFin.Name = "lblEditFin";
             this.lblEditFin.Size = new System.Drawing.Size(23, 19);
@@ -1035,7 +1035,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.dtpEditHorario.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.dtpEditHorario.CustomFormat = "HH:mm";
             this.dtpEditHorario.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpEditHorario.Location = new System.Drawing.Point(91, 4);
+            this.dtpEditHorario.Location = new System.Drawing.Point(90, 7);
             this.dtpEditHorario.Name = "dtpEditHorario";
             this.dtpEditHorario.ShowUpDown = true;
             this.dtpEditHorario.Size = new System.Drawing.Size(60, 25);
@@ -1048,7 +1048,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.lblEditHorario.BackColor = System.Drawing.Color.White;
             this.lblEditHorario.Depth = 0;
             this.lblEditHorario.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.lblEditHorario.Location = new System.Drawing.Point(21, 7);
+            this.lblEditHorario.Location = new System.Drawing.Point(20, 10);
             this.lblEditHorario.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblEditHorario.Name = "lblEditHorario";
             this.lblEditHorario.Size = new System.Drawing.Size(39, 19);
@@ -1065,11 +1065,11 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tableLayoutPanel16.Controls.Add(this.btnModificar, 0, 0);
             this.tableLayoutPanel16.Controls.Add(this.btnEliminar, 1, 0);
             this.tableLayoutPanel16.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel16.Location = new System.Drawing.Point(3, 385);
+            this.tableLayoutPanel16.Location = new System.Drawing.Point(3, 443);
             this.tableLayoutPanel16.Name = "tableLayoutPanel16";
             this.tableLayoutPanel16.RowCount = 1;
             this.tableLayoutPanel16.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel16.Size = new System.Drawing.Size(327, 57);
+            this.tableLayoutPanel16.Size = new System.Drawing.Size(321, 54);
             this.tableLayoutPanel16.TabIndex = 21;
             // 
             // btnLimpiarEditar
@@ -1081,12 +1081,12 @@ namespace SistemaAsistencia.Vista.Dictados
             this.btnLimpiarEditar.Depth = 0;
             this.btnLimpiarEditar.HighEmphasis = true;
             this.btnLimpiarEditar.Icon = null;
-            this.btnLimpiarEditar.Location = new System.Drawing.Point(222, 6);
+            this.btnLimpiarEditar.Location = new System.Drawing.Point(218, 6);
             this.btnLimpiarEditar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnLimpiarEditar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLimpiarEditar.Name = "btnLimpiarEditar";
             this.btnLimpiarEditar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnLimpiarEditar.Size = new System.Drawing.Size(101, 45);
+            this.btnLimpiarEditar.Size = new System.Drawing.Size(99, 42);
             this.btnLimpiarEditar.TabIndex = 14;
             this.btnLimpiarEditar.Text = "Limpiar";
             this.btnLimpiarEditar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
@@ -1108,7 +1108,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.btnModificar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnModificar.Name = "btnModificar";
             this.btnModificar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnModificar.Size = new System.Drawing.Size(101, 45);
+            this.btnModificar.Size = new System.Drawing.Size(99, 42);
             this.btnModificar.TabIndex = 12;
             this.btnModificar.Text = "Modificar";
             this.btnModificar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -1125,12 +1125,12 @@ namespace SistemaAsistencia.Vista.Dictados
             this.btnEliminar.Depth = 0;
             this.btnEliminar.HighEmphasis = true;
             this.btnEliminar.Icon = null;
-            this.btnEliminar.Location = new System.Drawing.Point(113, 6);
+            this.btnEliminar.Location = new System.Drawing.Point(111, 6);
             this.btnEliminar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnEliminar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnEliminar.Name = "btnEliminar";
             this.btnEliminar.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnEliminar.Size = new System.Drawing.Size(101, 45);
+            this.btnEliminar.Size = new System.Drawing.Size(99, 42);
             this.btnEliminar.TabIndex = 13;
             this.btnEliminar.Text = "Eliminar";
             this.btnEliminar.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
@@ -1145,12 +1145,12 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tableLayoutPanel3.Controls.Add(this.dgvDictados, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 0, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(342, 3);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(336, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 88F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(489, 445);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(495, 500);
             this.tableLayoutPanel3.TabIndex = 3;
             // 
             // tableLayoutPanel4
@@ -1165,7 +1165,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(483, 47);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(489, 54);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // materialTabSelector1
@@ -1190,7 +1190,6 @@ namespace SistemaAsistencia.Vista.Dictados
             this.ClientSize = new System.Drawing.Size(860, 600);
             this.Controls.Add(this.materialTabSelector1);
             this.Controls.Add(this.materialTabControl1);
-            this.MinimumSize = new System.Drawing.Size(860, 600);
             this.Name = "FrmDictados";
             this.Text = "Dictados";
             this.Load += new System.EventHandler(this.FrmDictados_Load);
@@ -1203,7 +1202,7 @@ namespace SistemaAsistencia.Vista.Dictados
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.pnlCrear.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
+            this.ConPrincipal.ResumeLayout(false);
             this.tableLayoutPanel9.ResumeLayout(false);
             this.tableLayoutPanel8.ResumeLayout(false);
             this.tableLayoutPanel8.PerformLayout();
@@ -1216,8 +1215,8 @@ namespace SistemaAsistencia.Vista.Dictados
             this.tableLayoutPanel7.ResumeLayout(false);
             this.tableLayoutPanel7.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            this.tableLayoutPanel12.ResumeLayout(false);
-            this.tableLayoutPanel10.ResumeLayout(false);
+            this.ConPrincipal2.ResumeLayout(false);
+            this.ConEditando.ResumeLayout(false);
             this.tableLayoutPanel15.ResumeLayout(false);
             this.tableLayoutPanel15.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEditAnio)).EndInit();
@@ -1227,8 +1226,8 @@ namespace SistemaAsistencia.Vista.Dictados
             ((System.ComponentModel.ISupportInitialize)(this.nudEditDivision)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEditAnioMateria)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEditMateriaSel)).EndInit();
-            this.tableLayoutPanel14.ResumeLayout(false);
-            this.tableLayoutPanel14.PerformLayout();
+            this.ConHora2.ResumeLayout(false);
+            this.ConHora2.PerformLayout();
             this.tableLayoutPanel16.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
@@ -1265,14 +1264,14 @@ namespace SistemaAsistencia.Vista.Dictados
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private MaterialSkin.Controls.MaterialTabSelector materialTabSelector1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel ConPrincipal;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
+        private System.Windows.Forms.TableLayoutPanel ConEditando;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel15;
         private System.Windows.Forms.NumericUpDown nudEditAnio;
         private MaterialSkin.Controls.MaterialLabel lblEditAnio;
@@ -1288,7 +1287,7 @@ namespace SistemaAsistencia.Vista.Dictados
         private System.Windows.Forms.DataGridView dgvEditMateriaSel;
         private MaterialSkin.Controls.MaterialComboBox cmbEditProfesor;
         private MaterialSkin.Controls.MaterialComboBox cmbEditDia;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel14;
+        private System.Windows.Forms.TableLayoutPanel ConHora2;
         private System.Windows.Forms.DateTimePicker dtpEditHorarioFin;
         private MaterialSkin.Controls.MaterialLabel lblEditFin;
         private System.Windows.Forms.DateTimePicker dtpEditHorario;
@@ -1297,6 +1296,6 @@ namespace SistemaAsistencia.Vista.Dictados
         private MaterialSkin.Controls.MaterialButton btnLimpiarEditar;
         private MaterialSkin.Controls.MaterialButton btnEliminar;
         private MaterialSkin.Controls.MaterialButton btnModificar;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel12;
+        private System.Windows.Forms.TableLayoutPanel ConPrincipal2;
     }
 }
