@@ -20,9 +20,6 @@ namespace SistemaAsistencia.Modelo.DAO
         /// Sin valor el dictado va a todo el curso; en el modelo eso es null,
         /// y la vista manda 0 en el NumericUpDown para el mismo significado.
         /// </summary>
-        /// <param name="dr">DataReader con el registro actual.</param>
-        /// <param name="columna">Nombre de la columna a leer.</param>
-        /// <returns>El valor, o null si la columna está vacía o es 0.</returns>
         private static int? LeerEnteroOpcional(MySqlDataReader dr, string columna)
         {
             object valor = dr[columna];
@@ -37,11 +34,8 @@ namespace SistemaAsistencia.Modelo.DAO
         /// Convierte un registro obtenido desde la base de datos
         /// en un objeto Dictado.
         /// </summary>
-        /// <param name="dr">DataReader con el registro actual.</param>
-        /// <returns>Objeto Dictado.</returns>
         private Dictado MapearDictado(MySqlDataReader dr)
         {
-            // horario_fin puede no existir en BD anteriores: lectura defensiva.
             string fin = string.Empty;
             try
             {
@@ -69,10 +63,6 @@ namespace SistemaAsistencia.Modelo.DAO
             };
         }
 
-        /// <summary>
-        /// Lee la columna activo si el SELECT la trae (defensivo: si no
-        /// existe se asume true para no romper listados viejos).
-        /// </summary>
         private static bool LeerActivo(MySqlDataReader dr)
         {
             try
@@ -84,9 +74,6 @@ namespace SistemaAsistencia.Modelo.DAO
             return true;
         }
 
-        /// <summary>
-        /// Obtiene todos los dictados registrados.
-        /// </summary>
         public List<Dictado> ObtenerTodos()
         {
             List<Dictado> lista = new List<Dictado>();
@@ -96,10 +83,10 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
-                                      D.dia, D.horario, D.horario_fin,
-                                      D.division, D.grupo, D.anio_lectivo, D.id_preceptor, D.activo,
-                                      M.nombre_materia, M.anio_materia, P.apellido_profesor,
-                                      E.nombre_especialidad
+                                    D.dia, D.horario, D.horario_fin,
+                                    D.division, D.grupo, D.anio_lectivo, D.id_preceptor, D.activo,
+                                    M.nombre_materia, M.anio_materia, P.apellido_profesor,
+                                    E.nombre_especialidad
                                FROM dictado D
                                INNER JOIN materia M
                                    ON M.id_materia = D.id_materia
@@ -125,10 +112,6 @@ namespace SistemaAsistencia.Modelo.DAO
             return lista;
         }
 
-        /// <summary>
-        /// Obtiene todos los dictados, incluyendo inactivos.
-        /// Solo para los ABM (el toggle Activar necesita ver los inactivos).
-        /// </summary>
         public List<Dictado> ObtenerTodosIncluyendoInactivos()
         {
             List<Dictado> lista = new List<Dictado>();
@@ -138,10 +121,10 @@ namespace SistemaAsistencia.Modelo.DAO
                 cn.Open();
 
                 string sql = @"SELECT D.id_dictado, D.id_materia, D.id_profesor,
-                                      D.dia, D.horario, D.horario_fin,
-                                      D.division, D.grupo, D.anio_lectivo, D.id_preceptor, D.activo,
-                                      M.nombre_materia, M.anio_materia, P.apellido_profesor,
-                                      E.nombre_especialidad
+                                    D.dia, D.horario, D.horario_fin,
+                                    D.division, D.grupo, D.anio_lectivo, D.id_preceptor, D.activo,
+                                    M.nombre_materia, M.anio_materia, P.apellido_profesor,
+                                    E.nombre_especialidad
                                FROM dictado D
                                INNER JOIN materia M
                                    ON M.id_materia = D.id_materia
@@ -166,12 +149,6 @@ namespace SistemaAsistencia.Modelo.DAO
             return lista;
         }
 
-        /// <summary>
-        /// Indica si el profesor ya tiene un dictado activo del mismo año
-        /// lectivo que se superpone en día y horario. Pegados (fin == inicio
-        /// ajeno) no cuentan como superposición. Se excluye un dictado
-        /// (el propio, al modificar).
-        /// </summary>
         public bool ExisteSolapamiento(int idProfesor, string dia, string inicio,
             string fin, int anioLectivo, int excluirIdDictado)
         {
@@ -202,9 +179,6 @@ namespace SistemaAsistencia.Modelo.DAO
             }
         }
 
-        /// <summary>
-        /// Agrega un nuevo dictado a la base de datos.
-        /// </summary>
         public bool Agregar(Dictado dictado)
         {
             using (MySqlConnection cn = conexionBD.ObtenerConexion())
@@ -228,16 +202,12 @@ namespace SistemaAsistencia.Modelo.DAO
                     dictado.Division.HasValue ? (object)dictado.Division.Value : System.DBNull.Value);
                 cmd.Parameters.AddWithValue("@grupo", dictado.Grupo);
                 cmd.Parameters.AddWithValue("@anio_lectivo", dictado.AnioLectivo);
-                // Todo lo creado desde el escritorio nace activo.
                 cmd.Parameters.AddWithValue("@activo", 1);
 
                 return cmd.ExecuteNonQuery() > 0;
             }
         }
 
-        /// <summary>
-        /// Modifica los datos de un dictado existente.
-        /// </summary>
         public bool Modificar(Dictado dictado)
         {
             using (MySqlConnection cn = conexionBD.ObtenerConexion())
@@ -273,9 +243,6 @@ namespace SistemaAsistencia.Modelo.DAO
             }
         }
 
-        /// <summary>
-        /// Da de baja lógica a un dictado (activo = 0). No borra su histórico.
-        /// </summary>
         public bool DarDeBaja(int idDictado)
         {
             using (MySqlConnection cn = conexionBD.ObtenerConexion())
@@ -287,16 +254,12 @@ namespace SistemaAsistencia.Modelo.DAO
                                 WHERE id_dictado = @id";
 
                 var cmd = new MySqlCommand(sql, cn);
-
                 cmd.Parameters.AddWithValue("@id", idDictado);
 
                 return cmd.ExecuteNonQuery() > 0;
             }
         }
 
-        /// <summary>
-        /// Da de alta a un dictado (activo = 1). Reverso de la baja logica.
-        /// </summary>
         public bool DarDeAlta(int idDictado)
         {
             using (MySqlConnection cn = conexionBD.ObtenerConexion())
@@ -308,16 +271,12 @@ namespace SistemaAsistencia.Modelo.DAO
                                 WHERE id_dictado = @id";
 
                 var cmd = new MySqlCommand(sql, cn);
-
                 cmd.Parameters.AddWithValue("@id", idDictado);
 
                 return cmd.ExecuteNonQuery() > 0;
             }
         }
 
-        /// <summary>
-        /// Asigna un preceptor al dictado (NULL = quitar la asignacion).
-        /// </summary>
         public bool AsignarPreceptor(int idDictado, int? idPreceptor)
         {
             using (MySqlConnection cn = conexionBD.ObtenerConexion())
@@ -339,8 +298,8 @@ namespace SistemaAsistencia.Modelo.DAO
         }
 
         /// <summary>
-        /// Cuenta los alumnos inscriptos en el dictado que se borrarían
-        /// con una eliminación definitiva.
+        /// Cuenta los elementos dependientes (alumnos inscriptos, clases y asistencias) 
+        /// que se borrarían con una eliminación definitiva.
         /// </summary>
         public List<Dependencia> ObtenerDependencias(int idDictado)
         {
@@ -350,14 +309,33 @@ namespace SistemaAsistencia.Modelo.DAO
             {
                 cn.Open();
 
+                // 1. Alumnos inscriptos
                 using (MySqlCommand cmd = new MySqlCommand(
                     "SELECT COUNT(*) FROM inscribe WHERE id_dictado = @id", cn))
                 {
                     cmd.Parameters.AddWithValue("@id", idDictado);
-
                     int alumnos = Convert.ToInt32(cmd.ExecuteScalar());
-
                     dependencias.Add(new Dependencia("Alumnos inscriptos", alumnos));
+                }
+
+                // 2. Clases registradas
+                using (MySqlCommand cmdClases = new MySqlCommand(
+                    "SELECT COUNT(*) FROM clase WHERE id_dictado = @id", cn))
+                {
+                    cmdClases.Parameters.AddWithValue("@id", idDictado);
+                    int clases = Convert.ToInt32(cmdClases.ExecuteScalar());
+                    dependencias.Add(new Dependencia("Clases registradas", clases));
+                }
+
+                // 3. Asistencias asociadas a las clases del dictado
+                using (MySqlCommand cmdAsistencias = new MySqlCommand(
+                    @"SELECT COUNT(*) FROM asistencia A 
+                      INNER JOIN clase C ON A.id_clase = C.id_clase 
+                      WHERE C.id_dictado = @id", cn))
+                {
+                    cmdAsistencias.Parameters.AddWithValue("@id", idDictado);
+                    int asistencias = Convert.ToInt32(cmdAsistencias.ExecuteScalar());
+                    dependencias.Add(new Dependencia("Registros de asistencia", asistencias));
                 }
             }
 
@@ -365,7 +343,7 @@ namespace SistemaAsistencia.Modelo.DAO
         }
 
         /// <summary>
-        /// Elimina definitivamente el dictado y sus inscripciones vinculadas,
+        /// Elimina definitivamente el dictado, sus inscripciones, asistencias y clases vinculadas,
         /// dentro de una transacción (evita dejar datos huérfanos).
         /// </summary>
         public bool EliminarDefinitivo(int idDictado)
@@ -378,6 +356,7 @@ namespace SistemaAsistencia.Modelo.DAO
                 {
                     try
                     {
+                        // 1. Borrar inscripciones de alumnos
                         using (MySqlCommand cmdInscripciones = new MySqlCommand(
                             "DELETE FROM inscribe WHERE id_dictado = @id", cn, tx))
                         {
@@ -385,6 +364,25 @@ namespace SistemaAsistencia.Modelo.DAO
                             cmdInscripciones.ExecuteNonQuery();
                         }
 
+                        // 2. Borrar asistencias de las clases asociadas a este dictado
+                        using (MySqlCommand cmdAsistencias = new MySqlCommand(
+                            @"DELETE A FROM asistencia A 
+                              INNER JOIN clase C ON A.id_clase = C.id_clase 
+                              WHERE C.id_dictado = @id", cn, tx))
+                        {
+                            cmdAsistencias.Parameters.AddWithValue("@id", idDictado);
+                            cmdAsistencias.ExecuteNonQuery();
+                        }
+
+                        // 3. Borrar clases asociadas al dictado
+                        using (MySqlCommand cmdClases = new MySqlCommand(
+                            "DELETE FROM clase WHERE id_dictado = @id", cn, tx))
+                        {
+                            cmdClases.Parameters.AddWithValue("@id", idDictado);
+                            cmdClases.ExecuteNonQuery();
+                        }
+
+                        // 4. Borrar el dictado principal
                         using (MySqlCommand cmd = new MySqlCommand(
                             "DELETE FROM dictado WHERE id_dictado = @id", cn, tx))
                         {
