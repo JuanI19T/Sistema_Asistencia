@@ -129,6 +129,86 @@ export async function obtenerDictados() {
   return pedir(`${API_URL}/api/dictados`);
 }
 
+export async function obtenerClasesProfesorHoy(idProfesor) {
+  try {
+    return await pedir(`${API_URL}/api/dictados/profesor/hoy`);
+  } catch {
+    // Respaldo para despliegues que todavía no tienen el endpoint nuevo.
+    const dictados = await obtenerDictados();
+    const ahora = new Date();
+    const diaHoy = DIAS[ahora.getDay()];
+    const minutosActual = ahora.getHours() * 60 + ahora.getMinutes();
+
+    const clases = dictados
+      .filter((dictado) => (
+        dictado.id_profesor === idProfesor && sinAcentos(dictado.dia) === diaHoy
+      ))
+      .sort((a, b) => minutosDeHora(a.horario) - minutosDeHora(b.horario))
+      .map((dictado) => ({
+        ...dictado,
+        id_clase: null,
+        estado: calcularEstadoLocal(dictado, minutosActual)
+      }));
+
+    return { fecha: fechaDeHoy(), dia: diaHoy, clases, derivado: true };
+  }
+}
+
+export async function obtenerClasesPreceptorHoy(idPreceptor) {
+  try {
+    return await pedir(`${API_URL}/api/dictados/preceptor/hoy`);
+  } catch {
+    try {
+      const dictados = await obtenerDictados();
+      const ahora = new Date();
+      const diaHoy = DIAS[ahora.getDay()];
+      const minutosActual = ahora.getHours() * 60 + ahora.getMinutes();
+
+      const clases = dictados
+        .filter((dictado) => (
+          Number(dictado.id_preceptor) === Number(idPreceptor) &&
+          sinAcentos(dictado.dia) === diaHoy
+        ))
+        .sort((a, b) => minutosDeHora(a.horario) - minutosDeHora(b.horario))
+        .map((dictado) => ({
+          id_dictado: dictado.id_dictado,
+          id_clase: null,
+          dia: dictado.dia,
+          horario: dictado.horario,
+          horario_fin: dictado.horario_fin,
+          grupo: dictado.grupo,
+          division: dictado.division,
+          anio_materia: dictado.anio_materia,
+          anio_lectivo: dictado.anio_lectivo,
+          nombre_materia: dictado.nombre_materia,
+          nombre_profesor: dictado.nombre_profesor,
+          apellido_profesor: dictado.apellido_profesor,
+          total_alumnos: 0,
+          total_verificados: 0,
+          estado: calcularEstadoLocal(dictado, minutosActual)
+        }));
+
+      return { fecha: fechaDeHoy(), dia: diaHoy, clases, derivado: true };
+    } catch {
+      const clases = await obtenerClases(fechaDeHoy());
+      return {
+        fecha: fechaDeHoy(),
+        clases: clases
+          .filter((clase) => Number(clase.id_preceptor) === Number(idPreceptor))
+          .map((clase) => ({
+            ...clase,
+            total_alumnos: clase.total_alumnos || 0,
+            total_verificados: clase.total_verificados || 0,
+            estado: clase.estado === 'en_curso'
+              ? 'en_curso'
+              : calcularEstadoLocal(clase, new Date().getHours() * 60 + new Date().getMinutes())
+          })),
+        derivado: true
+      };
+    }
+  }
+}
+
 export async function obtenerDictadosAlumno(idAlumno) {
   return pedir(`${API_URL}/api/dictados/alumno/${idAlumno}`);
 }
@@ -202,6 +282,14 @@ export async function obtenerClase(claseId) {
 
 export async function abrirClase(idDictado, fecha) {
   return post(`${API_URL}/api/clases`, { id_dictado: idDictado, fecha });
+}
+
+export async function abrirClasePreceptor(idDictado, fecha, datos) {
+  return post(`${API_URL}/api/clases/preceptor`, {
+    id_dictado: idDictado,
+    fecha,
+    ...datos
+  });
 }
 
 export async function rotarToken(claseId) {
