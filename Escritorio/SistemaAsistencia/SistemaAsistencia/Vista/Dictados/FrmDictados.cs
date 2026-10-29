@@ -154,7 +154,25 @@ namespace SistemaAsistencia.Vista.Dictados
 
             nudAnioMateria.Enabled = hayEsp;
             nudDivision.Enabled = hayEsp && !divFija.HasValue;
-            nudGrupo.Enabled = false;
+
+            if (hayEsp && divFija.HasValue && divFija.Value > 0)
+            {
+                // División fija por especialidad: permitir elegir grupo
+                nudDivision.Value = divFija.Value;
+                nudGrupo.Value = 0;
+                nudGrupo.Enabled = true;
+            }
+            else if (hayEsp)
+            {
+                // División libre: se habilita al elegirla
+                nudGrupo.Value = 0;
+                nudGrupo.Enabled = false;
+            }
+            else
+            {
+                nudGrupo.Enabled = false;
+            }
+
             if (hayEsp) FiltrarMateriasCrear();
         }
 
@@ -176,13 +194,19 @@ namespace SistemaAsistencia.Vista.Dictados
                 nudGrupo.Value = 0;
             }
             finally { _bloqueo--; }
+
             nudDivision.Enabled = !divFija.HasValue;
-            nudGrupo.Enabled = false;
+
+            if (divFija.HasValue && divFija.Value > 0)
+                nudGrupo.Enabled = true;
+            else
+                nudGrupo.Enabled = false;
         }
 
         private void DivisionCrear_Cambiada()
         {
-            bool conDivision = nudDivision.Enabled && nudDivision.Value > 0;
+            int? divFija = DivisionFijaCrear();
+            bool conDivision = (divFija.HasValue && divFija.Value > 0) || (nudDivision.Enabled && nudDivision.Value > 0);
             nudGrupo.Enabled = conDivision;
             if (!conDivision && !Programando) nudGrupo.Value = 0;
         }
@@ -216,7 +240,23 @@ namespace SistemaAsistencia.Vista.Dictados
 
             nudEditAnioMateria.Enabled = hayEsp;
             nudEditDivision.Enabled = hayEsp && !divFija.HasValue;
-            nudEditGrupo.Enabled = false;
+
+            if (hayEsp && divFija.HasValue && divFija.Value > 0)
+            {
+                nudEditDivision.Value = divFija.Value;
+                nudEditGrupo.Value = 0;
+                nudEditGrupo.Enabled = true;
+            }
+            else if (hayEsp)
+            {
+                nudEditGrupo.Value = 0;
+                nudEditGrupo.Enabled = false;
+            }
+            else
+            {
+                nudEditGrupo.Enabled = false;
+            }
+
             if (hayEsp) FiltrarMateriasEditar();
         }
 
@@ -236,13 +276,19 @@ namespace SistemaAsistencia.Vista.Dictados
                 nudEditGrupo.Value = 0;
             }
             finally { _bloqueo--; }
+
             nudEditDivision.Enabled = !divFija.HasValue;
-            nudEditGrupo.Enabled = false;
+
+            if (divFija.HasValue && divFija.Value > 0)
+                nudEditGrupo.Enabled = true;
+            else
+                nudEditGrupo.Enabled = false;
         }
 
         private void DivisionEditar_Cambiada()
         {
-            bool conDivision = nudEditDivision.Enabled && nudEditDivision.Value > 0;
+            int? divFija = DivisionFijaEditar();
+            bool conDivision = (divFija.HasValue && divFija.Value > 0) || (nudEditDivision.Enabled && nudEditDivision.Value > 0);
             nudEditGrupo.Enabled = conDivision;
             if (!conDivision && !Programando) nudEditGrupo.Value = 0;
         }
@@ -357,12 +403,70 @@ namespace SistemaAsistencia.Vista.Dictados
         {
             idMateriaCrear = IdMateriaDeFila(dgvMateriaSel);
             AplicarFranjaPorMateria(idMateriaCrear, dtpHorario, dtpHorarioFin);
+
+            if (idMateriaCrear == 0) return;
+
+            Materia mat = cacheMaterias.Find(m => m.IdMateria == idMateriaCrear);
+            if (mat == null) return;
+
+            Especialidad espMat = cacheEspecialidades.Find(e => e.IdEspecialidad == mat.IdEspecialidad);
+            int? divFija = CicloHelper.DivisionDeEspecialidad(espMat);
+
+            if (divFija.HasValue && divFija.Value > 0)
+            {
+                _bloqueo++;
+                try
+                {
+                    nudDivision.Value = divFija.Value;
+                    if (nudGrupo.Value < 0) nudGrupo.Value = 0;
+                }
+                finally { _bloqueo--; }
+
+                nudDivision.Enabled = false;
+                nudGrupo.Enabled = true;
+            }
+            else
+            {
+                nudDivision.Enabled = true;
+                bool conDivision = nudDivision.Value > 0;
+                nudGrupo.Enabled = conDivision;
+                if (!conDivision && !Programando) nudGrupo.Value = 0;
+            }
         }
 
         private void SeleccionMateriaEditar()
         {
             idMateriaEditar = IdMateriaDeFila(dgvEditMateriaSel);
             AplicarFranjaPorMateria(idMateriaEditar, dtpEditHorario, dtpEditHorarioFin);
+
+            if (idMateriaEditar == 0) return;
+
+            Materia mat = cacheMaterias.Find(m => m.IdMateria == idMateriaEditar);
+            if (mat == null) return;
+
+            Especialidad espMat = cacheEspecialidades.Find(e => e.IdEspecialidad == mat.IdEspecialidad);
+            int? divFija = CicloHelper.DivisionDeEspecialidad(espMat);
+
+            if (divFija.HasValue && divFija.Value > 0)
+            {
+                _bloqueo++;
+                try
+                {
+                    nudEditDivision.Value = divFija.Value;
+                    if (nudEditGrupo.Value < 0) nudEditGrupo.Value = 0;
+                }
+                finally { _bloqueo--; }
+
+                nudEditDivision.Enabled = false;
+                nudEditGrupo.Enabled = true;
+            }
+            else
+            {
+                nudEditDivision.Enabled = true;
+                bool conDivision = nudEditDivision.Value > 0;
+                nudEditGrupo.Enabled = conDivision;
+                if (!conDivision && !Programando) nudEditGrupo.Value = 0;
+            }
         }
 
         private static int IdMateriaDeFila(DataGridView dgv)
