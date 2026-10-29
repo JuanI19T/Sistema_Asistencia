@@ -376,6 +376,11 @@ namespace SistemaAsistencia.Vista.Principal
                 form.TopLevel = false;
                 form.FormBorderStyle = FormBorderStyle.None;
                 form.Dock = DockStyle.Fill;
+
+                // Refuerzo para forzar que el hijo se adapte al panel
+                form.MinimumSize = Size.Empty;
+                form.MaximumSize = Size.Empty;
+
                 form.Visible = true;
                 formActivo = form;
 

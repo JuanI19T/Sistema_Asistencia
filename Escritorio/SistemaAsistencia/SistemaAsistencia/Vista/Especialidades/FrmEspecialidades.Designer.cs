@@ -40,7 +40,7 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.dgvEspecialidades = new System.Windows.Forms.DataGridView();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.ConPrincipal = new System.Windows.Forms.TableLayoutPanel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
@@ -51,7 +51,7 @@ namespace SistemaAsistencia.Vista.Especialidades
             ((System.ComponentModel.ISupportInitialize)(this.dgvEspecialidades)).BeginInit();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.ConPrincipal.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
@@ -251,7 +251,7 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.dgvEspecialidades.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvEspecialidades.Location = new System.Drawing.Point(3, 63);
             this.dgvEspecialidades.Name = "dgvEspecialidades";
-            this.dgvEspecialidades.Size = new System.Drawing.Size(459, 437);
+            this.dgvEspecialidades.Size = new System.Drawing.Size(459, 442);
             this.dgvEspecialidades.TabIndex = 1;
             this.dgvEspecialidades.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvEspecialidades_CellClick);
             // 
@@ -276,7 +276,7 @@ namespace SistemaAsistencia.Vista.Especialidades
             // 
             this.tabPage1.AutoScroll = true;
             this.tabPage1.BackColor = System.Drawing.Color.White;
-            this.tabPage1.Controls.Add(this.tableLayoutPanel1);
+            this.tabPage1.Controls.Add(this.ConPrincipal);
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -284,27 +284,27 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Crear una Especialidad";
             // 
-            // tableLayoutPanel1
+            // ConPrincipal
             // 
-            this.tableLayoutPanel1.AutoSize = true;
-            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.Controls.Add(this.btnGuardar, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.btnLimpiarCrear, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.lblAvisoCrear, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.txtNombre, 1, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(834, 117);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.ConPrincipal.AutoSize = true;
+            this.ConPrincipal.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ConPrincipal.ColumnCount = 3;
+            this.ConPrincipal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConPrincipal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.ConPrincipal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConPrincipal.Controls.Add(this.btnGuardar, 0, 2);
+            this.ConPrincipal.Controls.Add(this.btnLimpiarCrear, 1, 2);
+            this.ConPrincipal.Controls.Add(this.lblAvisoCrear, 1, 0);
+            this.ConPrincipal.Controls.Add(this.txtNombre, 1, 1);
+            this.ConPrincipal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConPrincipal.Location = new System.Drawing.Point(3, 3);
+            this.ConPrincipal.Name = "ConPrincipal";
+            this.ConPrincipal.RowCount = 3;
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.ConPrincipal.Size = new System.Drawing.Size(834, 508);
+            this.ConPrincipal.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -326,18 +326,17 @@ namespace SistemaAsistencia.Vista.Especialidades
             // 
             // tableLayoutPanel3
             // 
-            this.tableLayoutPanel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel3.ColumnCount = 1;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.Controls.Add(this.dgvEspecialidades, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 0, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(366, 3);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Right;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(372, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 88F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(465, 503);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(465, 508);
             this.tableLayoutPanel3.TabIndex = 4;
             // 
             // tableLayoutPanel4
@@ -434,7 +433,6 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.ClientSize = new System.Drawing.Size(860, 600);
             this.Controls.Add(this.materialTabSelector1);
             this.Controls.Add(this.materialTabControl1);
-            this.MinimumSize = new System.Drawing.Size(860, 600);
             this.Name = "FrmEspecialidades";
             this.Text = "Especialidades";
             this.Load += new System.EventHandler(this.FrmEspecialidades_Load);
@@ -442,8 +440,8 @@ namespace SistemaAsistencia.Vista.Especialidades
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.ConPrincipal.ResumeLayout(false);
+            this.ConPrincipal.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
@@ -467,7 +465,7 @@ namespace SistemaAsistencia.Vista.Especialidades
         private System.Windows.Forms.DataGridView dgvEspecialidades;
         private MaterialSkin.Controls.MaterialTabControl materialTabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel ConPrincipal;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;

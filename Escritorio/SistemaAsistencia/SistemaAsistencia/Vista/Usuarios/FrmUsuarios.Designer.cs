@@ -38,11 +38,11 @@
             this.btnToggleActivo = new MaterialSkin.Controls.MaterialButton();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.ConPrincipal = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.ConPrincipal2 = new System.Windows.Forms.TableLayoutPanel();
             this.lblEditando = new MaterialSkin.Controls.MaterialLabel();
             this.txtEditPassword = new MaterialSkin.Controls.MaterialTextBox2();
             this.cmbEditRol = new MaterialSkin.Controls.MaterialComboBox();
@@ -59,11 +59,11 @@
             this.object_75e25dcf_ce2a_4393_bee0_b4b261e27f50 = new System.Windows.Forms.TableLayoutPanel();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.ConPrincipal.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tableLayoutPanel7.SuspendLayout();
-            this.tableLayoutPanel5.SuspendLayout();
+            this.ConPrincipal2.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
@@ -81,7 +81,7 @@
             this.txtPassword.HideSelection = true;
             this.txtPassword.Hint = "Contraseña";
             this.txtPassword.LeadingIcon = null;
-            this.txtPassword.Location = new System.Drawing.Point(83, 126);
+            this.txtPassword.Location = new System.Drawing.Point(291, 166);
             this.txtPassword.MaxLength = 32767;
             this.txtPassword.MouseState = MaterialSkin.MouseState.OUT;
             this.txtPassword.Name = "txtPassword";
@@ -111,7 +111,7 @@
             this.txtUsuario.HideSelection = true;
             this.txtUsuario.Hint = "Usuario";
             this.txtUsuario.LeadingIcon = null;
-            this.txtUsuario.Location = new System.Drawing.Point(83, 26);
+            this.txtUsuario.Location = new System.Drawing.Point(291, 39);
             this.txtUsuario.MaxLength = 32767;
             this.txtUsuario.MouseState = MaterialSkin.MouseState.OUT;
             this.txtUsuario.Name = "txtUsuario";
@@ -190,7 +190,7 @@
             this.cmbRol.Hint = "Selecciona un Rol";
             this.cmbRol.IntegralHeight = false;
             this.cmbRol.ItemHeight = 43;
-            this.cmbRol.Location = new System.Drawing.Point(107, 225);
+            this.cmbRol.Location = new System.Drawing.Point(315, 293);
             this.cmbRol.MaxDropDownItems = 4;
             this.cmbRol.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbRol.Name = "cmbRol";
@@ -208,7 +208,7 @@
             this.btnModificar.Depth = 0;
             this.btnModificar.HighEmphasis = true;
             this.btnModificar.Icon = null;
-            this.btnModificar.Location = new System.Drawing.Point(19, 6);
+            this.btnModificar.Location = new System.Drawing.Point(19, 7);
             this.btnModificar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnModificar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnModificar.Name = "btnModificar";
@@ -230,7 +230,7 @@
             this.txtBuscar.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txtBuscar.Hint = "Buscar Usuarios";
             this.txtBuscar.LeadingIcon = null;
-            this.txtBuscar.Location = new System.Drawing.Point(30, 3);
+            this.txtBuscar.Location = new System.Drawing.Point(30, 8);
             this.txtBuscar.MaxLength = 50;
             this.txtBuscar.MouseState = MaterialSkin.MouseState.OUT;
             this.txtBuscar.Multiline = false;
@@ -250,7 +250,7 @@
             this.btnToggleActivo.Depth = 0;
             this.btnToggleActivo.HighEmphasis = true;
             this.btnToggleActivo.Icon = null;
-            this.btnToggleActivo.Location = new System.Drawing.Point(265, 9);
+            this.btnToggleActivo.Location = new System.Drawing.Point(265, 14);
             this.btnToggleActivo.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnToggleActivo.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnToggleActivo.Name = "btnToggleActivo";
@@ -283,7 +283,7 @@
             // 
             this.tabPage1.AutoScroll = true;
             this.tabPage1.BackColor = System.Drawing.Color.White;
-            this.tabPage1.Controls.Add(this.tableLayoutPanel1);
+            this.tabPage1.Controls.Add(this.ConPrincipal);
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -291,26 +291,27 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Crear un Usuario";
             // 
-            // tableLayoutPanel1
+            // ConPrincipal
             // 
-            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.txtUsuario, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.txtPassword, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.cmbRol, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 3);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(834, 400);
-            this.tableLayoutPanel1.TabIndex = 14;
+            this.ConPrincipal.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ConPrincipal.ColumnCount = 3;
+            this.ConPrincipal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConPrincipal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.ConPrincipal.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConPrincipal.Controls.Add(this.txtUsuario, 1, 0);
+            this.ConPrincipal.Controls.Add(this.txtPassword, 1, 1);
+            this.ConPrincipal.Controls.Add(this.cmbRol, 1, 2);
+            this.ConPrincipal.Controls.Add(this.tableLayoutPanel2, 1, 3);
+            this.ConPrincipal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConPrincipal.Location = new System.Drawing.Point(3, 3);
+            this.ConPrincipal.Name = "ConPrincipal";
+            this.ConPrincipal.RowCount = 4;
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConPrincipal.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConPrincipal.Size = new System.Drawing.Size(834, 509);
+            this.ConPrincipal.TabIndex = 14;
             // 
             // tableLayoutPanel2
             // 
@@ -320,7 +321,7 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Controls.Add(this.btnGuardar, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnLimpiarCrear, 0, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(30, 310);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(238, 405);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -344,38 +345,38 @@
             this.tableLayoutPanel7.ColumnCount = 2;
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel7.Controls.Add(this.tableLayoutPanel5, 0, 0);
+            this.tableLayoutPanel7.Controls.Add(this.ConPrincipal2, 0, 0);
             this.tableLayoutPanel7.Controls.Add(this.tableLayoutPanel3, 1, 0);
-            this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel7.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 1;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(834, 431);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(834, 509);
             this.tableLayoutPanel7.TabIndex = 19;
             // 
-            // tableLayoutPanel5
+            // ConPrincipal2
             // 
-            this.tableLayoutPanel5.ColumnCount = 1;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Controls.Add(this.lblEditando, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.txtEditPassword, 0, 2);
-            this.tableLayoutPanel5.Controls.Add(this.cmbEditRol, 0, 3);
-            this.tableLayoutPanel5.Controls.Add(this.chkEditActivo, 0, 4);
-            this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanel6, 0, 5);
-            this.tableLayoutPanel5.Controls.Add(this.txtEditUsuario, 0, 1);
-            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 6;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(411, 425);
-            this.tableLayoutPanel5.TabIndex = 18;
+            this.ConPrincipal2.ColumnCount = 1;
+            this.ConPrincipal2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.ConPrincipal2.Controls.Add(this.lblEditando, 0, 0);
+            this.ConPrincipal2.Controls.Add(this.txtEditPassword, 0, 2);
+            this.ConPrincipal2.Controls.Add(this.cmbEditRol, 0, 3);
+            this.ConPrincipal2.Controls.Add(this.chkEditActivo, 0, 4);
+            this.ConPrincipal2.Controls.Add(this.tableLayoutPanel6, 0, 5);
+            this.ConPrincipal2.Controls.Add(this.txtEditUsuario, 0, 1);
+            this.ConPrincipal2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConPrincipal2.Location = new System.Drawing.Point(3, 3);
+            this.ConPrincipal2.Name = "ConPrincipal2";
+            this.ConPrincipal2.RowCount = 6;
+            this.ConPrincipal2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.ConPrincipal2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConPrincipal2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConPrincipal2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConPrincipal2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.ConPrincipal2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.ConPrincipal2.Size = new System.Drawing.Size(411, 503);
+            this.ConPrincipal2.TabIndex = 18;
             // 
             // lblEditando
             // 
@@ -401,7 +402,7 @@
             this.txtEditPassword.HideSelection = true;
             this.txtEditPassword.Hint = "Contraseña";
             this.txtEditPassword.LeadingIcon = null;
-            this.txtEditPassword.Location = new System.Drawing.Point(94, 137);
+            this.txtEditPassword.Location = new System.Drawing.Point(94, 166);
             this.txtEditPassword.MaxLength = 32767;
             this.txtEditPassword.MouseState = MaterialSkin.MouseState.OUT;
             this.txtEditPassword.Name = "txtEditPassword";
@@ -436,7 +437,7 @@
             this.cmbEditRol.Hint = "Selecciona un Rol";
             this.cmbEditRol.IntegralHeight = false;
             this.cmbEditRol.ItemHeight = 43;
-            this.cmbEditRol.Location = new System.Drawing.Point(96, 218);
+            this.cmbEditRol.Location = new System.Drawing.Point(96, 265);
             this.cmbEditRol.MaxDropDownItems = 4;
             this.cmbEditRol.MouseState = MaterialSkin.MouseState.OUT;
             this.cmbEditRol.Name = "cmbEditRol";
@@ -449,7 +450,7 @@
             // 
             this.chkEditActivo.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.chkEditActivo.Depth = 0;
-            this.chkEditActivo.Location = new System.Drawing.Point(154, 305);
+            this.chkEditActivo.Location = new System.Drawing.Point(154, 371);
             this.chkEditActivo.Margin = new System.Windows.Forms.Padding(0);
             this.chkEditActivo.MouseLocation = new System.Drawing.Point(-1, -1);
             this.chkEditActivo.MouseState = MaterialSkin.MouseState.HOVER;
@@ -471,11 +472,11 @@
             this.tableLayoutPanel6.Controls.Add(this.btnLimpiarEditar, 1, 0);
             this.tableLayoutPanel6.Controls.Add(this.btnEliminar, 2, 0);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 367);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 443);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(405, 55);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(405, 57);
             this.tableLayoutPanel6.TabIndex = 17;
             // 
             // btnLimpiarEditar
@@ -487,7 +488,7 @@
             this.btnLimpiarEditar.Depth = 0;
             this.btnLimpiarEditar.HighEmphasis = true;
             this.btnLimpiarEditar.Icon = null;
-            this.btnLimpiarEditar.Location = new System.Drawing.Point(151, 6);
+            this.btnLimpiarEditar.Location = new System.Drawing.Point(151, 7);
             this.btnLimpiarEditar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnLimpiarEditar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnLimpiarEditar.Name = "btnLimpiarEditar";
@@ -509,7 +510,7 @@
             this.btnEliminar.Depth = 0;
             this.btnEliminar.HighEmphasis = true;
             this.btnEliminar.Icon = null;
-            this.btnEliminar.Location = new System.Drawing.Point(285, 6);
+            this.btnEliminar.Location = new System.Drawing.Point(285, 7);
             this.btnEliminar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnEliminar.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnEliminar.Name = "btnEliminar";
@@ -533,7 +534,7 @@
             this.txtEditUsuario.HideSelection = true;
             this.txtEditUsuario.Hint = "Usuario";
             this.txtEditUsuario.LeadingIcon = null;
-            this.txtEditUsuario.Location = new System.Drawing.Point(93, 56);
+            this.txtEditUsuario.Location = new System.Drawing.Point(93, 66);
             this.txtEditUsuario.MaxLength = 32767;
             this.txtEditUsuario.MouseState = MaterialSkin.MouseState.OUT;
             this.txtEditUsuario.Name = "txtEditUsuario";
@@ -564,16 +565,16 @@
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.60905F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 85.39095F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(411, 425);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(411, 503);
             this.tableLayoutPanel3.TabIndex = 17;
             // 
             // dgvUsuarios
             // 
             this.dgvUsuarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvUsuarios.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvUsuarios.Location = new System.Drawing.Point(3, 65);
+            this.dgvUsuarios.Location = new System.Drawing.Point(3, 76);
             this.dgvUsuarios.Name = "dgvUsuarios";
-            this.dgvUsuarios.Size = new System.Drawing.Size(405, 357);
+            this.dgvUsuarios.Size = new System.Drawing.Size(405, 424);
             this.dgvUsuarios.TabIndex = 0;
             this.dgvUsuarios.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuarios_CellClick);
             // 
@@ -589,7 +590,7 @@
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(405, 56);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(405, 67);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // materialTabSelector1
@@ -652,18 +653,17 @@
             this.ClientSize = new System.Drawing.Size(860, 600);
             this.Controls.Add(this.materialTabSelector1);
             this.Controls.Add(this.materialTabControl1);
-            this.MinimumSize = new System.Drawing.Size(860, 600);
             this.Name = "FrmUsuarios";
             this.Text = "Usuarios";
             this.Load += new System.EventHandler(this.FrmUsuarios_Load);
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
+            this.ConPrincipal.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tableLayoutPanel7.ResumeLayout(false);
-            this.tableLayoutPanel5.ResumeLayout(false);
-            this.tableLayoutPanel5.PerformLayout();
+            this.ConPrincipal2.ResumeLayout(false);
+            this.ConPrincipal2.PerformLayout();
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).EndInit();
@@ -686,7 +686,7 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.DataGridView dgvUsuarios;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel ConPrincipal;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
@@ -698,7 +698,7 @@
         private MaterialSkin.Controls.MaterialTextBox2 txtEditPassword;
         private MaterialSkin.Controls.MaterialButton btnEliminar;
         private MaterialSkin.Controls.MaterialButton btnLimpiarEditar;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private System.Windows.Forms.TableLayoutPanel ConPrincipal2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private System.Windows.Forms.TableLayoutPanel object_5c919b92_82d7_40f2_8000_877d301d889d;
         private System.Windows.Forms.TableLayoutPanel object_75e25dcf_ce2a_4393_bee0_b4b261e27f50;
