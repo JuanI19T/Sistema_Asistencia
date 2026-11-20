@@ -49,10 +49,12 @@ export default function Horarios({ sesion }) {
       .sort((a, b) => String(a.horario).localeCompare(String(b.horario)))
   )), [dictados]);
 
-  const espacioDisponible = Math.max(0, width - 32);
+  // En web, el ancho de la ventana incluye la barra vertical de desplazamiento.
+  // Reservamos ese espacio para que la quinta columna nunca quede recortada.
+  const espacioDisponible = Math.max(0, width - 48);
   const separacion = 10;
   const anchoColumna = width >= 700
-    ? Math.max(140, (espacioDisponible - separacion * 4) / 5)
+    ? Math.max(120, (espacioDisponible - separacion * 4) / 5)
     : 188;
 
   return (
@@ -62,9 +64,16 @@ export default function Horarios({ sesion }) {
       {cargando ? <ActivityIndicator color={colores.azulReal} style={styles.cargando} /> : null}
       {mensaje ? <Text style={styles.mensaje}>{mensaje}</Text> : null}
       {!cargando && !mensaje ? (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.semana}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={[styles.semana, width >= 700 && { width: espacioDisponible }]}
+        >
           {porDia.map((clases, indice) => (
-            <View style={[styles.columna, { width: anchoColumna }]} key={DIAS[indice]}>
+            <View
+              style={[styles.columna, { width: anchoColumna, marginRight: indice < DIAS.length - 1 ? separacion : 0 }]}
+              key={DIAS[indice]}
+            >
               <View style={styles.encabezadoDia}><Text style={styles.nombreDia}>{NOMBRES_DIAS[indice]}</Text></View>
               {clases.length ? clases.map((clase) => (
                 <View style={styles.clase} key={clase.id_dictado}>
@@ -73,15 +82,15 @@ export default function Horarios({ sesion }) {
                   {sesion.rol !== 'profesor' && clase.apellido_profesor ? (
                     <Text style={styles.detalle}>Prof. {clase.apellido_profesor}</Text>
                   ) : null}
-                  {sesion.rol === 'alumno' ? (
+                  {clase.anio_materia || clase.division || clase.nombre_especialidad ? (
                     <Text style={styles.detalle}>
                       {clase.anio_materia ? `${clase.anio_materia}° año` : ''}
                       {clase.division ? ` · División ${clase.division}` : ''}
                       {clase.nombre_especialidad ? ` · ${clase.nombre_especialidad}` : ''}
                     </Text>
                   ) : null}
-                  {sesion.rol !== 'alumno' && (clase.division || clase.grupo) ? (
-                    <Text style={styles.detalle}>{clase.division || ''}{clase.division && clase.grupo ? ' · ' : ''}{clase.grupo || ''}</Text>
+                  {(sesion.rol === 'preceptor' || sesion.rol === 'profesor') && (clase.division || clase.grupo) ? (
+                    clase.grupo ? <Text style={styles.detalle}>Grupo {clase.grupo}</Text> : null
                   ) : null}
                 </View>
               )) : <Text style={styles.sinClases}>Sin clases</Text>}
@@ -101,13 +110,13 @@ const styles = StyleSheet.create({
   titulo: { fontFamily: 'Georgia', fontWeight: 'bold', fontSize: 34, color: colores.navy, textAlign: 'center', marginVertical: 12 },
   subtitulo: { textAlign: 'center', color: colores.textoSuave, fontSize: 15, marginBottom: 18 },
   cargando: { marginTop: 30 },
-  semana: { gap: 10, paddingHorizontal: 2, paddingBottom: 28 },
-  columna: { width: 188, minHeight: 230, backgroundColor: '#FFFDF7', borderRadius: 10, overflow: 'hidden', borderWidth: 1, borderColor: colores.borde },
+  semana: { paddingBottom: 28 },
+  columna: { width: 188, minWidth: 0, flexShrink: 0, minHeight: 230, backgroundColor: '#FFFDF7', borderRadius: 10, overflow: 'hidden', borderWidth: 1, borderColor: colores.borde },
   encabezadoDia: { backgroundColor: '#DCE9FA', paddingVertical: 12, alignItems: 'center', borderBottomWidth: 2, borderBottomColor: colores.azulReal },
   nombreDia: { color: colores.navy, fontWeight: '700', fontSize: 16 },
   clase: { margin: 9, padding: 11, borderRadius: 8, backgroundColor: '#F8F1D9', borderLeftWidth: 4, borderLeftColor: colores.amarillo },
   hora: { color: colores.navy, fontSize: 13, fontWeight: '700' },
-  materia: { color: colores.textoOscuro, fontSize: 15, fontWeight: '700', marginTop: 5 },
+  materia: { color: colores.textoOscuro, fontSize: 15, fontWeight: '700', marginTop: 5, flexShrink: 1, lineHeight: 19 },
   detalle: { color: colores.textoSuave, fontSize: 12, marginTop: 3 },
   sinClases: { color: colores.textoSuave, textAlign: 'center', marginTop: 28, fontSize: 13 },
   vacio: { textAlign: 'center', color: colores.textoSuave, marginTop: 20 },
