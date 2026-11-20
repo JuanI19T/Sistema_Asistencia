@@ -79,7 +79,7 @@ function calcularEstado(fila, minutosActual) {
 router.get('/', async (req, res) => {
   try {
     const [filas] = await pool.query(
-      `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
+      `SELECT d.id_dictado, d.id_profesor, d.id_preceptor, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
                m.id_materia, m.nombre_materia, m.anio_materia,
               p.id_profesor, p.apellido_profesor, p.nombre_profesor
        FROM dictado d
