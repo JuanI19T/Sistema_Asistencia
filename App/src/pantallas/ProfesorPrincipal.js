@@ -220,7 +220,7 @@ export default function ProfesorPrincipal({ sesion, evento, eventosConectados })
             </Text>
             <Text style={styles.detalleClaseQR}>Grupo {claseActiva.grupo}</Text>
             <View style={styles.qrContenedor}><QRCode value={codigoQR} size={220} /></View>
-            <Text style={styles.textoSecundario}>El QR vence en {restante}s · los alumnos lo escanean para registrarse.</Text>
+            <Text style={styles.textoSecundario}>El QR vence en {restante}s.</Text>
             {claseActiva.codigo ? <Text style={styles.codigoClase}>{claseActiva.codigo}</Text> : null}
             <TouchableOpacity style={styles.botonRotar} onPress={rotar} disabled={cargando}>
               <Text style={styles.textoBoton}>Rotar QR</Text>

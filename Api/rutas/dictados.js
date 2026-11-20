@@ -338,7 +338,7 @@ router.get('/alumno/:idAlumno', async (req, res) => {
   try {
     const [filas] = await pool.query(
        `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
-               m.nombre_materia, m.anio_materia, e.nombre_especialidad, p.apellido_profesor
+               m.id_materia, m.nombre_materia, m.anio_materia, e.nombre_especialidad, p.apellido_profesor
        FROM inscribe i
        JOIN dictado d ON d.id_dictado = i.id_dictado
        JOIN materia m ON m.id_materia = d.id_materia
