@@ -150,21 +150,38 @@ router.get('/profesor/hoy', requiereRol(['profesor']), async (req, res) => {
     const diaHoy = diaDeHoy();
     const minutosActual = minutosAhora();
 
-    const [filas] = await pool.query(
-      `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
-              m.nombre_materia, p.apellido_profesor,
-               c.id_clase, c.estado AS estado_clase,
-               DATE_FORMAT(DATE_SUB(c.abierta_en, INTERVAL 3 HOUR), '%H:%i') AS hora_apertura,
-              EXISTS (SELECT 1 FROM asistencia a WHERE a.id_clase = c.id_clase) AS tiene_asistencia
+    const base = `
        FROM dictado d
        JOIN materia m ON m.id_materia = d.id_materia
-       JOIN especialidad e ON e.id_especialidad = m.id_especialidad
        LEFT JOIN profesor p ON p.id_profesor = d.id_profesor
        LEFT JOIN clase c ON c.id_dictado = d.id_dictado AND c.fecha_clase = ?
        WHERE d.id_profesor = ?
-       ORDER BY d.horario`,
-      [hoy, req.usuario.id_profesor]
-    );
+       ORDER BY d.horario`;
+    const params = [hoy, req.usuario.id_profesor];
+
+    let filas;
+    try {
+      [filas] = await pool.query(
+        `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
+                m.nombre_materia, p.apellido_profesor,
+                c.id_clase, c.estado AS estado_clase,
+                DATE_FORMAT(DATE_SUB(c.abierta_en, INTERVAL 3 HOUR), '%H:%i') AS hora_apertura,
+                EXISTS (SELECT 1 FROM asistencia a WHERE a.id_clase = c.id_clase) AS tiene_asistencia
+         ${base}`,
+        params
+      );
+    } catch (error) {
+      if (!/Unknown column/i.test(error.message || '')) throw error;
+      [filas] = await pool.query(
+        `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
+                m.nombre_materia, p.apellido_profesor,
+                c.id_clase, c.estado AS estado_clase,
+                NULL AS hora_apertura,
+                EXISTS (SELECT 1 FROM asistencia a WHERE a.id_clase = c.id_clase) AS tiene_asistencia
+         ${base}`,
+        params
+      );
+    }
 
     const clases = filas
       .filter((fila) => sinAcentos(fila.dia) === diaHoy)
@@ -206,28 +223,65 @@ router.get('/preceptor/hoy', requiereRol(['preceptor']), async (req, res) => {
     const diaHoy = diaDeHoy();
     const minutosActual = minutosAhora();
 
-    const [filas] = await pool.query(
-       `SELECT d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
-                  m.nombre_materia, m.anio_materia, p.nombre_profesor, p.apellido_profesor,
-               c.id_clase, c.estado AS estado_clase,
-                DATE_FORMAT(DATE_SUB(c.abierta_en, INTERVAL 3 HOUR), '%H:%i') AS hora_apertura,
-                DATE_FORMAT(c.profesor_llego_en, '%H:%i') AS hora_llegada_profesor,
-              COUNT(DISTINCT i.id_alumno) AS total_alumnos,
-              COUNT(DISTINCT CASE WHEN a.verificada = 1 THEN a.id_alumno END) AS total_verificados
+    const base = `
        FROM dictado d
        JOIN materia m ON m.id_materia = d.id_materia
-       JOIN especialidad e ON e.id_especialidad = m.id_especialidad
        LEFT JOIN profesor p ON p.id_profesor = d.id_profesor
        LEFT JOIN inscribe i ON i.id_dictado = d.id_dictado
        LEFT JOIN clase c ON c.id_dictado = d.id_dictado AND c.fecha_clase = ?
        LEFT JOIN asistencia a ON a.id_clase = c.id_clase AND a.id_alumno = i.id_alumno
-       WHERE d.id_preceptor = ?
+       WHERE d.id_preceptor = ?`;
+    const params = [hoy, req.usuario.id_preceptor];
+    const camposBase = `d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
+                  m.nombre_materia, m.anio_materia, p.nombre_profesor, p.apellido_profesor,
+               c.id_clase, c.estado AS estado_clase`;
+    const totales = `,
+              COUNT(DISTINCT i.id_alumno) AS total_alumnos,
+              COUNT(DISTINCT CASE WHEN a.verificada = 1 THEN a.id_alumno END) AS total_verificados`;
+    const groupBase = `
        GROUP BY d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
                     m.nombre_materia, m.anio_materia, p.nombre_profesor, p.apellido_profesor,
-                    c.id_clase, c.estado, c.abierta_en, c.profesor_llego_en
-       ORDER BY d.horario`,
-      [hoy, req.usuario.id_preceptor]
-    );
+                    c.id_clase, c.estado`;
+
+    let filas;
+    try {
+      [filas] = await pool.query(
+        `SELECT ${camposBase},
+                DATE_FORMAT(DATE_SUB(c.abierta_en, INTERVAL 3 HOUR), '%H:%i') AS hora_apertura,
+                DATE_FORMAT(c.profesor_llego_en, '%H:%i') AS hora_llegada_profesor
+                ${totales}
+         ${base}
+         ${groupBase}, c.abierta_en, c.profesor_llego_en
+         ORDER BY d.horario`,
+        params
+      );
+    } catch (error) {
+      if (!/Unknown column/i.test(error.message || '')) throw error;
+      try {
+        [filas] = await pool.query(
+          `SELECT ${camposBase},
+                  DATE_FORMAT(DATE_SUB(c.abierta_en, INTERVAL 3 HOUR), '%H:%i') AS hora_apertura,
+                  NULL AS hora_llegada_profesor
+                  ${totales}
+           ${base}
+           ${groupBase}, c.abierta_en
+           ORDER BY d.horario`,
+          params
+        );
+      } catch (error2) {
+        if (!/Unknown column/i.test(error2.message || '')) throw error2;
+        [filas] = await pool.query(
+          `SELECT ${camposBase},
+                  NULL AS hora_apertura,
+                  NULL AS hora_llegada_profesor
+                  ${totales}
+           ${base}
+           ${groupBase}
+           ORDER BY d.horario`,
+          params
+        );
+      }
+    }
 
     const clases = filas
       .filter((fila) => sinAcentos(fila.dia) === diaHoy)
