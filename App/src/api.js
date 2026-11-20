@@ -141,7 +141,7 @@ export async function obtenerClasesProfesorHoy(idProfesor) {
 
     const clases = dictados
       .filter((dictado) => (
-        dictado.id_profesor === idProfesor && sinAcentos(dictado.dia) === diaHoy
+        Number(dictado.id_profesor) === Number(idProfesor) && sinAcentos(dictado.dia) === diaHoy
       ))
       .sort((a, b) => minutosDeHora(a.horario) - minutosDeHora(b.horario))
       .map((dictado) => ({
