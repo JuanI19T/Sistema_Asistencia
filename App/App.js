@@ -18,6 +18,7 @@ import { IconoCandado, IconoFlecha, IconoOjo, IconoSalir, IconoUsuario } from '.
 import ProfesorPrincipal from './src/pantallas/ProfesorPrincipal';
 import PreceptorPrincipal from './src/pantallas/PreceptorPrincipal';
 import AlumnoPrincipal from './src/pantallas/AlumnoPrincipal';
+import Horarios from './src/pantallas/Horarios';
 
 export default function App() {
   const [sesion, setSesion] = useState(null);
@@ -28,6 +29,7 @@ export default function App() {
   const [mensaje, setMensaje] = useState(null);
   const [evento, setEvento] = useState(null);
   const [eventosConectados, setEventosConectados] = useState(false);
+  const [apartado, setApartado] = useState('clases');
 
   useEffect(() => {
     if (!sesion) {
@@ -57,6 +59,7 @@ export default function App() {
   const cerrarSesion = () => {
     limpiarToken();
     setSesion(null);
+    setApartado('clases');
     setLoginDni('');
     setLoginPassword('');
     setMostrarPassword(false);
@@ -109,19 +112,33 @@ export default function App() {
             </TouchableOpacity>
           </View>
           <View style={styles.lineaAmarillaTop} />
-          <View style={styles.lineaAzulTop} />
+          <View style={styles.navbar}>
+            <TouchableOpacity
+              style={[styles.opcionNavbar, apartado === 'clases' && styles.opcionNavbarActiva]}
+              onPress={() => setApartado('clases')}
+            >
+              <Text style={[styles.textoNavbar, apartado === 'clases' && styles.textoNavbarActivo]}>Mis Clases</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.opcionNavbar, apartado === 'horarios' && styles.opcionNavbarActiva]}
+              onPress={() => setApartado('horarios')}
+            >
+              <Text style={[styles.textoNavbar, apartado === 'horarios' && styles.textoNavbarActivo]}>Horarios</Text>
+            </TouchableOpacity>
+          </View>
 
-          {sesion.rol === 'profesor' ? (
+          {apartado === 'horarios' ? <Horarios sesion={sesion} /> : null}
+          {apartado === 'clases' && sesion.rol === 'profesor' ? (
             <ProfesorPrincipal
               sesion={sesion}
               evento={evento}
               eventosConectados={eventosConectados}
             />
           ) : null}
-          {sesion.rol === 'preceptor' ? (
+          {apartado === 'clases' && sesion.rol === 'preceptor' ? (
             <PreceptorPrincipal sesion={sesion} evento={evento} eventosConectados={eventosConectados} />
           ) : null}
-          {sesion.rol === 'alumno' ? (
+          {apartado === 'clases' && sesion.rol === 'alumno' ? (
             <AlumnoPrincipal
               sesion={sesion}
               evento={evento}
@@ -476,8 +493,32 @@ const styles = StyleSheet.create({
     height: 12,
     backgroundColor: colores.amarillo
   },
-  lineaAzulTop: {
-    height: 8,
-    backgroundColor: colores.azulReal
+  navbar: {
+    minHeight: 56,
+    backgroundColor: colores.azulReal,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    gap: 8,
+    paddingHorizontal: 16
+  },
+  opcionNavbar: {
+    minWidth: 132,
+    paddingHorizontal: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 4,
+    borderBottomColor: 'transparent'
+  },
+  opcionNavbarActiva: {
+    borderBottomColor: colores.amarillo
+  },
+  textoNavbar: {
+    color: colores.blanco,
+    fontSize: 16,
+    fontWeight: '600'
+  },
+  textoNavbarActivo: {
+    fontWeight: '800'
   }
 });
