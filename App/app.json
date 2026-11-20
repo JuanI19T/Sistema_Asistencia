@@ -17,18 +17,29 @@
       ]
     ],
     "ios": {
+      "bundleIdentifier": "com.eest.appasistencia",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.eest.appasistencia",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "07e3e87e-f1a0-4681-baac-41cd3dfe5cad"
+      }
+    },
+    "owner": "juani19t"
   }
 }

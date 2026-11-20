@@ -22,7 +22,10 @@
     "android": "expo start --android",
     "android-usb": "expo start --localhost --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build:preview": "eas build -p android --profile preview",
+    "build:production": "eas build -p android --profile production",
+    "update": "eas update --environment production"
   },
   "private": true
 }
