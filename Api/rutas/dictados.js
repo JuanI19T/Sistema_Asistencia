@@ -211,6 +211,7 @@ router.get('/preceptor/hoy', requiereRol(['preceptor']), async (req, res) => {
                   m.nombre_materia, m.anio_materia, p.nombre_profesor, p.apellido_profesor,
                c.id_clase, c.estado AS estado_clase,
                 DATE_FORMAT(DATE_SUB(c.abierta_en, INTERVAL 3 HOUR), '%H:%i') AS hora_apertura,
+                DATE_FORMAT(c.profesor_llego_en, '%H:%i') AS hora_llegada_profesor,
               COUNT(DISTINCT i.id_alumno) AS total_alumnos,
               COUNT(DISTINCT CASE WHEN a.verificada = 1 THEN a.id_alumno END) AS total_verificados
        FROM dictado d
@@ -222,7 +223,8 @@ router.get('/preceptor/hoy', requiereRol(['preceptor']), async (req, res) => {
        LEFT JOIN asistencia a ON a.id_clase = c.id_clase AND a.id_alumno = i.id_alumno
        WHERE d.id_preceptor = ?
        GROUP BY d.id_dictado, d.dia, d.horario, d.horario_fin, d.grupo, d.division, d.anio_lectivo,
-                   m.nombre_materia, m.anio_materia, p.nombre_profesor, p.apellido_profesor, c.id_clase, c.estado, c.abierta_en
+                    m.nombre_materia, m.anio_materia, p.nombre_profesor, p.apellido_profesor,
+                    c.id_clase, c.estado, c.abierta_en, c.profesor_llego_en
        ORDER BY d.horario`,
       [hoy, req.usuario.id_preceptor]
     );
@@ -247,6 +249,7 @@ router.get('/preceptor/hoy', requiereRol(['preceptor']), async (req, res) => {
           id_dictado: fila.id_dictado,
           id_clase: fila.id_clase,
           abierta_en: fila.hora_apertura,
+          profesor_llego_en: fila.hora_llegada_profesor,
           dia: fila.dia,
           horario: fila.horario,
           horario_fin: fila.horario_fin,

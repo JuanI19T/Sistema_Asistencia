@@ -19,7 +19,8 @@ import {
   abrirClasePreceptor,
   obtenerAlumnosDictado,
   obtenerAsistencia,
-  obtenerClasesPreceptorHoy
+  obtenerClasesPreceptorHoy,
+  registrarLlegadaProfesor
 } from '../api';
 import { colores } from '../tema';
 import { IconoAviso, IconoReloj, IconoTilde } from '../componentes/Iconos';
@@ -246,6 +247,7 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
     const idCarga = ++cargaClaseRef.current;
     claseSeleccionadaRef.current = clase;
     setSeleccionada(clase);
+    setProfesorLlegoEn(clase.profesor_llego_en || '');
     setAlumnos([]);
     setEstados({});
     setDatosClaseCargados(false);
@@ -292,12 +294,27 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
       const fecha = fechaDeHoy();
       const clase = await abrirClasePreceptor(claseParaAbrir.id_dictado, fecha, {
         motivo_apertura: motivoApertura,
-        detalle_motivo: detalleMotivo,
-        profesor_llego_en: profesorLlegoEn || null
+        detalle_motivo: detalleMotivo
       });
       setClaseParaAbrir(null);
       await cargarClases();
       await elegirClase({ ...claseParaAbrir, ...clase, estado: 'en_curso' });
+    } catch (error) {
+      setMensaje(error.message);
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  const guardarLlegadaProfesor = async () => {
+    if (!seleccionada?.id_clase || !/^\d{2}:\d{2}$/.test(profesorLlegoEn)) {
+      setMensaje('Ingresá la hora con formato HH:mm.');
+      return;
+    }
+    setCargando(true);
+    try {
+      await registrarLlegadaProfesor(seleccionada.id_clase, profesorLlegoEn);
+      setMensaje('Llegada del profesor registrada.');
     } catch (error) {
       setMensaje(error.message);
     } finally {
@@ -658,6 +675,24 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
                   <Text style={styles.etiquetaMetrica}>Verificados</Text>
                 </View>
               </View> : null}
+              {seleccionada.id_clase ? (
+                <View style={styles.llegadaProfesor}>
+                  <Text style={styles.resumenDato}>Hora de llegada del profesor</Text>
+                  <View style={styles.filaLlegadaProfesor}>
+                    <TextInput
+                      style={styles.inputHoraLlegada}
+                      value={profesorLlegoEn}
+                      onChangeText={setProfesorLlegoEn}
+                      placeholder="HH:mm"
+                      keyboardType="numbers-and-punctuation"
+                      maxLength={5}
+                    />
+                    <TouchableOpacity style={styles.botonLlegada} onPress={guardarLlegadaProfesor} disabled={cargando}>
+                      <Text style={styles.textoBotonLlegada}>Guardar</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ) : null}
             </View>
 
             {!seleccionada.id_clase ? (
@@ -692,12 +727,6 @@ export default function PreceptorPrincipal({ sesion, evento, eventosConectados }
                     multiline
                   />
                 ) : null}
-                <TextInput
-                  style={styles.inputMotivo}
-                  value={profesorLlegoEn}
-                  onChangeText={setProfesorLlegoEn}
-                  placeholder="Hora de llegada del profesor (opcional, HH:mm)"
-                />
                 <TouchableOpacity style={styles.botonAbrirManual} onPress={abrirManual} disabled={cargando}>
                   <Text style={styles.textoBotonAccion}>Abrir y tomar asistencia manual</Text>
                 </TouchableOpacity>
@@ -1205,6 +1234,42 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
     textAlign: 'center'
+  },
+
+  llegadaProfesor: {
+    marginTop: 16,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#D2CEC5'
+  },
+
+  filaLlegadaProfesor: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 6
+  },
+
+  inputHoraLlegada: {
+    width: 100,
+    borderWidth: 1,
+    borderColor: colores.borde,
+    borderRadius: 7,
+    padding: 9,
+    color: colores.textoOscuro,
+    backgroundColor: colores.blanco
+  },
+
+  botonLlegada: {
+    backgroundColor: colores.azulReal,
+    borderRadius: 7,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    marginLeft: 8
+  },
+
+  textoBotonLlegada: {
+    color: colores.blanco,
+    fontWeight: '700'
   },
 
   textoBoton: {

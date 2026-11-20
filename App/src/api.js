@@ -300,6 +300,10 @@ export async function cambiarEstadoClase(claseId, estado) {
   return patch(`${API_URL}/api/clases/${claseId}`, { estado });
 }
 
+export async function registrarLlegadaProfesor(claseId, hora) {
+  return patch(`${API_URL}/api/clases/${claseId}/llegada-profesor`, { hora });
+}
+
 export async function escanearClase(claseId, token) {
   return post(`${API_URL}/api/clases/${claseId}/escanear`, { token });
 }
