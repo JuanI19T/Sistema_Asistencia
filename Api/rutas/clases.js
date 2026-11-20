@@ -95,21 +95,48 @@ async function claseCompleta(idClase, conToken) {
   const columnas = conToken
     ? 'token, token_valido_hasta, codigo,'
     : 'NULL AS token, NULL AS token_valido_hasta, NULL AS codigo,';
-  const [filas] = await pool.query(
+  const base = `
+     FROM clase c
+     JOIN dictado d ON d.id_dictado = c.id_dictado
+     JOIN materia m ON m.id_materia = d.id_materia
+     LEFT JOIN profesor p ON p.id_profesor = d.id_profesor
+     WHERE c.id_clase = ?`;
+
+  const consultas = [
     `SELECT c.id_clase, c.id_dictado, c.fecha_clase, c.estado,
             ${columnas}
             c.abierta_por, c.abierta_por_rol, c.motivo_apertura,
             c.profesor_llego_en, c.abierta_en,
             m.nombre_materia, p.apellido_profesor,
             d.grupo, d.dia, d.horario, d.horario_fin, d.anio_lectivo
-     FROM clase c
-     JOIN dictado d ON d.id_dictado = c.id_dictado
-     JOIN materia m ON m.id_materia = d.id_materia
-     LEFT JOIN profesor p ON p.id_profesor = d.id_profesor
-     WHERE c.id_clase = ?`,
-    [idClase]
-  );
-  return filas[0] || null;
+     ${base}`,
+    `SELECT c.id_clase, c.id_dictado, c.fecha_clase, c.estado,
+            ${columnas}
+            c.abierta_por, c.abierta_por_rol, c.motivo_apertura,
+            c.profesor_llego_en, NULL AS abierta_en,
+            m.nombre_materia, p.apellido_profesor,
+            d.grupo, d.dia, d.horario, d.horario_fin, d.anio_lectivo
+     ${base}`,
+    `SELECT c.id_clase, c.id_dictado, c.fecha_clase, c.estado,
+            ${columnas}
+            c.abierta_por, NULL AS abierta_por_rol, NULL AS motivo_apertura,
+            NULL AS profesor_llego_en, NULL AS abierta_en,
+            m.nombre_materia, p.apellido_profesor,
+            d.grupo, d.dia, d.horario, d.horario_fin, d.anio_lectivo
+     ${base}`
+  ];
+
+  for (const consulta of consultas) {
+    try {
+      const [filas] = await pool.query(consulta, [idClase]);
+      return filas[0] || null;
+    } catch (error) {
+      if (!/Unknown column/i.test(error.message || '') || consulta === consultas[consultas.length - 1]) {
+        throw error;
+      }
+    }
+  }
+  return null;
 }
 
 // GET /api/clases?fecha=YYYY-MM-DD  (lista; opcional filtro por fecha)
@@ -303,24 +330,84 @@ router.post('/preceptor', requiereRol(['preceptor']), async (req, res) => {
 
     if (existentes.length > 0) {
       idClase = existentes[0].id_clase;
-      await pool.query(
-        `UPDATE clase
-         SET estado = 'en_curso', token = NULL, token_valido_hasta = NULL,
-             codigo = NULL, abierta_por = ?, abierta_por_rol = 'preceptor',
-             motivo_apertura = ?, profesor_llego_en = ?,
-             abierta_en = IF(abierta_en IS NULL, CURRENT_TIMESTAMP, abierta_en)
-         WHERE id_clase = ?`,
-        [req.usuario.id_preceptor, motivo, llegadaProfesor, idClase]
-      );
+      const actualizaciones = [
+        {
+          sql: `UPDATE clase
+                SET estado = 'en_curso', token = NULL, token_valido_hasta = NULL,
+                    codigo = NULL, abierta_por = ?, abierta_por_rol = 'preceptor',
+                    motivo_apertura = ?, profesor_llego_en = ?,
+                    abierta_en = IF(abierta_en IS NULL, CURRENT_TIMESTAMP, abierta_en)
+                WHERE id_clase = ?`,
+          params: [req.usuario.id_preceptor, motivo, llegadaProfesor, idClase]
+        },
+        {
+          sql: `UPDATE clase
+                SET estado = 'en_curso', token = NULL, token_valido_hasta = NULL,
+                    codigo = NULL, abierta_por = ?, abierta_por_rol = 'preceptor',
+                    motivo_apertura = ?, profesor_llego_en = ?
+                WHERE id_clase = ?`,
+          params: [req.usuario.id_preceptor, motivo, llegadaProfesor, idClase]
+        },
+        {
+          sql: `UPDATE clase
+                SET estado = 'en_curso', token = NULL, token_valido_hasta = NULL,
+                    codigo = NULL, abierta_por = ?
+                WHERE id_clase = ?`,
+          params: [req.usuario.id_preceptor, idClase]
+        }
+      ];
+
+      let actualizada = false;
+      for (const actualizacion of actualizaciones) {
+        try {
+          await pool.query(actualizacion.sql, actualizacion.params);
+          actualizada = true;
+          break;
+        } catch (error) {
+          if (!/Unknown column/i.test(error.message || '') || actualizacion === actualizaciones[actualizaciones.length - 1]) {
+            throw error;
+          }
+        }
+      }
+      if (!actualizada) throw new Error('No se pudo abrir la clase.');
     } else {
-      const [resultado] = await pool.query(
-        `INSERT INTO clase
-          (id_dictado, fecha_clase, estado, abierta_por, abierta_por_rol,
-           motivo_apertura, profesor_llego_en, abierta_en)
-         VALUES (?, ?, 'en_curso', ?, 'preceptor', ?, ?, CURRENT_TIMESTAMP)`,
-        [id_dictado, fecha, req.usuario.id_preceptor, motivo, llegadaProfesor]
-      );
-      idClase = resultado.insertId;
+      const inserciones = [
+        {
+          sql: `INSERT INTO clase
+                  (id_dictado, fecha_clase, estado, abierta_por, abierta_por_rol,
+                   motivo_apertura, profesor_llego_en, abierta_en)
+                VALUES (?, ?, 'en_curso', ?, 'preceptor', ?, ?, CURRENT_TIMESTAMP)`,
+          params: [id_dictado, fecha, req.usuario.id_preceptor, motivo, llegadaProfesor]
+        },
+        {
+          sql: `INSERT INTO clase
+                  (id_dictado, fecha_clase, estado, abierta_por, abierta_por_rol,
+                   motivo_apertura, profesor_llego_en)
+                VALUES (?, ?, 'en_curso', ?, 'preceptor', ?, ?)`,
+          params: [id_dictado, fecha, req.usuario.id_preceptor, motivo, llegadaProfesor]
+        },
+        {
+          sql: `INSERT INTO clase
+                  (id_dictado, fecha_clase, estado, abierta_por)
+                VALUES (?, ?, 'en_curso', ?)`,
+          params: [id_dictado, fecha, req.usuario.id_preceptor]
+        }
+      ];
+
+      let creada = false;
+      for (const insercion of inserciones) {
+        try {
+          const [resultado] = await pool.query(insercion.sql, insercion.params);
+          idClase = resultado.insertId;
+          creada = true;
+          break;
+        } catch (error) {
+          if (!/Unknown column/i.test(error.message || '') || insercion === inserciones[inserciones.length - 1]) {
+            throw error;
+          }
+        }
+      }
+      if (!creada) throw new Error('No se pudo crear la clase.');
     }
 
     publicarEvento({ tipo: 'clase.abierta', roles: ['profesor', 'preceptor', 'alumno'], id_clase: idClase, id_dictado });
