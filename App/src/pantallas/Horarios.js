@@ -73,6 +73,13 @@ export default function Horarios({ sesion }) {
                   {sesion.rol !== 'profesor' && clase.apellido_profesor ? (
                     <Text style={styles.detalle}>Prof. {clase.apellido_profesor}</Text>
                   ) : null}
+                  {sesion.rol === 'alumno' ? (
+                    <Text style={styles.detalle}>
+                      {clase.anio_materia ? `${clase.anio_materia}° año` : ''}
+                      {clase.division ? ` · División ${clase.division}` : ''}
+                      {clase.nombre_especialidad ? ` · ${clase.nombre_especialidad}` : ''}
+                    </Text>
+                  ) : null}
                   {sesion.rol !== 'alumno' && (clase.division || clase.grupo) ? (
                     <Text style={styles.detalle}>{clase.division || ''}{clase.division && clase.grupo ? ' · ' : ''}{clase.grupo || ''}</Text>
                   ) : null}
