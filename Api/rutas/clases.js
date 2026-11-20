@@ -380,6 +380,37 @@ router.patch('/:id', requiereRol(['preceptor']), async (req, res) => {
   }
 });
 
+// PATCH /api/clases/:id/llegada-profesor - registra la llegada del profesor.
+router.patch('/:id/llegada-profesor', requiereRol(['preceptor']), async (req, res) => {
+  const idClase = Number(req.params.id);
+  const { hora } = req.body || {};
+
+  if (!Number.isInteger(idClase) || idClase <= 0 || !/^\d{2}:\d{2}$/.test(String(hora || ''))) {
+    return res.status(400).json({ error: 'La hora debe tener formato HH:mm.' });
+  }
+
+  try {
+    const [[clase]] = await pool.query(
+      `SELECT c.id_clase, c.fecha_clase, d.id_preceptor
+       FROM clase c JOIN dictado d ON d.id_dictado = c.id_dictado
+       WHERE c.id_clase = ?`,
+      [idClase]
+    );
+    if (!clase) return res.status(404).json({ error: 'La clase no existe.' });
+    if (clase.id_preceptor !== req.usuario.id_preceptor) {
+      return res.status(403).json({ error: 'No estás asignado a esta clase.' });
+    }
+
+    await pool.query(
+      'UPDATE clase SET profesor_llego_en = CONCAT(fecha_clase, ?, ":00") WHERE id_clase = ?',
+      [` ${hora}`, idClase]
+    );
+    res.json({ id_clase: idClase, profesor_llego_en: hora });
+  } catch (error) {
+    res.status(500).json({ error: 'Error registrando la llegada del profesor', detalle: error.message });
+  }
+});
+
 // POST /api/clases/:id/token  rota el token QR (visto y expiración)
 router.post('/:id/token', requiereRol(['profesor']), async (req, res) => {
   const idClase = Number(req.params.id);
