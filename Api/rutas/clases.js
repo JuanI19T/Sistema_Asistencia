@@ -351,6 +351,14 @@ router.post('/preceptor', requiereRol(['preceptor']), async (req, res) => {
         {
           sql: `UPDATE clase
                 SET estado = 'en_curso', token = NULL, token_valido_hasta = NULL,
+                    codigo = NULL, abierta_por = ?,
+                    abierta_en = IF(abierta_en IS NULL, CURRENT_TIMESTAMP, abierta_en)
+                WHERE id_clase = ?`,
+          params: [req.usuario.id_preceptor, idClase]
+        },
+        {
+          sql: `UPDATE clase
+                SET estado = 'en_curso', token = NULL, token_valido_hasta = NULL,
                     codigo = NULL, abierta_por = ?
                 WHERE id_clase = ?`,
           params: [req.usuario.id_preceptor, idClase]
@@ -385,6 +393,12 @@ router.post('/preceptor', requiereRol(['preceptor']), async (req, res) => {
                    motivo_apertura, profesor_llego_en)
                 VALUES (?, ?, 'en_curso', ?, 'preceptor', ?, ?)`,
           params: [id_dictado, fecha, req.usuario.id_preceptor, motivo, llegadaProfesor]
+        },
+        {
+          sql: `INSERT INTO clase
+                  (id_dictado, fecha_clase, estado, abierta_por, abierta_en)
+                VALUES (?, ?, 'en_curso', ?, CURRENT_TIMESTAMP)`,
+          params: [id_dictado, fecha, req.usuario.id_preceptor]
         },
         {
           sql: `INSERT INTO clase
@@ -488,10 +502,18 @@ router.patch('/:id/llegada-profesor', requiereRol(['preceptor']), async (req, re
       return res.status(403).json({ error: 'No estás asignado a esta clase.' });
     }
 
-    await pool.query(
-      'UPDATE clase SET profesor_llego_en = CONCAT(fecha_clase, ?, ":00") WHERE id_clase = ?',
-      [` ${hora}`, idClase]
-    );
+    try {
+      await pool.query(
+        "UPDATE clase SET profesor_llego_en = CONCAT(fecha_clase, ' ', ?, ':00') WHERE id_clase = ?",
+        [hora, idClase]
+      );
+    } catch (error) {
+      if (/Unknown column/i.test(error.message || '')) {
+        return res.status(409).json({ error: 'Falta aplicar la migración 2026-10-28_apertura_preceptor.sql en la base de datos.' });
+      }
+      throw error;
+    }
+
     res.json({ id_clase: idClase, profesor_llego_en: hora });
   } catch (error) {
     res.status(500).json({ error: 'Error registrando la llegada del profesor', detalle: error.message });
