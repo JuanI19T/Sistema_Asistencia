@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Platform, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { obtenerDictados, obtenerDictadosAlumno } from '../api';
 import { colores } from '../tema';
@@ -54,32 +54,34 @@ function aclararColor(hex, proporcion = 0.84) {
 function ClaseHorario({ clase, rol, color }) {
   const idGradiente = `gradiente-clase-${clase.id_dictado}`;
   return (
-    <View style={[styles.clase, { borderLeftColor: color.borde }]}>
-      <Svg pointerEvents="none" style={StyleSheet.absoluteFillObject}>
-        <Defs>
-          <LinearGradient id={idGradiente} x1="0" y1="0" x2="1" y2="1">
-            <Stop offset="0" stopColor={aclararColor(color.borde, 0.8)} />
-            <Stop offset="0.58" stopColor={aclararColor(color.borde, 0.9)} />
-            <Stop offset="1" stopColor="#FFFDF7" />
-          </LinearGradient>
-        </Defs>
-        <Rect x="0" y="0" width="100%" height="100%" rx="8" fill={`url(#${idGradiente})`} />
-      </Svg>
-      <Text style={styles.hora}>{hora(clase.horario)} - {hora(clase.horario_fin)}</Text>
-      <Text style={styles.materia}>{clase.nombre_materia}</Text>
-      {rol !== 'profesor' && clase.apellido_profesor ? (
-        <Text style={styles.detalle}>Prof. {clase.apellido_profesor}</Text>
-      ) : null}
-      {clase.anio_materia || clase.division || clase.nombre_especialidad ? (
-        <Text style={styles.detalle}>
-          {clase.anio_materia ? `${clase.anio_materia}° año` : ''}
-          {clase.division ? ` · División ${clase.division}` : ''}
-          {clase.nombre_especialidad ? ` · ${clase.nombre_especialidad}` : ''}
-        </Text>
-      ) : null}
-      {(rol === 'preceptor' || rol === 'profesor') && clase.grupo ? (
-        <Text style={styles.detalle}>Grupo {clase.grupo}</Text>
-      ) : null}
+    <View style={styles.contenedorTarjeta}>
+      <View style={[styles.clase, { borderLeftColor: color.borde }]}>
+        <Svg pointerEvents="none" style={StyleSheet.absoluteFillObject}>
+          <Defs>
+            <LinearGradient id={idGradiente} x1="0" y1="0" x2="1" y2="1">
+              <Stop offset="0" stopColor={aclararColor(color.borde, 0.8)} />
+              <Stop offset="0.58" stopColor={aclararColor(color.borde, 0.9)} />
+              <Stop offset="1" stopColor="#FFFDF7" />
+            </LinearGradient>
+          </Defs>
+          <Rect x="0" y="0" width="100%" height="100%" rx="8" fill={`url(#${idGradiente})`} />
+        </Svg>
+        <Text style={styles.hora}>{hora(clase.horario)} - {hora(clase.horario_fin)}</Text>
+        <Text style={styles.materia}>{clase.nombre_materia}</Text>
+        {rol !== 'profesor' && clase.apellido_profesor ? (
+          <Text style={styles.detalle}>Prof. {clase.apellido_profesor}</Text>
+        ) : null}
+        {clase.anio_materia || clase.division || clase.nombre_especialidad ? (
+          <Text style={styles.detalle}>
+            {clase.anio_materia ? `${clase.anio_materia}° año` : ''}
+            {clase.division ? ` · División ${clase.division}` : ''}
+            {clase.nombre_especialidad ? ` · ${clase.nombre_especialidad}` : ''}
+          </Text>
+        ) : null}
+        {(rol === 'preceptor' || rol === 'profesor') && clase.grupo ? (
+          <Text style={styles.detalle}>Grupo {clase.grupo}</Text>
+        ) : null}
+      </View>
     </View>
   );
 }
@@ -193,10 +195,9 @@ const styles = StyleSheet.create({
   columnaVertical: { width: '100%', alignSelf: 'stretch', marginBottom: 12 },
   encabezadoDia: { backgroundColor: '#DCE9FA', paddingVertical: 12, alignItems: 'center', borderBottomWidth: 2, borderBottomColor: colores.azulReal },
   nombreDia: { color: colores.navy, fontWeight: '700', fontSize: 16 },
+  contenedorTarjeta: { width: '100%', alignSelf: 'stretch', paddingHorizontal: 9, paddingVertical: 9 },
   clase: {
-    alignSelf: 'stretch',
-    width: Platform.OS === 'web' ? 'calc(100% - 18px)' : undefined,
-    margin: 9,
+    width: '100%',
     padding: 11,
     borderRadius: 8,
     overflow: 'hidden',
