@@ -51,10 +51,10 @@ function aclararColor(hex, proporcion = 0.84) {
   return `#${aclarar(rojo)}${aclarar(verde)}${aclarar(azul)}`;
 }
 
-function ClaseHorario({ clase, rol, color }) {
+function ClaseHorario({ clase, rol, color, ancho }) {
   const idGradiente = `gradiente-clase-${clase.id_dictado}`;
   return (
-    <View style={[styles.clase, { borderLeftColor: color.borde }]}>
+    <View style={[styles.clase, ancho ? { width: ancho } : null, { borderLeftColor: color.borde }]}>
       <Svg pointerEvents="none" style={StyleSheet.absoluteFillObject}>
         <Defs>
           <LinearGradient id={idGradiente} x1="0" y1="0" x2="1" y2="1">
@@ -89,6 +89,7 @@ export default function Horarios({ sesion }) {
   const [dictados, setDictados] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [mensaje, setMensaje] = useState(null);
+  const [anchoDiaMovil, setAnchoDiaMovil] = useState(0);
 
   useEffect(() => {
     let activo = true;
@@ -131,36 +132,53 @@ export default function Horarios({ sesion }) {
   const anchoColumna = width >= 700
     ? Math.max(120, (espacioDisponible - separacion * 4) / 5)
     : 188;
+  const anchoTarjetaMovil = Math.max(0, width - 50);
+
+  const renderColumna = (clases, indice, vertical = false) => (
+    <View
+      style={[
+        styles.columna,
+        vertical ? styles.columnaVertical : { width: anchoColumna, marginRight: indice < DIAS.length - 1 ? separacion : 0 }
+      ]}
+      onLayout={vertical ? ({ nativeEvent }) => setAnchoDiaMovil(nativeEvent.layout.width) : undefined}
+      key={DIAS[indice]}
+    >
+      <View style={styles.encabezadoDia}><Text style={styles.nombreDia}>{NOMBRES_DIAS[indice]}</Text></View>
+      {clases.length ? clases.map((clase) => (
+        <ClaseHorario
+          key={clase.id_dictado}
+          clase={clase}
+                  rol={sesion.rol}
+                  color={coloresPorClase.get(claveDeClase(clase, sesion.rol))}
+                  ancho={vertical ? Math.max(0, (anchoDiaMovil || anchoTarjetaMovil) - 18) : undefined}
+                />
+      )) : <Text style={styles.sinClases}>Sin clases</Text>}
+    </View>
+  );
 
   return (
-    <ScrollView style={styles.pantalla} contentContainerStyle={styles.contenido}>
+    <ScrollView
+      style={styles.pantalla}
+      contentContainerStyle={[styles.contenido, width < 700 && { width, minWidth: width }]}
+    >
       <Text style={styles.titulo}>Horarios</Text>
       <Text style={styles.subtitulo}>Tus clases semanales</Text>
       {cargando ? <ActivityIndicator color={colores.azulReal} style={styles.cargando} /> : null}
       {mensaje ? <Text style={styles.mensaje}>{mensaje}</Text> : null}
       {!cargando && !mensaje ? (
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={[styles.semana, width >= 700 && { width: espacioDisponible }]}
-        >
-          {porDia.map((clases, indice) => (
-            <View
-              style={[styles.columna, { width: anchoColumna, marginRight: indice < DIAS.length - 1 ? separacion : 0 }]}
-              key={DIAS[indice]}
-            >
-              <View style={styles.encabezadoDia}><Text style={styles.nombreDia}>{NOMBRES_DIAS[indice]}</Text></View>
-              {clases.length ? clases.map((clase) => (
-                <ClaseHorario
-                  key={clase.id_dictado}
-                  clase={clase}
-                  rol={sesion.rol}
-                  color={coloresPorClase.get(claveDeClase(clase, sesion.rol))}
-                />
-              )) : <Text style={styles.sinClases}>Sin clases</Text>}
-            </View>
-          ))}
-        </ScrollView>
+        width < 700 ? (
+          <View style={styles.semanaVertical}>
+            {porDia.map((clases, indice) => renderColumna(clases, indice, true))}
+          </View>
+        ) : (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[styles.semana, { width: espacioDisponible }]}
+          >
+            {porDia.map((clases, indice) => renderColumna(clases, indice))}
+          </ScrollView>
+        )
       ) : null}
       {!cargando && !mensaje && !dictados.length ? <Text style={styles.vacio}>No hay horarios asignados.</Text> : null}
       <View style={styles.pie}><Text style={styles.textoPie}>Sistema Integral de Asistencia (SIA)</Text></View>
@@ -170,15 +188,17 @@ export default function Horarios({ sesion }) {
 
 const styles = StyleSheet.create({
   pantalla: { flex: 1, backgroundColor: colores.crema },
-  contenido: { flexGrow: 1, paddingHorizontal: 16, paddingTop: 18, paddingBottom: 0 },
+  contenido: { flexGrow: 1, width: '100%', alignItems: 'stretch', paddingHorizontal: 16, paddingTop: 18, paddingBottom: 0 },
   titulo: { fontFamily: 'Georgia', fontWeight: 'bold', fontSize: 34, color: colores.navy, textAlign: 'center', marginVertical: 12 },
   subtitulo: { textAlign: 'center', color: colores.textoSuave, fontSize: 15, marginBottom: 18 },
   cargando: { marginTop: 30 },
   semana: { paddingBottom: 28 },
+  semanaVertical: { width: '100%', alignSelf: 'stretch', paddingBottom: 28 },
   columna: { width: 188, minWidth: 0, flexShrink: 0, minHeight: 230, backgroundColor: '#FFFDF7', borderRadius: 10, overflow: 'hidden', borderWidth: 1, borderColor: colores.borde },
+  columnaVertical: { width: '100%', alignSelf: 'stretch', marginBottom: 12 },
   encabezadoDia: { backgroundColor: '#DCE9FA', paddingVertical: 12, alignItems: 'center', borderBottomWidth: 2, borderBottomColor: colores.azulReal },
   nombreDia: { color: colores.navy, fontWeight: '700', fontSize: 16 },
-  clase: { margin: 9, padding: 11, borderRadius: 8, overflow: 'hidden', backgroundColor: '#FFFDF7', borderLeftWidth: 4, borderLeftColor: colores.amarillo },
+  clase: { alignSelf: 'stretch', margin: 9, padding: 11, borderRadius: 8, overflow: 'hidden', backgroundColor: '#FFFDF7', borderLeftWidth: 4, borderLeftColor: colores.amarillo },
   hora: { color: colores.navy, fontSize: 13, fontWeight: '700' },
   materia: { color: colores.textoOscuro, fontSize: 15, fontWeight: '700', marginTop: 5, flexShrink: 1, lineHeight: 19 },
   detalle: { color: colores.textoSuave, fontSize: 12, marginTop: 3 },
